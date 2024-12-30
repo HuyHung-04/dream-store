@@ -15,4 +15,5 @@ public class SanphamController {
             @RequestParam String userId) {
         return "User ID: " + userId;
     }
+
 }

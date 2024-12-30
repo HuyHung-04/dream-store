@@ -1,0 +1,10 @@
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\config\MapperConfig.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\config\SwaggerConfig.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\controller\SanPhamChiTietController.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\controller\SanphamController.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\DreamBackendApplication.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\dtos\SanPhamChiTietDTO.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\entities\SanPhamChiTiet.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\repository\SanPhamChiTietRepository.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\services\sanphamchitiet\ISanPhamChiTietService.java
+D:\dream-store\dream-backend\src\main\java\org\example\dreambackend\services\sanphamchitiet\SanPhamChiTietService.java

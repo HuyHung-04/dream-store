@@ -1,0 +1,11 @@
+org\example\dreambackend\dtos\SanPhamChiTietDTO.class
+org\example\dreambackend\controller\SanphamController.class
+org\example\dreambackend\DreamBackendApplication.class
+org\example\dreambackend\config\SwaggerConfig.class
+org\example\dreambackend\controller\SanPhamChiTietController.class
+org\example\dreambackend\services\sanphamchitiet\ISanPhamChiTietService.class
+org\example\dreambackend\repository\SanPhamChiTietRepository.class
+org\example\dreambackend\entities\SanPhamChiTiet.class
+org\example\dreambackend\services\sanphamchitiet\SanPhamChiTietService.class
+org\example\dreambackend\config\MapperConfig.class
+org\example\dreambackend\dtos\SanPhamChiTietDTO$SanPhamChiTietDTOBuilder.class
