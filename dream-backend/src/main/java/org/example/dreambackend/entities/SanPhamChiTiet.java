@@ -25,4 +25,11 @@ public class SanPhamChiTiet {
 
     @Column(name = "ngay_tao")
     private Date ngayTao;
+
+    @Column(name = "trang_thai")
+    private int trangThai;
+
+    @ManyToOne
+    @JoinColumn(name = "id_san_pham",referencedColumnName = "id")
+    private SanPham sanPham;
 }

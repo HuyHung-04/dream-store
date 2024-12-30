@@ -1,8 +1,10 @@
 package org.example.dreambackend.services.sanphamchitiet;
 
+import lombok.RequiredArgsConstructor;
 import org.example.dreambackend.dtos.SanPhamChiTietDTO;
 import org.example.dreambackend.entities.SanPhamChiTiet;
 import org.example.dreambackend.repository.SanPhamChiTietRepository;
+import org.example.dreambackend.repository.SanPhamRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,8 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 public class SanPhamChiTietService implements ISanPhamChiTietService {
+
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
 
     @Autowired
     private SanPhamChiTietRepository sanPhamChiTietRepository;
