@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -28,9 +29,9 @@ public class GioHang {
     @Column(name = "gia_sau_giam")
     private int giaSauGiam;
 
-    @Column(name = "ngay_tao")
-    private Date ngayTao;
-
     @Column(name = "ngay_sua")
-    private Date ngaySua;
+    private LocalDate ngaySua;
+
+    @Column(name = "ngay_tao")
+    private LocalDate ngayTao;
 }

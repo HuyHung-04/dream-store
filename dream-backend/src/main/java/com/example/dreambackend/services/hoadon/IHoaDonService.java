@@ -6,8 +6,10 @@ import com.example.dreambackend.entities.HoaDon;
 import java.util.List;
 
 public interface IHoaDonService {
-    HoaDonDTO getHoaDonById(int id);
-    HoaDon createHoaDon(HoaDonDTO hoaDonDTO);
-    List<HoaDonDTO> getListHoaDon();
+    HoaDon getHoaDonById(int id);
+    HoaDon createHoaDon(HoaDonDTO hoaDonDTO) throws Exception;
+    List<HoaDon> getListHoaDon();
     HoaDon updateHoaDon(HoaDonDTO hoaDonDTO);
+    List<HoaDon> findHoaDonByKhachHangId(int id);
+    void deleteHoaDon(int id);
 }

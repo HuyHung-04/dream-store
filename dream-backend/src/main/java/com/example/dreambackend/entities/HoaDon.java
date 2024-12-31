@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -43,12 +44,20 @@ public class HoaDon {
     @Column(name = "phi_van_chuyen")
     private Float phiVanChuyen;
 
-    @Column(name = "ngay_tao")
-    private Date ngayTao;
-
     @Column(name = "ngay_sua")
-    private Date ngaySua;
+    private LocalDate ngaySua;
+
+    @Column(name = "ngay_tao")
+    private LocalDate ngayTao;
 
     @Column(name = "trang_thai")
-    private int trangThai;
+    private String trangThai;
+
+    @ManyToOne
+    @JoinColumn(name = "id_khach_hang",referencedColumnName = "id")
+    private KhachHang khachHang;
+
+    @ManyToOne
+    @JoinColumn(name = "id_nhan_vien",referencedColumnName = "id")
+    private NhanVien nhanVien;
 }

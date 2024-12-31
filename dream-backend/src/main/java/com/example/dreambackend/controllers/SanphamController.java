@@ -1,4 +1,4 @@
-package com.example.dreambackend.controller;
+package com.example.dreambackend.controllers;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.GetMapping;

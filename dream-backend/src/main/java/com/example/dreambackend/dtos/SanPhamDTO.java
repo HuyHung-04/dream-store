@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @Data
@@ -18,9 +18,11 @@ public class SanPhamDTO {
 
     private Float gia;
 
-    private Date ngayTao;
+    @JsonProperty("ngay_tao")
+    private LocalDate ngayTao;
 
-    private Date ngaySua;
+    @JsonProperty("ngay_sua")
+    private LocalDate ngaySua;
 
     @JsonProperty("trang_thai")
     private int trangThai;

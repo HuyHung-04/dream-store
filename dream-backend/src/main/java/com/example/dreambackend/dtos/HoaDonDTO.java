@@ -1,16 +1,16 @@
 package com.example.dreambackend.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class HoaDonDTO {
 
     private String ma;
@@ -36,11 +36,21 @@ public class HoaDonDTO {
     @JsonProperty("phi_van_chuyen")
     private Float phiVanChuyen;
 
+    @JsonProperty("ngay_tao")
+    private LocalDate ngayTao;
 
-    private Date ngayTao;
-
-    private Date ngaySua;
+    @JsonProperty("ngay_sua")
+    private LocalDate ngaySua;
 
     @JsonProperty("trang_thai")
-    private int trangThai;
+    private String trangThai;
+
+    @JsonProperty("id_khach_hang")
+    private int idKhachHang;
+
+    @JsonProperty("id_nhan_vien")
+    private int idNhanVien;
+
+    @JsonProperty("gio_hang")
+    private List<GioHangDTO> gioHang;
 }

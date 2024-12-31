@@ -3,6 +3,7 @@ package com.example.dreambackend.dtos;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -19,9 +20,11 @@ public class SanPhamChiTietDTO {
     @JsonProperty("id_san_pham")
     private Integer idSanPham;
 
-    private Date ngaySua;
+    @JsonProperty("ngay_tao")
+    private LocalDate ngayTao;
 
-    private Date ngayTao;
+    @JsonProperty("ngay_sua")
+    private LocalDate ngaySua;
 
     @JsonProperty("trang_thai")
     private int trangThai;

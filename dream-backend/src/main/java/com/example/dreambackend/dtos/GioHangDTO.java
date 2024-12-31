@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -23,7 +24,9 @@ public class GioHangDTO {
     @JsonProperty("gia_sau_giam")
     private int giaSauGiam;
 
-    private Date ngayTao;
+    @JsonProperty("ngay_tao")
+    private LocalDate ngayTao;
 
-    private Date ngaySua;
+    @JsonProperty("ngay_sua")
+    private LocalDate ngaySua;
 }

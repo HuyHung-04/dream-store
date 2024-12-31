@@ -3,7 +3,7 @@ package com.example.dreambackend.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Getter
@@ -21,10 +21,10 @@ public class SanPhamChiTiet {
     private int soLuong;
 
     @Column(name = "ngay_sua")
-    private Date ngaySua;
+    private LocalDate ngaySua;
 
     @Column(name = "ngay_tao")
-    private Date ngayTao;
+    private LocalDate ngayTao;
 
     @Column(name = "trang_thai")
     private int trangThai;

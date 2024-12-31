@@ -1,4 +1,4 @@
-package com.example.dreambackend.controller;
+package com.example.dreambackend.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
