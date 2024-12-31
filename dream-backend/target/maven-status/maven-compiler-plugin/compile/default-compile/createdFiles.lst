@@ -1,2 +1,17 @@
+com\example\dreambackend\dtos\ThuongHieuDto.class
+com\example\dreambackend\entities\CoAo.class
+com\example\dreambackend\controllers\ChatLieuController.class
+com\example\dreambackend\controllers\SanPhamController.class
+com\example\dreambackend\entities\SanPham.class
+com\example\dreambackend\controllers\CoAoController.class
+com\example\dreambackend\services\thuonghieu\ThuongHieuService.class
+com\example\dreambackend\entities\XuatXu.class
+com\example\dreambackend\configs\SwaggerConfig.class
 com\example\dreambackend\DreamBackendApplication.class
+com\example\dreambackend\repositories\ThuongHieuRepository.class
+com\example\dreambackend\entities\ThuongHieu.class
+com\example\dreambackend\entities\ChatLieu.class
+com\example\dreambackend\controllers\XuatXuController.class
 com\example\dreambackend\entities\SanPham$SanPhamBuilder.class
+com\example\dreambackend\services\thuonghieu\IThuongHieuService.class
+com\example\dreambackend\controllers\ThuongHieuController.class

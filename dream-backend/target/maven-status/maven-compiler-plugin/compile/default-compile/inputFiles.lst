@@ -1,5 +1,9 @@
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\configs\SwaggerConfig.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\ChatLieuController.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\CoAoController.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\SanPhamController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\ThuongHieuController.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\XuatXuController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\DreamBackendApplication.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\ThuongHieuDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\ChatLieu.java
@@ -8,5 +12,5 @@ D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\San
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\ThuongHieu.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\XuatXu.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\repositories\ThuongHieuRepository.java
-D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\IThuongHieuService.java
-D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\ThuongHieuService.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\thuonghieu\IThuongHieuService.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\thuonghieu\ThuongHieuService.java
