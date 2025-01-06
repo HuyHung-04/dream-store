@@ -32,4 +32,5 @@ public class SanPhamChiTiet {
     @ManyToOne
     @JoinColumn(name = "id_san_pham",referencedColumnName = "id")
     private SanPham sanPham;
+
 }

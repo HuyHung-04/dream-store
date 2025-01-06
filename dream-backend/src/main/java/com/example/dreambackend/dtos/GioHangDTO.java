@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 
 @Data
@@ -29,4 +28,10 @@ public class GioHangDTO {
 
     @JsonProperty("ngay_sua")
     private LocalDate ngaySua;
+
+    @JsonProperty("id_san_pham_chi_tiet")
+    private int idSanPhamChiTiet;
+
+    @JsonProperty("id_khach_hang")
+    private int idKhachHang;
 }

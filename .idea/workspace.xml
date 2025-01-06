@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f593c9ef-544a-4c84-a923-8a21ffa3b1ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/GioHangController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/GioHangController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/HoaDonChiTietController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/HoaDonChiTietController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/HoaDonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/HoaDonController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/dtos/GioHangDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/dtos/GioHangDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/GioHang.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/GioHang.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/HoaDon.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/HoaDon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/HoaDonChiTiet.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/HoaDonChiTiet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/NhanVien.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/NhanVien.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/SanPhamChiTiet.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/entities/SanPhamChiTiet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/repository/GioHangRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/repository/GioHangRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/repository/HoaDonChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/repository/HoaDonChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/repository/HoaDonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/repository/HoaDonRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/IHoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/IHoaDonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadonchitiet/HoaDonChiTietService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadonchitiet/HoaDonChiTietService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadonchitiet/IHoaDonChiTietService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadonchitiet/IHoaDonChiTietService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/sanphamchitiet/ISanPhamChiTietService.java" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/sanphamchitiet/ISanPhamChiTietService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/controllers/GioHangController.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/controllers/GioHangController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/controllers/HoaDonController.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/controllers/HoaDonController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/dtos/GioHangDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/dtos/GioHangDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/GioHang$GioHangBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/GioHang$GioHangBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/GioHang.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/GioHang.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/HoaDonChiTiet$HoaDonChiTietBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/HoaDonChiTiet$HoaDonChiTietBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/HoaDonChiTiet.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/HoaDonChiTiet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/SanPhamChiTiet.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/entities/SanPhamChiTiet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/repository/GioHangRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/repository/GioHangRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/services/hoadon/IHoaDonService.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/services/hoadon/IHoaDonService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/services/hoadonchitiet/HoaDonChiTietService.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/services/hoadonchitiet/HoaDonChiTietService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/services/hoadonchitiet/IHoaDonChiTietService.class" beforeDir="false" afterPath="$PROJECT_DIR$/dream-backend/target/classes/com/example/dreambackend/services/hoadonchitiet/IHoaDonChiTietService.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2qzF2feXfNt8ZP2gDf1FGLyTsNp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.DreamBackendApplication.executor": "Run",
+    "git-widget-placeholder": "son",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f593c9ef-544a-4c84-a923-8a21ffa3b1ba" name="Changes" comment="" />
+      <created>1735657290295</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1735657290295</updated>
+      <workItem from="1735657291539" duration="731000" />
+      <workItem from="1735783793969" duration="8776000" />
+      <workItem from="1735871268795" duration="24618000" />
+      <workItem from="1735916263859" duration="335000" />
+      <workItem from="1736129777752" duration="27049000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/HoaDonController.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>136</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/HoaDonController.java</url>
+          <line>78</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/GioHangController.java</url>
+          <line>54</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/GioHang/GioHangService.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/services/hoadonchitiet/HoaDonChiTietService.java</url>
+          <line>74</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/dream-backend/src/main/java/com/example/dreambackend/controllers/HoaDonChiTietController.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

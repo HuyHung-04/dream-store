@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,4 +35,12 @@ public class GioHang {
 
     @Column(name = "ngay_tao")
     private LocalDate ngayTao;
+
+    @ManyToOne
+    @JoinColumn(name = "id_san_pham_chi_tiet",referencedColumnName = "id")
+    private SanPhamChiTiet sanPhamChiTiet;
+
+    @ManyToOne
+    @JoinColumn(name = "id_khach_hang",referencedColumnName = "id")
+    private KhachHang khachHang;
 }

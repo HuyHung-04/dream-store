@@ -1,25 +1,22 @@
 package com.example.dreambackend.entities;
 
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Table(name = "nhan_vien")
-public class NhanVien {
+@Table(name = "voucher")
+public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+//
 //    @Column(name = "ten")
 //    private String ten;
-
-//    @Column(name = "")
-//    ...
 }
