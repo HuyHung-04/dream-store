@@ -100,7 +100,7 @@
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   outline: none;
-  margin-bottom: 15px; /* Giảm khoảng cách dưới */
+  margin-bottom: 80px; /* Giảm khoảng cách dưới */
   color: #294764;
 }
 
@@ -115,10 +115,11 @@
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
-  font-size: 15px; /* Thay đổi kích thước phông chữ cho nút */
+  font-size: 14px; /* Thay đổi kích thước phông chữ cho nút */
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 16px;
+  margin-top: 20px;
 }
 
 .input-row {
@@ -127,10 +128,33 @@
   margin-bottom: 20px; /* Khoảng cách giữa các hàng */
 }
 
+/* Label căn trái */
+.input-field label {
+  position: absolute;
+  top: 50%; /* Đặt label ngang với input */
+  left: 0; /* Đặt label ở bên trái */
+  transform: translateY(-50%); /* Căn giữa theo chiều dọc */
+  color: #294764;
+  pointer-events: none; /* Đảm bảo label không ảnh hưởng đến tương tác */
+  transition: all 0.3s ease; /* Hiệu ứng chuyển đổi */
+}
+
+.input-field .input:focus + label,
+.input-field .input:valid + label {
+  top: -10px; /* Di chuyển label lên trên khi input được focus */
+  font-size: 14px; /* Thu nhỏ label */
+  color: #294764; /* Đổi màu khi focus */
+}
+
+/* Định dạng chung cho modal */
+.modal-box {
+  position: relative; /* Để định vị nút Close */
+}
+
 .input-field {
   flex: 1; /* Mỗi trường sẽ có cùng một độ rộng */
   margin-right: 10px; /* Khoảng cách bên phải giữa các trường */
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .input-field:last-child {
@@ -177,9 +201,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100%; /* Đảm bảo overlay phủ toàn màn hình */
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6); /* Tăng độ mờ */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,18 +212,46 @@
 
 .modal-box {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px; /* Tăng padding */
+  border-radius: 10px;
+  width: 600px; /* Tăng độ rộng */
+  height: 600px; /* Tăng chiều cao */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Tăng độ bóng */
   text-align: center;
+  overflow-y: auto; /* Thêm cuộn dọc nếu nội dung quá dài */
+}
+
+.modal-box .btn-primary {
+  padding: 10px 15px; /* Giảm padding */
+  font-size: 12px; /* Giảm kích thước chữ */
+  margin-top: -70px; /* Dịch nút lên trên thêm */
+  position: relative; /* Giữ nguyên vị trí so với modal */
 }
 
 .modal-box button {
-  padding: 10px 20px;
+  padding: 15px 30px; /* Tăng kích thước nút */
   border: none;
-  background-color: #007BFF;
+  background-color: #294764;
   color: white;
   border-radius: 5px;
+  font-size: 16px; /* Tăng kích thước chữ */
   cursor: pointer;
+  transition: background-color 0.3s ease; /* Thêm hiệu ứng hover */
 }
+
+/* Nút Close */
+.modal-box .close-btn {
+  position: absolute;
+  top: 5px; /* Căn chỉnh nút ở góc trên */
+  right: 10px; /* Căn chỉnh nút ở góc phải */
+  background: none;
+  border: none;
+  padding: 10px; /* Thêm padding để nút lớn hơn */
+  font-size: 20px; /* Kích thước chữ */
+  color: #294764;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+

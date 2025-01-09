@@ -1,7 +1,13 @@
 package com.example.dreambackend.dtos;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class XuatXuDto {
     private String ma;
 

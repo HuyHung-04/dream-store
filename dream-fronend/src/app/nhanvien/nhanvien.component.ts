@@ -1,17 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import CommonModule
-import { NhanvienService } from './nhanvien.service'; // Import service
-
+import { NhanvienService } from './nhanvien.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-nhanvien',
-  standalone: true, // Standalone component
-  imports: [CommonModule], // Import CommonModule để hỗ trợ *ngFor, *ngIf
+  standalone: true,
+  imports: [CommonModule, FormsModule], // FormsModule cần được thêm ở đây
   templateUrl: './nhanvien.component.html',
   styleUrls: ['./nhanvien.component.css'],
+  
 })
 export class NhanvienComponent implements OnInit {
   nhanviens: any[] = []; // Danh sách nhân viên
-  error: string | null = null; // Lỗi nếu có
+  filteredNhanViens: any[] = []; // Danh sách đã lọc
+  searchQuery: string = ''; // Từ khóa tìm kiếm
+  statusFilter: string = ''; // Lọc trạng thái
 
   constructor(private nhanvienService: NhanvienService) {}
 
@@ -19,19 +22,39 @@ export class NhanvienComponent implements OnInit {
     this.loadNhanViens();
   }
 
-  /**
-   * Hàm tải danh sách nhân viên từ backend
-   */
   loadNhanViens(): void {
     this.nhanvienService.getAllNhanVien().subscribe({
       next: (data) => {
         this.nhanviens = data;
-        console.log('Danh sách nhân viên:', this.nhanviens);
+        this.filteredNhanViens = data;
       },
       error: (err) => {
-        this.error = 'Không thể tải danh sách nhân viên.';
-        console.error('Lỗi khi tải nhân viên:', err);
+        console.error('Lỗi khi tải dữ liệu:', err);
       },
     });
+  }
+
+  applyFilter(): void {
+    this.filteredNhanViens = this.nhanviens.filter((nv) => {
+      const matchesSearch =
+        nv.ten.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        nv.email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        nv.ma.includes(this.searchQuery);
+      const matchesStatus =
+        this.statusFilter === '' || nv.trangThai === +this.statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }
+
+  createAccount(): void {
+    console.log('Tạo tài khoản mới');
+  }
+
+  editNhanVien(id: number): void {
+    console.log('Sửa nhân viên ID:', id);
+  }
+
+  deleteNhanVien(id: number): void {
+    console.log('Xóa nhân viên ID:', id);
   }
 }

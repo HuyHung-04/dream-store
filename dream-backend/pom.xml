@@ -70,7 +70,6 @@
             <version>1.18.28</version> <!-- Hoặc phiên bản mới nhất -->
             <scope>provided</scope>
         </dependency>
-
         <!--    thư viện swak -->
         <dependency>
             <groupId>org.springdoc</groupId>
