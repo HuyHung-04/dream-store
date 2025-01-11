@@ -1,4 +1,12 @@
 -------------------------------------------------------------------------------
 Test set: com.example.dreambackend.DreamBackendApplicationTests
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.635 s -- in com.example.dreambackend.DreamBackendApplicationTests
+=======
+<<<<<<< HEAD
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.010 s -- in com.example.dreambackend.DreamBackendApplicationTests
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.98 s -- in com.example.dreambackend.DreamBackendApplicationTests
+>>>>>>> dong
+>>>>>>> 9d846e1e080723bce68d16bc42866e69004679ab

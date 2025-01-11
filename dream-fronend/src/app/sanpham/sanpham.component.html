@@ -67,9 +67,79 @@
         </div>
     </form>
 </div> -->
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <!-- Nút Close ở góc trên -->
+    <button class="close-btn" (click)="closeModal()">×</button>
+    <form action="" method="post">
+      <div class="input-row">
+        <div class="input-field">
+          <input type="text" class="input" id="ma" name="ma" autocomplete="off">
+          <label for="ma">Mã sản phẩm</label>
+        </div>
+        <div class="input-field">
+          <input type="text" class="input" id="ten" name="ten">
+          <label for="ten">Tên sản phẩm</label>
+        </div>
+        <div class="input-field">
+          <select class="input" id="thuongHieu" name="thuongHieu">
+            <option value="" disabled selected>Chọn thương hiệu</option>
+            <option *ngFor="let thuongHieu of thuongHieus" [value]="thuongHieu.id">{{thuongHieu.ten}}</option>
+          </select>
+          <label for="thuongHieu">Thương hiệu</label>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-field">
+          <select class="input" id="xuatXu" name="xuatXu">
+            <option value="" disabled selected>Chọn xuất sứ</option>
+            <option *ngFor="let xuatXu of xuatXus" [value]="xuatXu.id">{{xuatXu.ten}}</option>
+          </select>
+          <label for="xuatXu">Xuất xứ</label>
+        </div>
+        <div class="input-field">
+          <select class="input" id="chatLieu" name="chatLieu">
+            <option value="" disabled selected>Chọn chất liệu</option>
+            <option *ngFor="let chatLieu of chatLieus" [value]="chatLieu.id">{{chatLieu.ten}}</option>
+          </select>
+          <label for="chatLieu">Chất liệu</label>
+        </div>
+        <div class="input-field">
+          <select class="input" id="coAo" name="coAo">
+            <option value="" disabled selected>Chọn cổ áo</option>
+            <option *ngFor="let coAo of coAos" [value]="coAo.id">{{coAo.ten}}</option>
+          </select>
+          <label for="coAo">Cổ áo</label>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-field">
+          <input type="date" class="input" id="ngaytao" name="ngaytao">
+          <label for="ngaytao">Ngày tạo</label>
+        </div>
+        <div class="input-field">
+          <input type="date" class="input" id="ngaysua" name="ngaysua">
+          <label for="ngaysua">Ngày sửa</label>
+        </div>
+        <div class="input-field">
+          <select class="input" id="size" name="size">
+            <option value="" disabled selected>Chọn trạng thái</option>
+            <option value="Hoạt động">Hoạt động</option>
+            <option value="Không hoạt động">Không hoạt động</option>
+          </select>
+          <label for="size">Trạng thái</label>
+        </div>
+      </div>
+      <div class="ps-2">
+        <button type="submit" class="btn-primary">Thêm sản phẩm</button>
+      </div>
+    </form>
+  </div>
+</div>
 <div>
   <p class="title">Danh sách sản phẩm</p>
-  <p class="filter">Lọc</p>
+  <button (click)="openModal()" class="button btn-primary">Thêm sản phẩm</button>
 </div>
 <div class="table-container">
   <div class="table-scrollable">
@@ -90,102 +160,22 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>SP001</td>
-        <td>Áo thể thao Nike</td>
-        <td>Nike</td>
-        <td>Mỹ</td>
-        <td>Polyester</td>
-        <td>Tròn</td>
-        <td>2024-12-25</td>
-        <td>2024-12-26</td>
-        <td>Đang bán</td>
-        <td>Trống</td>
-        <td>
-          <a href="" class="button btn-success">Thêm</a>
-          <a href="" class="button btn-danger">Sửa</a>
-        </td>
-      </tr>
-      <tr>
-        <td>SP001</td>
-        <td>Áo thể thao Nike</td>
-        <td>Nike</td>
-        <td>Mỹ</td>
-        <td>Polyester</td>
-        <td>Tròn</td>
-        <td>2024-12-25</td>
-        <td>2024-12-26</td>
-        <td>Đang bán</td>
-        <td>Trống</td>
-        <td>
-          <a href="" class="button btn-success">Thêm</a>
-          <a href="" class="button btn-danger">Sửa</a>
-        </td>
-      </tr>
-      <tr>
-        <td>SP001</td>
-        <td>Áo thể thao Nike</td>
-        <td>Nike</td>
-        <td>Mỹ</td>
-        <td>Polyester</td>
-        <td>Tròn</td>
-        <td>2024-12-25</td>
-        <td>2024-12-26</td>
-        <td>Đang bán</td>
-        <td>Trống</td>
-        <td>
-          <a href="" class="button btn-success">Thêm</a>
-          <a href="" class="button btn-danger">Sửa</a>
-        </td>
-      </tr>
-      <tr>
-        <td>SP001</td>
-        <td>Áo thể thao Nike</td>
-        <td>Nike</td>
-        <td>Mỹ</td>
-        <td>Polyester</td>
-        <td>Tròn</td>
-        <td>2024-12-25</td>
-        <td>2024-12-26</td>
-        <td>Đang bán</td>
-        <td>Trống</td>
-        <td>
-          <a href="" class="button btn-success">Thêm</a>
-          <a href="" class="button btn-danger">Sửa</a>
-        </td>
-      </tr>
-      <tr>
-        <td>SP001</td>
-        <td>Áo thể thao Nike</td>
-        <td>Nike</td>
-        <td>Mỹ</td>
-        <td>Polyester</td>
-        <td>Tròn</td>
-        <td>2024-12-25</td>
-        <td>2024-12-26</td>
-        <td>Đang bán</td>
-        <td>Trống</td>
-        <td>
-          <a href="" class="button btn-success">Thêm</a>
-          <a href="" class="button btn-danger">Sửa</a>
-        </td>
-      </tr>
-      <tr>
-        <td>SP001</td>
-        <td>Áo thể thao Nike</td>
-        <td>Nike</td>
-        <td>Mỹ</td>
-        <td>Polyester</td>
-        <td>Tròn</td>
-        <td>2024-12-25</td>
-        <td>2024-12-26</td>
-        <td>Đang bán</td>
-        <td>Trống</td>
-        <td>
-          <a href="" class="button btn-success">Thêm</a>
-          <a href="" class="button btn-danger">Sửa</a>
-        </td>
-      </tr>
+        <tr *ngFor="let sanPham of sanPhams">
+          <td>{{ sanPham.ma}}</td>
+          <td>{{ sanPham.ten}}</td>
+          <td>{{ sanPham.thuongHieu.ten}}</td>
+          <td>{{ sanPham.xuatXu.ten }}</td>
+          <td>{{ sanPham.chatLieu.ten }}</td>
+          <td>{{ sanPham.coAo.ten }}</td>
+          <td>{{ sanPham.ngayTao }}</td>
+          <td>{{ sanPham.ngaySua }}</td>
+          <td>{{ sanPham.trangThai?"Hoạt động":"Không hoạt động" }}</td>
+          <td><img [src]="sanPham.anh" alt="Ảnh sản phẩm" /></td>
+          <td>
+            <button (click)="openModal()" class="button btn-primary">Chi tiết</button>
+            <a href="" class="button btn-danger">Sửa</a>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -344,79 +334,6 @@
       </tr>
       </tbody>
     </table>
-  </div>
-</div>
-<!-- Modal -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal-box" (click)="$event.stopPropagation()">
-    <form action="" method="post">
-      <div class="input-row">
-        <div class="input-field">
-          <label for="ma">Mã sản phẩm</label>
-          <input type="text" class="input" id="ma" name="ma" autocomplete="off">
-        </div>
-        <div class="input-field">
-          <label for="ten">Tên sản phẩm</label>
-          <input type="text" class="input" id="ten" name="ten">
-        </div>
-        <div class="input-field">
-          <label for="">Thương hiệu</label>
-          <select class="input" id="" name="">
-            <option value="" disabled selected>Chọn thương hiệu</option>
-            <option value="Nike">Nike</option>
-            <option value="Adidas">Adidas</option>
-          </select>
-        </div>
-      </div>
-      <div class="input-row">
-        <div class="input-field">
-          <label for="">Xuất sứ</label>
-          <select class="input" id="" name="">
-            <option value="" disabled selected>Chọn xuất sứ</option>
-            <option value="">Việt Nam</option>
-            <option value="">Trung</option>
-          </select>
-        </div>
-        <div class="input-field">
-          <label for="">Chất liệu</label>
-          <select class="input" id="" name="">
-            <option value="" disabled selected>Chọn chất liệu</option>
-            <option value="">Polime</option>
-            <option value="">Cao su</option>
-          </select>
-        </div>
-        <div class="input-field">
-          <label for="">Cổ áo</label>
-          <select class="input" id="" name="">
-            <option value="" disabled selected>Chọn cổ áo</option>
-            <option value="">Cổ Chữ V</option>
-            <option value="">Cổ tròn</option>
-          </select>
-        </div>
-      </div>
-      <div class="input-row">
-        <div class="input-field">
-          <label for="ngaytao">Ngày tạo</label>
-          <input type="date" class="input" id="ngaytao" name="ngaytao">
-        </div>
-        <div class="input-field">
-          <label for="ngaysua">Ngày sửa</label>
-          <input type="date" class="input" id="ngaysua" name="ngaysua">
-        </div>
-        <div class="input-field">
-          <label for="size">Trạng thái</label>
-          <select class="input" id="size" name="size">
-            <option value="" disabled selected>Chọn trạng thái</option>
-            <option value="Hoạt động">Hoạt động</option>
-            <option value="Không hoạt động">Không hoạt động</option>
-          </select>
-        </div>
-      </div>
-      <div class="ps-2">
-        <button type="submit" class="btn-primary">Thêm sản phẩm</button>
-      </div>
-    </form>
-    <button (click)="closeModal()">Close</button>
   </div>
 </div>
 

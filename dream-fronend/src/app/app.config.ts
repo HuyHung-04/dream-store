@@ -8,6 +8,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {RouterModule} from '@angular/router';
+import { HttpClientModule } from '@angular/common/http'; // Thêm HttpClientModule
 import {routes} from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -21,7 +22,8 @@ export const appConfig: ApplicationConfig = {
       MatSidenavModule,
       MatToolbarModule,
       MatButtonModule,
-      MatIconModule
+      MatIconModule,
+      HttpClientModule 
     )
   ]
 };

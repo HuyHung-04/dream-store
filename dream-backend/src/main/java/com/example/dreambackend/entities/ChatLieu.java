@@ -1,14 +1,11 @@
 package com.example.dreambackend.entities;
-
+import lombok.Builder;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
-
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
