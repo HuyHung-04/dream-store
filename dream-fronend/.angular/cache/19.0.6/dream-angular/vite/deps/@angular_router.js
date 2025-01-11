@@ -1,6 +1,6 @@
 import {
   Title
-} from "./chunk-OBR7AS7K.js";
+} from "./chunk-TCFOYBO7.js";
 import {
   DOCUMENT,
   HashLocationStrategy,
@@ -9,7 +9,7 @@ import {
   LocationStrategy,
   PathLocationStrategy,
   ViewportScroller
-} from "./chunk-VP6DRI4E.js";
+} from "./chunk-CUIEDR4A.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   APP_INITIALIZER,
@@ -112,22 +112,19 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-7WEFQ6UK.js";
+} from "./chunk-KB6DLHMF.js";
 
 // node_modules/@angular/router/fesm2022/router.mjs
 var PRIMARY_OUTLET = "primary";
 var RouteTitleKey = Symbol("RouteTitle");
 var ParamsAsMap = class {
   params;
-
   constructor(params) {
     this.params = params || {};
   }
-
   has(name) {
     return Object.prototype.hasOwnProperty.call(this.params, name);
   }
-
   get(name) {
     if (this.has(name)) {
       const v = this.params[name];
@@ -135,7 +132,6 @@ var ParamsAsMap = class {
     }
     return null;
   }
-
   getAll(name) {
     if (this.has(name)) {
       const v = this.params[name];
@@ -143,16 +139,13 @@ var ParamsAsMap = class {
     }
     return [];
   }
-
   get keys() {
     return Object.keys(this.params);
   }
 };
-
 function convertToParamMap(params) {
   return new ParamsAsMap(params);
 }
-
 function defaultUrlMatcher(segments, segmentGroup, route) {
   const parts = route.path.split("/");
   if (parts.length > segments.length) {
@@ -177,7 +170,6 @@ function defaultUrlMatcher(segments, segmentGroup, route) {
     posParams
   };
 }
-
 function shallowEqualArrays(a, b) {
   if (a.length !== b.length) return false;
   for (let i = 0; i < a.length; ++i) {
@@ -185,7 +177,6 @@ function shallowEqualArrays(a, b) {
   }
   return true;
 }
-
 function shallowEqual(a, b) {
   const k1 = a ? getDataKeys(a) : void 0;
   const k2 = b ? getDataKeys(b) : void 0;
@@ -201,11 +192,9 @@ function shallowEqual(a, b) {
   }
   return true;
 }
-
 function getDataKeys(obj) {
   return [...Object.keys(obj), ...Object.getOwnPropertySymbols(obj)];
 }
-
 function equalArraysOrString(a, b) {
   if (Array.isArray(a) && Array.isArray(b)) {
     if (a.length !== b.length) return false;
@@ -216,11 +205,9 @@ function equalArraysOrString(a, b) {
     return a === b;
   }
 }
-
 function last2(a) {
   return a.length > 0 ? a[a.length - 1] : null;
 }
-
 function wrapIntoObservable(value) {
   if (isObservable(value)) {
     return value;
@@ -230,7 +217,6 @@ function wrapIntoObservable(value) {
   }
   return of(value);
 }
-
 var pathCompareMap = {
   "exact": equalSegmentGroups,
   "subset": containsSegmentGroup
@@ -240,15 +226,12 @@ var paramCompareMap = {
   "subset": containsParams,
   "ignored": () => true
 };
-
 function containsTree(container, containee, options) {
   return pathCompareMap[options.paths](container.root, containee.root, options.matrixParams) && paramCompareMap[options.queryParams](container.queryParams, containee.queryParams) && !(options.fragment === "exact" && container.fragment !== containee.fragment);
 }
-
 function equalParams(container, containee) {
   return shallowEqual(container, containee);
 }
-
 function equalSegmentGroups(container, containee, matrixParams) {
   if (!equalPath(container.segments, containee.segments)) return false;
   if (!matrixParamsMatch(container.segments, containee.segments, matrixParams)) {
@@ -261,15 +244,12 @@ function equalSegmentGroups(container, containee, matrixParams) {
   }
   return true;
 }
-
 function containsParams(container, containee) {
   return Object.keys(containee).length <= Object.keys(container).length && Object.keys(containee).every((key) => equalArraysOrString(container[key], containee[key]));
 }
-
 function containsSegmentGroup(container, containee, matrixParams) {
   return containsSegmentGroupHelper(container, containee, containee.segments, matrixParams);
 }
-
 function containsSegmentGroupHelper(container, containee, containeePaths, matrixParams) {
   if (container.segments.length > containeePaths.length) {
     const current = container.segments.slice(0, containeePaths.length);
@@ -296,20 +276,17 @@ function containsSegmentGroupHelper(container, containee, containeePaths, matrix
     return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next, matrixParams);
   }
 }
-
 function matrixParamsMatch(containerPaths, containeePaths, options) {
   return containeePaths.every((containeeSegment, i) => {
     return paramCompareMap[options](containerPaths[i].parameters, containeeSegment.parameters);
   });
 }
-
 var UrlTree = class {
   root;
   queryParams;
   fragment;
   /** @internal */
   _queryParamMap;
-
   constructor(root = new UrlSegmentGroup([], {}), queryParams = {}, fragment = null) {
     this.root = root;
     this.queryParams = queryParams;
@@ -320,12 +297,10 @@ var UrlTree = class {
       }
     }
   }
-
   get queryParamMap() {
     this._queryParamMap ??= convertToParamMap(this.queryParams);
     return this._queryParamMap;
   }
-
   /** @docsNotRequired */
   toString() {
     return DEFAULT_SERIALIZER.serialize(this);
@@ -336,23 +311,19 @@ var UrlSegmentGroup = class {
   children;
   /** The parent node in the url tree */
   parent = null;
-
   constructor(segments, children) {
     this.segments = segments;
     this.children = children;
     Object.values(children).forEach((v) => v.parent = this);
   }
-
   /** Whether the segment has child segments */
   hasChildren() {
     return this.numberOfChildren > 0;
   }
-
   /** Number of child segments */
   get numberOfChildren() {
     return Object.keys(this.children).length;
   }
-
   /** @docsNotRequired */
   toString() {
     return serializePaths(this);
@@ -363,32 +334,26 @@ var UrlSegment = class {
   parameters;
   /** @internal */
   _parameterMap;
-
   constructor(path, parameters) {
     this.path = path;
     this.parameters = parameters;
   }
-
   get parameterMap() {
     this._parameterMap ??= convertToParamMap(this.parameters);
     return this._parameterMap;
   }
-
   /** @docsNotRequired */
   toString() {
     return serializePath(this);
   }
 };
-
 function equalSegments(as, bs) {
   return equalPath(as, bs) && as.every((a, i) => shallowEqual(a.parameters, bs[i].parameters));
 }
-
 function equalPath(as, bs) {
   if (as.length !== bs.length) return false;
   return as.every((a, i) => a.path === bs[i].path);
 }
-
 function mapChildrenIntoArray(segment, fn) {
   let res = [];
   Object.entries(segment.children).forEach(([childOutlet, child]) => {
@@ -403,7 +368,6 @@ function mapChildrenIntoArray(segment, fn) {
   });
   return res;
 }
-
 var UrlSerializer = class _UrlSerializer {
   static ɵfac = function UrlSerializer_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _UrlSerializer)();
@@ -429,7 +393,6 @@ var DefaultUrlSerializer = class {
     const p = new UrlParser(url);
     return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
   }
-
   /** Converts a `UrlTree` into a url */
   serialize(tree2) {
     const segment = `/${serializeSegment(tree2.root, true)}`;
@@ -439,11 +402,9 @@ var DefaultUrlSerializer = class {
   }
 };
 var DEFAULT_SERIALIZER = new DefaultUrlSerializer();
-
 function serializePaths(segment) {
   return segment.segments.map((p) => serializePath(p)).join("/");
 }
-
 function serializeSegment(segment, root) {
   if (!segment.hasChildren()) {
     return serializePaths(segment);
@@ -470,83 +431,63 @@ function serializeSegment(segment, root) {
     return `${serializePaths(segment)}/(${children.join("//")})`;
   }
 }
-
 function encodeUriString(s) {
   return encodeURIComponent(s).replace(/%40/g, "@").replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",");
 }
-
 function encodeUriQuery(s) {
   return encodeUriString(s).replace(/%3B/gi, ";");
 }
-
 function encodeUriFragment(s) {
   return encodeURI(s);
 }
-
 function encodeUriSegment(s) {
   return encodeUriString(s).replace(/\(/g, "%28").replace(/\)/g, "%29").replace(/%26/gi, "&");
 }
-
 function decode(s) {
   return decodeURIComponent(s);
 }
-
 function decodeQuery(s) {
   return decode(s.replace(/\+/g, "%20"));
 }
-
 function serializePath(path) {
   return `${encodeUriSegment(path.path)}${serializeMatrixParams(path.parameters)}`;
 }
-
 function serializeMatrixParams(params) {
   return Object.entries(params).map(([key, value]) => `;${encodeUriSegment(key)}=${encodeUriSegment(value)}`).join("");
 }
-
 function serializeQueryParams(params) {
   const strParams = Object.entries(params).map(([name, value]) => {
     return Array.isArray(value) ? value.map((v) => `${encodeUriQuery(name)}=${encodeUriQuery(v)}`).join("&") : `${encodeUriQuery(name)}=${encodeUriQuery(value)}`;
   }).filter((s) => s);
   return strParams.length ? `?${strParams.join("&")}` : "";
 }
-
 var SEGMENT_RE = /^[^\/()?;#]+/;
-
 function matchSegments(str) {
   const match2 = str.match(SEGMENT_RE);
   return match2 ? match2[0] : "";
 }
-
 var MATRIX_PARAM_SEGMENT_RE = /^[^\/()?;=#]+/;
-
 function matchMatrixKeySegments(str) {
   const match2 = str.match(MATRIX_PARAM_SEGMENT_RE);
   return match2 ? match2[0] : "";
 }
-
 var QUERY_PARAM_RE = /^[^=?&#]+/;
-
 function matchQueryParams(str) {
   const match2 = str.match(QUERY_PARAM_RE);
   return match2 ? match2[0] : "";
 }
-
 var QUERY_PARAM_VALUE_RE = /^[^&#]+/;
-
 function matchUrlQueryParamValue(str) {
   const match2 = str.match(QUERY_PARAM_VALUE_RE);
   return match2 ? match2[0] : "";
 }
-
 var UrlParser = class {
   url;
   remaining;
-
   constructor(url) {
     this.url = url;
     this.remaining = url;
   }
-
   parseRootSegment() {
     this.consumeOptional("/");
     if (this.remaining === "" || this.peekStartsWith("?") || this.peekStartsWith("#")) {
@@ -554,7 +495,6 @@ var UrlParser = class {
     }
     return new UrlSegmentGroup([], this.parseChildren());
   }
-
   parseQueryParams() {
     const params = {};
     if (this.consumeOptional("?")) {
@@ -564,11 +504,9 @@ var UrlParser = class {
     }
     return params;
   }
-
   parseFragment() {
     return this.consumeOptional("#") ? decodeURIComponent(this.remaining) : null;
   }
-
   parseChildren() {
     if (this.remaining === "") {
       return {};
@@ -596,7 +534,6 @@ var UrlParser = class {
     }
     return res;
   }
-
   // parse a segment with its matrix parameters
   // ie `name;k1=v1;k2`
   parseSegment() {
@@ -607,7 +544,6 @@ var UrlParser = class {
     this.capture(path);
     return new UrlSegment(decode(path), this.parseMatrixParams());
   }
-
   parseMatrixParams() {
     const params = {};
     while (this.consumeOptional(";")) {
@@ -615,7 +551,6 @@ var UrlParser = class {
     }
     return params;
   }
-
   parseParam(params) {
     const key = matchMatrixKeySegments(this.remaining);
     if (!key) {
@@ -632,7 +567,6 @@ var UrlParser = class {
     }
     params[decode(key)] = decode(value);
   }
-
   // Parse a single query parameter `name[=value]`
   parseQueryParam(params) {
     const key = matchQueryParams(this.remaining);
@@ -661,7 +595,6 @@ var UrlParser = class {
       params[decodedKey] = decodedVal;
     }
   }
-
   // parse `(a/b//outlet_name:c/d)`
   parseParens(allowPrimary) {
     const segments = {};
@@ -686,11 +619,9 @@ var UrlParser = class {
     }
     return segments;
   }
-
   peekStartsWith(str) {
     return this.remaining.startsWith(str);
   }
-
   // Consumes the prefix when it is present and returns whether it has been consumed
   consumeOptional(str) {
     if (this.peekStartsWith(str)) {
@@ -699,20 +630,17 @@ var UrlParser = class {
     }
     return false;
   }
-
   capture(str) {
     if (!this.consumeOptional(str)) {
       throw new RuntimeError(4011, (typeof ngDevMode === "undefined" || ngDevMode) && `Expected "${str}".`);
     }
   }
 };
-
 function createRoot(rootCandidate) {
   return rootCandidate.segments.length > 0 ? new UrlSegmentGroup([], {
     [PRIMARY_OUTLET]: rootCandidate
   }) : rootCandidate;
 }
-
 function squashSegmentGroup(segmentGroup) {
   const newChildren = {};
   for (const [childOutlet, child] of Object.entries(segmentGroup.children)) {
@@ -728,7 +656,6 @@ function squashSegmentGroup(segmentGroup) {
   const s = new UrlSegmentGroup(segmentGroup.segments, newChildren);
   return mergeTrivialChildren(s);
 }
-
 function mergeTrivialChildren(s) {
   if (s.numberOfChildren === 1 && s.children[PRIMARY_OUTLET]) {
     const c = s.children[PRIMARY_OUTLET];
@@ -736,19 +663,15 @@ function mergeTrivialChildren(s) {
   }
   return s;
 }
-
 function isUrlTree(v) {
   return v instanceof UrlTree;
 }
-
 function createUrlTreeFromSnapshot(relativeTo, commands, queryParams = null, fragment = null) {
   const relativeToUrlSegmentGroup = createSegmentGroupFromRoute(relativeTo);
   return createUrlTreeFromSegmentGroup(relativeToUrlSegmentGroup, commands, queryParams, fragment);
 }
-
 function createSegmentGroupFromRoute(route) {
   let targetGroup;
-
   function createSegmentGroupFromRouteRecursive(currentRoute) {
     const childOutlets = {};
     for (const childSnapshot of currentRoute.children) {
@@ -761,12 +684,10 @@ function createSegmentGroupFromRoute(route) {
     }
     return segmentGroup;
   }
-
   const rootCandidate = createSegmentGroupFromRouteRecursive(route.root);
   const rootSegmentGroup = createRoot(rootCandidate);
   return targetGroup ?? rootSegmentGroup;
 }
-
 function createUrlTreeFromSegmentGroup(relativeTo, commands, queryParams, fragment) {
   let root = relativeTo;
   while (root.parent) {
@@ -783,15 +704,12 @@ function createUrlTreeFromSegmentGroup(relativeTo, commands, queryParams, fragme
   const newSegmentGroup = position.processChildren ? updateSegmentGroupChildren(position.segmentGroup, position.index, nav.commands) : updateSegmentGroup(position.segmentGroup, position.index, nav.commands);
   return tree(root, position.segmentGroup, newSegmentGroup, queryParams, fragment);
 }
-
 function isMatrixParams(command) {
   return typeof command === "object" && command != null && !command.outlets && !command.segmentPath;
 }
-
 function isCommandWithOutlets(command) {
   return typeof command === "object" && command != null && command.outlets;
 }
-
 function tree(oldRoot, oldSegmentGroup, newSegmentGroup, queryParams, fragment) {
   let qp = {};
   if (queryParams) {
@@ -808,7 +726,6 @@ function tree(oldRoot, oldSegmentGroup, newSegmentGroup, queryParams, fragment) 
   const newRoot = createRoot(squashSegmentGroup(rootCandidate));
   return new UrlTree(newRoot, qp, fragment);
 }
-
 function replaceSegment(current, oldSegment, newSegment) {
   const children = {};
   Object.entries(current.children).forEach(([outletName, c]) => {
@@ -820,12 +737,10 @@ function replaceSegment(current, oldSegment, newSegment) {
   });
   return new UrlSegmentGroup(current.segments, children);
 }
-
 var Navigation = class {
   isAbsolute;
   numberOfDoubleDots;
   commands;
-
   constructor(isAbsolute, numberOfDoubleDots, commands) {
     this.isAbsolute = isAbsolute;
     this.numberOfDoubleDots = numberOfDoubleDots;
@@ -838,12 +753,10 @@ var Navigation = class {
       throw new RuntimeError(4004, (typeof ngDevMode === "undefined" || ngDevMode) && "{outlets:{}} has to be the last command");
     }
   }
-
   toRoot() {
     return this.isAbsolute && this.commands.length === 1 && this.commands[0] == "/";
   }
 };
-
 function computeNavigation(commands) {
   if (typeof commands[0] === "string" && commands.length === 1 && commands[0] === "/") {
     return new Navigation(true, 0, commands);
@@ -885,19 +798,16 @@ function computeNavigation(commands) {
   }, []);
   return new Navigation(isAbsolute, numberOfDoubleDots, res);
 }
-
 var Position = class {
   segmentGroup;
   processChildren;
   index;
-
   constructor(segmentGroup, processChildren, index) {
     this.segmentGroup = segmentGroup;
     this.processChildren = processChildren;
     this.index = index;
   }
 };
-
 function findStartingPositionForTargetGroup(nav, root, target) {
   if (nav.isAbsolute) {
     return new Position(root, true, 0);
@@ -912,7 +822,6 @@ function findStartingPositionForTargetGroup(nav, root, target) {
   const index = target.segments.length - 1 + modifier;
   return createPositionApplyingDoubleDots(target, index, nav.numberOfDoubleDots);
 }
-
 function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
   let g = group;
   let ci = index;
@@ -927,7 +836,6 @@ function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
   }
   return new Position(g, false, ci - dd);
 }
-
 function getOutlets(commands) {
   if (isCommandWithOutlets(commands[0])) {
     return commands[0].outlets;
@@ -936,7 +844,6 @@ function getOutlets(commands) {
     [PRIMARY_OUTLET]: commands
   };
 }
-
 function updateSegmentGroup(segmentGroup, startIndex, commands) {
   segmentGroup ??= new UrlSegmentGroup([], {});
   if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
@@ -958,7 +865,6 @@ function updateSegmentGroup(segmentGroup, startIndex, commands) {
     return createNewSegmentGroup(segmentGroup, startIndex, commands);
   }
 }
-
 function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
   if (commands.length === 0) {
     return new UrlSegmentGroup(segmentGroup.segments, {});
@@ -985,7 +891,6 @@ function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
     return new UrlSegmentGroup(segmentGroup.segments, children);
   }
 }
-
 function prefixedWith(segmentGroup, startIndex, commands) {
   let currentCommandIndex = 0;
   let currentPathIndex = startIndex;
@@ -1019,7 +924,6 @@ function prefixedWith(segmentGroup, startIndex, commands) {
     commandIndex: currentCommandIndex
   };
 }
-
 function createNewSegmentGroup(segmentGroup, startIndex, commands) {
   const paths = segmentGroup.segments.slice(0, startIndex);
   let i = 0;
@@ -1047,7 +951,6 @@ function createNewSegmentGroup(segmentGroup, startIndex, commands) {
   }
   return new UrlSegmentGroup(paths, {});
 }
-
 function createNewSegmentChildren(outlets) {
   const children = {};
   Object.entries(outlets).forEach(([outlet, commands]) => {
@@ -1060,20 +963,17 @@ function createNewSegmentChildren(outlets) {
   });
   return children;
 }
-
 function stringify(params) {
   const res = {};
   Object.entries(params).forEach(([k, v]) => res[k] = `${v}`);
   return res;
 }
-
 function compare(path, params, segment) {
   return path == segment.path && shallowEqual(params, segment.parameters);
 }
-
 var IMPERATIVE_NAVIGATION = "imperative";
 var EventType;
-(function (EventType2) {
+(function(EventType2) {
   EventType2[EventType2["NavigationStart"] = 0] = "NavigationStart";
   EventType2[EventType2["NavigationEnd"] = 1] = "NavigationEnd";
   EventType2[EventType2["NavigationCancel"] = 2] = "NavigationCancel";
@@ -1095,7 +995,6 @@ var EventType;
 var RouterEvent = class {
   id;
   url;
-
   constructor(id, url) {
     this.id = id;
     this.url = url;
@@ -1130,13 +1029,11 @@ var NavigationStart = class extends RouterEvent {
    *
    */
   restoredState;
-
   constructor(id, url, navigationTrigger = "imperative", restoredState = null) {
     super(id, url);
     this.navigationTrigger = navigationTrigger;
     this.restoredState = restoredState;
   }
-
   /** @docsNotRequired */
   toString() {
     return `NavigationStart(id: ${this.id}, url: '${this.url}')`;
@@ -1145,26 +1042,24 @@ var NavigationStart = class extends RouterEvent {
 var NavigationEnd = class extends RouterEvent {
   urlAfterRedirects;
   type = EventType.NavigationEnd;
-
   constructor(id, url, urlAfterRedirects) {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
   }
-
   /** @docsNotRequired */
   toString() {
     return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}')`;
   }
 };
 var NavigationCancellationCode;
-(function (NavigationCancellationCode2) {
+(function(NavigationCancellationCode2) {
   NavigationCancellationCode2[NavigationCancellationCode2["Redirect"] = 0] = "Redirect";
   NavigationCancellationCode2[NavigationCancellationCode2["SupersededByNewNavigation"] = 1] = "SupersededByNewNavigation";
   NavigationCancellationCode2[NavigationCancellationCode2["NoDataFromResolver"] = 2] = "NoDataFromResolver";
   NavigationCancellationCode2[NavigationCancellationCode2["GuardRejected"] = 3] = "GuardRejected";
 })(NavigationCancellationCode || (NavigationCancellationCode = {}));
 var NavigationSkippedCode;
-(function (NavigationSkippedCode2) {
+(function(NavigationSkippedCode2) {
   NavigationSkippedCode2[NavigationSkippedCode2["IgnoredSameUrlNavigation"] = 0] = "IgnoredSameUrlNavigation";
   NavigationSkippedCode2[NavigationSkippedCode2["IgnoredByUrlHandlingStrategy"] = 1] = "IgnoredByUrlHandlingStrategy";
 })(NavigationSkippedCode || (NavigationSkippedCode = {}));
@@ -1172,13 +1067,11 @@ var NavigationCancel = class extends RouterEvent {
   reason;
   code;
   type = EventType.NavigationCancel;
-
   constructor(id, url, reason, code) {
     super(id, url);
     this.reason = reason;
     this.code = code;
   }
-
   /** @docsNotRequired */
   toString() {
     return `NavigationCancel(id: ${this.id}, url: '${this.url}')`;
@@ -1188,7 +1081,6 @@ var NavigationSkipped = class extends RouterEvent {
   reason;
   code;
   type = EventType.NavigationSkipped;
-
   constructor(id, url, reason, code) {
     super(id, url);
     this.reason = reason;
@@ -1199,13 +1091,11 @@ var NavigationError = class extends RouterEvent {
   error;
   target;
   type = EventType.NavigationError;
-
   constructor(id, url, error, target) {
     super(id, url);
     this.error = error;
     this.target = target;
   }
-
   /** @docsNotRequired */
   toString() {
     return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
@@ -1215,13 +1105,11 @@ var RoutesRecognized = class extends RouterEvent {
   urlAfterRedirects;
   state;
   type = EventType.RoutesRecognized;
-
   constructor(id, url, urlAfterRedirects, state) {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
   }
-
   /** @docsNotRequired */
   toString() {
     return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
@@ -1231,13 +1119,11 @@ var GuardsCheckStart = class extends RouterEvent {
   urlAfterRedirects;
   state;
   type = EventType.GuardsCheckStart;
-
   constructor(id, url, urlAfterRedirects, state) {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
   }
-
   toString() {
     return `GuardsCheckStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
   }
@@ -1247,14 +1133,12 @@ var GuardsCheckEnd = class extends RouterEvent {
   state;
   shouldActivate;
   type = EventType.GuardsCheckEnd;
-
   constructor(id, url, urlAfterRedirects, state, shouldActivate) {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
     this.shouldActivate = shouldActivate;
   }
-
   toString() {
     return `GuardsCheckEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state}, shouldActivate: ${this.shouldActivate})`;
   }
@@ -1263,13 +1147,11 @@ var ResolveStart = class extends RouterEvent {
   urlAfterRedirects;
   state;
   type = EventType.ResolveStart;
-
   constructor(id, url, urlAfterRedirects, state) {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
   }
-
   toString() {
     return `ResolveStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
   }
@@ -1278,13 +1160,11 @@ var ResolveEnd = class extends RouterEvent {
   urlAfterRedirects;
   state;
   type = EventType.ResolveEnd;
-
   constructor(id, url, urlAfterRedirects, state) {
     super(id, url);
     this.urlAfterRedirects = urlAfterRedirects;
     this.state = state;
   }
-
   toString() {
     return `ResolveEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${this.urlAfterRedirects}', state: ${this.state})`;
   }
@@ -1292,11 +1172,9 @@ var ResolveEnd = class extends RouterEvent {
 var RouteConfigLoadStart = class {
   route;
   type = EventType.RouteConfigLoadStart;
-
   constructor(route) {
     this.route = route;
   }
-
   toString() {
     return `RouteConfigLoadStart(path: ${this.route.path})`;
   }
@@ -1304,11 +1182,9 @@ var RouteConfigLoadStart = class {
 var RouteConfigLoadEnd = class {
   route;
   type = EventType.RouteConfigLoadEnd;
-
   constructor(route) {
     this.route = route;
   }
-
   toString() {
     return `RouteConfigLoadEnd(path: ${this.route.path})`;
   }
@@ -1316,11 +1192,9 @@ var RouteConfigLoadEnd = class {
 var ChildActivationStart = class {
   snapshot;
   type = EventType.ChildActivationStart;
-
   constructor(snapshot) {
     this.snapshot = snapshot;
   }
-
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
     return `ChildActivationStart(path: '${path}')`;
@@ -1329,11 +1203,9 @@ var ChildActivationStart = class {
 var ChildActivationEnd = class {
   snapshot;
   type = EventType.ChildActivationEnd;
-
   constructor(snapshot) {
     this.snapshot = snapshot;
   }
-
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
     return `ChildActivationEnd(path: '${path}')`;
@@ -1342,11 +1214,9 @@ var ChildActivationEnd = class {
 var ActivationStart = class {
   snapshot;
   type = EventType.ActivationStart;
-
   constructor(snapshot) {
     this.snapshot = snapshot;
   }
-
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
     return `ActivationStart(path: '${path}')`;
@@ -1355,11 +1225,9 @@ var ActivationStart = class {
 var ActivationEnd = class {
   snapshot;
   type = EventType.ActivationEnd;
-
   constructor(snapshot) {
     this.snapshot = snapshot;
   }
-
   toString() {
     const path = this.snapshot.routeConfig && this.snapshot.routeConfig.path || "";
     return `ActivationEnd(path: '${path}')`;
@@ -1370,13 +1238,11 @@ var Scroll = class {
   position;
   anchor;
   type = EventType.Scroll;
-
   constructor(routerEvent, position, anchor) {
     this.routerEvent = routerEvent;
     this.position = position;
     this.anchor = anchor;
   }
-
   toString() {
     const pos = this.position ? `${this.position[0]}, ${this.position[1]}` : null;
     return `Scroll(anchor: '${this.anchor}', position: '${pos}')`;
@@ -1387,13 +1253,11 @@ var BeforeActivateRoutes = class {
 var RedirectRequest = class {
   url;
   navigationBehaviorOptions;
-
   constructor(url, navigationBehaviorOptions) {
     this.url = url;
     this.navigationBehaviorOptions = navigationBehaviorOptions;
   }
 };
-
 function stringifyEvent(routerEvent) {
   switch (routerEvent.type) {
     case EventType.ActivationEnd:
@@ -1433,14 +1297,12 @@ function stringifyEvent(routerEvent) {
       return `Scroll(anchor: '${routerEvent.anchor}', position: '${pos}')`;
   }
 }
-
 function getOrCreateRouteInjectorIfNeeded(route, currentInjector) {
   if (route.providers && !route._injector) {
     route._injector = createEnvironmentInjector(route.providers, currentInjector, `Route: ${route.path}`);
   }
   return route._injector ?? currentInjector;
 }
-
 function validateConfig(config, parentPath = "", requireStandaloneComponents = false) {
   for (let i = 0; i < config.length; i++) {
     const route = config[i];
@@ -1448,7 +1310,6 @@ function validateConfig(config, parentPath = "", requireStandaloneComponents = f
     validateNode(route, fullPath, requireStandaloneComponents);
   }
 }
-
 function assertStandalone(fullPath, component) {
   if (component && isNgModule(component)) {
     throw new RuntimeError(4014, `Invalid configuration of route '${fullPath}'. You are using 'loadComponent' with a module, but it must be used with standalone components. Use 'loadChildren' instead.`);
@@ -1456,7 +1317,6 @@ function assertStandalone(fullPath, component) {
     throw new RuntimeError(4014, `Invalid configuration of route '${fullPath}'. The component must be standalone.`);
   }
 }
-
 function validateNode(route, fullPath, requireStandaloneComponents) {
   if (typeof ngDevMode === "undefined" || ngDevMode) {
     if (!route) {
@@ -1520,7 +1380,6 @@ function validateNode(route, fullPath, requireStandaloneComponents) {
     validateConfig(route.children, fullPath, requireStandaloneComponents);
   }
 }
-
 function getFullPath(parentPath, currentRoute) {
   if (!currentRoute) {
     return parentPath;
@@ -1535,17 +1394,14 @@ function getFullPath(parentPath, currentRoute) {
     return `${parentPath}/${currentRoute.path}`;
   }
 }
-
 function getOutlet(route) {
   return route.outlet || PRIMARY_OUTLET;
 }
-
 function sortByMatchingOutlets(routes, outletName) {
   const sortedConfig = routes.filter((r) => getOutlet(r) === outletName);
   sortedConfig.push(...routes.filter((r) => getOutlet(r) !== outletName));
   return sortedConfig;
 }
-
 function getClosestRouteInjector(snapshot) {
   if (!snapshot) return null;
   if (snapshot.routeConfig?._injector) {
@@ -1558,18 +1414,15 @@ function getClosestRouteInjector(snapshot) {
   }
   return null;
 }
-
 var OutletContext = class {
   rootInjector;
   outlet = null;
   route = null;
   children;
   attachRef = null;
-
   get injector() {
     return getClosestRouteInjector(this.route?.snapshot) ?? this.rootInjector;
   }
-
   constructor(rootInjector) {
     this.rootInjector = rootInjector;
     this.children = new ChildrenOutletContexts(this.rootInjector);
@@ -1579,19 +1432,16 @@ var ChildrenOutletContexts = class _ChildrenOutletContexts {
   rootInjector;
   // contexts for child outlets, by name.
   contexts = /* @__PURE__ */ new Map();
-
   /** @nodoc */
   constructor(rootInjector) {
     this.rootInjector = rootInjector;
   }
-
   /** Called when a `RouterOutlet` directive is instantiated */
   onChildOutletCreated(childName, outlet) {
     const context = this.getOrCreateContext(childName);
     context.outlet = outlet;
     this.contexts.set(childName, context);
   }
-
   /**
    * Called when a `RouterOutlet` directive is destroyed.
    * We need to keep the context as the outlet could be destroyed inside a NgIf and might be
@@ -1604,7 +1454,6 @@ var ChildrenOutletContexts = class _ChildrenOutletContexts {
       context.attachRef = null;
     }
   }
-
   /**
    * Called when the corresponding route is deactivated during navigation.
    * Because the component get destroyed, all children outlet are destroyed.
@@ -1614,11 +1463,9 @@ var ChildrenOutletContexts = class _ChildrenOutletContexts {
     this.contexts = /* @__PURE__ */ new Map();
     return contexts;
   }
-
   onOutletReAttached(contexts) {
     this.contexts = contexts;
   }
-
   getOrCreateContext(childName) {
     let context = this.getContext(childName);
     if (!context) {
@@ -1627,11 +1474,9 @@ var ChildrenOutletContexts = class _ChildrenOutletContexts {
     }
     return context;
   }
-
   getContext(childName) {
     return this.contexts.get(childName) || null;
   }
-
   static ɵfac = function ChildrenOutletContexts_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ChildrenOutletContexts)(ɵɵinject(EnvironmentInjector));
   };
@@ -1654,15 +1499,12 @@ var ChildrenOutletContexts = class _ChildrenOutletContexts {
 var Tree = class {
   /** @internal */
   _root;
-
   constructor(root) {
     this._root = root;
   }
-
   get root() {
     return this._root.value;
   }
-
   /**
    * @internal
    */
@@ -1670,7 +1512,6 @@ var Tree = class {
     const p = this.pathFromRoot(t);
     return p.length > 1 ? p[p.length - 2] : null;
   }
-
   /**
    * @internal
    */
@@ -1678,7 +1519,6 @@ var Tree = class {
     const n = findNode(t, this._root);
     return n ? n.children.map((t2) => t2.value) : [];
   }
-
   /**
    * @internal
    */
@@ -1686,7 +1526,6 @@ var Tree = class {
     const n = findNode(t, this._root);
     return n && n.children.length > 0 ? n.children[0].value : null;
   }
-
   /**
    * @internal
    */
@@ -1696,7 +1535,6 @@ var Tree = class {
     const c = p[p.length - 2].children.map((c2) => c2.value);
     return c.filter((cc) => cc !== t);
   }
-
   /**
    * @internal
    */
@@ -1704,7 +1542,6 @@ var Tree = class {
     return findPath(t, this._root).map((s) => s.value);
   }
 };
-
 function findNode(value, node) {
   if (value === node.value) return node;
   for (const child of node.children) {
@@ -1713,7 +1550,6 @@ function findNode(value, node) {
   }
   return null;
 }
-
 function findPath(value, node) {
   if (value === node.value) return [node];
   for (const child of node.children) {
@@ -1725,21 +1561,17 @@ function findPath(value, node) {
   }
   return [];
 }
-
 var TreeNode = class {
   value;
   children;
-
   constructor(value, children) {
     this.value = value;
     this.children = children;
   }
-
   toString() {
     return `TreeNode(${this.value})`;
   }
 };
-
 function nodeChildrenAsMap(node) {
   const map2 = {};
   if (node) {
@@ -1747,22 +1579,18 @@ function nodeChildrenAsMap(node) {
   }
   return map2;
 }
-
 var RouterState = class extends Tree {
   snapshot;
-
   /** @internal */
   constructor(root, snapshot) {
     super(root);
     this.snapshot = snapshot;
     setRouterState(this, root);
   }
-
   toString() {
     return this.snapshot.toString();
   }
 };
-
 function createEmptyState(rootComponent) {
   const snapshot = createEmptyStateSnapshot(rootComponent);
   const emptyUrl = new BehaviorSubject([new UrlSegment("", {})]);
@@ -1774,7 +1602,6 @@ function createEmptyState(rootComponent) {
   activated.snapshot = snapshot.root;
   return new RouterState(new TreeNode(activated, []), snapshot);
 }
-
 function createEmptyStateSnapshot(rootComponent) {
   const emptyParams = {};
   const emptyData = {};
@@ -1783,7 +1610,6 @@ function createEmptyStateSnapshot(rootComponent) {
   const activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, {});
   return new RouterStateSnapshot("", new TreeNode(activated, []));
 }
-
 var ActivatedRoute = class {
   urlSubject;
   paramsSubject;
@@ -1814,7 +1640,6 @@ var ActivatedRoute = class {
   fragment;
   /** An observable of the static and resolved data of this route. */
   data;
-
   /** @internal */
   constructor(urlSubject, paramsSubject, queryParamsSubject, fragmentSubject, dataSubject, outlet, component, futureSnapshot) {
     this.urlSubject = urlSubject;
@@ -1832,37 +1657,30 @@ var ActivatedRoute = class {
     this.fragment = fragmentSubject;
     this.data = dataSubject;
   }
-
   /** The configuration used to match this route. */
   get routeConfig() {
     return this._futureSnapshot.routeConfig;
   }
-
   /** The root of the router state. */
   get root() {
     return this._routerState.root;
   }
-
   /** The parent of this route in the router state tree. */
   get parent() {
     return this._routerState.parent(this);
   }
-
   /** The first child of this route in the router state tree. */
   get firstChild() {
     return this._routerState.firstChild(this);
   }
-
   /** The children of this route in the router state tree. */
   get children() {
     return this._routerState.children(this);
   }
-
   /** The path from the root of the router state tree to this route. */
   get pathFromRoot() {
     return this._routerState.pathFromRoot(this);
   }
-
   /**
    * An Observable that contains a map of the required and optional parameters
    * specific to the route.
@@ -1872,7 +1690,6 @@ var ActivatedRoute = class {
     this._paramMap ??= this.params.pipe(map((p) => convertToParamMap(p)));
     return this._paramMap;
   }
-
   /**
    * An Observable that contains a map of the query parameters available to all routes.
    * The map supports retrieving single and multiple values from the query parameter.
@@ -1881,20 +1698,18 @@ var ActivatedRoute = class {
     this._queryParamMap ??= this.queryParams.pipe(map((p) => convertToParamMap(p)));
     return this._queryParamMap;
   }
-
   toString() {
     return this.snapshot ? this.snapshot.toString() : `Future(${this._futureSnapshot})`;
   }
 };
-
 function getInherited(route, parent, paramsInheritanceStrategy = "emptyOnly") {
   let inherited;
   const {
     routeConfig
   } = route;
   if (parent !== null && (paramsInheritanceStrategy === "always" || // inherit parent data if route is empty path
-    routeConfig?.path === "" || // inherit parent data if parent was componentless
-    !parent.component && !parent.routeConfig?.loadComponent)) {
+  routeConfig?.path === "" || // inherit parent data if parent was componentless
+  !parent.component && !parent.routeConfig?.loadComponent)) {
     inherited = {
       params: __spreadValues(__spreadValues({}, parent.params), route.params),
       data: __spreadValues(__spreadValues({}, parent.data), route.data),
@@ -1912,7 +1727,6 @@ function getInherited(route, parent, paramsInheritanceStrategy = "emptyOnly") {
   }
   return inherited;
 }
-
 var ActivatedRouteSnapshot = class {
   url;
   params;
@@ -1933,12 +1747,10 @@ var ActivatedRouteSnapshot = class {
   _paramMap;
   /** @internal */
   _queryParamMap;
-
   /** The resolved route title */
   get title() {
     return this.data?.[RouteTitleKey];
   }
-
   /** @internal */
   constructor(url, params, queryParams, fragment, data, outlet, component, routeConfig, resolve) {
     this.url = url;
@@ -1951,42 +1763,34 @@ var ActivatedRouteSnapshot = class {
     this.routeConfig = routeConfig;
     this._resolve = resolve;
   }
-
   /** The root of the router state */
   get root() {
     return this._routerState.root;
   }
-
   /** The parent of this route in the router state tree */
   get parent() {
     return this._routerState.parent(this);
   }
-
   /** The first child of this route in the router state tree */
   get firstChild() {
     return this._routerState.firstChild(this);
   }
-
   /** The children of this route in the router state tree */
   get children() {
     return this._routerState.children(this);
   }
-
   /** The path from the root of the router state tree to this route */
   get pathFromRoot() {
     return this._routerState.pathFromRoot(this);
   }
-
   get paramMap() {
     this._paramMap ??= convertToParamMap(this.params);
     return this._paramMap;
   }
-
   get queryParamMap() {
     this._queryParamMap ??= convertToParamMap(this.queryParams);
     return this._queryParamMap;
   }
-
   toString() {
     const url = this.url.map((segment) => segment.toString()).join("/");
     const matched = this.routeConfig ? this.routeConfig.path : "";
@@ -1995,29 +1799,24 @@ var ActivatedRouteSnapshot = class {
 };
 var RouterStateSnapshot = class extends Tree {
   url;
-
   /** @internal */
   constructor(url, root) {
     super(root);
     this.url = url;
     setRouterState(this, root);
   }
-
   toString() {
     return serializeNode(this._root);
   }
 };
-
 function setRouterState(state, node) {
   node.value._routerState = state;
   node.children.forEach((c) => setRouterState(state, c));
 }
-
 function serializeNode(node) {
   const c = node.children.length > 0 ? ` { ${node.children.map(serializeNode).join(", ")} } ` : "";
   return `${node.value}${c}`;
 }
-
 function advanceActivatedRoute(route) {
   if (route.snapshot) {
     const currentSnapshot = route.snapshot;
@@ -2043,26 +1842,21 @@ function advanceActivatedRoute(route) {
     route.dataSubject.next(route._futureSnapshot.data);
   }
 }
-
 function equalParamsAndUrlSegments(a, b) {
   const equalUrlParams = shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
   const parentsMismatch = !a.parent !== !b.parent;
   return equalUrlParams && !parentsMismatch && (!a.parent || equalParamsAndUrlSegments(a.parent, b.parent));
 }
-
 function hasStaticTitle(config) {
   return typeof config.title === "string" || config.title === null;
 }
-
 var ROUTER_OUTLET_DATA = new InjectionToken(ngDevMode ? "RouterOutlet data" : "");
 var RouterOutlet = class _RouterOutlet {
   activated = null;
-
   /** @internal */
   get activatedComponentRef() {
     return this.activated;
   }
-
   _activatedRoute = null;
   /**
    * The name of the outlet
@@ -2095,7 +1889,6 @@ var RouterOutlet = class _RouterOutlet {
   });
   /** @nodoc */
   supportsBindingToComponentInputs = true;
-
   /** @nodoc */
   ngOnChanges(changes) {
     if (changes["name"]) {
@@ -2113,7 +1906,6 @@ var RouterOutlet = class _RouterOutlet {
       this.initializeOutletWithName();
     }
   }
-
   /** @nodoc */
   ngOnDestroy() {
     if (this.isTrackedInParentContexts(this.name)) {
@@ -2121,16 +1913,13 @@ var RouterOutlet = class _RouterOutlet {
     }
     this.inputBinder?.unsubscribeFromRouteData(this);
   }
-
   isTrackedInParentContexts(outletName) {
     return this.parentContexts.getContext(outletName)?.outlet === this;
   }
-
   /** @nodoc */
   ngOnInit() {
     this.initializeOutletWithName();
   }
-
   initializeOutletWithName() {
     this.parentContexts.onChildOutletCreated(this.name, this);
     if (this.activated) {
@@ -2145,11 +1934,9 @@ var RouterOutlet = class _RouterOutlet {
       }
     }
   }
-
   get isActivated() {
     return !!this.activated;
   }
-
   /**
    * @returns The currently activated component instance.
    * @throws An error if the outlet is not activated.
@@ -2158,19 +1945,16 @@ var RouterOutlet = class _RouterOutlet {
     if (!this.activated) throw new RuntimeError(4012, (typeof ngDevMode === "undefined" || ngDevMode) && "Outlet is not activated");
     return this.activated.instance;
   }
-
   get activatedRoute() {
     if (!this.activated) throw new RuntimeError(4012, (typeof ngDevMode === "undefined" || ngDevMode) && "Outlet is not activated");
     return this._activatedRoute;
   }
-
   get activatedRouteData() {
     if (this._activatedRoute) {
       return this._activatedRoute.snapshot.data;
     }
     return {};
   }
-
   /**
    * Called when the `RouteReuseStrategy` instructs to detach the subtree
    */
@@ -2183,7 +1967,6 @@ var RouterOutlet = class _RouterOutlet {
     this.detachEvents.emit(cmp.instance);
     return cmp;
   }
-
   /**
    * Called when the `RouteReuseStrategy` instructs to re-attach a previously detached subtree
    */
@@ -2194,7 +1977,6 @@ var RouterOutlet = class _RouterOutlet {
     this.inputBinder?.bindActivatedRouteToOutletComponent(this);
     this.attachEvents.emit(ref.instance);
   }
-
   deactivate() {
     if (this.activated) {
       const c = this.component;
@@ -2204,7 +1986,6 @@ var RouterOutlet = class _RouterOutlet {
       this.deactivateEvents.emit(c);
     }
   }
-
   activateWith(activatedRoute, environmentInjector) {
     if (this.isActivated) {
       throw new RuntimeError(4013, (typeof ngDevMode === "undefined" || ngDevMode) && "Cannot activate an already activated outlet");
@@ -2224,7 +2005,6 @@ var RouterOutlet = class _RouterOutlet {
     this.inputBinder?.bindActivatedRouteToOutletComponent(this);
     this.activateEvents.emit(this.activated.instance);
   }
-
   static ɵfac = function RouterOutlet_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouterOutlet)();
   };
@@ -2279,7 +2059,6 @@ var OutletInjector = class _OutletInjector {
   childContexts;
   parent;
   outletData;
-
   /**
    * This injector has a special handing for the `ActivatedRoute` and
    * `ChildrenOutletContexts` tokens: it returns corresponding values for those
@@ -2298,14 +2077,12 @@ var OutletInjector = class _OutletInjector {
   __ngOutletInjector(parentInjector) {
     return new _OutletInjector(this.route, this.childContexts, parentInjector, this.outletData);
   }
-
   constructor(route, childContexts, parent, outletData) {
     this.route = route;
     this.childContexts = childContexts;
     this.parent = parent;
     this.outletData = outletData;
   }
-
   get(token, notFoundValue) {
     if (token === ActivatedRoute) {
       return this.route;
@@ -2322,17 +2099,14 @@ var OutletInjector = class _OutletInjector {
 var INPUT_BINDER = new InjectionToken("");
 var RoutedComponentInputBinder = class _RoutedComponentInputBinder {
   outletDataSubscriptions = /* @__PURE__ */ new Map();
-
   bindActivatedRouteToOutletComponent(outlet) {
     this.unsubscribeFromRouteData(outlet);
     this.subscribeToRouteData(outlet);
   }
-
   unsubscribeFromRouteData(outlet) {
     this.outletDataSubscriptions.get(outlet)?.unsubscribe();
     this.outletDataSubscriptions.delete(outlet);
   }
-
   subscribeToRouteData(outlet) {
     const {
       activatedRoute
@@ -2361,7 +2135,6 @@ var RoutedComponentInputBinder = class _RoutedComponentInputBinder {
     });
     this.outletDataSubscriptions.set(outlet, dataSubscription);
   }
-
   static ɵfac = function RoutedComponentInputBinder_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RoutedComponentInputBinder)();
   };
@@ -2375,12 +2148,10 @@ var RoutedComponentInputBinder = class _RoutedComponentInputBinder {
     type: Injectable
   }], null, null);
 })();
-
 function createRouterState(routeReuseStrategy, curr, prevState) {
   const root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : void 0);
   return new RouterState(root, curr);
 }
-
 function createNode(routeReuseStrategy, curr, prevState) {
   if (prevState && routeReuseStrategy.shouldReuseRoute(curr.value, prevState.value.snapshot)) {
     const value = prevState.value;
@@ -2402,7 +2173,6 @@ function createNode(routeReuseStrategy, curr, prevState) {
     return new TreeNode(value, children);
   }
 }
-
 function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
   return curr.children.map((child) => {
     for (const p of prevState.children) {
@@ -2413,22 +2183,18 @@ function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
     return createNode(routeReuseStrategy, child);
   });
 }
-
 function createActivatedRoute(c) {
   return new ActivatedRoute(new BehaviorSubject(c.url), new BehaviorSubject(c.params), new BehaviorSubject(c.queryParams), new BehaviorSubject(c.fragment), new BehaviorSubject(c.data), c.outlet, c.component, c);
 }
-
 var RedirectCommand = class {
   redirectTo;
   navigationBehaviorOptions;
-
   constructor(redirectTo, navigationBehaviorOptions) {
     this.redirectTo = redirectTo;
     this.navigationBehaviorOptions = navigationBehaviorOptions;
   }
 };
 var NAVIGATION_CANCELING_ERROR = "ngNavigationCancelingError";
-
 function redirectingNavigationError(urlSerializer, redirect) {
   const {
     redirectTo,
@@ -2442,22 +2208,18 @@ function redirectingNavigationError(urlSerializer, redirect) {
   error.navigationBehaviorOptions = navigationBehaviorOptions;
   return error;
 }
-
 function navigationCancelingError(message, code) {
   const error = new Error(`NavigationCancelingError: ${message || ""}`);
   error[NAVIGATION_CANCELING_ERROR] = true;
   error.cancellationCode = code;
   return error;
 }
-
 function isRedirectingNavigationCancelingError(error) {
   return isNavigationCancelingError(error) && isUrlTree(error.url);
 }
-
 function isNavigationCancelingError(error) {
   return !!error && error[NAVIGATION_CANCELING_ERROR];
 }
-
 var warnedAboutUnsupportedInputBinding = false;
 var activateRoutes = (rootContexts, routeReuseStrategy, forwardEvent, inputBindingEnabled) => map((t) => {
   new ActivateRoutes(routeReuseStrategy, t.targetRouterState, t.currentRouterState, forwardEvent, inputBindingEnabled).activate(rootContexts);
@@ -2469,7 +2231,6 @@ var ActivateRoutes = class {
   currState;
   forwardEvent;
   inputBindingEnabled;
-
   constructor(routeReuseStrategy, futureState, currState, forwardEvent, inputBindingEnabled) {
     this.routeReuseStrategy = routeReuseStrategy;
     this.futureState = futureState;
@@ -2477,7 +2238,6 @@ var ActivateRoutes = class {
     this.forwardEvent = forwardEvent;
     this.inputBindingEnabled = inputBindingEnabled;
   }
-
   activate(parentContexts) {
     const futureRoot = this.futureState._root;
     const currRoot = this.currState ? this.currState._root : null;
@@ -2485,7 +2245,6 @@ var ActivateRoutes = class {
     advanceActivatedRoute(this.futureState.root);
     this.activateChildRoutes(futureRoot, currRoot, parentContexts);
   }
-
   // De-activate the child route that are not re-used for the future state
   deactivateChildRoutes(futureNode, currNode, contexts) {
     const children = nodeChildrenAsMap(currNode);
@@ -2498,7 +2257,6 @@ var ActivateRoutes = class {
       this.deactivateRouteAndItsChildren(v, contexts);
     });
   }
-
   deactivateRoutes(futureNode, currNode, parentContext) {
     const future = futureNode.value;
     const curr = currNode ? currNode.value : null;
@@ -2517,7 +2275,6 @@ var ActivateRoutes = class {
       }
     }
   }
-
   deactivateRouteAndItsChildren(route, parentContexts) {
     if (route.value.component && this.routeReuseStrategy.shouldDetach(route.value.snapshot)) {
       this.detachAndStoreRouteSubtree(route, parentContexts);
@@ -2525,7 +2282,6 @@ var ActivateRoutes = class {
       this.deactivateRouteAndOutlet(route, parentContexts);
     }
   }
-
   detachAndStoreRouteSubtree(route, parentContexts) {
     const context = parentContexts.getContext(route.value.outlet);
     const contexts = context && route.value.component ? context.children : parentContexts;
@@ -2543,7 +2299,6 @@ var ActivateRoutes = class {
       });
     }
   }
-
   deactivateRouteAndOutlet(route, parentContexts) {
     const context = parentContexts.getContext(route.value.outlet);
     const contexts = context && route.value.component ? context.children : parentContexts;
@@ -2560,7 +2315,6 @@ var ActivateRoutes = class {
       context.route = null;
     }
   }
-
   activateChildRoutes(futureNode, currNode, contexts) {
     const children = nodeChildrenAsMap(currNode);
     futureNode.children.forEach((c) => {
@@ -2571,7 +2325,6 @@ var ActivateRoutes = class {
       this.forwardEvent(new ChildActivationEnd(futureNode.value.snapshot));
     }
   }
-
   activateRoutes(futureNode, currNode, parentContexts) {
     const future = futureNode.value;
     const curr = currNode ? currNode.value : null;
@@ -2622,7 +2375,6 @@ var ActivateRoutes = class {
 var CanActivate = class {
   path;
   route;
-
   constructor(path) {
     this.path = path;
     this.route = this.path[this.path.length - 1];
@@ -2631,19 +2383,16 @@ var CanActivate = class {
 var CanDeactivate = class {
   component;
   route;
-
   constructor(component, route) {
     this.component = component;
     this.route = route;
   }
 };
-
 function getAllRouteGuards(future, curr, parentContexts) {
   const futureRoot = future._root;
   const currRoot = curr ? curr._root : null;
   return getChildRouteGuards(futureRoot, currRoot, parentContexts, [futureRoot.value]);
 }
-
 function getCanActivateChild(p) {
   const canActivateChild = p.routeConfig ? p.routeConfig.canActivateChild : null;
   if (!canActivateChild || canActivateChild.length === 0) return null;
@@ -2652,7 +2401,6 @@ function getCanActivateChild(p) {
     guards: canActivateChild
   };
 }
-
 function getTokenOrFunctionIdentity(tokenOrFunction, injector) {
   const NOT_FOUND = Symbol();
   const result = injector.get(tokenOrFunction, NOT_FOUND);
@@ -2665,7 +2413,6 @@ function getTokenOrFunctionIdentity(tokenOrFunction, injector) {
   }
   return result;
 }
-
 function getChildRouteGuards(futureNode, currNode, contexts, futurePath, checks = {
   canDeactivateChecks: [],
   canActivateChecks: []
@@ -2678,7 +2425,6 @@ function getChildRouteGuards(futureNode, currNode, contexts, futurePath, checks 
   Object.entries(prevChildren).forEach(([k, v]) => deactivateRouteAndItsChildren(v, contexts.getContext(k), checks));
   return checks;
 }
-
 function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks = {
   canDeactivateChecks: [],
   canActivateChecks: []
@@ -2715,7 +2461,6 @@ function getRouteGuards(futureNode, currNode, parentContexts, futurePath, checks
   }
   return checks;
 }
-
 function shouldRunGuardsAndResolvers(curr, future, mode) {
   if (typeof mode === "function") {
     return mode(curr, future);
@@ -2734,7 +2479,6 @@ function shouldRunGuardsAndResolvers(curr, future, mode) {
       return !equalParamsAndUrlSegments(curr, future);
   }
 }
-
 function deactivateRouteAndItsChildren(route, context, checks) {
   const children = nodeChildrenAsMap(route);
   const r = route.value;
@@ -2755,41 +2499,31 @@ function deactivateRouteAndItsChildren(route, context, checks) {
     checks.canDeactivateChecks.push(new CanDeactivate(null, r));
   }
 }
-
 function isFunction(v) {
   return typeof v === "function";
 }
-
 function isBoolean(v) {
   return typeof v === "boolean";
 }
-
 function isCanLoad(guard) {
   return guard && isFunction(guard.canLoad);
 }
-
 function isCanActivate(guard) {
   return guard && isFunction(guard.canActivate);
 }
-
 function isCanActivateChild(guard) {
   return guard && isFunction(guard.canActivateChild);
 }
-
 function isCanDeactivate(guard) {
   return guard && isFunction(guard.canDeactivate);
 }
-
 function isCanMatch(guard) {
   return guard && isFunction(guard.canMatch);
 }
-
 function isEmptyError(e) {
   return e instanceof EmptyError || e?.name === "EmptyError";
 }
-
 var INITIAL_VALUE = Symbol("INITIAL_VALUE");
-
 function prioritizedGuardValue() {
   return switchMap((obs) => {
     return combineLatest(obs.map((o) => o.pipe(take(1), startWith(INITIAL_VALUE)))).pipe(map((results) => {
@@ -2806,11 +2540,9 @@ function prioritizedGuardValue() {
     }), filter((item) => item !== INITIAL_VALUE), take(1));
   });
 }
-
 function isRedirect(val) {
   return isUrlTree(val) || val instanceof RedirectCommand;
 }
-
 function checkGuards(injector, forwardEvent) {
   return mergeMap((t) => {
     const {
@@ -2833,13 +2565,11 @@ function checkGuards(injector, forwardEvent) {
     })));
   });
 }
-
 function runCanDeactivateChecks(checks, futureRSS, currRSS, injector) {
   return from(checks).pipe(mergeMap((check) => runCanDeactivate(check.component, check.route, currRSS, futureRSS, injector)), first((result) => {
     return result !== true;
   }, true));
 }
-
 function runCanActivateChecks(futureSnapshot, checks, injector, forwardEvent) {
   return from(checks).pipe(concatMap((check) => {
     return concat(fireChildActivationStart(check.route.parent, forwardEvent), fireActivationStart(check.route, forwardEvent), runCanActivateChild(futureSnapshot, check.path, injector), runCanActivate(futureSnapshot, check.route, injector));
@@ -2847,21 +2577,18 @@ function runCanActivateChecks(futureSnapshot, checks, injector, forwardEvent) {
     return result !== true;
   }, true));
 }
-
 function fireActivationStart(snapshot, forwardEvent) {
   if (snapshot !== null && forwardEvent) {
     forwardEvent(new ActivationStart(snapshot));
   }
   return of(true);
 }
-
 function fireChildActivationStart(snapshot, forwardEvent) {
   if (snapshot !== null && forwardEvent) {
     forwardEvent(new ChildActivationStart(snapshot));
   }
   return of(true);
 }
-
 function runCanActivate(futureRSS, futureARS, injector) {
   const canActivate = futureARS.routeConfig ? futureARS.routeConfig.canActivate : null;
   if (!canActivate || canActivate.length === 0) return of(true);
@@ -2875,7 +2602,6 @@ function runCanActivate(futureRSS, futureARS, injector) {
   });
   return of(canActivateObservables).pipe(prioritizedGuardValue());
 }
-
 function runCanActivateChild(futureRSS, path, injector) {
   const futureARS = path[path.length - 1];
   const canActivateChildGuards = path.slice(0, path.length - 1).reverse().map((p) => getCanActivateChild(p)).filter((_) => _ !== null);
@@ -2892,7 +2618,6 @@ function runCanActivateChild(futureRSS, path, injector) {
   });
   return of(canActivateChildGuardsMapped).pipe(prioritizedGuardValue());
 }
-
 function runCanDeactivate(component, currARS, currRSS, futureRSS, injector) {
   const canDeactivate = currARS && currARS.routeConfig ? currARS.routeConfig.canDeactivate : null;
   if (!canDeactivate || canDeactivate.length === 0) return of(true);
@@ -2904,7 +2629,6 @@ function runCanDeactivate(component, currARS, currRSS, futureRSS, injector) {
   });
   return of(canDeactivateObservables).pipe(prioritizedGuardValue());
 }
-
 function runCanLoadGuards(injector, route, segments, urlSerializer) {
   const canLoad = route.canLoad;
   if (canLoad === void 0 || canLoad.length === 0) {
@@ -2917,14 +2641,12 @@ function runCanLoadGuards(injector, route, segments, urlSerializer) {
   });
   return of(canLoadObservables).pipe(prioritizedGuardValue(), redirectIfUrlTree(urlSerializer));
 }
-
 function redirectIfUrlTree(urlSerializer) {
   return pipe(tap((result) => {
     if (typeof result === "boolean") return;
     throw redirectingNavigationError(urlSerializer, result);
   }), map((result) => result === true));
 }
-
 function runCanMatchGuards(injector, route, segments, urlSerializer) {
   const canMatch = route.canMatch;
   if (!canMatch || canMatch.length === 0) return of(true);
@@ -2935,44 +2657,35 @@ function runCanMatchGuards(injector, route, segments, urlSerializer) {
   });
   return of(canMatchObservables).pipe(prioritizedGuardValue(), redirectIfUrlTree(urlSerializer));
 }
-
 var NoMatch = class {
   segmentGroup;
-
   constructor(segmentGroup) {
     this.segmentGroup = segmentGroup || null;
   }
 };
 var AbsoluteRedirect = class extends Error {
   urlTree;
-
   constructor(urlTree) {
     super();
     this.urlTree = urlTree;
   }
 };
-
 function noMatch$1(segmentGroup) {
   return throwError(new NoMatch(segmentGroup));
 }
-
 function namedOutletsRedirect(redirectTo) {
   return throwError(new RuntimeError(4e3, (typeof ngDevMode === "undefined" || ngDevMode) && `Only absolute redirects can have named outlets. redirectTo: '${redirectTo}'`));
 }
-
 function canLoadFails(route) {
   return throwError(navigationCancelingError((typeof ngDevMode === "undefined" || ngDevMode) && `Cannot load children because the guard of the route "path: '${route.path}'" returned false`, NavigationCancellationCode.GuardRejected));
 }
-
 var ApplyRedirects = class {
   urlSerializer;
   urlTree;
-
   constructor(urlSerializer, urlTree) {
     this.urlSerializer = urlSerializer;
     this.urlTree = urlTree;
   }
-
   lineralizeSegments(route, urlTree) {
     let res = [];
     let c = urlTree.root;
@@ -2987,7 +2700,6 @@ var ApplyRedirects = class {
       c = c.children[PRIMARY_OUTLET];
     }
   }
-
   applyRedirectCommands(segments, redirectTo, posParams, currentSnapshot, injector) {
     if (typeof redirectTo !== "string") {
       const redirectToFn = redirectTo;
@@ -3022,12 +2734,10 @@ var ApplyRedirects = class {
     }
     return newTree;
   }
-
   applyRedirectCreateUrlTree(redirectTo, urlTree, segments, posParams) {
     const newRoot = this.createSegmentGroup(redirectTo, urlTree.root, segments, posParams);
     return new UrlTree(newRoot, this.createQueryParams(urlTree.queryParams, this.urlTree.queryParams), urlTree.fragment);
   }
-
   createQueryParams(redirectToParams, actualParams) {
     const res = {};
     Object.entries(redirectToParams).forEach(([k, v]) => {
@@ -3041,7 +2751,6 @@ var ApplyRedirects = class {
     });
     return res;
   }
-
   createSegmentGroup(redirectTo, group, segments, posParams) {
     const updatedSegments = this.createSegments(redirectTo, group.segments, segments, posParams);
     let children = {};
@@ -3050,17 +2759,14 @@ var ApplyRedirects = class {
     });
     return new UrlSegmentGroup(updatedSegments, children);
   }
-
   createSegments(redirectTo, redirectToSegments, actualSegments, posParams) {
     return redirectToSegments.map((s) => s.path[0] === ":" ? this.findPosParam(redirectTo, s, posParams) : this.findOrReturn(s, actualSegments));
   }
-
   findPosParam(redirectTo, redirectToUrlSegment, posParams) {
     const pos = posParams[redirectToUrlSegment.path.substring(1)];
     if (!pos) throw new RuntimeError(4001, (typeof ngDevMode === "undefined" || ngDevMode) && `Cannot redirect to '${redirectTo}'. Cannot find '${redirectToUrlSegment.path}'.`);
     return pos;
   }
-
   findOrReturn(redirectToUrlSegment, actualSegments) {
     let idx = 0;
     for (const s of actualSegments) {
@@ -3080,7 +2786,6 @@ var noMatch = {
   parameters: {},
   positionalParamSegments: {}
 };
-
 function matchWithChecks(segmentGroup, route, segments, injector, urlSerializer) {
   const result = match(segmentGroup, route, segments);
   if (!result.matched) {
@@ -3089,7 +2794,6 @@ function matchWithChecks(segmentGroup, route, segments, injector, urlSerializer)
   injector = getOrCreateRouteInjectorIfNeeded(route, injector);
   return runCanMatchGuards(injector, route, segments, urlSerializer).pipe(map((v) => v === true ? result : __spreadValues({}, noMatch)));
 }
-
 function match(segmentGroup, route, segments) {
   if (route.path === "**") {
     return createWildcardMatchResult(segments);
@@ -3123,7 +2827,6 @@ function match(segmentGroup, route, segments) {
     positionalParamSegments: res.posParams ?? {}
   };
 }
-
 function createWildcardMatchResult(segments) {
   return {
     matched: true,
@@ -3133,7 +2836,6 @@ function createWildcardMatchResult(segments) {
     positionalParamSegments: {}
   };
 }
-
 function split(segmentGroup, consumedSegments, slicedSegments, config) {
   if (slicedSegments.length > 0 && containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
     const s2 = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
@@ -3155,7 +2857,6 @@ function split(segmentGroup, consumedSegments, slicedSegments, config) {
     slicedSegments
   };
 }
-
 function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
   const res = {};
   for (const r of routes) {
@@ -3166,7 +2867,6 @@ function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, c
   }
   return __spreadValues(__spreadValues({}, children), res);
 }
-
 function createChildrenForEmptyPaths(routes, primarySegment) {
   const res = {};
   res[PRIMARY_OUTLET] = primarySegment;
@@ -3178,33 +2878,26 @@ function createChildrenForEmptyPaths(routes, primarySegment) {
   }
   return res;
 }
-
 function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
   return routes.some((r) => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet(r) !== PRIMARY_OUTLET);
 }
-
 function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
   return routes.some((r) => emptyPathMatch(segmentGroup, slicedSegments, r));
 }
-
 function emptyPathMatch(segmentGroup, slicedSegments, r) {
   if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === "full") {
     return false;
   }
   return r.path === "";
 }
-
 function noLeftoversInUrl(segmentGroup, segments, outlet) {
   return segments.length === 0 && !segmentGroup.children[outlet];
 }
-
 var NoLeftoversInUrl = class {
 };
-
 function recognize$1(injector, configLoader, rootComponentType, config, urlTree, urlSerializer, paramsInheritanceStrategy = "emptyOnly") {
   return new Recognizer(injector, configLoader, rootComponentType, config, urlTree, paramsInheritanceStrategy, urlSerializer).recognize();
 }
-
 var MAX_ALLOWED_REDIRECTS = 31;
 var Recognizer = class {
   injector;
@@ -3217,7 +2910,6 @@ var Recognizer = class {
   applyRedirects;
   absoluteRedirectCount = 0;
   allowRedirects = true;
-
   constructor(injector, configLoader, rootComponentType, config, urlTree, paramsInheritanceStrategy, urlSerializer) {
     this.injector = injector;
     this.configLoader = configLoader;
@@ -3228,17 +2920,15 @@ var Recognizer = class {
     this.urlSerializer = urlSerializer;
     this.applyRedirects = new ApplyRedirects(this.urlSerializer, this.urlTree);
   }
-
   noMatchError(e) {
     return new RuntimeError(4002, typeof ngDevMode === "undefined" || ngDevMode ? `Cannot match any routes. URL Segment: '${e.segmentGroup}'` : `'${e.segmentGroup}'`);
   }
-
   recognize() {
     const rootSegmentGroup = split(this.urlTree.root, [], [], this.config).segmentGroup;
     return this.match(rootSegmentGroup).pipe(map(({
-                                                    children,
-                                                    rootSnapshot
-                                                  }) => {
+      children,
+      rootSnapshot
+    }) => {
       const rootNode = new TreeNode(rootSnapshot, children);
       const routeState = new RouterStateSnapshot("", rootNode);
       const tree2 = createUrlTreeFromSnapshot(rootSnapshot, [], this.urlTree.queryParams, this.urlTree.fragment);
@@ -3250,7 +2940,6 @@ var Recognizer = class {
       };
     }));
   }
-
   match(rootSegmentGroup) {
     const rootSnapshot = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(__spreadValues({}, this.urlTree.queryParams)), this.urlTree.fragment, Object.freeze({}), PRIMARY_OUTLET, this.rootComponentType, null, {});
     return this.processSegmentGroup(this.injector, this.config, rootSegmentGroup, PRIMARY_OUTLET, rootSnapshot).pipe(map((children) => {
@@ -3269,14 +2958,12 @@ var Recognizer = class {
       throw e;
     }));
   }
-
   processSegmentGroup(injector, config, segmentGroup, outlet, parentRoute) {
     if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
       return this.processChildren(injector, config, segmentGroup, parentRoute);
     }
     return this.processSegment(injector, config, segmentGroup, segmentGroup.segments, outlet, true, parentRoute).pipe(map((child) => child instanceof TreeNode ? [child] : []));
   }
-
   /**
    * Matches every child outlet in the `segmentGroup` to a `Route` in the config. Returns `null` if
    * we cannot find a match for _any_ of the children.
@@ -3311,7 +2998,6 @@ var Recognizer = class {
       return of(mergedChildren);
     }));
   }
-
   processSegment(injector, routes, segmentGroup, segments, outlet, allowRedirects, parentRoute) {
     return from(routes).pipe(concatMap((r) => {
       return this.processSegmentAgainstRoute(r._injector ?? injector, routes, r, segmentGroup, segments, outlet, allowRedirects, parentRoute).pipe(catchError((e) => {
@@ -3330,7 +3016,6 @@ var Recognizer = class {
       throw e;
     }));
   }
-
   processSegmentAgainstRoute(injector, routes, route, rawSegment, segments, outlet, allowRedirects, parentRoute) {
     if (getOutlet(route) !== outlet && (outlet === PRIMARY_OUTLET || !emptyPathMatch(rawSegment, segments, route))) {
       return noMatch$1(rawSegment);
@@ -3343,7 +3028,6 @@ var Recognizer = class {
     }
     return noMatch$1(rawSegment);
   }
-
   expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet, parentRoute) {
     const {
       matched,
@@ -3372,7 +3056,6 @@ This is currently a dev mode only error but will become a call stack size exceed
       return this.processSegment(injector, routes, segmentGroup, newSegments.concat(remainingSegments), outlet, false, parentRoute);
     }));
   }
-
   matchSegmentAgainstRoute(injector, rawSegment, route, segments, outlet, parentRoute) {
     const matchResult = matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer);
     if (route.path === "**") {
@@ -3384,8 +3067,8 @@ This is currently a dev mode only error but will become a call stack size exceed
       }
       injector = route._injector ?? injector;
       return this.getChildConfig(injector, route, segments).pipe(switchMap(({
-                                                                              routes: childConfig
-                                                                            }) => {
+        routes: childConfig
+      }) => {
         const childInjector = route._loadedInjector ?? injector;
         const {
           parameters,
@@ -3415,7 +3098,6 @@ This is currently a dev mode only error but will become a call stack size exceed
       }));
     }));
   }
-
   getChildConfig(injector, route, segments) {
     if (route.children) {
       return of({
@@ -3446,7 +3128,6 @@ This is currently a dev mode only error but will become a call stack size exceed
     });
   }
 };
-
 function sortActivatedRouteSnapshots(nodes) {
   nodes.sort((a, b) => {
     if (a.value.outlet === PRIMARY_OUTLET) return -1;
@@ -3454,12 +3135,10 @@ function sortActivatedRouteSnapshots(nodes) {
     return a.value.outlet.localeCompare(b.value.outlet);
   });
 }
-
 function hasEmptyPathConfig(node) {
   const config = node.value.routeConfig;
   return config && config.path === "";
 }
-
 function mergeEmptyPathMatches(nodes) {
   const result = [];
   const mergedNodes = /* @__PURE__ */ new Set();
@@ -3482,7 +3161,6 @@ function mergeEmptyPathMatches(nodes) {
   }
   return result.filter((n) => !mergedNodes.has(n));
 }
-
 function checkOutletNameUniqueness(nodes) {
   const names = {};
   nodes.forEach((n) => {
@@ -3495,27 +3173,23 @@ function checkOutletNameUniqueness(nodes) {
     names[n.value.outlet] = n.value;
   });
 }
-
 function getData(route) {
   return route.data || {};
 }
-
 function getResolve(route) {
   return route.resolve || {};
 }
-
 function recognize(injector, configLoader, rootComponentType, config, serializer, paramsInheritanceStrategy) {
   return mergeMap((t) => recognize$1(injector, configLoader, rootComponentType, config, t.extractedUrl, serializer, paramsInheritanceStrategy).pipe(map(({
-                                                                                                                                                           state: targetSnapshot,
-                                                                                                                                                           tree: urlAfterRedirects
-                                                                                                                                                         }) => {
+    state: targetSnapshot,
+    tree: urlAfterRedirects
+  }) => {
     return __spreadProps(__spreadValues({}, t), {
       targetSnapshot,
       urlAfterRedirects
     });
   })));
 }
-
 function resolveData(paramsInheritanceStrategy, injector) {
   return mergeMap((t) => {
     const {
@@ -3548,12 +3222,10 @@ function resolveData(paramsInheritanceStrategy, injector) {
     }), tap(() => routesProcessed++), takeLast(1), mergeMap((_) => routesProcessed === routesNeedingDataUpdates.size ? of(t) : EMPTY));
   });
 }
-
 function flattenRouteTree(route) {
   const descendants = route.children.map((child) => flattenRouteTree(child)).flat();
   return [route, ...descendants];
 }
-
 function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, injector) {
   const config = futureARS.routeConfig;
   const resolve = futureARS._resolve;
@@ -3566,7 +3238,6 @@ function runResolve(futureARS, futureRSS, paramsInheritanceStrategy, injector) {
     return null;
   }));
 }
-
 function resolveNode(resolve, futureARS, futureRSS, injector) {
   const keys = getDataKeys(resolve);
   if (keys.length === 0) {
@@ -3580,14 +3251,12 @@ function resolveNode(resolve, futureARS, futureRSS, injector) {
     data[key] = value;
   }))), takeLast(1), mapTo(data), catchError((e) => isEmptyError(e) ? EMPTY : throwError(e)));
 }
-
 function getResolver(injectionToken, futureARS, futureRSS, injector) {
   const closestInjector = getClosestRouteInjector(futureARS) ?? injector;
   const resolver = getTokenOrFunctionIdentity(injectionToken, closestInjector);
   const resolverValue = resolver.resolve ? resolver.resolve(futureARS, futureRSS) : runInInjectionContext(closestInjector, () => resolver(futureARS, futureRSS));
   return wrapIntoObservable(resolverValue);
 }
-
 function switchTap(next) {
   return switchMap((v) => {
     const nextResult = next(v);
@@ -3597,7 +3266,6 @@ function switchTap(next) {
     return of(v);
   });
 }
-
 var TitleStrategy = class _TitleStrategy {
   /**
    * @returns The `title` of the deepest primary route.
@@ -3611,7 +3279,6 @@ var TitleStrategy = class _TitleStrategy {
     }
     return pageTitle;
   }
-
   /**
    * Given an `ActivatedRouteSnapshot`, returns the final value of the
    * `Route.title` property, which can either be a static string or a resolved value.
@@ -3619,7 +3286,6 @@ var TitleStrategy = class _TitleStrategy {
   getResolvedTitleForRoute(snapshot) {
     return snapshot.data[RouteTitleKey];
   }
-
   static ɵfac = function TitleStrategy_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _TitleStrategy)();
   };
@@ -3640,12 +3306,10 @@ var TitleStrategy = class _TitleStrategy {
 })();
 var DefaultTitleStrategy = class _DefaultTitleStrategy extends TitleStrategy {
   title;
-
   constructor(title) {
     super();
     this.title = title;
   }
-
   /**
    * Sets the title of the browser to the given value.
    *
@@ -3657,7 +3321,6 @@ var DefaultTitleStrategy = class _DefaultTitleStrategy extends TitleStrategy {
       this.title.setTitle(title);
     }
   }
-
   static ɵfac = function DefaultTitleStrategy_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DefaultTitleStrategy)(ɵɵinject(Title));
   };
@@ -3708,7 +3371,6 @@ var ɵEmptyOutletComponent = class _ɵEmptyOutletComponent {
     }]
   }], null, null);
 })();
-
 function standardizeConfig(r) {
   const children = r.children && r.children.map(standardizeConfig);
   const c = children ? __spreadProps(__spreadValues({}, r), {
@@ -3719,7 +3381,6 @@ function standardizeConfig(r) {
   }
   return c;
 }
-
 var ROUTES = new InjectionToken(ngDevMode ? "ROUTES" : "");
 var RouterConfigLoader = class _RouterConfigLoader {
   componentLoaders = /* @__PURE__ */ new WeakMap();
@@ -3727,7 +3388,6 @@ var RouterConfigLoader = class _RouterConfigLoader {
   onLoadStartListener;
   onLoadEndListener;
   compiler = inject(Compiler);
-
   loadComponent(route) {
     if (this.componentLoaders.get(route)) {
       return this.componentLoaders.get(route);
@@ -3750,7 +3410,6 @@ var RouterConfigLoader = class _RouterConfigLoader {
     this.componentLoaders.set(route, loader);
     return loader;
   }
-
   loadChildren(parentInjector, route) {
     if (this.childrenLoaders.get(route)) {
       return this.childrenLoaders.get(route);
@@ -3771,7 +3430,6 @@ var RouterConfigLoader = class _RouterConfigLoader {
     this.childrenLoaders.set(route, loader);
     return loader;
   }
-
   static ɵfac = function RouterConfigLoader_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouterConfigLoader)();
   };
@@ -3789,7 +3447,6 @@ var RouterConfigLoader = class _RouterConfigLoader {
     }]
   }], null, null);
 })();
-
 function loadChildren(route, compiler, parentInjector, onLoadEndListener) {
   return wrapIntoObservable(route.loadChildren()).pipe(map(maybeUnwrapDefaultExport), mergeMap((t) => {
     if (t instanceof NgModuleFactory$1 || Array.isArray(t)) {
@@ -3822,15 +3479,12 @@ function loadChildren(route, compiler, parentInjector, onLoadEndListener) {
     };
   }));
 }
-
 function isWrappedDefaultExport(value) {
   return value && typeof value === "object" && "default" in value;
 }
-
 function maybeUnwrapDefaultExport(input2) {
   return isWrappedDefaultExport(input2) ? input2["default"] : input2;
 }
-
 var UrlHandlingStrategy = class _UrlHandlingStrategy {
   static ɵfac = function UrlHandlingStrategy_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _UrlHandlingStrategy)();
@@ -3854,15 +3508,12 @@ var DefaultUrlHandlingStrategy = class _DefaultUrlHandlingStrategy {
   shouldProcessUrl(url) {
     return true;
   }
-
   extract(url) {
     return url;
   }
-
   merge(newUrlPart, wholeUrl) {
     return newUrlPart;
   }
-
   static ɵfac = function DefaultUrlHandlingStrategy_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _DefaultUrlHandlingStrategy)();
   };
@@ -3882,7 +3533,6 @@ var DefaultUrlHandlingStrategy = class _DefaultUrlHandlingStrategy {
 })();
 var CREATE_VIEW_TRANSITION = new InjectionToken(ngDevMode ? "view transition helper" : "");
 var VIEW_TRANSITION_OPTIONS = new InjectionToken(ngDevMode ? "view transition options" : "");
-
 function createViewTransition(injector, from2, to) {
   const transitionOptions = injector.get(VIEW_TRANSITION_OPTIONS);
   const document = injector.get(DOCUMENT);
@@ -3912,7 +3562,6 @@ function createViewTransition(injector, from2, to) {
     return viewTransitionStarted;
   });
 }
-
 function createRenderPromise(injector) {
   return new Promise((resolve) => {
     afterNextRender({
@@ -3922,7 +3571,6 @@ function createRenderPromise(injector) {
     });
   });
 }
-
 var NAVIGATION_ERROR_HANDLER = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "navigation error handler" : "");
 var NavigationTransitions = class _NavigationTransitions {
   currentNavigation = null;
@@ -3959,11 +3607,9 @@ var NavigationTransitions = class _NavigationTransitions {
     optional: true
   });
   navigationId = 0;
-
   get hasRequestedNavigation() {
     return this.navigationId !== 0;
   }
-
   transitions;
   /**
    * Hook that enables you to pause navigation after the preactivation phase.
@@ -3974,25 +3620,21 @@ var NavigationTransitions = class _NavigationTransitions {
   afterPreactivation = () => of(void 0);
   /** @internal */
   rootComponentType = null;
-
   constructor() {
     const onLoadStart = (r) => this.events.next(new RouteConfigLoadStart(r));
     const onLoadEnd = (r) => this.events.next(new RouteConfigLoadEnd(r));
     this.configLoader.onLoadEndListener = onLoadEnd;
     this.configLoader.onLoadStartListener = onLoadStart;
   }
-
   complete() {
     this.transitions?.complete();
   }
-
   handleNavigationRequest(request) {
     const id = ++this.navigationId;
     this.transitions?.next(__spreadProps(__spreadValues(__spreadValues({}, this.transitions.value), request), {
       id
     }));
   }
-
   setupNavigations(router, initialUrlTree, initialRouterState) {
     this.transitions = new BehaviorSubject({
       id: 0,
@@ -4269,13 +3911,11 @@ var NavigationTransitions = class _NavigationTransitions {
       })
     );
   }
-
   cancelNavigationTransition(t, reason, code) {
     const navCancel = new NavigationCancel(t.id, this.urlSerializer.serialize(t.extractedUrl), reason, code);
     this.events.next(navCancel);
     t.resolve(false);
   }
-
   /**
    * @returns Whether we're navigating to somewhere that is not what the Router is
    * currently set to.
@@ -4283,7 +3923,6 @@ var NavigationTransitions = class _NavigationTransitions {
   isUpdatingInternalState() {
     return this.currentTransition?.extractedUrl.toString() !== this.currentTransition?.currentUrlTree.toString();
   }
-
   /**
    * @returns Whether we're updating the browser URL to something new (navigation is going
    * to somewhere not displayed in the URL bar and we will update the URL
@@ -4294,7 +3933,6 @@ var NavigationTransitions = class _NavigationTransitions {
     const targetBrowserUrl = this.currentNavigation?.targetBrowserUrl ?? this.currentNavigation?.extractedUrl;
     return currentBrowserUrl.toString() !== targetBrowserUrl?.toString() && !this.currentNavigation?.extras.skipLocationChange;
   }
-
   static ɵfac = function NavigationTransitions_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _NavigationTransitions)();
   };
@@ -4312,11 +3950,9 @@ var NavigationTransitions = class _NavigationTransitions {
     }]
   }], () => [], null);
 })();
-
 function isBrowserTriggeredNavigation(source) {
   return source !== IMPERATIVE_NAVIGATION;
 }
-
 var RouteReuseStrategy = class _RouteReuseStrategy {
   static ɵfac = function RouteReuseStrategy_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouteReuseStrategy)();
@@ -4344,23 +3980,19 @@ var BaseRouteReuseStrategy = class {
   shouldDetach(route) {
     return false;
   }
-
   /**
    * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
    */
   store(route, detachedTree) {
   }
-
   /** Returns `false`, meaning the route (and its subtree) is never reattached */
   shouldAttach(route) {
     return false;
   }
-
   /** Returns `null` because this strategy does not store routes for later re-use. */
   retrieve(route) {
     return null;
   }
-
   /**
    * Determines if a route should be reused.
    * This strategy returns `true` when the future route config and current route config are
@@ -4420,17 +4052,13 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
   urlHandlingStrategy = inject(UrlHandlingStrategy);
   urlUpdateStrategy = this.options.urlUpdateStrategy || "deferred";
   currentUrlTree = new UrlTree();
-
   getCurrentUrlTree() {
     return this.currentUrlTree;
   }
-
   rawUrlTree = this.currentUrlTree;
-
   getRawUrlTree() {
     return this.rawUrlTree;
   }
-
   /**
    * The id of the currently active page in the router.
    * Updated to the transition's target id on a successful navigation.
@@ -4441,11 +4069,9 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
    */
   currentPageId = 0;
   lastSuccessfulId = -1;
-
   restoredState() {
     return this.location.getState();
   }
-
   /**
    * The ɵrouterPageId of whatever page is currently active in the browser history. This is
    * important for computing the target page id for new navigations because we need to ensure each
@@ -4457,15 +4083,11 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
     }
     return this.restoredState()?.ɵrouterPageId ?? this.currentPageId;
   }
-
   routerState = createEmptyState(null);
-
   getRouterState() {
     return this.routerState;
   }
-
   stateMemento = this.createStateMemento();
-
   createStateMemento() {
     return {
       rawUrlTree: this.rawUrlTree,
@@ -4473,7 +4095,6 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
       routerState: this.routerState
     };
   }
-
   registerNonRouterCurrentEntryChangeListener(listener) {
     return this.location.subscribe((event) => {
       if (event["type"] === "popstate") {
@@ -4481,7 +4102,6 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
       }
     });
   }
-
   handleRouterEvent(e, currentTransition) {
     if (e instanceof NavigationStart) {
       this.stateMemento = this.createStateMemento();
@@ -4510,7 +4130,6 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
       this.currentPageId = this.browserPageId;
     }
   }
-
   setBrowserUrl(url, transition) {
     const path = url instanceof UrlTree ? this.urlSerializer.serialize(url) : url;
     if (this.location.isCurrentPathEqualTo(path) || !!transition.extras.replaceUrl) {
@@ -4522,7 +4141,6 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
       this.location.go(path, "", state);
     }
   }
-
   /**
    * Performs the necessary rollback action to restore the browser URL to the
    * state before the transition.
@@ -4545,17 +4163,14 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
       this.resetUrlToCurrentUrlTree();
     }
   }
-
   resetState(navigation) {
     this.routerState = this.stateMemento.routerState;
     this.currentUrlTree = this.stateMemento.currentUrlTree;
     this.rawUrlTree = this.urlHandlingStrategy.merge(this.currentUrlTree, navigation.finalUrl ?? this.rawUrlTree);
   }
-
   resetUrlToCurrentUrlTree() {
     this.location.replaceState(this.urlSerializer.serialize(this.rawUrlTree), "", this.generateNgRouterState(this.lastSuccessfulId, this.currentPageId));
   }
-
   generateNgRouterState(navigationId, routerPageId) {
     if (this.canceledNavigationResolution === "computed") {
       return {
@@ -4567,7 +4182,6 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
       navigationId
     };
   }
-
   static ɵfac = /* @__PURE__ */ (() => {
     let ɵHistoryStateManager_BaseFactory;
     return function HistoryStateManager_Factory(__ngFactoryType__) {
@@ -4589,12 +4203,11 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
   }], null, null);
 })();
 var NavigationResult;
-(function (NavigationResult2) {
+(function(NavigationResult2) {
   NavigationResult2[NavigationResult2["COMPLETE"] = 0] = "COMPLETE";
   NavigationResult2[NavigationResult2["FAILED"] = 1] = "FAILED";
   NavigationResult2[NavigationResult2["REDIRECTING"] = 2] = "REDIRECTING";
 })(NavigationResult || (NavigationResult = {}));
-
 function afterNextNavigation(router, action) {
   router.events.pipe(filter((e) => e instanceof NavigationEnd || e instanceof NavigationCancel || e instanceof NavigationError || e instanceof NavigationSkipped), map((e) => {
     if (e instanceof NavigationEnd || e instanceof NavigationSkipped) {
@@ -4606,7 +4219,6 @@ function afterNextNavigation(router, action) {
     action();
   });
 }
-
 var exactMatchOptions = {
   paths: "exact",
   fragment: "ignored",
@@ -4623,11 +4235,9 @@ var Router = class _Router {
   get currentUrlTree() {
     return this.stateManager.getCurrentUrlTree();
   }
-
   get rawUrlTree() {
     return this.stateManager.getRawUrlTree();
   }
-
   disposed = false;
   nonRouterCurrentEntryChangeSubscription;
   console = inject(Console);
@@ -4653,14 +4263,12 @@ var Router = class _Router {
   get events() {
     return this._events;
   }
-
   /**
    * The current state of routing in this NgModule.
    */
   get routerState() {
     return this.stateManager.getRouterState();
   }
-
   /**
    * True if at least one navigation event has occurred,
    * false otherwise.
@@ -4695,7 +4303,6 @@ var Router = class _Router {
   componentInputBindingEnabled = !!inject(INPUT_BINDER, {
     optional: true
   });
-
   constructor() {
     this.resetConfig(this.config);
     this.navigationTransitions.setupNavigations(this, this.currentUrlTree, this.routerState).subscribe({
@@ -4705,9 +4312,7 @@ var Router = class _Router {
     });
     this.subscribeToNavigationEvents();
   }
-
   eventsSubscription = new Subscription();
-
   subscribeToNavigationEvents() {
     const subscription = this.navigationTransitions.events.subscribe((e) => {
       try {
@@ -4748,13 +4353,11 @@ var Router = class _Router {
     });
     this.eventsSubscription.add(subscription);
   }
-
   /** @internal */
   resetRootComponentType(rootComponentType) {
     this.routerState.root.component = rootComponentType;
     this.navigationTransitions.rootComponentType = rootComponentType;
   }
-
   /**
    * Sets up the location change listener and performs the initial navigation.
    */
@@ -4764,7 +4367,6 @@ var Router = class _Router {
       this.navigateToSyncWithBrowser(this.location.path(true), IMPERATIVE_NAVIGATION, this.stateManager.restoredState());
     }
   }
-
   /**
    * Sets up the location change listener. This listener detects navigations triggered from outside
    * the Router (the browser back/forward buttons, for example) and schedules a corresponding Router
@@ -4777,7 +4379,6 @@ var Router = class _Router {
       }, 0);
     });
   }
-
   /**
    * Schedules a router navigation to synchronize Router state with the browser state.
    *
@@ -4801,12 +4402,10 @@ var Router = class _Router {
     const urlTree = this.parseUrl(url);
     this.scheduleNavigation(urlTree, source, restoredState, extras);
   }
-
   /** The current URL. */
   get url() {
     return this.serializeUrl(this.currentUrlTree);
   }
-
   /**
    * Returns the current `Navigation` object when the router is navigating,
    * and `null` when idle.
@@ -4814,7 +4413,6 @@ var Router = class _Router {
   getCurrentNavigation() {
     return this.navigationTransitions.currentNavigation;
   }
-
   /**
    * The `Navigation` object of the most recent navigation to succeed and `null` if there
    *     has not been a successful navigation yet.
@@ -4822,7 +4420,6 @@ var Router = class _Router {
   get lastSuccessfulNavigation() {
     return this.navigationTransitions.lastSuccessfulNavigation;
   }
-
   /**
    * Resets the route configuration used for navigation and generating links.
    *
@@ -4844,12 +4441,10 @@ var Router = class _Router {
     this.config = config.map(standardizeConfig);
     this.navigated = false;
   }
-
   /** @nodoc */
   ngOnDestroy() {
     this.dispose();
   }
-
   /** Disposes of the router. */
   dispose() {
     this.navigationTransitions.complete();
@@ -4860,7 +4455,6 @@ var Router = class _Router {
     this.disposed = true;
     this.eventsSubscription.unsubscribe();
   }
-
   /**
    * Appends URL segments to the current URL tree to create a new URL tree.
    *
@@ -4944,7 +4538,6 @@ var Router = class _Router {
     }
     return createUrlTreeFromSegmentGroup(relativeToUrlSegmentGroup, commands, q, f ?? null);
   }
-
   /**
    * Navigates to a view using an absolute route path.
    *
@@ -4976,7 +4569,6 @@ var Router = class _Router {
     const mergedTree = this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree);
     return this.scheduleNavigation(mergedTree, IMPERATIVE_NAVIGATION, null, extras);
   }
-
   /**
    * Navigate based on the provided array of commands and a starting point.
    * If no starting route is provided, the navigation is absolute.
@@ -5013,12 +4605,10 @@ var Router = class _Router {
     validateCommands(commands);
     return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
   }
-
   /** Serializes a `UrlTree` into a string */
   serializeUrl(url) {
     return this.urlSerializer.serialize(url);
   }
-
   /** Parses a string into a `UrlTree` */
   parseUrl(url) {
     try {
@@ -5027,7 +4617,6 @@ var Router = class _Router {
       return this.urlSerializer.parse("/");
     }
   }
-
   isActive(url, matchOptions) {
     let options;
     if (matchOptions === true) {
@@ -5043,7 +4632,6 @@ var Router = class _Router {
     const urlTree = this.parseUrl(url);
     return containsTree(this.currentUrlTree, urlTree, options);
   }
-
   removeEmptyProps(params) {
     return Object.entries(params).reduce((result, [key, value]) => {
       if (value !== null && value !== void 0) {
@@ -5052,7 +4640,6 @@ var Router = class _Router {
       return result;
     }, {});
   }
-
   scheduleNavigation(rawUrl, source, restoredState, extras, priorPromise) {
     if (this.disposed) {
       return Promise.resolve(false);
@@ -5091,7 +4678,6 @@ var Router = class _Router {
       return Promise.reject(e);
     });
   }
-
   static ɵfac = function Router_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _Router)();
   };
@@ -5109,7 +4695,6 @@ var Router = class _Router {
     }]
   }], () => [], null);
 })();
-
 function validateCommands(commands) {
   for (let i = 0; i < commands.length; i++) {
     const cmd = commands[i];
@@ -5118,11 +4703,9 @@ function validateCommands(commands) {
     }
   }
 }
-
 function isPublicRouterEvent(e) {
   return !(e instanceof BeforeActivateRoutes) && !(e instanceof RedirectRequest);
 }
-
 var RouterLink = class _RouterLink {
   router;
   route;
@@ -5190,7 +4773,6 @@ var RouterLink = class _RouterLink {
   subscription;
   /** @internal */
   onChanges = new Subject();
-
   constructor(router, route, tabIndexAttribute, renderer, el, locationStrategy) {
     this.router = router;
     this.route = route;
@@ -5210,7 +4792,6 @@ var RouterLink = class _RouterLink {
       this.setTabIndexIfNotOnNativeEl("0");
     }
   }
-
   /**
    * Passed to {@link Router#createUrlTree} as part of the
    * `UrlCreationOptions`.
@@ -5232,7 +4813,6 @@ var RouterLink = class _RouterLink {
    * @see {@link Router#navigateByUrl}
    */
   replaceUrl = false;
-
   /**
    * Modifies the tab index if there was not a tabindex attribute on the element during
    * instantiation.
@@ -5243,7 +4823,6 @@ var RouterLink = class _RouterLink {
     }
     this.applyAttributeValue("tabindex", newTabIndex);
   }
-
   /** @nodoc */
   // TODO(atscott): Remove changes parameter in major version as a breaking change.
   ngOnChanges(changes) {
@@ -5255,9 +4834,7 @@ var RouterLink = class _RouterLink {
     }
     this.onChanges.next(this);
   }
-
   routerLinkInput = null;
-
   /**
    * Commands to pass to {@link Router#createUrlTree} or a `UrlTree`.
    *   - **array**: commands to pass to {@link Router#createUrlTree}.
@@ -5280,7 +4857,6 @@ var RouterLink = class _RouterLink {
       this.setTabIndexIfNotOnNativeEl("0");
     }
   }
-
   /** @nodoc */
   onClick(button, ctrlKey, shiftKey, altKey, metaKey) {
     const urlTree = this.urlTree;
@@ -5304,12 +4880,10 @@ var RouterLink = class _RouterLink {
     this.router.navigateByUrl(urlTree, extras);
     return !this.isAnchorElement;
   }
-
   /** @nodoc */
   ngOnDestroy() {
     this.subscription?.unsubscribe();
   }
-
   updateHref() {
     const urlTree = this.urlTree;
     this.href = urlTree !== null && this.locationStrategy ? this.locationStrategy?.prepareExternalUrl(this.router.serializeUrl(urlTree)) : null;
@@ -5328,7 +4902,6 @@ var RouterLink = class _RouterLink {
     );
     this.applyAttributeValue("href", sanitizedValue);
   }
-
   applyAttributeValue(attrName, attrValue) {
     const renderer = this.renderer;
     const nativeElement = this.el.nativeElement;
@@ -5338,7 +4911,6 @@ var RouterLink = class _RouterLink {
       renderer.removeAttribute(nativeElement, attrName);
     }
   }
-
   get urlTree() {
     if (this.routerLinkInput === null) {
       return null;
@@ -5355,7 +4927,6 @@ var RouterLink = class _RouterLink {
       preserveFragment: this.preserveFragment
     });
   }
-
   static ɵfac = function RouterLink_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouterLink)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ActivatedRoute), ɵɵinjectAttribute("tabindex"), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(LocationStrategy));
   };
@@ -5477,7 +5048,6 @@ var RouterLinkActive = class _RouterLinkActive {
   get isActive() {
     return this._isActive;
   }
-
   /**
    * Options to configure how to determine if the router link is active.
    *
@@ -5513,7 +5083,6 @@ var RouterLinkActive = class _RouterLinkActive {
    * ```
    */
   isActiveChange = new EventEmitter();
-
   constructor(router, element, renderer, cdr, link) {
     this.router = router;
     this.element = element;
@@ -5526,7 +5095,6 @@ var RouterLinkActive = class _RouterLinkActive {
       }
     });
   }
-
   /** @nodoc */
   ngAfterContentInit() {
     of(this.links.changes, of(null)).pipe(mergeAll()).subscribe((_) => {
@@ -5534,7 +5102,6 @@ var RouterLinkActive = class _RouterLinkActive {
       this.subscribeToEachLinkOnChanges();
     });
   }
-
   subscribeToEachLinkOnChanges() {
     this.linkInputChangesSubscription?.unsubscribe();
     const allLinkChanges = [...this.links.toArray(), this.link].filter((link) => !!link).map((link) => link.onChanges);
@@ -5544,23 +5111,19 @@ var RouterLinkActive = class _RouterLinkActive {
       }
     });
   }
-
   set routerLinkActive(data) {
     const classes = Array.isArray(data) ? data : data.split(" ");
     this.classes = classes.filter((c) => !!c);
   }
-
   /** @nodoc */
   ngOnChanges(changes) {
     this.update();
   }
-
   /** @nodoc */
   ngOnDestroy() {
     this.routerEventsSubscription.unsubscribe();
     this.linkInputChangesSubscription?.unsubscribe();
   }
-
   update() {
     if (!this.links || !this.router.navigated) return;
     queueMicrotask(() => {
@@ -5584,7 +5147,6 @@ var RouterLinkActive = class _RouterLinkActive {
       }
     });
   }
-
   isLinkActive(router) {
     const options = isActiveMatchOptions(this.routerLinkActiveOptions) ? this.routerLinkActiveOptions : (
       // While the types should disallow `undefined` here, it's possible without strict inputs
@@ -5595,12 +5157,10 @@ var RouterLinkActive = class _RouterLinkActive {
       return urlTree ? router.isActive(urlTree, options) : false;
     };
   }
-
   hasActiveLinks() {
     const isActiveCheckFn = this.isLinkActive(this.router);
     return this.link && isActiveCheckFn(this.link) || this.links.some(isActiveCheckFn);
   }
-
   static ɵfac = function RouterLinkActive_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouterLinkActive)(ɵɵdirectiveInject(Router), ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(RouterLink, 8));
   };
@@ -5669,18 +5229,15 @@ var RouterLinkActive = class _RouterLinkActive {
     }]
   });
 })();
-
 function isActiveMatchOptions(options) {
   return !!options.paths;
 }
-
 var PreloadingStrategy = class {
 };
 var PreloadAllModules = class _PreloadAllModules {
   preload(route, fn) {
     return fn().pipe(catchError(() => of(null)));
   }
-
   static ɵfac = function PreloadAllModules_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _PreloadAllModules)();
   };
@@ -5702,7 +5259,6 @@ var NoPreloading = class _NoPreloading {
   preload(route, fn) {
     return of(null);
   }
-
   static ɵfac = function NoPreloading_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _NoPreloading)();
   };
@@ -5726,30 +5282,25 @@ var RouterPreloader = class _RouterPreloader {
   preloadingStrategy;
   loader;
   subscription;
-
   constructor(router, compiler, injector, preloadingStrategy, loader) {
     this.router = router;
     this.injector = injector;
     this.preloadingStrategy = preloadingStrategy;
     this.loader = loader;
   }
-
   setUpPreloading() {
     this.subscription = this.router.events.pipe(filter((e) => e instanceof NavigationEnd), concatMap(() => this.preload())).subscribe(() => {
     });
   }
-
   preload() {
     return this.processRoutes(this.injector, this.router.config);
   }
-
   /** @nodoc */
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
-
   processRoutes(injector, routes) {
     const res = [];
     for (const route of routes) {
@@ -5767,7 +5318,6 @@ var RouterPreloader = class _RouterPreloader {
     }
     return from(res).pipe(mergeAll());
   }
-
   preloadConfig(injector, route) {
     return this.preloadingStrategy.preload(route, () => {
       let loadedChildren$;
@@ -5792,7 +5342,6 @@ var RouterPreloader = class _RouterPreloader {
       }
     });
   }
-
   static ɵfac = function RouterPreloader_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouterPreloader)(ɵɵinject(Router), ɵɵinject(Compiler), ɵɵinject(EnvironmentInjector), ɵɵinject(PreloadingStrategy), ɵɵinject(RouterConfigLoader));
   };
@@ -5833,7 +5382,6 @@ var RouterScroller = class _RouterScroller {
   lastSource = "imperative";
   restoredId = 0;
   store = {};
-
   /** @nodoc */
   constructor(urlSerializer, transitions, viewportScroller, zone, options = {}) {
     this.urlSerializer = urlSerializer;
@@ -5844,7 +5392,6 @@ var RouterScroller = class _RouterScroller {
     options.scrollPositionRestoration ||= "disabled";
     options.anchorScrolling ||= "disabled";
   }
-
   init() {
     if (this.options.scrollPositionRestoration !== "disabled") {
       this.viewportScroller.setHistoryScrollRestoration("manual");
@@ -5852,7 +5399,6 @@ var RouterScroller = class _RouterScroller {
     this.routerEventsSubscription = this.createScrollEvents();
     this.scrollEventsSubscription = this.consumeScrollEvents();
   }
-
   createScrollEvents() {
     return this.transitions.events.subscribe((e) => {
       if (e instanceof NavigationStart) {
@@ -5869,7 +5415,6 @@ var RouterScroller = class _RouterScroller {
       }
     });
   }
-
   consumeScrollEvents() {
     return this.transitions.events.subscribe((e) => {
       if (!(e instanceof Scroll)) return;
@@ -5888,7 +5433,6 @@ var RouterScroller = class _RouterScroller {
       }
     });
   }
-
   scheduleScrollEvent(routerEvent, anchor) {
     this.zone.runOutsideAngular(() => {
       setTimeout(() => {
@@ -5898,13 +5442,11 @@ var RouterScroller = class _RouterScroller {
       }, 0);
     });
   }
-
   /** @nodoc */
   ngOnDestroy() {
     this.routerEventsSubscription?.unsubscribe();
     this.scrollEventsSubscription?.unsubscribe();
   }
-
   static ɵfac = function RouterScroller_Factory(__ngFactoryType__) {
     ɵɵinvalidFactory();
   };
@@ -5928,7 +5470,6 @@ var RouterScroller = class _RouterScroller {
     type: void 0
   }], null);
 })();
-
 function provideRouter(routes, ...features) {
   return makeEnvironmentProviders([{
     provide: ROUTES,
@@ -5947,18 +5488,15 @@ function provideRouter(routes, ...features) {
     useFactory: getBootstrapListener
   }, features.map((feature) => feature.ɵproviders)]);
 }
-
 function rootRoute(router) {
   return router.routerState.root;
 }
-
 function routerFeature(kind, providers) {
   return {
     ɵkind: kind,
     ɵproviders: providers
   };
 }
-
 var ROUTER_IS_PROVIDED = new InjectionToken("", {
   providedIn: "root",
   factory: () => false
@@ -5974,7 +5512,6 @@ var routerIsProvidedDevModeCheck = {
     };
   }
 };
-
 function provideRoutes(routes) {
   return [{
     provide: ROUTES,
@@ -5982,7 +5519,6 @@ function provideRoutes(routes) {
     useValue: routes
   }, typeof ngDevMode === "undefined" || ngDevMode ? routerIsProvidedDevModeCheck : []];
 }
-
 function withInMemoryScrolling(options = {}) {
   const providers = [{
     provide: ROUTER_SCROLLER,
@@ -5996,7 +5532,6 @@ function withInMemoryScrolling(options = {}) {
   }];
   return routerFeature(4, providers);
 }
-
 function getBootstrapListener() {
   const injector = inject(Injector);
   return (bootstrappedComponentRef) => {
@@ -6019,7 +5554,6 @@ function getBootstrapListener() {
     }
   };
 }
-
 var BOOTSTRAP_DONE = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "bootstrap done indicator" : "", {
   factory: () => {
     return new Subject();
@@ -6030,7 +5564,6 @@ var INITIAL_NAVIGATION = new InjectionToken(typeof ngDevMode === "undefined" || 
   factory: () => 1
   /* InitialNavigation.EnabledNonBlocking */
 });
-
 function withEnabledBlockingInitialNavigation() {
   const providers = [{
     provide: INITIAL_NAVIGATION,
@@ -6062,7 +5595,6 @@ function withEnabledBlockingInitialNavigation() {
   }];
   return routerFeature(2, providers);
 }
-
 function withDisabledInitialNavigation() {
   const providers = [{
     provide: APP_INITIALIZER,
@@ -6080,7 +5612,6 @@ function withDisabledInitialNavigation() {
   }];
   return routerFeature(3, providers);
 }
-
 function withDebugTracing() {
   let providers = [];
   if (typeof ngDevMode === "undefined" || ngDevMode) {
@@ -6102,9 +5633,7 @@ function withDebugTracing() {
   }
   return routerFeature(1, providers);
 }
-
 var ROUTER_PRELOADER = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "router preloader" : "");
-
 function withPreloading(preloadingStrategy) {
   const providers = [{
     provide: ROUTER_PRELOADER,
@@ -6115,7 +5644,6 @@ function withPreloading(preloadingStrategy) {
   }];
   return routerFeature(0, providers);
 }
-
 function withRouterConfig(options) {
   const providers = [{
     provide: ROUTER_CONFIGURATION,
@@ -6123,7 +5651,6 @@ function withRouterConfig(options) {
   }];
   return routerFeature(5, providers);
 }
-
 function withHashLocation() {
   const providers = [{
     provide: LocationStrategy,
@@ -6131,7 +5658,6 @@ function withHashLocation() {
   }];
   return routerFeature(6, providers);
 }
-
 function withNavigationErrorHandler(handler) {
   const providers = [{
     provide: NAVIGATION_ERROR_HANDLER,
@@ -6139,7 +5665,6 @@ function withNavigationErrorHandler(handler) {
   }];
   return routerFeature(7, providers);
 }
-
 function withComponentInputBinding() {
   const providers = [RoutedComponentInputBinder, {
     provide: INPUT_BINDER,
@@ -6147,7 +5672,6 @@ function withComponentInputBinding() {
   }];
   return routerFeature(8, providers);
 }
-
 function withViewTransitions(options) {
   const providers = [{
     provide: CREATE_VIEW_TRANSITION,
@@ -6160,7 +5684,6 @@ function withViewTransitions(options) {
   }];
   return routerFeature(9, providers);
 }
-
 var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkActive, ɵEmptyOutletComponent];
 var ROUTER_FORROOT_GUARD = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "router duplicate forRoot guard" : "ROUTER_FORROOT_GUARD");
 var ROUTER_PROVIDERS = [
@@ -6187,7 +5710,6 @@ var ROUTER_PROVIDERS = [
 var RouterModule = class _RouterModule {
   constructor(guard) {
   }
-
   /**
    * Creates and configures a module with all the router providers and directives.
    * Optionally sets up an application listener to perform an initial navigation.
@@ -6226,7 +5748,6 @@ var RouterModule = class _RouterModule {
       }, config?.useHash ? provideHashLocationStrategy() : providePathLocationStrategy(), provideRouterScroller(), config?.preloadingStrategy ? withPreloading(config.preloadingStrategy).ɵproviders : [], config?.initialNavigation ? provideInitialNavigation(config) : [], config?.bindToComponentInputs ? withComponentInputBinding().ɵproviders : [], config?.enableViewTransitions ? withViewTransitions().ɵproviders : [], provideRouterInitializer()]
     };
   }
-
   /**
    * Creates a module with all the router directives and a provider registering routes,
    * without creating a new Router service.
@@ -6253,7 +5774,6 @@ var RouterModule = class _RouterModule {
       }]
     };
   }
-
   static ɵfac = function RouterModule_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouterModule)(ɵɵinject(ROUTER_FORROOT_GUARD, 8));
   };
@@ -6281,7 +5801,6 @@ var RouterModule = class _RouterModule {
     }]
   }], null);
 })();
-
 function provideRouterScroller() {
   return {
     provide: ROUTER_SCROLLER,
@@ -6298,34 +5817,28 @@ function provideRouterScroller() {
     }
   };
 }
-
 function provideHashLocationStrategy() {
   return {
     provide: LocationStrategy,
     useClass: HashLocationStrategy
   };
 }
-
 function providePathLocationStrategy() {
   return {
     provide: LocationStrategy,
     useClass: PathLocationStrategy
   };
 }
-
 function provideForRootGuard(router) {
   if ((typeof ngDevMode === "undefined" || ngDevMode) && router) {
     throw new RuntimeError(4007, `The Router was provided more than once. This can happen if 'forRoot' is used outside of the root injector. Lazy loaded modules should use RouterModule.forChild() instead.`);
   }
   return "guarded";
 }
-
 function provideInitialNavigation(config) {
   return [config.initialNavigation === "disabled" ? withDisabledInitialNavigation().ɵproviders : [], config.initialNavigation === "enabledBlocking" ? withEnabledBlockingInitialNavigation().ɵproviders : []];
 }
-
 var ROUTER_INITIALIZER = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "Router Initializer" : "");
-
 function provideRouterInitializer() {
   return [
     // ROUTER_INITIALIZER token should be removed. It's public API but shouldn't be. We can just
@@ -6341,33 +5854,25 @@ function provideRouterInitializer() {
     }
   ];
 }
-
 function mapToCanMatch(providers) {
   return providers.map((provider) => (...params) => inject(provider).canMatch(...params));
 }
-
 function mapToCanActivate(providers) {
   return providers.map((provider) => (...params) => inject(provider).canActivate(...params));
 }
-
 function mapToCanActivateChild(providers) {
   return providers.map((provider) => (...params) => inject(provider).canActivateChild(...params));
 }
-
 function mapToCanDeactivate(providers) {
   return providers.map((provider) => (...params) => inject(provider).canDeactivate(...params));
 }
-
 function mapToResolve(provider) {
   return (...params) => inject(provider).resolve(...params);
 }
-
 var VERSION = new Version("19.0.5");
-
 function getLoadedRoutes(route) {
   return route._loadedRoutes;
 }
-
 publishExternalGlobalUtil("ɵgetLoadedRoutes", getLoadedRoutes);
 export {
   ActivatedRoute,

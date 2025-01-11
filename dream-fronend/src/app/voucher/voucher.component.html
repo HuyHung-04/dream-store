@@ -1,1 +1,39 @@
-<p>voucher works!</p>
+
+  <div class="table-container">
+    <div class="table-scrollable">
+      <table class="voucher-table">
+        <thead>
+          <tr>
+            <th>Mã Voucher</th>
+            <th>Tên Voucher</th>
+            <th>Hình thức giảm</th>
+            <th>Giá trị giảm</th>
+            <th>Trạng thái</th>
+            <th>Ngày tạo</th>
+            <th>Ngày sửa</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th colspan="2">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let voucher of vouchers">
+            <td>{{ voucher.ma }}</td>
+            <td>{{ voucher.ten }}</td>
+            <td>{{ voucher.hinhThucGiam ? 'Giảm giá' : 'Giảm %' }}</td>
+            <td>{{ voucher.giaTriGiam }}</td>
+            <td>{{ voucher.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
+            <td>{{ voucher.ngayTao  }}</td>
+            <td>{{ voucher.ngaySua  }}</td>
+            <td>{{ voucher.ngayBatDau }}</td>
+            <td>{{ voucher.ngayKetThuc  }}</td>
+            <td>
+              
+              <a href="" class="button btn-danger">Sửa</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

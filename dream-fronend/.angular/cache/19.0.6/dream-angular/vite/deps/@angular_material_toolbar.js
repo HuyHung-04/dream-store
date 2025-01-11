@@ -1,10 +1,10 @@
 import {
   MatCommonModule,
   Platform
-} from "./chunk-RNQNS65U.js";
+} from "./chunk-EG2MLVRF.js";
 import {
   DOCUMENT
-} from "./chunk-VP6DRI4E.js";
+} from "./chunk-CUIEDR4A.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -27,7 +27,7 @@ import {
   ɵɵprojection,
   ɵɵprojectionDef,
   ɵɵqueryRefresh
-} from "./chunk-7WEFQ6UK.js";
+} from "./chunk-KB6DLHMF.js";
 
 // node_modules/@angular/material/fesm2022/toolbar.mjs
 var _c0 = ["*", [["mat-toolbar-row"]]];
@@ -70,17 +70,14 @@ var MatToolbar = class _MatToolbar {
   color;
   /** Reference to all toolbar row elements that have been projected. */
   _toolbarRows;
-
   constructor() {
   }
-
   ngAfterViewInit() {
     if (this._platform.isBrowser) {
       this._checkToolbarMixedModes();
       this._toolbarRows.changes.subscribe(() => this._checkToolbarMixedModes());
     }
   }
-
   /**
    * Throws an exception when developers are attempting to combine the different toolbar row modes.
    */
@@ -92,7 +89,6 @@ var MatToolbar = class _MatToolbar {
       }
     }
   }
-
   static ɵfac = function MatToolbar_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _MatToolbar)();
   };
@@ -164,11 +160,9 @@ var MatToolbar = class _MatToolbar {
     }]
   });
 })();
-
 function throwToolbarMixedModesError() {
   throw Error("MatToolbar: Attempting to combine different toolbar modes. Either specify multiple `<mat-toolbar-row>` elements explicitly or just place content inside of a `<mat-toolbar>` for a single row.");
 }
-
 var MatToolbarModule = class _MatToolbarModule {
   static ɵfac = function MatToolbarModule_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _MatToolbarModule)();

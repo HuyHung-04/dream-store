@@ -14,17 +14,17 @@ import {
   getRtlScrollAxisType,
   hasModifierKey,
   supportsScrollBehavior
-} from "./chunk-RNQNS65U.js";
+} from "./chunk-EG2MLVRF.js";
 import {
   animate,
   state,
   style,
   transition,
   trigger
-} from "./chunk-XBYJB54V.js";
+} from "./chunk-HLDBBLS3.js";
 import {
   DOCUMENT
-} from "./chunk-VP6DRI4E.js";
+} from "./chunk-CUIEDR4A.js";
 import {
   ANIMATION_MODULE_TYPE,
   AfterRenderPhase,
@@ -112,33 +112,28 @@ import {
   ɵɵsyntheticHostProperty,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-7WEFQ6UK.js";
+} from "./chunk-KB6DLHMF.js";
 
 // node_modules/@angular/cdk/fesm2022/collections.mjs
 var DataSource = class {
 };
-
 function isDataSource(value) {
   return value && typeof value.connect === "function" && !(value instanceof ConnectableObservable);
 }
-
 var ArrayDataSource = class extends DataSource {
   _data;
-
   constructor(_data) {
     super();
     this._data = _data;
   }
-
   connect() {
     return isObservable(this._data) ? this._data : of(this._data);
   }
-
   disconnect() {
   }
 };
 var _ViewRepeaterOperation;
-(function (_ViewRepeaterOperation2) {
+(function(_ViewRepeaterOperation2) {
   _ViewRepeaterOperation2[_ViewRepeaterOperation2["REPLACED"] = 0] = "REPLACED";
   _ViewRepeaterOperation2[_ViewRepeaterOperation2["INSERTED"] = 1] = "INSERTED";
   _ViewRepeaterOperation2[_ViewRepeaterOperation2["MOVED"] = 2] = "MOVED";
@@ -159,7 +154,6 @@ var _RecycleViewRepeaterStrategy = class {
    * TODO(michaeljamesparsons) Investigate whether using a linked list would improve performance.
    */
   _viewCache = [];
-
   /** Apply changes to the DOM. */
   applyChanges(changes, viewContainerRef, itemContextFactory, itemValueResolver, itemViewChanged) {
     changes.forEachOperation((record, adjustedPreviousIndex, currentIndex) => {
@@ -185,14 +179,12 @@ var _RecycleViewRepeaterStrategy = class {
       }
     });
   }
-
   detach() {
     for (const view of this._viewCache) {
       view.destroy();
     }
     this._viewCache = [];
   }
-
   /**
    * Inserts a view for a new item, either from the cache or by creating a new
    * one. Returns `undefined` if the item was inserted into a cached view.
@@ -206,13 +198,11 @@ var _RecycleViewRepeaterStrategy = class {
     const viewArgs = viewArgsFactory();
     return viewContainerRef.createEmbeddedView(viewArgs.templateRef, viewArgs.context, viewArgs.index);
   }
-
   /** Detaches the view at the given index and inserts into the view cache. */
   _detachAndCacheView(index, viewContainerRef) {
     const detachedView = viewContainerRef.detach(index);
     this._maybeCacheView(detachedView, viewContainerRef);
   }
-
   /** Moves view at the previous index to the current index. */
   _moveView(adjustedPreviousIndex, currentIndex, viewContainerRef, value) {
     const view = viewContainerRef.get(adjustedPreviousIndex);
@@ -220,7 +210,6 @@ var _RecycleViewRepeaterStrategy = class {
     view.context.$implicit = value;
     return view;
   }
-
   /**
    * Cache the given detached view. If the cache is full, the view will be
    * destroyed.
@@ -237,7 +226,6 @@ var _RecycleViewRepeaterStrategy = class {
       }
     }
   }
-
   /** Inserts a recycled view from the cache at the given index. */
   _insertViewFromCache(index, viewContainerRef) {
     const cachedView = this._viewCache.pop();
@@ -249,7 +237,6 @@ var _RecycleViewRepeaterStrategy = class {
 };
 var UniqueSelectionDispatcher = class _UniqueSelectionDispatcher {
   _listeners = [];
-
   /**
    * Notify other items that selection for the given name has been set.
    * @param id ID of the item.
@@ -260,7 +247,6 @@ var UniqueSelectionDispatcher = class _UniqueSelectionDispatcher {
       listener(id, name);
     }
   }
-
   /**
    * Listen for future changes to item selection.
    * @return Function used to deregister listener
@@ -273,11 +259,9 @@ var UniqueSelectionDispatcher = class _UniqueSelectionDispatcher {
       });
     };
   }
-
   ngOnDestroy() {
     this._listeners = [];
   }
-
   static ɵfac = function UniqueSelectionDispatcher_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _UniqueSelectionDispatcher)();
   };
@@ -312,7 +296,6 @@ var FixedSizeVirtualScrollStrategy = class {
   _minBufferPx;
   /** The number of buffer items to render beyond the edge of the viewport (in pixels). */
   _maxBufferPx;
-
   /**
    * @param itemSize The size of the items in the virtually scrolling list.
    * @param minBufferPx The minimum amount of buffer (in pixels) before needing to render more
@@ -323,7 +306,6 @@ var FixedSizeVirtualScrollStrategy = class {
     this._minBufferPx = minBufferPx;
     this._maxBufferPx = maxBufferPx;
   }
-
   /**
    * Attaches this scroll strategy to a viewport.
    * @param viewport The viewport to attach this strategy to.
@@ -333,13 +315,11 @@ var FixedSizeVirtualScrollStrategy = class {
     this._updateTotalContentSize();
     this._updateRenderedRange();
   }
-
   /** Detaches this scroll strategy from the currently attached viewport. */
   detach() {
     this._scrolledIndexChange.complete();
     this._viewport = null;
   }
-
   /**
    * Update the item size and buffer size.
    * @param itemSize The size of the items in the virtually scrolling list.
@@ -356,26 +336,21 @@ var FixedSizeVirtualScrollStrategy = class {
     this._updateTotalContentSize();
     this._updateRenderedRange();
   }
-
   /** @docs-private Implemented as part of VirtualScrollStrategy. */
   onContentScrolled() {
     this._updateRenderedRange();
   }
-
   /** @docs-private Implemented as part of VirtualScrollStrategy. */
   onDataLengthChanged() {
     this._updateTotalContentSize();
     this._updateRenderedRange();
   }
-
   /** @docs-private Implemented as part of VirtualScrollStrategy. */
   onContentRendered() {
   }
-
   /** @docs-private Implemented as part of VirtualScrollStrategy. */
   onRenderedOffsetChanged() {
   }
-
   /**
    * Scroll to the offset for the given index.
    * @param index The index of the element to scroll to.
@@ -386,7 +361,6 @@ var FixedSizeVirtualScrollStrategy = class {
       this._viewport.scrollToOffset(index * this._itemSize, behavior);
     }
   }
-
   /** Update the viewport's total content size. */
   _updateTotalContentSize() {
     if (!this._viewport) {
@@ -394,7 +368,6 @@ var FixedSizeVirtualScrollStrategy = class {
     }
     this._viewport.setTotalContentSize(this._viewport.getDataLength() * this._itemSize);
   }
-
   /** Update the viewport's rendered range. */
   _updateRenderedRange() {
     if (!this._viewport) {
@@ -439,23 +412,18 @@ var FixedSizeVirtualScrollStrategy = class {
     this._scrolledIndexChange.next(Math.floor(firstVisibleIndex));
   }
 };
-
 function _fixedSizeVirtualScrollStrategyFactory(fixedSizeDir) {
   return fixedSizeDir._scrollStrategy;
 }
-
 var CdkFixedSizeVirtualScroll = class _CdkFixedSizeVirtualScroll {
   /** The size of the items in the list (in pixels). */
   get itemSize() {
     return this._itemSize;
   }
-
   set itemSize(value) {
     this._itemSize = coerceNumberProperty(value);
   }
-
   _itemSize = 20;
-
   /**
    * The minimum amount of buffer rendered beyond the viewport (in pixels).
    * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
@@ -463,32 +431,25 @@ var CdkFixedSizeVirtualScroll = class _CdkFixedSizeVirtualScroll {
   get minBufferPx() {
     return this._minBufferPx;
   }
-
   set minBufferPx(value) {
     this._minBufferPx = coerceNumberProperty(value);
   }
-
   _minBufferPx = 100;
-
   /**
    * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
    */
   get maxBufferPx() {
     return this._maxBufferPx;
   }
-
   set maxBufferPx(value) {
     this._maxBufferPx = coerceNumberProperty(value);
   }
-
   _maxBufferPx = 200;
   /** The scroll strategy used by this directive. */
   _scrollStrategy = new FixedSizeVirtualScrollStrategy(this.itemSize, this.minBufferPx, this.maxBufferPx);
-
   ngOnChanges() {
     this._scrollStrategy.updateItemAndBufferSize(this.itemSize, this.minBufferPx, this.maxBufferPx);
   }
-
   static ɵfac = function CdkFixedSizeVirtualScroll_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CdkFixedSizeVirtualScroll)();
   };
@@ -538,10 +499,8 @@ var ScrollDispatcher = class _ScrollDispatcher {
   _document = inject(DOCUMENT, {
     optional: true
   });
-
   constructor() {
   }
-
   /** Subject for notifying that a registered scrollable reference element has been scrolled. */
   _scrolled = new Subject();
   /** Keeps track of the global `scroll` and `resize` subscriptions. */
@@ -553,7 +512,6 @@ var ScrollDispatcher = class _ScrollDispatcher {
    * scroll event subscriptions.
    */
   scrollContainers = /* @__PURE__ */ new Map();
-
   /**
    * Registers a scrollable instance with the service and listens for its scrolled events. When the
    * scrollable is scrolled, the service emits the event to its scrolled observable.
@@ -564,7 +522,6 @@ var ScrollDispatcher = class _ScrollDispatcher {
       this.scrollContainers.set(scrollable, scrollable.elementScrolled().subscribe(() => this._scrolled.next(scrollable)));
     }
   }
-
   /**
    * De-registers a Scrollable reference and unsubscribes from its scroll event observable.
    * @param scrollable Scrollable instance to be deregistered.
@@ -576,7 +533,6 @@ var ScrollDispatcher = class _ScrollDispatcher {
       this.scrollContainers.delete(scrollable);
     }
   }
-
   /**
    * Returns an observable that emits an event whenever any of the registered Scrollable
    * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
@@ -606,13 +562,11 @@ var ScrollDispatcher = class _ScrollDispatcher {
       };
     });
   }
-
   ngOnDestroy() {
     this._removeGlobalListener();
     this.scrollContainers.forEach((_, container) => this.deregister(container));
     this._scrolled.complete();
   }
-
   /**
    * Returns an observable that emits whenever any of the
    * scrollable ancestors of an element are scrolled.
@@ -625,7 +579,6 @@ var ScrollDispatcher = class _ScrollDispatcher {
       return !target || ancestors.indexOf(target) > -1;
     }));
   }
-
   /** Returns all registered Scrollables that contain the provided element. */
   getAncestorScrollContainers(elementOrElementRef) {
     const scrollingContainers = [];
@@ -636,12 +589,10 @@ var ScrollDispatcher = class _ScrollDispatcher {
     });
     return scrollingContainers;
   }
-
   /** Use defaultView of injected document if available or fallback to global window reference */
   _getWindow() {
     return this._document.defaultView || window;
   }
-
   /** Returns true if the element is contained within the provided Scrollable. */
   _scrollableContainsElement(scrollable, elementOrElementRef) {
     let element = coerceElement(elementOrElementRef);
@@ -653,7 +604,6 @@ var ScrollDispatcher = class _ScrollDispatcher {
     } while (element = element.parentElement);
     return false;
   }
-
   /** Sets up the global scroll listeners. */
   _addGlobalListener() {
     this._globalSubscription = this._ngZone.runOutsideAngular(() => {
@@ -661,7 +611,6 @@ var ScrollDispatcher = class _ScrollDispatcher {
       return fromEvent(window2.document, "scroll").subscribe(() => this._scrolled.next());
     });
   }
-
   /** Cleans up the global scroll listener. */
   _removeGlobalListener() {
     if (this._globalSubscription) {
@@ -669,7 +618,6 @@ var ScrollDispatcher = class _ScrollDispatcher {
       this._globalSubscription = null;
     }
   }
-
   static ɵfac = function ScrollDispatcher_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ScrollDispatcher)();
   };
@@ -696,30 +644,24 @@ var CdkScrollable = class _CdkScrollable {
   });
   _destroyed = new Subject();
   _elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(this.elementRef.nativeElement, "scroll").pipe(takeUntil(this._destroyed)).subscribe(observer)));
-
   constructor() {
   }
-
   ngOnInit() {
     this.scrollDispatcher.register(this);
   }
-
   ngOnDestroy() {
     this.scrollDispatcher.deregister(this);
     this._destroyed.next();
     this._destroyed.complete();
   }
-
   /** Returns observable that emits when a scroll event is fired on the host element. */
   elementScrolled() {
     return this._elementScrolled;
   }
-
   /** Gets the ElementRef for the viewport. */
   getElementRef() {
     return this.elementRef;
   }
-
   /**
    * Scrolls to the specified offsets. This is a normalized version of the browser's native scrollTo
    * method, since browsers are not consistent about what scrollLeft means in RTL. For this method
@@ -756,7 +698,6 @@ var CdkScrollable = class _CdkScrollable {
     }
     this._applyScrollToOptions(options);
   }
-
   _applyScrollToOptions(options) {
     const el = this.elementRef.nativeElement;
     if (supportsScrollBehavior()) {
@@ -770,7 +711,6 @@ var CdkScrollable = class _CdkScrollable {
       }
     }
   }
-
   /**
    * Measures the scroll offset relative to the specified edge of the viewport. This method can be
    * used instead of directly checking scrollLeft or scrollTop, since browsers are not consistent
@@ -816,7 +756,6 @@ var CdkScrollable = class _CdkScrollable {
       }
     }
   }
-
   static ɵfac = function CdkScrollable_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CdkScrollable)();
   };
@@ -845,7 +784,6 @@ var ViewportRuler = class _ViewportRuler {
   _document = inject(DOCUMENT, {
     optional: true
   });
-
   constructor() {
     const ngZone = inject(NgZone);
     const renderer = inject(RendererFactory2).createRenderer(null, null);
@@ -857,12 +795,10 @@ var ViewportRuler = class _ViewportRuler {
       this.change().subscribe(() => this._viewportSize = null);
     });
   }
-
   ngOnDestroy() {
     this._listeners?.forEach((cleanup) => cleanup());
     this._change.complete();
   }
-
   /** Returns the viewport's width and height. */
   getViewportSize() {
     if (!this._viewportSize) {
@@ -877,7 +813,6 @@ var ViewportRuler = class _ViewportRuler {
     }
     return output;
   }
-
   /** Gets a DOMRect for the viewport's bounds. */
   getViewportRect() {
     const scrollPosition = this.getViewportScrollPosition();
@@ -894,7 +829,6 @@ var ViewportRuler = class _ViewportRuler {
       width
     };
   }
-
   /** Gets the (top, left) scroll position of the viewport. */
   getViewportScrollPosition() {
     if (!this._platform.isBrowser) {
@@ -914,7 +848,6 @@ var ViewportRuler = class _ViewportRuler {
       left
     };
   }
-
   /**
    * Returns a stream that emits whenever the size of the viewport changes.
    * This stream emits outside of the Angular zone.
@@ -923,12 +856,10 @@ var ViewportRuler = class _ViewportRuler {
   change(throttleTime = DEFAULT_RESIZE_TIME) {
     return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
   }
-
   /** Use defaultView of injected document if available or fallback to global window reference */
   _getWindow() {
     return this._document.defaultView || window;
   }
-
   /** Updates the cached viewport size. */
   _updateViewportSize() {
     const window2 = this._getWindow();
@@ -940,7 +871,6 @@ var ViewportRuler = class _ViewportRuler {
       height: 0
     };
   }
-
   static ɵfac = function ViewportRuler_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ViewportRuler)();
   };
@@ -963,7 +893,6 @@ var CdkVirtualScrollable = class _CdkVirtualScrollable extends CdkScrollable {
   constructor() {
     super();
   }
-
   /**
    * Measure the viewport size for the provided orientation.
    *
@@ -973,7 +902,6 @@ var CdkVirtualScrollable = class _CdkVirtualScrollable extends CdkScrollable {
     const viewportEl = this.elementRef.nativeElement;
     return orientation === "horizontal" ? viewportEl.clientWidth : viewportEl.clientHeight;
   }
-
   static ɵfac = function CdkVirtualScrollable_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CdkVirtualScrollable)();
   };
@@ -987,11 +915,9 @@ var CdkVirtualScrollable = class _CdkVirtualScrollable extends CdkScrollable {
     type: Directive
   }], () => [], null);
 })();
-
 function rangesEqual(r1, r2) {
   return r1.start == r2.start && r1.end == r2.end;
 }
-
 var SCROLL_SCHEDULER = typeof requestAnimationFrame !== "undefined" ? animationFrameScheduler : asapScheduler;
 var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtualScrollable {
   elementRef = inject(ElementRef);
@@ -1007,19 +933,16 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
   _detachedSubject = new Subject();
   /** Emits when the rendered range changes. */
   _renderedRangeSubject = new Subject();
-
   /** The direction the viewport scrolls. */
   get orientation() {
     return this._orientation;
   }
-
   set orientation(orientation) {
     if (this._orientation !== orientation) {
       this._orientation = orientation;
       this._calculateSpacerSize();
     }
   }
-
   _orientation = "vertical";
   /**
    * Whether rendered items should persist in the DOM after scrolling out of view. By default, items
@@ -1075,7 +998,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
   _viewportChanges = Subscription.EMPTY;
   _injector = inject(Injector);
   _isDestroyed = false;
-
   constructor() {
     super();
     const viewportRuler = inject(ViewportRuler);
@@ -1090,7 +1012,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       this.scrollable = this;
     }
   }
-
   ngOnInit() {
     if (!this._platform.isBrowser) {
       return;
@@ -1116,7 +1037,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       this._markChangeDetectionNeeded();
     }));
   }
-
   ngOnDestroy() {
     this.detach();
     this._scrollStrategy.detach();
@@ -1126,7 +1046,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     this._isDestroyed = true;
     super.ngOnDestroy();
   }
-
   /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */
   attach(forOf) {
     if (this._forOf && (typeof ngDevMode === "undefined" || ngDevMode)) {
@@ -1144,23 +1063,19 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       });
     });
   }
-
   /** Detaches the current `CdkVirtualForOf`. */
   detach() {
     this._forOf = null;
     this._detachedSubject.next();
   }
-
   /** Gets the length of the data bound to this viewport (in number of items). */
   getDataLength() {
     return this._dataLength;
   }
-
   /** Gets the size of the viewport (in pixels). */
   getViewportSize() {
     return this._viewportSize;
   }
-
   // TODO(mmalerba): This is technically out of sync with what's really rendered until a render
   // cycle happens. I'm being careful to only call it after the render cycle is complete and before
   // setting it to something else, but its error prone and should probably be split into
@@ -1169,11 +1084,9 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
   getRenderedRange() {
     return this._renderedRange;
   }
-
   measureBoundingClientRectWithScrollOffset(from) {
     return this.getElementRef().nativeElement.getBoundingClientRect()[from];
   }
-
   /**
    * Sets the total size of all content (in pixels), including content that is not currently
    * rendered.
@@ -1185,7 +1098,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       this._markChangeDetectionNeeded();
     }
   }
-
   /** Sets the currently rendered range of indices. */
   setRenderedRange(range) {
     if (!rangesEqual(this._renderedRange, range)) {
@@ -1199,14 +1111,12 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       this._markChangeDetectionNeeded(() => this._scrollStrategy.onContentRendered());
     }
   }
-
   /**
    * Gets the offset from the start of the viewport to the start of the rendered data (in pixels).
    */
   getOffsetToRenderedContentStart() {
     return this._renderedContentOffsetNeedsRewrite ? null : this._renderedContentOffset;
   }
-
   /**
    * Sets the offset from the start of the viewport to either the start or end of the rendered data
    * (in pixels).
@@ -1236,7 +1146,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       });
     }
   }
-
   /**
    * Scrolls to the given offset from the start of the viewport. Please note that this is not always
    * the same as setting `scrollTop` or `scrollLeft`. In a horizontal viewport with right-to-left
@@ -1255,7 +1164,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     }
     this.scrollable.scrollTo(options);
   }
-
   /**
    * Scrolls to the offset for the given index.
    * @param index The index of the element to scroll to.
@@ -1264,7 +1172,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
   scrollToIndex(index, behavior = "auto") {
     this._scrollStrategy.scrollToIndex(index, behavior);
   }
-
   /**
    * Gets the current scroll offset from the start of the scrollable (in pixels).
    * @param from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
@@ -1279,7 +1186,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     }
     return Math.max(0, measureScrollOffset(from ?? (this.orientation === "horizontal" ? "start" : "top")) - this.measureViewportOffset());
   }
-
   /**
    * Measures the offset of the viewport from the scrolling container
    * @param from The edge to measure from.
@@ -1302,13 +1208,11 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     const viewportClientRect = this.elementRef.nativeElement.getBoundingClientRect()[fromRect];
     return viewportClientRect - scrollerClientRect;
   }
-
   /** Measure the combined size of all of the rendered items. */
   measureRenderedContentSize() {
     const contentEl = this._contentWrapper.nativeElement;
     return this.orientation === "horizontal" ? contentEl.offsetWidth : contentEl.offsetHeight;
   }
-
   /**
    * Measure the total combined size of the given range. Throws if the range includes items that are
    * not rendered.
@@ -1319,18 +1223,15 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     }
     return this._forOf.measureRangeSize(range, this.orientation);
   }
-
   /** Update the viewport dimensions and re-render. */
   checkViewportSize() {
     this._measureViewportSize();
     this._scrollStrategy.onDataLengthChanged();
   }
-
   /** Measure the viewport size. */
   _measureViewportSize() {
     this._viewportSize = this.scrollable.measureViewportSize(this.orientation);
   }
-
   /** Queue up change detection to run. */
   _markChangeDetectionNeeded(runAfter) {
     if (runAfter) {
@@ -1343,7 +1244,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       }));
     }
   }
-
   /** Run change detection. */
   _doChangeDetection() {
     if (this._isDestroyed) {
@@ -1364,13 +1264,11 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       });
     });
   }
-
   /** Calculates the `style.width` and `style.height` for the spacer element. */
   _calculateSpacerSize() {
     this._totalContentHeight = this.orientation === "horizontal" ? "" : `${this._totalContentSize}px`;
     this._totalContentWidth = this.orientation === "horizontal" ? `${this._totalContentSize}px` : "";
   }
-
   static ɵfac = function CdkVirtualScrollViewport_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CdkVirtualScrollViewport)();
   };
@@ -1468,7 +1366,6 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     }]
   });
 })();
-
 function getOffset(orientation, direction, node) {
   const el = node;
   if (!el.getBoundingClientRect) {
@@ -1480,7 +1377,6 @@ function getOffset(orientation, direction, node) {
   }
   return direction === "start" ? rect.top : rect.bottom;
 }
-
 var CdkVirtualForOf = class _CdkVirtualForOf {
   _viewContainerRef = inject(ViewContainerRef);
   _template = inject(TemplateRef);
@@ -1493,12 +1389,10 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
   viewChange = new Subject();
   /** Subject that emits when a new DataSource instance is given. */
   _dataSourceChanges = new Subject();
-
   /** The DataSource to display. */
   get cdkVirtualForOf() {
     return this._cdkVirtualForOf;
   }
-
   set cdkVirtualForOf(value) {
     this._cdkVirtualForOf = value;
     if (isDataSource(value)) {
@@ -1507,9 +1401,7 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       this._dataSourceChanges.next(new ArrayDataSource(isObservable(value) ? value : Array.from(value || [])));
     }
   }
-
   _cdkVirtualForOf;
-
   /**
    * The `TrackByFunction` to use for tracking changes. The `TrackByFunction` takes the index and
    * the item and produces a value to be used as the item's identity when tracking changes.
@@ -1517,14 +1409,11 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
   get cdkVirtualForTrackBy() {
     return this._cdkVirtualForTrackBy;
   }
-
   set cdkVirtualForTrackBy(fn) {
     this._needsUpdate = true;
     this._cdkVirtualForTrackBy = fn ? (index, item) => fn(index + (this._renderedRange ? this._renderedRange.start : 0), item) : void 0;
   }
-
   _cdkVirtualForTrackBy;
-
   /** The template used to stamp out new elements. */
   set cdkVirtualForTemplate(value) {
     if (value) {
@@ -1532,7 +1421,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       this._template = value;
     }
   }
-
   /**
    * The size of the cache used to store templates that are not being used for re-use later.
    * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
@@ -1540,11 +1428,9 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
   get cdkVirtualForTemplateCacheSize() {
     return this._viewRepeater.viewCacheSize;
   }
-
   set cdkVirtualForTemplateCacheSize(size) {
     this._viewRepeater.viewCacheSize = coerceNumberProperty(size);
   }
-
   /** Emits whenever the data in the current DataSource changes. */
   dataStream = this._dataSourceChanges.pipe(
     // Start off with null `DataSource`.
@@ -1569,7 +1455,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
   /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
   _needsUpdate = false;
   _destroyed = new Subject();
-
   constructor() {
     const ngZone = inject(NgZone);
     this.dataStream.subscribe((data) => {
@@ -1585,7 +1470,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     });
     this._viewport.attach(this);
   }
-
   /**
    * Measures the combined size (width for horizontal orientation, height for vertical) of all items
    * in the specified range. Throws an error if the range includes items that are not currently
@@ -1618,7 +1502,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     }
     return firstNode && lastNode ? getOffset(orientation, "end", lastNode) - getOffset(orientation, "start", firstNode) : 0;
   }
-
   ngDoCheck() {
     if (this._differ && this._needsUpdate) {
       const changes = this._differ.diff(this._renderedItems);
@@ -1630,7 +1513,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       this._needsUpdate = false;
     }
   }
-
   ngOnDestroy() {
     this._viewport.detach();
     this._dataSourceChanges.next(void 0);
@@ -1640,7 +1522,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     this._destroyed.complete();
     this._viewRepeater.detach();
   }
-
   /** React to scroll state changes in the viewport. */
   _onRenderedDataChange() {
     if (!this._renderedRange) {
@@ -1654,7 +1535,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     }
     this._needsUpdate = true;
   }
-
   /** Swap out one `DataSource` for another. */
   _changeDataSource(oldDs, newDs) {
     if (oldDs) {
@@ -1663,7 +1543,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     this._needsUpdate = true;
     return newDs ? newDs.connect(this) : of();
   }
-
   /** Update the `CdkVirtualForOfContext` for all views. */
   _updateContext() {
     const count = this._data.length;
@@ -1676,7 +1555,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       view.detectChanges();
     }
   }
-
   /** Apply changes to the DOM. */
   _applyChanges(changes) {
     this._viewRepeater.applyChanges(changes, this._viewContainerRef, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record, currentIndex), (record) => record.item);
@@ -1693,7 +1571,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       this._updateComputedContextProperties(view.context);
     }
   }
-
   /** Update the computed properties on the `CdkVirtualForOfContext`. */
   _updateComputedContextProperties(context) {
     context.first = context.index === 0;
@@ -1701,7 +1578,6 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     context.even = context.index % 2 === 0;
     context.odd = !context.even;
   }
-
   _getEmbeddedViewArgs(record, index) {
     return {
       templateRef: this._template,
@@ -1720,11 +1596,9 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       index
     };
   }
-
   static ngTemplateContextGuard(directive, context) {
     return true;
   }
-
   static ɵfac = function CdkVirtualForOf_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CdkVirtualForOf)();
   };
@@ -1772,11 +1646,9 @@ var CdkVirtualScrollableElement = class _CdkVirtualScrollableElement extends Cdk
   constructor() {
     super();
   }
-
   measureBoundingClientRectWithScrollOffset(from) {
     return this.getElementRef().nativeElement.getBoundingClientRect()[from] - this.measureScrollOffset(from);
   }
-
   static ɵfac = function CdkVirtualScrollableElement_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CdkVirtualScrollableElement)();
   };
@@ -1807,16 +1679,13 @@ var CdkVirtualScrollableElement = class _CdkVirtualScrollableElement extends Cdk
 })();
 var CdkVirtualScrollableWindow = class _CdkVirtualScrollableWindow extends CdkVirtualScrollable {
   _elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(document, "scroll").pipe(takeUntil(this._destroyed)).subscribe(observer)));
-
   constructor() {
     super();
     this.elementRef = new ElementRef(document.documentElement);
   }
-
   measureBoundingClientRectWithScrollOffset(from) {
     return this.getElementRef().nativeElement.getBoundingClientRect()[from];
   }
-
   static ɵfac = function CdkVirtualScrollableWindow_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CdkVirtualScrollableWindow)();
   };
@@ -1889,7 +1758,6 @@ var _c02 = ["*"];
 var _c12 = ["content"];
 var _c2 = [[["mat-drawer"]], [["mat-drawer-content"]], "*"];
 var _c3 = ["mat-drawer", "mat-drawer-content", "*"];
-
 function MatDrawerContainer_Conditional_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = ɵɵgetCurrentView();
@@ -1906,7 +1774,6 @@ function MatDrawerContainer_Conditional_0_Template(rf, ctx) {
     ɵɵclassProp("mat-drawer-shown", ctx_r1._isShowingBackdrop());
   }
 }
-
 function MatDrawerContainer_Conditional_3_Template(rf, ctx) {
   if (rf & 1) {
     ɵɵelementStart(0, "mat-drawer-content");
@@ -1914,10 +1781,8 @@ function MatDrawerContainer_Conditional_3_Template(rf, ctx) {
     ɵɵelementEnd();
   }
 }
-
 var _c4 = [[["mat-sidenav"]], [["mat-sidenav-content"]], "*"];
 var _c5 = ["mat-sidenav", "mat-sidenav-content", "*"];
-
 function MatSidenavContainer_Conditional_0_Template(rf, ctx) {
   if (rf & 1) {
     const _r1 = ɵɵgetCurrentView();
@@ -1934,7 +1799,6 @@ function MatSidenavContainer_Conditional_0_Template(rf, ctx) {
     ɵɵclassProp("mat-drawer-shown", ctx_r1._isShowingBackdrop());
   }
 }
-
 function MatSidenavContainer_Conditional_3_Template(rf, ctx) {
   if (rf & 1) {
     ɵɵelementStart(0, "mat-sidenav-content");
@@ -1942,7 +1806,6 @@ function MatSidenavContainer_Conditional_3_Template(rf, ctx) {
     ɵɵelementEnd();
   }
 }
-
 var _c6 = '.mat-drawer-container{position:relative;z-index:1;color:var(--mat-sidenav-content-text-color, var(--mat-sys-on-background));background-color:var(--mat-sidenav-content-background-color, var(--mat-sys-background));box-sizing:border-box;-webkit-overflow-scrolling:touch;display:block;overflow:hidden}.mat-drawer-container[fullscreen]{top:0;left:0;right:0;bottom:0;position:absolute}.mat-drawer-container[fullscreen].mat-drawer-container-has-open{overflow:hidden}.mat-drawer-container.mat-drawer-container-explicit-backdrop .mat-drawer-side{z-index:3}.mat-drawer-container.ng-animate-disabled .mat-drawer-backdrop,.mat-drawer-container.ng-animate-disabled .mat-drawer-content,.ng-animate-disabled .mat-drawer-container .mat-drawer-backdrop,.ng-animate-disabled .mat-drawer-container .mat-drawer-content{transition:none}.mat-drawer-backdrop{top:0;left:0;right:0;bottom:0;position:absolute;display:block;z-index:3;visibility:hidden}.mat-drawer-backdrop.mat-drawer-shown{visibility:visible;background-color:var(--mat-sidenav-scrim-color, color-mix(in srgb, var(--mat-sys-neutral-variant20) 40%, transparent))}.mat-drawer-transition .mat-drawer-backdrop{transition-duration:400ms;transition-timing-function:cubic-bezier(0.25, 0.8, 0.25, 1);transition-property:background-color,visibility}@media(forced-colors: active){.mat-drawer-backdrop{opacity:.5}}.mat-drawer-content{position:relative;z-index:1;display:block;height:100%;overflow:auto}.mat-drawer-content.mat-drawer-content-hidden{opacity:0}.mat-drawer-transition .mat-drawer-content{transition-duration:400ms;transition-timing-function:cubic-bezier(0.25, 0.8, 0.25, 1);transition-property:transform,margin-left,margin-right}.mat-drawer{position:relative;z-index:4;color:var(--mat-sidenav-container-text-color, var(--mat-sys-on-surface-variant));box-shadow:var(--mat-sidenav-container-elevation-shadow, none);background-color:var(--mat-sidenav-container-background-color, var(--mat-sys-surface));border-top-right-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));border-bottom-right-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));width:var(--mat-sidenav-container-width, 360px);display:block;position:absolute;top:0;bottom:0;z-index:3;outline:0;box-sizing:border-box;overflow-y:auto;transform:translate3d(-100%, 0, 0)}@media(forced-colors: active){.mat-drawer,[dir=rtl] .mat-drawer.mat-drawer-end{border-right:solid 1px currentColor}}@media(forced-colors: active){[dir=rtl] .mat-drawer,.mat-drawer.mat-drawer-end{border-left:solid 1px currentColor;border-right:none}}.mat-drawer.mat-drawer-side{z-index:2}.mat-drawer.mat-drawer-end{right:0;transform:translate3d(100%, 0, 0);border-top-left-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));border-bottom-left-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));border-top-right-radius:0;border-bottom-right-radius:0}[dir=rtl] .mat-drawer{border-top-left-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));border-bottom-left-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));border-top-right-radius:0;border-bottom-right-radius:0;transform:translate3d(100%, 0, 0)}[dir=rtl] .mat-drawer.mat-drawer-end{border-top-right-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));border-bottom-right-radius:var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));border-top-left-radius:0;border-bottom-left-radius:0;left:0;right:auto;transform:translate3d(-100%, 0, 0)}.mat-drawer[style*="visibility: hidden"]{display:none}.mat-drawer-side{box-shadow:none;border-right-color:var(--mat-sidenav-container-divider-color, transparent);border-right-width:1px;border-right-style:solid}.mat-drawer-side.mat-drawer-end{border-left-color:var(--mat-sidenav-container-divider-color, transparent);border-left-width:1px;border-left-style:solid;border-right:none}[dir=rtl] .mat-drawer-side{border-left-color:var(--mat-sidenav-container-divider-color, transparent);border-left-width:1px;border-left-style:solid;border-right:none}[dir=rtl] .mat-drawer-side.mat-drawer-end{border-right-color:var(--mat-sidenav-container-divider-color, transparent);border-right-width:1px;border-right-style:solid;border-left:none}.mat-drawer-inner-container{width:100%;height:100%;overflow:auto;-webkit-overflow-scrolling:touch}.mat-sidenav-fixed{position:fixed}';
 var matDrawerAnimations = {
   /** Animation that slides a drawer in and out. */
@@ -1964,39 +1827,32 @@ var matDrawerAnimations = {
     transition("void <=> open, open-instant => void", animate("400ms cubic-bezier(0.25, 0.8, 0.25, 1)"))
   ])
 };
-
 function throwMatDuplicatedDrawerError(position) {
   throw Error(`A drawer was already declared for 'position="${position}"'`);
 }
-
 var MAT_DRAWER_DEFAULT_AUTOSIZE = new InjectionToken("MAT_DRAWER_DEFAULT_AUTOSIZE", {
   providedIn: "root",
   factory: MAT_DRAWER_DEFAULT_AUTOSIZE_FACTORY
 });
 var MAT_DRAWER_CONTAINER = new InjectionToken("MAT_DRAWER_CONTAINER");
-
 function MAT_DRAWER_DEFAULT_AUTOSIZE_FACTORY() {
   return false;
 }
-
 var MatDrawerContent = class _MatDrawerContent extends CdkScrollable {
   _platform = inject(Platform);
   _changeDetectorRef = inject(ChangeDetectorRef);
   _container = inject(MatDrawerContainer);
-
   constructor() {
     const elementRef = inject(ElementRef);
     const scrollDispatcher = inject(ScrollDispatcher);
     const ngZone = inject(NgZone);
     super(elementRef, scrollDispatcher, ngZone);
   }
-
   ngAfterContentInit() {
     this._container._contentMarginChanges.subscribe(() => {
       this._changeDetectorRef.markForCheck();
     });
   }
-
   /** Determines whether the content element should be hidden from the user. */
   _shouldBeHidden() {
     if (this._platform.isBrowser) {
@@ -2008,7 +1864,6 @@ var MatDrawerContent = class _MatDrawerContent extends CdkScrollable {
     } = this._container;
     return start != null && start.mode !== "over" && start.opened || end != null && end.mode !== "over" && end.opened;
   }
-
   static ɵfac = function MatDrawerContent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _MatDrawerContent)();
   };
@@ -2083,12 +1938,10 @@ var MatDrawer = class _MatDrawer {
   _isAttached;
   /** Anchor node used to restore the drawer to its initial position. */
   _anchor;
-
   /** The side that the drawer is attached to. */
   get position() {
     return this._position;
   }
-
   set position(value) {
     value = value === "end" ? "end" : "start";
     if (value !== this._position) {
@@ -2099,33 +1952,25 @@ var MatDrawer = class _MatDrawer {
       this.onPositionChanged.emit();
     }
   }
-
   _position = "start";
-
   /** Mode of the drawer; one of 'over', 'push' or 'side'. */
   get mode() {
     return this._mode;
   }
-
   set mode(value) {
     this._mode = value;
     this._updateFocusTrapState();
     this._modeChanged.next();
   }
-
   _mode = "over";
-
   /** Whether the drawer can be closed with the escape key or by clicking on the backdrop. */
   get disableClose() {
     return this._disableClose;
   }
-
   set disableClose(value) {
     this._disableClose = coerceBooleanProperty(value);
   }
-
   _disableClose = false;
-
   /**
    * Whether the drawer should focus the first focusable element automatically when opened.
    * Defaults to false in when `mode` is set to `side`, otherwise defaults to `true`. If explicitly
@@ -2144,16 +1989,13 @@ var MatDrawer = class _MatDrawer {
     }
     return value;
   }
-
   set autoFocus(value) {
     if (value === "true" || value === "false" || value == null) {
       value = coerceBooleanProperty(value);
     }
     this._autoFocus = value;
   }
-
   _autoFocus;
-
   /**
    * Whether the drawer is opened. We overload this because we trigger an event when it
    * starts or end.
@@ -2161,11 +2003,9 @@ var MatDrawer = class _MatDrawer {
   get opened() {
     return this._opened;
   }
-
   set opened(value) {
     this.toggle(coerceBooleanProperty(value));
   }
-
   _opened = false;
   /** How the sidenav was opened (keypress, mouse click etc.) */
   _openedVia;
@@ -2196,7 +2036,7 @@ var MatDrawer = class _MatDrawer {
   /** Emits when the component is destroyed. */
   _destroyed = new Subject();
   /** Event emitted when the drawer's position changes. */
-    // tslint:disable-next-line:no-output-on-prefix
+  // tslint:disable-next-line:no-output-on-prefix
   onPositionChanged = new EventEmitter();
   /** Reference to the inner element that contains all the content. */
   _content;
@@ -2207,7 +2047,6 @@ var MatDrawer = class _MatDrawer {
   _modeChanged = new Subject();
   _injector = inject(Injector);
   _changeDetectorRef = inject(ChangeDetectorRef);
-
   constructor() {
     this.openedChange.pipe(takeUntil(this._destroyed)).subscribe((opened) => {
       if (opened) {
@@ -2238,7 +2077,6 @@ var MatDrawer = class _MatDrawer {
       }
     });
   }
-
   /**
    * Focuses the provided element. If the element is not focusable, it will add a tabIndex
    * attribute to forcefully focus it. The attribute is removed after focus is moved.
@@ -2259,7 +2097,6 @@ var MatDrawer = class _MatDrawer {
     }
     element.focus(options);
   }
-
   /**
    * Focuses the first element that matches the given selector within the focus trap.
    * @param selector The CSS selector for the element to set focus to.
@@ -2270,7 +2107,6 @@ var MatDrawer = class _MatDrawer {
       this._forceFocus(elementToFocus, options);
     }
   }
-
   /**
    * Moves focus into the drawer. Note that this works even if
    * the focus trap is disabled in `side` mode.
@@ -2303,7 +2139,6 @@ var MatDrawer = class _MatDrawer {
         break;
     }
   }
-
   /**
    * Restores focus to the element that was originally focused when the drawer opened.
    * If no element was focused at that time, the focus will be restored to the drawer.
@@ -2319,13 +2154,11 @@ var MatDrawer = class _MatDrawer {
     }
     this._elementFocusedBeforeDrawerWasOpened = null;
   }
-
   /** Whether focus is currently within the drawer. */
   _isFocusWithinDrawer() {
     const activeEl = this._doc.activeElement;
     return !!activeEl && this._elementRef.nativeElement.contains(activeEl);
   }
-
   ngAfterViewInit() {
     this._isAttached = true;
     if (this._position === "end") {
@@ -2336,13 +2169,11 @@ var MatDrawer = class _MatDrawer {
       this._updateFocusTrapState();
     }
   }
-
   ngAfterContentChecked() {
     if (this._platform.isBrowser) {
       this._enableAnimations = true;
     }
   }
-
   ngOnDestroy() {
     this._focusTrap?.destroy();
     this._anchor?.remove();
@@ -2353,7 +2184,6 @@ var MatDrawer = class _MatDrawer {
     this._destroyed.next();
     this._destroyed.complete();
   }
-
   /**
    * Open the drawer.
    * @param openedVia Whether the drawer was opened by a key press, mouse click or programmatically.
@@ -2362,12 +2192,10 @@ var MatDrawer = class _MatDrawer {
   open(openedVia) {
     return this.toggle(true, openedVia);
   }
-
   /** Close the drawer. */
   close() {
     return this.toggle(false);
   }
-
   /** Closes the drawer with context that the backdrop was clicked. */
   _closeViaBackdropClick() {
     return this._setOpen(
@@ -2378,7 +2206,6 @@ var MatDrawer = class _MatDrawer {
       "mouse"
     );
   }
-
   /**
    * Toggle this drawer.
    * @param isOpen Whether the drawer should be open.
@@ -2400,7 +2227,6 @@ var MatDrawer = class _MatDrawer {
     }
     return result;
   }
-
   /**
    * Toggles the opened state of the drawer.
    * @param isOpen Whether the drawer should open or close.
@@ -2423,18 +2249,15 @@ var MatDrawer = class _MatDrawer {
       this.openedChange.pipe(take(1)).subscribe((open) => resolve(open ? "open" : "close"));
     });
   }
-
   _getWidth() {
     return this._elementRef.nativeElement ? this._elementRef.nativeElement.offsetWidth || 0 : 0;
   }
-
   /** Updates the enabled state of the focus trap. */
   _updateFocusTrapState() {
     if (this._focusTrap) {
       this._focusTrap.enabled = !!this._container?.hasBackdrop && this.opened;
     }
   }
-
   /**
    * Updates the position of the drawer in the DOM. We need to move the element around ourselves
    * when it's in the `end` position so that it comes after the content and the visual order
@@ -2457,7 +2280,6 @@ var MatDrawer = class _MatDrawer {
       this._anchor.parentNode.insertBefore(element, this._anchor);
     }
   }
-
   static ɵfac = function MatDrawer_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _MatDrawer)();
   };
@@ -2610,17 +2432,14 @@ var MatDrawerContainer = class _MatDrawerContainer {
   _drawers = new QueryList();
   _content;
   _userContent;
-
   /** The drawer child with the `start` position. */
   get start() {
     return this._start;
   }
-
   /** The drawer child with the `end` position. */
   get end() {
     return this._end;
   }
-
   /**
    * Whether to automatically resize the container whenever
    * the size of any of its drawers changes.
@@ -2632,13 +2451,10 @@ var MatDrawerContainer = class _MatDrawerContainer {
   get autosize() {
     return this._autosize;
   }
-
   set autosize(value) {
     this._autosize = coerceBooleanProperty(value);
   }
-
   _autosize = inject(MAT_DRAWER_DEFAULT_AUTOSIZE);
-
   /**
    * Whether the drawer container should have a backdrop while one of the sidenavs is open.
    * If explicitly set to `true`, the backdrop will be enabled for drawers in the `side`
@@ -2647,11 +2463,9 @@ var MatDrawerContainer = class _MatDrawerContainer {
   get hasBackdrop() {
     return this._drawerHasBackdrop(this._start) || this._drawerHasBackdrop(this._end);
   }
-
   set hasBackdrop(value) {
     this._backdropOverride = value == null ? null : coerceBooleanProperty(value);
   }
-
   _backdropOverride;
   /** Event emitted when the drawer backdrop is clicked. */
   backdropClick = new EventEmitter();
@@ -2680,14 +2494,11 @@ var MatDrawerContainer = class _MatDrawerContainer {
     right: null
   };
   _contentMarginChanges = new Subject();
-
   /** Reference to the CdkScrollable instance that wraps the scrollable content. */
   get scrollable() {
     return this._userContent || this._content;
   }
-
   _injector = inject(Injector);
-
   constructor() {
     const viewportRuler = inject(ViewportRuler);
     this._dir?.change.pipe(takeUntil(this._destroyed)).subscribe(() => {
@@ -2696,7 +2507,6 @@ var MatDrawerContainer = class _MatDrawerContainer {
     });
     viewportRuler.change().pipe(takeUntil(this._destroyed)).subscribe(() => this.updateContentMargins());
   }
-
   ngAfterContentInit() {
     this._allDrawers.changes.pipe(startWith(this._allDrawers), takeUntil(this._destroyed)).subscribe((drawer) => {
       this._drawers.reset(drawer.filter((item) => !item._container || item._container === this));
@@ -2722,7 +2532,6 @@ var MatDrawerContainer = class _MatDrawerContainer {
       ).subscribe(() => this.updateContentMargins());
     });
   }
-
   ngOnDestroy() {
     this._contentMarginChanges.complete();
     this._doCheckSubject.complete();
@@ -2730,17 +2539,14 @@ var MatDrawerContainer = class _MatDrawerContainer {
     this._destroyed.next();
     this._destroyed.complete();
   }
-
   /** Calls `open` of both start and end drawers */
   open() {
     this._drawers.forEach((drawer) => drawer.open());
   }
-
   /** Calls `close` of both start and end drawers */
   close() {
     this._drawers.forEach((drawer) => drawer.close());
   }
-
   /**
    * Recalculates and updates the inline styles for the content. Note that this should be used
    * sparingly, because it causes a reflow.
@@ -2776,13 +2582,11 @@ var MatDrawerContainer = class _MatDrawerContainer {
       this._ngZone.run(() => this._contentMarginChanges.next(this._contentMargins));
     }
   }
-
   ngDoCheck() {
     if (this._autosize && this._isPushed()) {
       this._ngZone.runOutsideAngular(() => this._doCheckSubject.next());
     }
   }
-
   /**
    * Subscribes to drawer events in order to set a class on the main container element when the
    * drawer is open and the backdrop is visible. This ensures any overflow on the container element
@@ -2800,7 +2604,6 @@ var MatDrawerContainer = class _MatDrawerContainer {
       drawer.openedChange.pipe(takeUntil(this._drawers.changes)).subscribe(() => this._setContainerClass(drawer.opened));
     }
   }
-
   /**
    * Subscribes to drawer onPositionChanged event in order to
    * re-validate drawers when the position changes.
@@ -2818,7 +2621,6 @@ var MatDrawerContainer = class _MatDrawerContainer {
       });
     });
   }
-
   /** Subscribes to changes in drawer mode so we can run change detection. */
   _watchDrawerMode(drawer) {
     if (drawer) {
@@ -2828,7 +2630,6 @@ var MatDrawerContainer = class _MatDrawerContainer {
       });
     }
   }
-
   /** Toggles the 'mat-drawer-opened' class on the main 'mat-drawer-container' element. */
   _setContainerClass(isAdd) {
     const classList = this._element.nativeElement.classList;
@@ -2839,7 +2640,6 @@ var MatDrawerContainer = class _MatDrawerContainer {
       classList.remove(className);
     }
   }
-
   /** Validate the state of the drawer children components. */
   _validateDrawers() {
     this._start = this._end = null;
@@ -2865,29 +2665,23 @@ var MatDrawerContainer = class _MatDrawerContainer {
       this._right = this._end;
     }
   }
-
   /** Whether the container is being pushed to the side by one of the drawers. */
   _isPushed() {
     return this._isDrawerOpen(this._start) && this._start.mode != "over" || this._isDrawerOpen(this._end) && this._end.mode != "over";
   }
-
   _onBackdropClicked() {
     this.backdropClick.emit();
     this._closeModalDrawersViaBackdrop();
   }
-
   _closeModalDrawersViaBackdrop() {
     [this._start, this._end].filter((drawer) => drawer && !drawer.disableClose && this._drawerHasBackdrop(drawer)).forEach((drawer) => drawer._closeViaBackdropClick());
   }
-
   _isShowingBackdrop() {
     return this._isDrawerOpen(this._start) && this._drawerHasBackdrop(this._start) || this._isDrawerOpen(this._end) && this._drawerHasBackdrop(this._end);
   }
-
   _isDrawerOpen(drawer) {
     return drawer != null && drawer.opened;
   }
-
   // Whether argument drawer should have a backdrop when it opens
   _drawerHasBackdrop(drawer) {
     if (this._backdropOverride == null) {
@@ -2895,7 +2689,6 @@ var MatDrawerContainer = class _MatDrawerContainer {
     }
     return this._backdropOverride;
   }
-
   static ɵfac = function MatDrawerContainer_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _MatDrawerContainer)();
   };
@@ -3064,13 +2857,10 @@ var MatSidenav = class _MatSidenav extends MatDrawer {
   get fixedInViewport() {
     return this._fixedInViewport;
   }
-
   set fixedInViewport(value) {
     this._fixedInViewport = coerceBooleanProperty(value);
   }
-
   _fixedInViewport = false;
-
   /**
    * The gap between the top of the sidenav and the top of the viewport when the sidenav is in fixed
    * mode.
@@ -3078,13 +2868,10 @@ var MatSidenav = class _MatSidenav extends MatDrawer {
   get fixedTopGap() {
     return this._fixedTopGap;
   }
-
   set fixedTopGap(value) {
     this._fixedTopGap = coerceNumberProperty(value);
   }
-
   _fixedTopGap = 0;
-
   /**
    * The gap between the bottom of the sidenav and the bottom of the viewport when the sidenav is in
    * fixed mode.
@@ -3092,11 +2879,9 @@ var MatSidenav = class _MatSidenav extends MatDrawer {
   get fixedBottomGap() {
     return this._fixedBottomGap;
   }
-
   set fixedBottomGap(value) {
     this._fixedBottomGap = coerceNumberProperty(value);
   }
-
   _fixedBottomGap = 0;
   static ɵfac = /* @__PURE__ */ (() => {
     let ɵMatSidenav_BaseFactory;

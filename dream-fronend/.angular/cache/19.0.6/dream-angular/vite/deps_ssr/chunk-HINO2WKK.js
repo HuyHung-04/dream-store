@@ -1,6 +1,7 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   DOCUMENT
-} from "./chunk-VP6DRI4E.js";
+} from "./chunk-DSBQXEXU.js";
 import {
   ANIMATION_MODULE_TYPE,
   Inject,
@@ -12,11 +13,11 @@ import {
   setClassMetadata,
   ɵɵdefineInjectable,
   ɵɵinject
-} from "./chunk-7WEFQ6UK.js";
+} from "./chunk-MFL6BTOL.js";
 
 // node_modules/@angular/animations/fesm2022/animations.mjs
 var AnimationMetadataType;
-(function (AnimationMetadataType2) {
+(function(AnimationMetadataType2) {
   AnimationMetadataType2[AnimationMetadataType2["State"] = 0] = "State";
   AnimationMetadataType2[AnimationMetadataType2["Transition"] = 1] = "Transition";
   AnimationMetadataType2[AnimationMetadataType2["Sequence"] = 2] = "Sequence";
@@ -32,7 +33,6 @@ var AnimationMetadataType;
   AnimationMetadataType2[AnimationMetadataType2["Stagger"] = 12] = "Stagger";
 })(AnimationMetadataType || (AnimationMetadataType = {}));
 var AUTO_STYLE = "*";
-
 function trigger(name, definitions) {
   return {
     type: AnimationMetadataType.Trigger,
@@ -41,7 +41,6 @@ function trigger(name, definitions) {
     options: {}
   };
 }
-
 function animate(timings, styles = null) {
   return {
     type: AnimationMetadataType.Animate,
@@ -49,7 +48,6 @@ function animate(timings, styles = null) {
     timings
   };
 }
-
 function sequence(steps, options = null) {
   return {
     type: AnimationMetadataType.Sequence,
@@ -57,7 +55,6 @@ function sequence(steps, options = null) {
     options
   };
 }
-
 function style(tokens) {
   return {
     type: AnimationMetadataType.Style,
@@ -65,7 +62,6 @@ function style(tokens) {
     offset: null
   };
 }
-
 function state(name, styles, options) {
   return {
     type: AnimationMetadataType.State,
@@ -74,7 +70,6 @@ function state(name, styles, options) {
     options
   };
 }
-
 function transition(stateChangeExpr, steps, options = null) {
   return {
     type: AnimationMetadataType.Transition,
@@ -83,7 +78,6 @@ function transition(stateChangeExpr, steps, options = null) {
     options
   };
 }
-
 var AnimationBuilder = class _AnimationBuilder {
   static ɵfac = function AnimationBuilder_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _AnimationBuilder)();
@@ -111,7 +105,6 @@ var BrowserAnimationBuilder = class _BrowserAnimationBuilder extends AnimationBu
   });
   _nextAnimationId = 0;
   _renderer;
-
   constructor(rootRenderer, doc) {
     super();
     const typeData = {
@@ -127,7 +120,6 @@ var BrowserAnimationBuilder = class _BrowserAnimationBuilder extends AnimationBu
       throw new RuntimeError(3600, (typeof ngDevMode === "undefined" || ngDevMode) && "Angular detected that the `AnimationBuilder` was injected, but animation support was not enabled. Please make sure that you enable animations in your application by calling `provideAnimations()` or `provideAnimationsAsync()` function.");
     }
   }
-
   build(animation) {
     const id = this._nextAnimationId;
     this._nextAnimationId++;
@@ -135,7 +127,6 @@ var BrowserAnimationBuilder = class _BrowserAnimationBuilder extends AnimationBu
     issueAnimationCommand(this._renderer, null, id, "register", [entry]);
     return new BrowserAnimationFactory(id, this._renderer);
   }
-
   static ɵfac = function BrowserAnimationBuilder_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _BrowserAnimationBuilder)(ɵɵinject(RendererFactory2), ɵɵinject(DOCUMENT));
   };
@@ -164,13 +155,11 @@ var BrowserAnimationBuilder = class _BrowserAnimationBuilder extends AnimationBu
 var BrowserAnimationFactory = class extends AnimationFactory {
   _id;
   _renderer;
-
   constructor(_id, _renderer) {
     super();
     this._id = _id;
     this._renderer = _renderer;
   }
-
   create(element, options) {
     return new RendererAnimationPlayer(this._id, element, options || {}, this._renderer);
   }
@@ -181,83 +170,64 @@ var RendererAnimationPlayer = class {
   _renderer;
   parentPlayer = null;
   _started = false;
-
   constructor(id, element, options, _renderer) {
     this.id = id;
     this.element = element;
     this._renderer = _renderer;
     this._command("create", options);
   }
-
   _listen(eventName, callback) {
     return this._renderer.listen(this.element, `@@${this.id}:${eventName}`, callback);
   }
-
   _command(command, ...args) {
     issueAnimationCommand(this._renderer, this.element, this.id, command, args);
   }
-
   onDone(fn) {
     this._listen("done", fn);
   }
-
   onStart(fn) {
     this._listen("start", fn);
   }
-
   onDestroy(fn) {
     this._listen("destroy", fn);
   }
-
   init() {
     this._command("init");
   }
-
   hasStarted() {
     return this._started;
   }
-
   play() {
     this._command("play");
     this._started = true;
   }
-
   pause() {
     this._command("pause");
   }
-
   restart() {
     this._command("restart");
   }
-
   finish() {
     this._command("finish");
   }
-
   destroy() {
     this._command("destroy");
   }
-
   reset() {
     this._command("reset");
     this._started = false;
   }
-
   setPosition(p) {
     this._command("setPosition", p);
   }
-
   getPosition() {
     return unwrapAnimationRenderer(this._renderer)?.engine?.players[this.id]?.getPosition() ?? 0;
   }
-
   totalTime = 0;
 };
-
 function issueAnimationCommand(renderer, element, id, command, args) {
   renderer.setProperty(element, `@@${id}:${command}`, args);
 }
-
 function unwrapAnimationRenderer(renderer) {
   const type = renderer.ɵtype;
   if (type === 0) {
@@ -267,12 +237,10 @@ function unwrapAnimationRenderer(renderer) {
   }
   return null;
 }
-
 function isAnimationRenderer(renderer) {
   const type = renderer.ɵtype;
   return type === 0 || type === 1;
 }
-
 var NoopAnimationPlayer = class {
   _onDoneFns = [];
   _onStartFns = [];
@@ -285,11 +253,9 @@ var NoopAnimationPlayer = class {
   _position = 0;
   parentPlayer = null;
   totalTime;
-
   constructor(duration = 0, delay = 0) {
     this.totalTime = duration + delay;
   }
-
   _onFinish() {
     if (!this._finished) {
       this._finished = true;
@@ -297,28 +263,22 @@ var NoopAnimationPlayer = class {
       this._onDoneFns = [];
     }
   }
-
   onStart(fn) {
     this._originalOnStartFns.push(fn);
     this._onStartFns.push(fn);
   }
-
   onDone(fn) {
     this._originalOnDoneFns.push(fn);
     this._onDoneFns.push(fn);
   }
-
   onDestroy(fn) {
     this._onDestroyFns.push(fn);
   }
-
   hasStarted() {
     return this._started;
   }
-
   init() {
   }
-
   play() {
     if (!this.hasStarted()) {
       this._onStart();
@@ -326,27 +286,21 @@ var NoopAnimationPlayer = class {
     }
     this._started = true;
   }
-
   /** @internal */
   triggerMicrotask() {
     queueMicrotask(() => this._onFinish());
   }
-
   _onStart() {
     this._onStartFns.forEach((fn) => fn());
     this._onStartFns = [];
   }
-
   pause() {
   }
-
   restart() {
   }
-
   finish() {
     this._onFinish();
   }
-
   destroy() {
     if (!this._destroyed) {
       this._destroyed = true;
@@ -358,22 +312,18 @@ var NoopAnimationPlayer = class {
       this._onDestroyFns = [];
     }
   }
-
   reset() {
     this._started = false;
     this._finished = false;
     this._onStartFns = this._originalOnStartFns;
     this._onDoneFns = this._originalOnDoneFns;
   }
-
   setPosition(position) {
     this._position = this.totalTime ? position * this.totalTime : 1;
   }
-
   getPosition() {
     return this.totalTime ? this._position / this.totalTime : 1;
   }
-
   /** @internal */
   triggerCallback(phaseName) {
     const methods = phaseName == "start" ? this._onStartFns : this._onDoneFns;
@@ -391,7 +341,6 @@ var AnimationGroupPlayer = class {
   parentPlayer = null;
   totalTime = 0;
   players;
-
   constructor(_players) {
     this.players = _players;
     let doneCount = 0;
@@ -421,7 +370,6 @@ var AnimationGroupPlayer = class {
     }
     this.totalTime = this.players.reduce((time, player) => Math.max(time, player.totalTime), 0);
   }
-
   _onFinish() {
     if (!this._finished) {
       this._finished = true;
@@ -429,15 +377,12 @@ var AnimationGroupPlayer = class {
       this._onDoneFns = [];
     }
   }
-
   init() {
     this.players.forEach((player) => player.init());
   }
-
   onStart(fn) {
     this._onStartFns.push(fn);
   }
-
   _onStart() {
     if (!this.hasStarted()) {
       this._started = true;
@@ -445,19 +390,15 @@ var AnimationGroupPlayer = class {
       this._onStartFns = [];
     }
   }
-
   onDone(fn) {
     this._onDoneFns.push(fn);
   }
-
   onDestroy(fn) {
     this._onDestroyFns.push(fn);
   }
-
   hasStarted() {
     return this._started;
   }
-
   play() {
     if (!this.parentPlayer) {
       this.init();
@@ -465,24 +406,19 @@ var AnimationGroupPlayer = class {
     this._onStart();
     this.players.forEach((player) => player.play());
   }
-
   pause() {
     this.players.forEach((player) => player.pause());
   }
-
   restart() {
     this.players.forEach((player) => player.restart());
   }
-
   finish() {
     this._onFinish();
     this.players.forEach((player) => player.finish());
   }
-
   destroy() {
     this._onDestroy();
   }
-
   _onDestroy() {
     if (!this._destroyed) {
       this._destroyed = true;
@@ -492,14 +428,12 @@ var AnimationGroupPlayer = class {
       this._onDestroyFns = [];
     }
   }
-
   reset() {
     this.players.forEach((player) => player.reset());
     this._destroyed = false;
     this._finished = false;
     this._started = false;
   }
-
   setPosition(p) {
     const timeAtPosition = p * this.totalTime;
     this.players.forEach((player) => {
@@ -507,7 +441,6 @@ var AnimationGroupPlayer = class {
       player.setPosition(position);
     });
   }
-
   getPosition() {
     const longestPlayer = this.players.reduce((longestSoFar, player) => {
       const newPlayerIsLongest = longestSoFar === null || player.totalTime > longestSoFar.totalTime;
@@ -515,7 +448,6 @@ var AnimationGroupPlayer = class {
     }, null);
     return longestPlayer != null ? longestPlayer.getPosition() : 0;
   }
-
   beforeDestroy() {
     this.players.forEach((player) => {
       if (player.beforeDestroy) {
@@ -523,7 +455,6 @@ var AnimationGroupPlayer = class {
       }
     });
   }
-
   /** @internal */
   triggerCallback(phaseName) {
     const methods = phaseName == "start" ? this._onStartFns : this._onDoneFns;
@@ -555,4 +486,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-XBYJB54V.js.map
+//# sourceMappingURL=chunk-HINO2WKK.js.map
