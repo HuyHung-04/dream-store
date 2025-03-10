@@ -67,7 +67,7 @@
     
     <div class="button-group">
       <button class="btn" (click)="themVaoGio()">Thêm vào giỏ</button>
-      <button class="btn" (click)="openModalThanhToan(idKhachHang)">Mua ngay</button>
+      <button class="btn" (click)="openModalThanhToan()">Mua ngay</button>
     </div>
 </div>
 
@@ -139,12 +139,22 @@
 
       <!-- Phần danh sách sản phẩm (bên phải) -->
       <div class="cart-info">
-        <h4>Đơn hàng</h4>
-        <div class="cart-items">
-          <div>
-            <p>Áo thun 1</p>
-            <img src="https://bizweb.dktcdn.net/100/415/697/products/img-1706-1.jpg?v=1730800585823" alt="Áo thun">
-            <p>200000đ</p>
+        <h6>Đơn hàng</h6>
+        <div *ngIf="payMent.length > 0">
+          <div *ngFor="let item of payMent" class="cart-item">
+            <!-- Ảnh sản phẩm -->
+            <div class="product-container">
+              <img [src]="'http://localhost:8080' + item.anhUrl" alt="Ảnh sản phẩm" class="product-img">
+              <span class="quantity-badge">{{ item.soLuong }}</span>
+            </div>
+            <!-- Thông tin sản phẩm -->
+            <div>
+              <p><strong>{{ item.tenSanPham }}</strong></p>
+              <p>{{ item.mau }} / {{ item.size }}</p>
+            </div>
+    
+            <!-- Giá sản phẩm -->
+            <p class="price">{{ item.donGia | number }} VND</p>
           </div>
         </div>
 

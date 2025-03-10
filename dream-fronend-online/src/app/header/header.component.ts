@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   modalCard: boolean = false;
   gioHang: any[] = []; // Danh sách sản phẩm trong giỏ hàng
   idKhachHang: number = 2; // Giả sử ID khách hàng là 1
-  searchQuery: string = ''; // 🔍 Từ khóa tìm kiếm
+  searchQuery: string = ''; // Từ khóa tìm kiếm
   isSearching: boolean = false; // Trạng thái tìm kiếm
   searchResults: any[] = []; // Kết quả tìm kiếm
   

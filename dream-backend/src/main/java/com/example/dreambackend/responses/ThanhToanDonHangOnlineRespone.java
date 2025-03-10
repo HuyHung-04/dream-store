@@ -11,45 +11,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThanhToanDonHangOnlineRespone {
-    private String tenKhachHang;
+    private Integer id;
 
-    private String soDienThoai;
+    private String anhUrl;
 
-    private String thon;
+    private String tenSanPham;
 
-    private String phuongXa;
+    private String mau;
 
-    private String quanHuyen;
+    private String size;
 
-    private String tinhThanhPho;
+    private Integer soLuong;
 
-    private String moTa; // mô tả của hoá đơn
+    private Double donGia;
 
-    private String tenSanPham; // bảng sản phẩm
-
-    private Double giaGoc; // bảng sản phẩm chi tiết giá chưa giảm giá
-
-    private String tenMauSac;
-
-    private String tenSize;
-
-    private Integer soLuongGioHang;
-
-    private Boolean hinhThucGiam; // giảm của khuyến mại
+    private Boolean hinhThucGiam; // True: Giảm tiền, False: Giảm %
 
     private BigDecimal giaTriGiam;
-
-    private Boolean hinhThucGiamVoucher; // giảm của voucher theo hoá đơn
-
-    private BigDecimal giaTriGiamVoucher;
-
-    private Double TienTamTinh; // tiền trước voucher bảng hoá đơn
-
-    private Double phiVanChuyen; // bảng hoá đơn
-
-    private Double tongTienThanhToan; //bảng hoá đơn
-
-    private LocalDate ngayNhanDuKien; // bảng hoá đơn
-
-    private int trangThai; // của hoá đơn
 }

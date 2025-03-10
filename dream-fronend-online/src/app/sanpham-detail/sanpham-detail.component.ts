@@ -40,6 +40,7 @@ import { HeaderService } from '../header/header.service'
     tinhThanhPhoList: any[] = [];
     quanHuyenList: any[] = [];
     phuongXaList: any[] = [];
+    payMent: any[] = []
 
   private route = inject(ActivatedRoute);
   private sanphamService = inject(SanphamDetailService);
@@ -242,7 +243,12 @@ import { HeaderService } from '../header/header.service'
 
   // code modalThanhToan khi ấn mua ngay/////////////////////////////////
 
-  openModalThanhToan(idKhachHang: number) {
+  openModalThanhToan() {
+    this.loadKhachHang(this.idKhachHang);
+    this.loadPayMent();
+  }
+
+  loadKhachHang(idKhachHang: number) {
     this.sanphamService.getThongTinKhachHang(idKhachHang).subscribe(
       (data) => {
         console.log("Dữ liệu khách hàng nhận được:", data);
@@ -261,6 +267,30 @@ import { HeaderService } from '../header/header.service'
         console.error("Lỗi khi lấy thông tin khách hàng:", error);
       }
     );
+  }
+
+  loadPayMent(): void {
+    this.headerService.getPayMent(this.idKhachHang).subscribe((data) => {
+      this.payMent = data;
+    });
+  }
+
+  addSanPhamPayMent(){
+    const sanPhamPayment = {
+      idKhachHang: this.idKhachHang,
+      idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, // Đúng field
+      mauSac: this.selectedMauSac,
+      size: this.selectedSize,
+      soLuong: this.soLuongMua
+  };
+  console.log("Dữ liệu gửi lên API:", sanPhamPayment);
+  this.headerService.addToPayment(sanPhamPayment).subscribe(response => {
+      // console.log("Thêm vào giỏ hàng thành công:", response);
+      this.headerService.notifyGioHangUpdated();
+      this.soLuongMua = 1;
+  }, error => {
+      console.error("Lỗi khi thêm vào giỏ hàng:", error);
+  });
   }
   
   closeModalThanhToan(){

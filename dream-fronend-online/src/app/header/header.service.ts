@@ -20,7 +20,15 @@ export class HeaderService {
     return this.http.get<any[]>(`${this.apiUrl}/hien-thi?idKhachHang=${idKhachHang}`);
   }
 
+  getPayMent(idKhachHang: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/hien-thi?idKhachHang=${idKhachHang}`);
+  }
+
   addToCart(sanPham: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add`, sanPham);
+  }
+
+  addToPayment(sanPham: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, sanPham);
   }
 

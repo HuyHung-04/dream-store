@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { routes } from './app.routes';
 import { FormsModule } from '@angular/forms';
-
+import { HeaderService } from './header/header.service';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -26,6 +26,7 @@ export const appConfig: ApplicationConfig = {
       MatIconModule,
       HttpClientModule,
       FormsModule,
-    )
+    ),
+    HeaderService
   ]
 };
