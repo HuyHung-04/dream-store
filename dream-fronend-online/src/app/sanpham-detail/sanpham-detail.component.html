@@ -83,43 +83,45 @@
       <div class="customer-info">
         <div class="form-group">
           <label>Họ và tên</label>
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" [(ngModel)]="khachHang.tenKhachHang">
         </div>
 
         <div class="form-group">
           <label>Số điện thoại</label>
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" [(ngModel)]="khachHang.soDienThoai">
         </div>
 
         <div class="form-group">
           <label>Địa chỉ</label>
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" [(ngModel)]="khachHang.thon">
         </div>
 
         <div class="form-group">
-          <label>Tỉnh thành</label>
-          <select class="form-control">
-            <option value="" selected>Chọn tỉnh thành...</option>
-            <option value="hanoi">Hà Nội</option>
-            <option value="hanam">Hà Nam</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label>Quận huyện</label>
-          <select class="form-control">
-            <option value="" selected>Chọn quận huyện...</option>
-            <option value="namtuliem">Nam Từ Liêm</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label>Phường xã</label>
-          <select class="form-control">
-            <option value="" selected>Chọn phường xã...</option>
-            <option value="mydinh">Mỹ Đình</option>
-          </select>
-        </div>
+    <label>Tỉnh thành</label>
+    <select class="form-control" [(ngModel)]="khachHang.tinhThanhPho" (change)="onSelectTinhThanh($event)">
+      <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.code">
+        {{ tinh.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Quận huyện</label>
+    <select class="form-control" [(ngModel)]="khachHang.quanHuyen" (change)="onSelectQuanHuyen($event)">
+      <option *ngFor="let huyen of quanHuyenList" [value]="huyen.code">
+        {{ huyen.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Phường xã</label>
+    <select class="form-control" [(ngModel)]="khachHang.phuongXa">
+      <option *ngFor="let xa of phuongXaList" [value]="xa.code">
+        {{ xa.name }}
+      </option>
+    </select>
+  </div>
         
         <div class="form-group">
           <label>Hình thức thanh toán</label>
@@ -137,12 +139,22 @@
 
       <!-- Phần danh sách sản phẩm (bên phải) -->
       <div class="cart-info">
-        <h4>Đơn hàng</h4>
-        <div class="cart-items">
-          <div>
-            <p>Áo thun 1</p>
-            <img src="https://bizweb.dktcdn.net/100/415/697/products/img-1706-1.jpg?v=1730800585823" alt="Áo thun">
-            <p>200000đ</p>
+        <h6>Đơn hàng</h6>
+        <div *ngIf="payMent.length > 0">
+          <div *ngFor="let item of payMent" class="cart-item">
+            <!-- Ảnh sản phẩm -->
+            <div class="product-container">
+              <img [src]="'http://localhost:8080' + item.anhUrl" alt="Ảnh sản phẩm" class="product-img">
+              <span class="quantity-badge">{{ item.soLuong }}</span>
+            </div>
+            <!-- Thông tin sản phẩm -->
+            <div>
+              <p><strong>{{ item.tenSanPham }}</strong></p>
+              <p>{{ item.mau }} / {{ item.size }}</p>
+            </div>
+    
+            <!-- Giá sản phẩm -->
+            <p class="price">{{ item.donGia | number }} VND</p>
           </div>
         </div>
 
@@ -151,20 +163,25 @@
           <div class="voucher-container">
             <select class="form-control">
               <option value="" selected>Chọn voucher...</option>
-              <option>Giảm 20k</option>
+              <option></option>
             </select>
             <button class="btn btn-primary">Áp dụng</button>
           </div>
-        </div>     
+        </div>  
+        
+        <div class="total">
+          <span>Tạm tính</span>
+          <span></span>
+        </div>
 
         <div class="shipcod">
           <span>Phí vận chuyển:</span>
-          <span>20.000đ</span>
+          <span></span>
         </div>
 
         <div class="total">
           <span>Tổng cộng:</span>
-          <span>1.000.000đ</span>
+          <span></span>
         </div>
 
         <div class="form-group">
@@ -173,8 +190,6 @@
         </div>        
       </div>
     </div>
-
-    <button class="btn btn-success">Xác nhận đặt hàng</button>
+    <button class="btn-success">Xác nhận đặt hàng</button>
   </div>
-</div>
 

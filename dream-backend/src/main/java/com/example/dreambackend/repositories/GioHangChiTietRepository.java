@@ -12,19 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, Integer> {
-//    @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
-//            "g.id, " +
-//            "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham = spct.sanPham AND a.trangThai = 1 ORDER BY a.ngayTao ASC LIMIT 1), " + // Lấy ảnh đầu tiên
-//            "s.ten, spct.mauSac.ten, spct.size.ten, " +
-//            "g.soLuong, CAST(g.soLuong * spct.gia AS double), " +
-//            "g.trangThai, k.id, spct.id) " +
-//            "FROM GioHangChiTiet g " +
-//            "JOIN g.khachHang k " +
-//            "JOIN g.sanPhamChiTiet spct " +
-//            "JOIN spct.sanPham s " +
-//            "WHERE k.id = :idKhachHang")
-//    List<GioHangChiTietResponse> findGioHangChiTietByKhachHangId(@Param("idKhachHang") Integer idKhachHang);
-
     @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
             "g.id, " +
             "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham = spct.sanPham AND a.trangThai = 1 ORDER BY a.ngayTao ASC LIMIT 1), " +

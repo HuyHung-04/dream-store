@@ -1,95 +1,143 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {CurrencyPipe, NgClass} from '@angular/common';
+
 @Component({
   selector: 'app-banhang',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './banhang.component.html',
-  styleUrl: './banhang.component.css'
+  imports: [
+    FormsModule,
+    NgClass,
+    CurrencyPipe,
+    CommonModule
+  ],
+  styleUrls: ['./banhang.component.css']
 })
-export class BanhangComponent implements AfterViewInit {
-  invoices: number[] = [1]; // Mặc định có một hóa đơn
-  selectedTab: number = 0; // Tab hiện tại
-  tabWidth: number = 120; // Kích thước tab
-  readonly minTabWidth: number = 50; // Kích thước tối thiểu
-  readonly maxTabWidth: number = 120; // Kích thước tối đa
-  selectedButton: string = '';
-  isQuickSaleOpen = false; // Trạng thái cửa sổ bán nhanh
-  isNormalSaleOpen = false; // Trạng thái cửa sổ bán thường
+export class BanhangComponent {
+  searchText: string = '';
+  selectedCategory: string = '';
+  invoices: number[] = [1]; // Danh sách hóa đơn
+  selectedTab: number = 0;
+  discountCode: string = '';
+  discountAmount: number = 0;
+  selectedPaymentMethod: string = 'cash';
 
-  @ViewChild('tabContainer', { static: false }) tabContainer!: ElementRef;
+  products = [
+    { id: 1, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 2, name: 'Giày Nike Phantom', price: 2700000, stock: 5, image: 'assets/nike-phantom.jpg' },
+    { id: 3, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 4, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 5, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 6, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 7, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 8, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 9, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 10, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 11, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 12, name: 'Giày Nike Mercurial', price: 2500000, stock: 10, image: 'assets/nike-mercurial.jpg' },
+    { id: 13, name: 'Giày Nike Tiempo', price: 2300000, stock: 2, image: 'assets/nike-tiempo.jpg' }
+  ];
 
-  ngAfterViewInit(): void {
-    this.updateTabSize();
+  cart: any[] = [];
+  categories = ['Nike Mercurial', 'Nike Phantom', 'Nike Tiempo'];
+
+  // Lọc sản phẩm theo danh mục hoặc tìm kiếm
+  filteredProducts() {
+    return this.products.filter(product =>
+      (this.selectedCategory === '' || product.name.includes(this.selectedCategory)) &&
+      (this.searchText === '' || product.name.toLowerCase().includes(this.searchText.toLowerCase()))
+    );
   }
 
-  /** Chọn tab */
-  selectTab(index: number): void {
+  // Xem chi tiết sản phẩm
+  viewProductDetails(product: any) {
+    console.log('Xem chi tiết sản phẩm:', product);
+    alert(`Sản phẩm: ${product.name}\nGiá: ${product.price.toLocaleString()} VND`);
+  }
+
+  // Thêm sản phẩm vào giỏ hàng
+  addToCart(product: any) {
+    const existingItem = this.cart.find(item => item.id === product.id);
+    if (existingItem) {
+      if (existingItem.quantity < product.stock) {
+        existingItem.quantity++;
+      } else {
+        alert('Số lượng sản phẩm không đủ!');
+      }
+    } else {
+      this.cart.push({ ...product, quantity: 1 });
+    }
+  }
+
+  // Xóa sản phẩm khỏi giỏ hàng
+  removeFromCart(item: any) {
+    this.cart = this.cart.filter(cartItem => cartItem.id !== item.id);
+  }
+
+  // Kiểm tra số lượng giỏ hàng
+  validateQuantity(item: any) {
+    const product = this.products.find(p => p.id === item.id);
+    if (!product) {
+      alert('Sản phẩm không tồn tại!');
+      return;
+    }
+
+    if (item.quantity < 1 || isNaN(item.quantity)) {
+      item.quantity = 1;
+    } else if (item.quantity > product.stock) {
+      item.quantity = product.stock;
+      alert('Số lượng sản phẩm không đủ!');
+    }
+  }
+
+
+  // Tính tổng tiền giỏ hàng
+  getTotal() {
+    return this.cart.reduce((total, item) => total + item.price * item.quantity, 0) - this.discountAmount;
+  }
+
+  // Áp dụng mã giảm giá
+  applyDiscount() {
+    if (this.discountCode === 'GIAM10') {
+      this.discountAmount = this.getTotal() * 0.1;
+    } else {
+      this.discountAmount = 0;
+      alert('Mã giảm giá không hợp lệ!');
+    }
+  }
+
+  // Chọn tab hóa đơn
+  selectTab(index: number) {
     this.selectedTab = index;
   }
 
-  /** Tạo hóa đơn mới */
-  createInvoice(): void {
-    const newInvoice = this.invoices.length > 0 ? Math.max(...this.invoices) + 1 : 1;
-    this.invoices.push(newInvoice);
+  // Tạo hóa đơn mới
+  createInvoice() {
+    this.invoices.push(this.invoices.length + 1);
     this.selectedTab = this.invoices.length - 1;
-    this.updateTabSize();
   }
 
-  /** Xóa hóa đơn */
-  removeInvoice(index: number, event: Event): void {
+  // Xóa hóa đơn
+  removeInvoice(index: number, event: Event) {
     event.stopPropagation();
-    this.invoices.splice(index, 1);
-    this.selectedTab = Math.max(0, this.invoices.length - 1);
-    this.updateTabSize();
-  }
-
-  /** Cập nhật kích thước tab khi số lượng thay đổi */
-  updateTabSize(): void {
-    if (!this.tabContainer) return;
-  
-    if (typeof window !== 'undefined') {
-      const containerWidth = window.innerWidth * 0.5; // Giới hạn 50% màn hình
-      const totalTabs = this.invoices.length + 1; // Tổng số tab + nút thêm
-  
-      this.tabWidth = totalTabs * this.maxTabWidth > containerWidth
-        ? Math.max(containerWidth / totalTabs, this.minTabWidth)
-        : this.maxTabWidth;
+    if (this.invoices.length > 1) {
+      this.invoices.splice(index, 1);
+      this.selectedTab = this.invoices.length - 1;
     }
   }
-  
 
-  /** Lắng nghe thay đổi kích thước màn hình */
-  @HostListener('window:resize')
-  onResize(): void {
-    this.updateTabSize();
-  }
 
-  /** Mở giao diện Bán Nhanh và đóng Bán Thường */
-  openQuickSale(): void {
-    this.isQuickSaleOpen = true;
-    this.isNormalSaleOpen = false; // Đảm bảo chỉ mở một cửa sổ
-    this.selectedButton = 'quick-sale';
-  }
+  // Xác nhận thanh toán
+  checkout() {
+    if (this.cart.length === 0) {
+      alert('Giỏ hàng đang trống!');
+      return;
+    }
 
-  /** Đóng giao diện Bán Nhanh */
-  closeQuickSale(): void {
-    this.isQuickSaleOpen = false;
-    this.selectedButton = '';
-  }
-
-  /** Mở giao diện Bán Thường và đóng Bán Nhanh */
-  openNormalSale(): void {
-    this.isNormalSaleOpen = true;
-    this.isQuickSaleOpen = false; // Đảm bảo chỉ mở một cửa sổ
-    
-    this.selectedButton = 'normal-sale'; // Đánh dấu nút Bán Thường đang được chọn
-  }
-
-  /** Đóng giao diện Bán Thường */
-  closeNormalSale(): void {
-    this.isNormalSaleOpen = false;
-    this.selectedButton = ''; 
+    alert(`Thanh toán thành công bằng ${this.selectedPaymentMethod.toUpperCase()}!`);
+    this.cart = [];
+    this.discountCode = '';
+    this.discountAmount = 0;
   }
 }

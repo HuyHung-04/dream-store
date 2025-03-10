@@ -14,34 +14,54 @@ import { HeaderService } from '../header/header.service'
   templateUrl: './sanpham-detail.component.html',
   styleUrl: './sanpham-detail.component.css'
 })
-export class SanphamDetailComponent implements OnInit {
-  sanPhamList: any[] = [];
-  danhSachMauSac: any[] = [];
-  danhSachSize: any[] = [];
-  danhSachAnh: string[] = [];
-  selectedSanPham: any = null;
-  hinhThucGiam: any = null;
-  giaTriGiam: any = null;
-  selectedSize: string = '';
-  selectedMauSac: string = '';
-  soLuongMua: number = 1;
-  filteredDanhSachMauSac: any[] = [];
-  filteredDanhSachSize: any[] = [];
-  idKhachHang: number = 1; // Giả sử ID khách hàng = 1
-  showModalThanhToan: boolean = false; // mở modal thanh toán
+  export class SanphamDetailComponent implements OnInit {
+    sanPhamList: any[] = [];
+    danhSachMauSac: any[] = [];
+    danhSachSize: any[] = [];
+    danhSachAnh: string[] = [];
+    selectedSanPham: any = null;
+    hinhThucGiam: any = null;
+    giaTriGiam: any = null;
+    selectedSize: string = '';
+    selectedMauSac: string = '';
+    soLuongMua: number = 1;
+    filteredDanhSachMauSac: any[] = [];
+    filteredDanhSachSize: any[] = [];
+    idKhachHang: number = 2; // Giả sử ID khách hàng = 1
+    showModalThanhToan: boolean = false; // mở modal thanh toán
+    khachHang: any = {
+      tenKhachHang: '',
+      soDienThoai: '',
+      thon: '',
+      tinhThanhPho: null,
+      quanHuyen: null,
+      phuongXa: null
+    };
+    tinhThanhPhoList: any[] = [];
+    quanHuyenList: any[] = [];
+    phuongXaList: any[] = [];
+    payMent: any[] = []
 
   private route = inject(ActivatedRoute);
   private sanphamService = inject(SanphamDetailService);
+  // thao tác 2 component
   constructor(private headerService: HeaderService) {}
 
   ngOnInit(): void {
     this.loadSanPhamChiTiet();
+    this.loadTinhThanh();
     this.filteredDanhSachSize = this.danhSachSize;
     this.filteredDanhSachMauSac = this.danhSachMauSac;
     this.updateFilteredLists();
   if (this.selectedMauSac) {
     this.onSelectionChange();
   }
+
+  // hiện modal thanh toán header
+  this.headerService.modalThanhToan$.subscribe(status => {
+    console.log("Trạng thái modal từ HeaderService:", status); // Debug
+    this.showModalThanhToan = status;
+  });
   }
 
   loadSanPhamChiTiet(): void {
@@ -211,7 +231,7 @@ export class SanphamDetailComponent implements OnInit {
         size: this.selectedSize,
         soLuong: this.soLuongMua
     };
-    // console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
+    console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
     this.headerService.addToCart(sanPhamGioHang).subscribe(response => {
         // console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
@@ -221,14 +241,92 @@ export class SanphamDetailComponent implements OnInit {
     });
   }
 
-  // code modalThanhToan khi ấn mua ngay//////////////////////////////////////////
+  // code modalThanhToan khi ấn mua ngay/////////////////////////////////
 
-  openModalThanhToan(){
-    this.showModalThanhToan = true;
+  openModalThanhToan() {
+    this.loadKhachHang(this.idKhachHang);
+    this.loadPayMent();
   }
 
+  loadKhachHang(idKhachHang: number) {
+    this.sanphamService.getThongTinKhachHang(idKhachHang).subscribe(
+      (data) => {
+        console.log("Dữ liệu khách hàng nhận được:", data);
+        
+        // Kiểm tra nếu data là một mảng và có ít nhất một phần tử
+        if (Array.isArray(data) && data.length > 0) {
+          this.khachHang = data[0]; // Lấy phần tử đầu tiên
+        } else {
+          console.warn("Không có dữ liệu khách hàng!");
+          this.khachHang = null; // Để tránh lỗi binding trên giao diện
+        }
+  
+        this.showModalThanhToan = true;
+      },
+      (error) => {
+        console.error("Lỗi khi lấy thông tin khách hàng:", error);
+      }
+    );
+  }
+
+  loadPayMent(): void {
+    this.headerService.getPayMent(this.idKhachHang).subscribe((data) => {
+      this.payMent = data;
+    });
+  }
+
+  addSanPhamPayMent(){
+    const sanPhamPayment = {
+      idKhachHang: this.idKhachHang,
+      idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, // Đúng field
+      mauSac: this.selectedMauSac,
+      size: this.selectedSize,
+      soLuong: this.soLuongMua
+  };
+  console.log("Dữ liệu gửi lên API:", sanPhamPayment);
+  this.headerService.addToPayment(sanPhamPayment).subscribe(response => {
+      // console.log("Thêm vào giỏ hàng thành công:", response);
+      this.headerService.notifyGioHangUpdated();
+      this.soLuongMua = 1;
+  }, error => {
+      console.error("Lỗi khi thêm vào giỏ hàng:", error);
+  });
+  }
+  
   closeModalThanhToan(){
     this.showModalThanhToan = false;
   }
-  
+
+  // hiện modal thanh toán bên header
+  closeModalThanhToanHeader(){
+    this.headerService.closeModalThanhToan();
+  }
+
+  // Lấy danh sách tỉnh thành
+  loadTinhThanh() {
+    this.sanphamService.getTinhThanh().subscribe((data) => {
+      this.tinhThanhPhoList = data;
+    });
+  }
+
+  // Khi chọn tỉnh, lấy danh sách quận huyện
+  onSelectTinhThanh(event: any) {
+    const maTinh = event.target.value;
+    this.khachHang.tinhThanhPho = maTinh;
+    this.sanphamService.getQuanHuyen(maTinh).subscribe((data) => {
+      this.quanHuyenList = data.districts;
+      this.khachHang.quanHuyen = null;
+      this.phuongXaList = [];
+    });
+  }
+
+  // Khi chọn huyện, lấy danh sách phường xã
+  onSelectQuanHuyen(event: any) {
+    const maHuyen = event.target.value;
+    this.khachHang.quanHuyen = maHuyen;
+    this.sanphamService.getPhuongXa(maHuyen).subscribe((data) => {
+      this.phuongXaList = data.wards;
+      this.khachHang.phuongXa = null;
+    });
+  }
 }

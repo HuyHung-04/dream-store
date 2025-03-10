@@ -1,374 +1,439 @@
-.main {
-background:#f9f9f9;
-}
-/* HEADER */
-header {
-  background-color: #1c89ed;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  gap: 5px;
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
+/* Reset & Variables */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* SEARCH BAR */
-.search-container {
+:root {
+  --primary: #007BFF;       /* Marine Blue */
+  --secondary: #6b5b95;
+  --accent: #0d6dcf;        /* Darker marine blue cho hiệu ứng hover */
+  --info: #f7cac9;
+  --danger: #d9534f;
+  --bg-main: #fff9e6;
+  --bg-dark: #2e2e2e;
+  --border: #5c4444;
+  --transition: 0.3s;
+  --font-family: 'Roboto', sans-serif;
+  --gradient-header: linear-gradient(135deg, #007BFF, #66B2FF);
+}
+
+
+html, body {
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--bg-dark);
+}
+
+/* Container chính */
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header */
+.main-header {
+  background: var(--gradient-header);
+  color: #fff;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  padding: 15px 20px;
+}
+
+.header-content {
   display: flex;
   align-items: center;
-  background: white;
-  border-radius: 5px;
-  padding: 2px;
-  height: 35px;
-  flex-shrink: 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.search-container {
+  flex: 1;
+  min-width: 200px;
 }
 
 .search-bar {
-  height: 100%;
-  width: 300px;
-  padding: 5px 10px;
+  width: 100%;
+  padding: 10px 12px;
   border: none;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--bg-dark);
   outline: none;
-  font-size: 14px;
+  transition: box-shadow var(--transition);
 }
 
-/* TAB WRAPPER */
+.search-bar:focus {
+  box-shadow: 0 0 10px var(--primary);
+}
+
+/* Tab hóa đơn */
 .tab-wrapper {
-  flex-grow: 1;
-  display: flex;
-  max-width: 50vw;
-  overflow: hidden;
-  position: relative;
-  align-items: center;
+  flex: 2;
+  margin-left: 20px;
+  min-width: 250px;
 }
 
-/* TAB CONTAINER */
 .tab-container {
   display: flex;
   align-items: center;
-  flex-grow: 1;
   overflow-x: auto;
-  gap: 5px;
-  white-space: nowrap;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  padding: 5px 0;
-  position: relative;
 }
 
-.tab-container::-webkit-scrollbar {
-  display: none;
-}
-
-/* TABS */
 .tab {
-  padding: 5px 10px;
-  border-radius: 5px 5px 0 0; /* Bo tròn phía trên */
-  font-size: 14px;
+  background-color: var(--info);
+  padding: 8px 12px;
+  border-radius: 20px;
+  margin-right: 10px;
   display: flex;
   align-items: center;
-  gap: 5px;
-  height: 35px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  transition: all 0.3s ease;
   cursor: pointer;
- border-radius: 5px 5px;
-}
-
-.tab p {
-  flex-grow: 1; /* Giúp chữ co lại khi tab nhỏ */
-  overflow: hidden;
-  text-overflow: ellipsis;
+  transition: background-color var(--transition), transform var(--transition);
   white-space: nowrap;
-  position: relative;
-  top: 10px;
 }
 
-
-/* Khi tab không được chọn */
-.inactive-tab {
-  background: #1c89ed !important;
-  color: white !important;
+.tab:hover {
+  background-color: var(--accent);
+  transform: scale(1.05);
 }
 
-.active-tab::after {
-  content: "";
-  position: absolute;
-  bottom: -4px; /* Điều chỉnh giá trị này để nền kéo dài hết */
-  left: 0;
-  width: 100%;
-  height: 4px; /* Điều chỉnh độ dày của nền mở rộng */
-  background: white;
-  z-index: 1;
+.tab.active {
+  background-color: var(--primary);
+  color: #fff;
 }
 
-/* Nút đóng tab */
-.close-tab {
-  position: relative;
-  top: 2px;
-  left: 2px;
-  cursor: pointer;
-  font-weight: bold;
-  border: none;
+.tab-close {
   background: transparent;
-  font-size: 11px;
-  border-radius: 100%;
-  transition: color 0.3s ease;
-}
-
-.close-tab i {
-  font-size: 11px;
-  font-weight: bold;
-  pointer-events: none;
-}
-
-.close-tab:hover {
-  background:gainsboro; /* Hiệu ứng hover */
-}
-
-/* Nút thêm tab */
-.add-tab-button {
-  background-color: #1c89ed;
   border: none;
+  margin-left: 8px;
   cursor: pointer;
-  font-size: 20px;
-  padding: 5px;
+  font-size: 14px;
+  color: inherit;
+}
+
+.tab-add {
+  background-color: var(--accent);
+  border: none;
+  padding: 8px 12px;
   border-radius: 50%;
-  width: 35px;
-  height: 35px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.tab-add:hover {
+  background-color: var(--primary);
+  transform: scale(1.1);
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Product Section */
+.product-section {
+  flex: 3;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.product-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.product-filters input,
+.product-filters select {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: #fff;
+  transition: box-shadow var(--transition);
+  flex: 1;
+  min-width: 150px;
+}
+
+.product-filters input:focus,
+.product-filters select:focus {
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.product-info {
+  text-align: center;
+}
+
+.product-title {
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.product-price {
+  color: var(--primary);
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.product-stock {
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}
+
+.product-stock.low-stock {
+  color: var(--danger);
+}
+
+.product-add {
+  background-color: #f6f1f1;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  color: red;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.product-add:hover {
+  background-color: var(--accent);
+}
+
+/* Checkout Sidebar */
+.checkout-sidebar {
+  flex: 1;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  padding: 20px;
+  overflow-y: auto;
+  border-left: 3px solid var(--primary);
+}
+
+.sidebar-title {
+  font-size: 1.4em;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  flex-shrink: 0;
-  position: relative;
-  color: white;
+  color: var(--primary);
 }
 
-.add-tab-button:hover {
-  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+.sidebar-title i {
+  margin-right: 8px;
 }
 
-.active-tab {
-  background: white !important;
-  color: black !important;
-  border-bottom: 2px solid transparent !important;
-  font-weight: bold;
-  z-index: 2;
-  border-radius: 5px 5px;
+/* Cart Container */
+.cart-container {
+  margin-bottom: 20px;
 }
 
-.inactive-tab {
-  background: #1c89ed !important;
-  color: white !important;
+.cart-items {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 15px;
 }
 
-.close-inactive {
-  color: white !important;
-}
-
-.active-tab .close-tab {
-  color: black !important;
-}
-
-.tab:not(.active-tab) {
-  position: relative;
-  overflow: hidden; /* Ngăn nền tràn ra ngoài */
-}
-
-.tab:not(.active-tab)::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%; /* Ẩn màu nền bên ngoài */
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.3); /* Màu nền khi hover */
-  transition: left 0.3s ease-in-out;
-}
-
-.tab:not(.active-tab):hover::before {
-  left: 0; /* Đẩy màu nền từ trái sang phải */
-}
-
-.tab:not(.active-tab) {
-  border-left: 1px solid rgba(255, 255, 255, 0.5); /* Viền sáng bên trái */
-  border-right: 1px solid rgba(255, 255, 255, 0.5); /* Viền sáng bên phải */
-}
-
-/* BODY */
-.body-content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 20px;
-  gap: 20px;
-  background-color: #f9f9f9;
-}
-
-/* Right Panel (Quick Sale and Normal Sale) */
-.right-panel {
-  width: 600px;
-  transition: width 0.3s ease-in-out;
-  height: 84%;
-  position: absolute;
-  top: 60px;
-  right: 10px;
+.cart-item {
   background-color: #fff;
-  box-shadow: -4px 0px 8px rgba(0, 0, 0, 0.1);
-  border-left: 1px solid #e0e0e0;
-  padding: 20px;
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-info {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
 }
 
-.right-panel h2 {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #333;
+.item-controls {
+  display: flex;
+  align-items: center;
 }
 
-.right-panel p {
-  font-size: 16px;
-  color: #666;
+.item-quantity {
+  width: 60px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-right: 5px;
 }
 
-.right-panel button.close-btn {
-  background: transparent;
+.item-remove {
+  background: none;
   border: none;
-  color: #999;
-  font-size: 18px;
+  color: var(--danger);
   cursor: pointer;
-  align-self: flex-end;
-  transition: color 0.3s ease;
-}
-
-.right-panel button.close-btn:hover {
-  color: #333;
-}
-
-.footer {
-  display: flex;
-  justify-content: space-between; /* Phần trái: nút bán hàng | Phần phải: thông tin liên hệ */
-  align-items: center;
-  padding: 10px 20px;
-  background-color:#ffffff;
-  position: fixed;
-  bottom: 0;
-  left: 250px;
-  right: 0;
-  border-radius: 5px 5px 0 0;
-  z-index: 1000;
-  
-}
-
-/* Căn trái các nút Bán Nhanh & Bán Thường */
-.footer-left {
-  display: flex;
-  align-items: center;
-  gap: 5px; /* Giữ khoảng cách hợp lý giữa các nút */
-}
-
-/* Các nút Bán Nhanh và Bán Thường */
-.footer-btn {
-  background-color: #ffffff;
-  padding: 7px 15px;
   font-size: 16px;
-  font-weight: 500;
-  border: 1px solid #1c89ed;
-  border-radius: 10px; /* Làm tròn nút giống thiết kế trong ảnh */
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 5px; /* Tạo khoảng cách giữa icon và chữ */
 }
 
-.footer-btn:hover {
-  background-color: #1c89ed;
-  color: white;
-  transform: translateY(-2px);
-
-}
-
-.footer-btn:active {
-  transform: translateY(0);
-
-}
-
-/* Phần bên phải của Footer */
-.footer-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.footer-right .phone-number {
-  font-size: 16px;
-  
-  font-weight: bold;
-}
-
-.footer-right .icons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.footer-right .icons i {
-  font-size: 18px;
-  
-  cursor: pointer;
-}
-
-.footer-right .icons i:hover {
-  color: #333;
-}
-
-.footer-btn.active {
-  background-color: #1c89ed !important; /* Khi được chọn, giữ màu xanh */
-  color: white !important; /* Chữ trắng */
-}
-
-/* Ghi chú */
-.note-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f9f9f9;
-  padding: 5px 5px;
-  margin: 5px 5px;
-  border-radius: 10px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-  width: 585px;
-  margin-top: 573px;
-}
-
-.note-input {
-  flex-grow: 1;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
+/* Cart Total */
+.cart-total {
+  background-color: #fff;
+  border: 1px solid var(--border);
+  padding: 15px;
   border-radius: 8px;
-  font-size: 14px;
-  outline: none;
+  text-align: center;
 }
 
-.note-input:focus {
-  border-color: #1c89ed;
-  box-shadow: 0 0 5px rgba(28, 137, 237, 0.3);
+.discount-input {
+  width: calc(100% - 100px);
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-right: 10px;
 }
 
+.discount-btn {
+  padding: 10px 15px;
+  background-color: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: #ea0f0f;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
 
+.discount-btn:hover {
+  background-color: var(--primary);
+}
 
+/* Payment Container */
+.payment-container {
+  background-color: #fff;
+  border: 1px solid var(--border);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
 
+.payment-method {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
 
+.checkout-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary);
+  border: none;
+  border-radius: 20px;
+  color: #030d19;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-btn:hover {
+  background-color: #da1c1c;
+}
+
+/* Hiệu ứng trạng thái nhấn cho các nút */
+button:active,
+.tab:active,
+.product-add:active,
+.checkout-btn:active,
+.discount-btn:active,
+.tab-add:active,
+.item-remove:active {
+  transform: scale(0.95);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s;
+}
+
+.product-add:active {
+  background-color: var(--accent);
+}
+
+.tab:active {
+  background-color: var(--accent);
+  transform: scale(0.98);
+}
+
+.checkout-btn:active {
+  background-color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .checkout-sidebar {
+    border-left: none;
+    border-top: 3px solid var(--primary);
+    margin-top: 20px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tab-wrapper {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}
+
+/* --- Thêm khối Cart Button luôn hiển thị --- */
+/* Đây là nút giỏ hàng cố định (fixed) ở góc dưới bên phải màn hình */
+button {
+  background-color: #007bff; /* Màu xanh dương */
+  color: white; /* Chữ màu trắng */
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3; /* Màu xanh đậm khi hover */
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
 
 

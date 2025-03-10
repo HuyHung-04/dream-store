@@ -43,7 +43,6 @@
               </button>
             </div>
           </div>
-  
           <!-- Giá sản phẩm -->
           <p>{{ item.donGia | number }} VND</p>
         </div>
@@ -53,15 +52,15 @@
           <p><strong>Tổng tiền: </strong> <span>{{ getTongTien() | number }} VND</span></p>
         </div>
         <div class="payment">
-          <button class="btn-payment">Thanh toán</button>
+          <button class="btn-payment" (click)="openModalThanhToan()">Thanh toán</button>
         </div>
       </div>
-      
       <ng-template #emptyCart>
         <p>Giỏ hàng trống</p>
       </ng-template>
     </div>
   </div>
+  
   
   
 

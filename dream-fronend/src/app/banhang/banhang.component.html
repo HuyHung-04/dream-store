@@ -1,72 +1,92 @@
 <div class="main">
-<!-- Header -->
-<header>
-  <!-- Thanh tìm kiếm cố định bên trái -->
-  <div class="search-container">
-    <input type="text" placeholder="Tìm kiếm..." class="search-bar">
-  </div>
+  <!-- Header -->
+  <!-- <header class="main-header">
+    <div class="header-content">
+      <div class="search-container">
+        <input type="text" placeholder="Tìm kiếm..." [(ngModel)]="searchText" class="search-bar">
+      </div>
+      <div class="tab-wrapper">
+        <div class="tab-container">
+          <div *ngFor="let invoice of invoices; let i = index" class="tab"
+               [ngClass]="{'active': selectedTab === i}"
+               (click)="selectTab(i)">
+            <span>Hóa đơn {{ invoice }}</span>
+            <button class="tab-close" (click)="removeInvoice(i, $event); $event.stopPropagation()">
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+          <button class="tab-add" (click)="createInvoice()">
+            <i class="bi bi-plus-lg"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header> -->
 
-  <!-- Tabs + Nút cộng -->
-  <div class="tab-wrapper">
-    <div class="tab-container" #tabContainer>
-      <div *ngFor="let invoice of invoices; let i = index" class="tab"
-        [ngClass]="{'active-tab': selectedTab === i, 'inactive-tab': selectedTab !== i}"
-        [ngStyle]="{'width.px': tabWidth}" (click)="selectTab(i)">
-        <p>Hóa đơn {{ invoice }}</p>
-        <button class="close-tab" [ngClass]="{'close-inactive': selectedTab !== i}" (click)="removeInvoice(i, $event)">
-          <i class="bi bi-x-lg"></i>
-        </button>
+  <!-- Main Content -->
+  <main class="main-content">
+    <section class="product-section">
+      <div class="product-filters">
+        <input type="text" placeholder="Tìm sản phẩm..." [(ngModel)]="searchText">
+        <select [(ngModel)]="selectedCategory">
+          <option value="">Tất cả danh mục</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
       </div>
 
-      <!-- Nút cộng luôn nằm bên phải -->
-      <button class="add-tab-button" (click)="createInvoice()">
-        <i class="bi bi-plus-circle"></i>
-      </button>
-    </div>
-  </div>
-</header>
+      <div class="product-grid">
+        <article class="product-card" *ngFor="let product of filteredProducts()" (click)="viewProductDetails(product)">
+          <img [src]="product.image" alt="{{ product.name }}" class="product-image">
+          <div class="product-info">
+            <h3 class="product-title">{{ product.name }}</h3>
+            <p class="product-price">{{ product.price | currency }}</p>
+            <p class="product-stock" [ngClass]="{'low-stock': product.stock <= 5}">
+              Còn lại: {{ product.stock }} sản phẩm
+            </p>
+            <button class="product-add" (click)="addToCart(product); $event.stopPropagation()">
+              <i class="bi bi-cart-plus"></i> Thêm giỏ
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
 
-<!-- Body -->
-<div class="body-content">
+    <aside class="checkout-sidebar">
+      <div class="cart-container">
+        <h2 class="sidebar-title"><i class="bi bi-cart3"></i> Giỏ hàng</h2>
+        <div class="cart-items">
+          <div class="cart-item" *ngFor="let item of cart">
+            <div class="item-info">
+              <span class="item-name">{{ item.name }}</span>
+              <div class="item-controls">
+                <input type="number" [(ngModel)]="item.quantity" min="1" class="item-quantity" (change)="validateQuantity(item)">
+                <button class="item-remove" (click)="removeFromCart(item)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cart-total">
+          <input type="text" placeholder="Nhập mã giảm giá" [(ngModel)]="discountCode" class="discount-input">
+          <button (click)="applyDiscount()" class="discount-btn">Áp dụng</button>
+          <p>Giảm giá: {{ discountAmount | currency }}</p>
+          <span>Tổng cộng:</span>
+          <span>{{ getTotal() | currency }}</span>
+        </div>
+      </div>
 
-  <!-- Cửa sổ Bán Nhanh -->
-  <div class="right-panel quick-sale" *ngIf="isQuickSaleOpen">
-    <button class="close-btn" (click)="closeQuickSale()">✖</button>
-    <h2>Bán Nhanh</h2>
-    <p>Giao diện bán nhanh...</p>
-  </div>
-
-  <!-- Cửa sổ Bán Thường -->
-  <div class="right-panel normal-sale" *ngIf="isNormalSaleOpen">
-    <button class="close-btn" (click)="closeNormalSale()">✖</button>
-    <h2>Bán Thường</h2>
-    <p>Giao diện bán thường...</p>
-  </div>
-</div>
-
-<!-- Ô Ghi Chú -->
-<div class="note-container">
-  <input type="text" id="note-input" class="note-input"  placeholder="Nhập ghi chú đơn hàng">
-</div>
-
-<footer class="footer">
-  <!-- Căn trái các nút Bán Nhanh & Bán Thường -->
-  <div class="footer-left">
-    <button class="footer-btn" [ngClass]="{'active': selectedButton === 'quick-sale'}" (click)="openQuickSale()">
-      ⚡ Bán Nhanh
-    </button>
-    <button class="footer-btn" [ngClass]="{'active': selectedButton === 'normal-sale'}" (click)="openNormalSale()">
-      ⏳ Bán Thường
-    </button>
-  </div>
-
-  <!-- Phần bên phải của Footer -->
-  <div class="footer-right">
-    <span class="phone-number">📞 1900 6522</span>
-    <div class="icons">
-      <i class="bi bi-question-circle"></i> <!-- Biểu tượng hỗ trợ -->
-      <i class="bi bi-chat-text"></i> <!-- Biểu tượng chat -->
-    </div>
-  </div>
-</footer>
+      <div class="payment-container">
+        <h2 class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán</h2>
+        <select [(ngModel)]="selectedPaymentMethod" class="payment-method">
+          <option value="cash">Tiền mặt</option>
+          <option value="bank">Chuyển khoản</option>
+          <option value="qr">Quét QR</option>
+        </select>
+        <button class="checkout-btn" (click)="checkout()">
+          <i class="bi bi-wallet2"></i> Xác nhận thanh toán
+        </button>
+      </div>
+    </aside>
+  </main>
 </div>

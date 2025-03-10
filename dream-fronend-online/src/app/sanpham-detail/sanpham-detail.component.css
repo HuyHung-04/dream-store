@@ -134,6 +134,7 @@ select {
   border-radius: 5px;
   outline: none;
   cursor: pointer;
+  max-height: 200px;
 }
 
 select option {
@@ -159,6 +160,7 @@ select option {
   background: #fff;
   padding: 20px;
   border-radius: 10px;
+  height: 680px;
   width: 800px;
   position: relative;
   z-index: 10000; /* Đảm bảo modal nằm trên lớp nền */
@@ -181,6 +183,11 @@ select option {
   padding-top: 15px;
   flex: 1;
   border-radius: 8px;
+}
+
+.cart-info h6{
+  padding-top: -5px;
+  font-weight: bold;
 }
 
 /* Căn chỉnh danh sách sản phẩm */
@@ -216,6 +223,7 @@ select option {
   margin-top: 20px;
   width: 100%;
   padding: 10px;
+  height: 40px; /* Điều chỉnh chiều cao */
   background-color: #294764;
   color: white;
   border: none;
@@ -227,6 +235,7 @@ select option {
 .btn-success:hover {
   background-color: #1f3a56;
 }
+
 
 .close-btn {
   position: absolute;
@@ -248,6 +257,10 @@ select option {
   font-size: 14px;
 }
 
+.form-group {
+  margin-bottom: 9px; /* Tạo khoảng cách giữa các nhóm form */
+}
+
 .form-group label {
   font-weight: bold;
 }
@@ -266,4 +279,53 @@ select option {
   white-space: nowrap; /* Giữ nút không bị xuống hàng */
   padding: 8px 12px;
 }
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+/* Ảnh sản phẩm */
+.product-img {
+  width: 50px;  
+  height: 50px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  position: relative;
+}
+
+/* Thông tin sản phẩm */
+.cart-item p {
+  margin: 3px 0;
+  font-size: 12px;
+  color: #294764;
+}
+
+/* Giá sản phẩm */
+.cart-item p:last-child {
+  font-size: 12px;
+  color: red;
+}
+
+.product-container {
+  position: relative;
+  display: inline-block;
+}
+
+.quantity-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #294764;
+  color: white;
+  font-size: 8px;
+  font-weight: bold;
+  padding: 3px 7px;
+  border-radius: 50%;
+}
+
 
