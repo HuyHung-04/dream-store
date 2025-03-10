@@ -59,9 +59,7 @@ export class HoaDonComponent implements OnInit {
       }
     });
   }
-
-
-
+  
   search(): void {
     this.loadHoaDons();
   }

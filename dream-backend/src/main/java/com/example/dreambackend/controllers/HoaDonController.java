@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4300")
 @RestController
 @RequestMapping("/api/hoa-don")
 public class HoaDonController {
@@ -36,15 +37,12 @@ public class HoaDonController {
         }
     }
 
-//    @DeleteMapping("/{id}/delete")
-//    public ResponseEntity<?> deleteHoaDon(@PathVariable Integer id) {
-//        try {
-//            hoaDonService.deleteHoaDon(id);
-//            return ResponseEntity.noContent().build();
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
+    @PostMapping("/all")
+    public ResponseEntity<List<HoaDonResponse>> getAllHoaDon(
+            @RequestBody HoaDonSearchRequest request
+    ) {
+        List<HoaDonResponse> response = hoaDonService.getAllHoaDon(request);
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getHoaDonById(@PathVariable Integer id) {
@@ -54,12 +52,6 @@ public class HoaDonController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<HoaDonResponse>> getAllHoaDon() {
-        List<HoaDonResponse> response = hoaDonService.getAllHoaDon();
-        return ResponseEntity.ok(response);
     }
 }
 
