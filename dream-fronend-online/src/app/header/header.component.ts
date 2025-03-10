@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class HeaderComponent implements OnInit {
   modalCard: boolean = false;
   gioHang: any[] = []; // Danh sách sản phẩm trong giỏ hàng
-  idKhachHang: number = 1; // Giả sử ID khách hàng là 1
+  idKhachHang: number = 2; // Giả sử ID khách hàng là 1
   searchQuery: string = ''; // 🔍 Từ khóa tìm kiếm
   isSearching: boolean = false; // Trạng thái tìm kiếm
   searchResults: any[] = []; // Kết quả tìm kiếm
@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit {
       this.gioHang = data;
     });
   }
+  
 
   xoaSanPham(id: number) {
     this.headerService.deleteFromCart(id).subscribe(() => {
@@ -59,6 +60,12 @@ export class HeaderComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.modalCard = !this.modalCard;
+    this.headerService.closeModalThanhToan();
+  }
+
+  openModalThanhToan() {
+    console.log("Nút Thanh toán được ấn!"); // Debug
+    this.headerService.openModalThanhToan();
   }
 
   // Gọi phương thức tìm kiếm khi người dùng nhấn nút tìm kiếm hoặc Enter
