@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderService } from './header.service';
 import { CommonModule } from '@angular/common';
-import { BanhangService } from '../banhang/banhang.service'; 
+import { BanhangService } from '../banhang/banhang.service';
 import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-header',
   standalone: true,
-    imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
@@ -17,14 +17,14 @@ export class HeaderComponent implements OnInit {
   searchQuery: string = ''; // 🔍 Từ khóa tìm kiếm
   isSearching: boolean = false; // Trạng thái tìm kiếm
   searchResults: any[] = []; // Kết quả tìm kiếm
-  constructor(private headerService: HeaderService,private banhangService: BanhangService) {}
+  constructor(private headerService: HeaderService, private banhangService: BanhangService) { }
 
   ngOnInit(): void {
     this.loadGioHang();
 
     this.headerService.gioHangUpdated$.subscribe(() => {
       this.loadGioHang(); // Cập nhật giỏ hàng ngay lập tức
-  });
+    });
   }
 
   loadGioHang(): void {
@@ -48,12 +48,12 @@ export class HeaderComponent implements OnInit {
   getTongTien(): number {
     return this.gioHang.reduce((total, item) => {
       // console.log(`Sản phẩm: ${item.tenSanPham} - Đơn giá đã nhân số lượng: ${item.donGia}`);
-      return total + item.donGia; 
+      return total + item.donGia;
     }, 0);
   }
-  
-  
-  
+
+
+
   cardModal(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
@@ -68,13 +68,23 @@ export class HeaderComponent implements OnInit {
         (data) => {
           this.banhangService.setSearchResults(data); // Lưu kết quả vào BanhangService
           this.isSearching = false;
+          console.log(data)
+          // Kiểm tra nếu không có sản phẩm nào được tìm thấy
+          if (data.content.length === 0) {
+           
+            alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
+            
+          }
         },
         (error) => {
           console.error('Lỗi khi tìm kiếm sản phẩm', error);
           this.isSearching = false;
         }
       );
+    } else {
+      // Hiển thị thông báo bằng alert khi không có từ khóa tìm kiếm
+      alert('Vui lòng nhập từ khóa để tìm kiếm.');
     }
   }
-  
+
 }
