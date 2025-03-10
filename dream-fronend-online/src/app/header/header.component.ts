@@ -53,12 +53,15 @@ export class HeaderComponent implements OnInit {
     }, 0);
   }
   
-  
-  
   cardModal(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
     this.modalCard = !this.modalCard;
+  }
+
+  openModalThanhToan() {
+    console.log("Nút Thanh toán được ấn!"); // Debug
+    this.headerService.openModalThanhToan();
   }
 
   // Gọi phương thức tìm kiếm khi người dùng nhấn nút tìm kiếm hoặc Enter

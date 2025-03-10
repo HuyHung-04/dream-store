@@ -3,12 +3,17 @@ package com.example.dreambackend.services.hoadon;
 import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.HoaDonRequest;
+import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +29,10 @@ public class HoaDonService implements IHoaDonService {
     private VoucherRepository voucherRepository;
     @Autowired
     private PhuongThucThanhToanRepository ptttRepository;
+    @Autowired
+    private HoaDonChiTietRepository hoaDonChiTietRepository;
+    @Autowired
+    private SanPhamChiTietRepository sanPhamChiTietRepository;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -68,11 +77,37 @@ public class HoaDonService implements IHoaDonService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
         return convertToDTO(hoaDon);
     }
+    @PersistenceContext
+    private EntityManager em;
+    @Override
+    public List<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request) {
+        return hoaDonRepository.search(request, em);
+    }
 
     @Override
-    public List<HoaDonResponse> getAllHoaDon() {
-        List<HoaDon> hoaDons = hoaDonRepository.findAllByTrangThai(1);
-        return hoaDons.stream().map(this::convertToDTO).toList();
+    @Transactional(rollbackOn = Exception.class)
+    public void cancelHoaDon(Integer id) {
+        HoaDon hoaDon = hoaDonRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hoá đơn không tồn tại"));
+
+        if (hoaDon.getTrangThai() != 1) {
+            throw new RuntimeException("Không thể huỷ hoá đơn trong trang thái chờ");
+        }
+
+        hoaDon.setTrangThai(4);
+        hoaDonRepository.save(hoaDon);
+
+        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByHoaDonId(id);
+        List<SanPhamChiTiet> listSPCT = new ArrayList<>();
+        for (HoaDonChiTiet hdct : list) {
+            listSPCT.add(hdct.getSanPhamChiTiet());
+        }
+        for (SanPhamChiTiet sanPhamChiTiet : listSPCT) {
+            SanPhamChiTiet spct = sanPhamChiTietRepository.findById(sanPhamChiTiet.getId())
+                    .orElseThrow(() -> new RuntimeException("Sản phầm chi tiết không tồn tại"));
+            sanPhamChiTiet.setSoLuong(sanPhamChiTiet.getSoLuong() + spct.getSoLuong());
+            sanPhamChiTietRepository.save(sanPhamChiTiet);
+        }
     }
 
     private HoaDon convertToEntity(HoaDonRequest request) {

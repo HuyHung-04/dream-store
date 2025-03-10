@@ -1,15 +1,15 @@
 package com.example.dreambackend.repositories;
 
 import com.example.dreambackend.entities.HoaDon;
-import com.example.dreambackend.responses.ThongKeHomNayResponse;
-import com.example.dreambackend.responses.ThongKeResponse;
-import com.example.dreambackend.responses.ThongKeThangResponse;
-import com.example.dreambackend.responses.ThongKeThangNayResponse;
+import com.example.dreambackend.requests.HoaDonSearchRequest;
+import com.example.dreambackend.responses.*;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

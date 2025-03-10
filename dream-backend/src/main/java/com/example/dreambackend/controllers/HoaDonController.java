@@ -1,6 +1,7 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.requests.HoaDonRequest;
+import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
 import com.example.dreambackend.services.hoadon.IHoaDonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,16 +43,7 @@ public class HoaDonController {
             @RequestBody HoaDonSearchRequest request
     ) {
         List<HoaDonResponse> response = hoaDonService.getAllHoaDon(request);
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getHoaDonById(@PathVariable Integer id) {
-        try {
-            HoaDonResponse response = hoaDonService.findById(id);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(response);
     }
 }
 
