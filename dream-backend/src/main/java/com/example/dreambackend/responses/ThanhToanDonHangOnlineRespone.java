@@ -50,4 +50,6 @@ public class ThanhToanDonHangOnlineRespone {
     private Double tongTienThanhToan; //bảng hoá đơn
 
     private LocalDate ngayNhanDuKien; // bảng hoá đơn
+
+    private int trangThai; // của hoá đơn
 }

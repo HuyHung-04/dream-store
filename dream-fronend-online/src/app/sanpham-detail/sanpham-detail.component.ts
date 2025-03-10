@@ -14,32 +14,32 @@ import { HeaderService } from '../header/header.service'
   templateUrl: './sanpham-detail.component.html',
   styleUrl: './sanpham-detail.component.css'
 })
-export class SanphamDetailComponent implements OnInit {
-  sanPhamList: any[] = [];
-  danhSachMauSac: any[] = [];
-  danhSachSize: any[] = [];
-  danhSachAnh: string[] = [];
-  selectedSanPham: any = null;
-  hinhThucGiam: any = null;
-  giaTriGiam: any = null;
-  selectedSize: string = '';
-  selectedMauSac: string = '';
-  soLuongMua: number = 1;
-  filteredDanhSachMauSac: any[] = [];
-  filteredDanhSachSize: any[] = [];
-  idKhachHang: number = 2; // Giả sử ID khách hàng = 1
-  showModalThanhToan: boolean = false; // mở modal thanh toán
-  khachHang: any = {
-    tenKhachHang: '',
-    soDienThoai: '',
-    thon: '',
-    tinhThanhPho: null,
-    quanHuyen: null,
-    phuongXa: null
-  };
-  tinhThanhPhoList: any[] = [];
-  quanHuyenList: any[] = [];
-  phuongXaList: any[] = [];
+  export class SanphamDetailComponent implements OnInit {
+    sanPhamList: any[] = [];
+    danhSachMauSac: any[] = [];
+    danhSachSize: any[] = [];
+    danhSachAnh: string[] = [];
+    selectedSanPham: any = null;
+    hinhThucGiam: any = null;
+    giaTriGiam: any = null;
+    selectedSize: string = '';
+    selectedMauSac: string = '';
+    soLuongMua: number = 1;
+    filteredDanhSachMauSac: any[] = [];
+    filteredDanhSachSize: any[] = [];
+    idKhachHang: number = 2; // Giả sử ID khách hàng = 1
+    showModalThanhToan: boolean = false; // mở modal thanh toán
+    khachHang: any = {
+      tenKhachHang: '',
+      soDienThoai: '',
+      thon: '',
+      tinhThanhPho: null,
+      quanHuyen: null,
+      phuongXa: null
+    };
+    tinhThanhPhoList: any[] = [];
+    quanHuyenList: any[] = [];
+    phuongXaList: any[] = [];
 
   private route = inject(ActivatedRoute);
   private sanphamService = inject(SanphamDetailService);
@@ -230,7 +230,7 @@ export class SanphamDetailComponent implements OnInit {
         size: this.selectedSize,
         soLuong: this.soLuongMua
     };
-    // console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
+    console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
     this.headerService.addToCart(sanPhamGioHang).subscribe(response => {
         // console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
