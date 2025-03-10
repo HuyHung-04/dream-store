@@ -1,71 +1,88 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý Hóa Đơn</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<h2>Quản lý Hóa Đơn</h2>
+<div class="hoa-don-container">
+  <!-- Bộ lọc tìm kiếm -->
+  <div class="filter-section">
+    <h3>Bộ lọc tìm kiếm</h3>
+    <label>
+      Mã Hóa Đơn:
+      <input type="text" [(ngModel)]="searchRequest.maHoaDon" placeholder="Nhập mã hóa đơn">
+    </label>
 
-<div>
-  <<input type="text" [(ngModel)]="searchParams.maHoaDon" placeholder="Mã hóa đơn">
-  <input type="text" [(ngModel)]="searchParams.tenKhachHang" placeholder="Tên khách hàng">
-  <select [(ngModel)]="searchParams.listTrangThai">
-    <option value="">Tất cả trạng thái</option>
-    <option value="1">Chưa thanh toán</option>
-    <option value="2">Đã thanh toán</option>
-    <option value="3">Đã huỷ</option>
-  </select>
-  <input type="date" [(ngModel)]="searchParams.ngayTaoFrom">
+    <label>
+      Tên Khách Hàng:
+      <input type="text" [(ngModel)]="searchRequest.tenKhachHang" placeholder="Nhập tên khách hàng">
+    </label>
 
-  <button (click)="fetchHoaDons()">Tìm kiếm</button>
-</div>
+    <label>
+      Ngày Tạo Từ:
+      <input type="date" [(ngModel)]="searchRequest.ngayTaoFrom">
+    </label>
 
-<h2>Danh sách Hóa Đơn</h2>
+    <label>
+      Ngày Tạo Đến:
+      <input type="date" [(ngModel)]="searchRequest.ngayTaoTo">
+    </label>
 
-<table border="1">
-  <thead>
-  <tr>
-    <th>STT</th>
-    <th>Mã Hóa Đơn</th>
-    <th>Tên Khách Hàng</th>
-    <th>Ngày Tạo</th>
-    <th>Ngày Sửa</th>
-    <th>Trạng Thái</th>
-  </tr>
-  </thead>
-  <tbody *ngIf="hoaDons && hoaDons.length > 0; else noData">
-  <tr *ngFor="let hoaDon of hoaDons; let i = index">
-    <td>{{ i + 1 + page * pageSize }}</td>
-    <td>{{ hoaDon.maHoaDon }}</td>
-    <td>{{ hoaDon.tenKhachHang }}</td>
-    <td>{{ hoaDon.ngaySua }}</td>
-    <td>{{ hoaDon.ngayTao }}</td>
-    <td>
-  <span [ngSwitch]="hoaDon.trangThai">
-    <span *ngSwitchCase="1">Chưa thanh toán</span>
-    <span *ngSwitchCase="2">Đã thanh toán</span>
-    <span *ngSwitchCase="4">Đã huỷ</span>
-  </span>
-    </td>
-  </tr>
-  </tbody>
-  <ng-template #noData>
-    <tbody>
+    <label>
+      Trạng Thái:
+      <select [(ngModel)]="searchRequest.listTrangThai" multiple>
+        <option *ngFor="let option of trangThaiOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </label>
+
+    <button (click)="search()">Tìm Kiếm</button>
+    <button (click)="resetFilters()">Đặt Lại</button>
+  </div>
+
+  <!-- Danh sách hóa đơn -->
+  <h3>Danh sách hóa đơn</h3>
+  <table>
+    <thead>
     <tr>
-      <td colspan="6">Không có hóa đơn nào.</td>
+      <th>Mã Hóa Đơn</th>
+      <th>Voucher</th>
+      <th>Tên Khách Hàng</th>
+      <th>Nhân Viên</th>
+      <th>Ngày Tạo</th>
+      <th>Trạng Thái</th>
+      <th>Hành Động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let hoaDon of hoaDons?.content">
+      <td>{{ hoaDon.maHoaDon }}</td>
+      <td>{{ hoaDon.tenVoucher }}</td>
+      <td>{{ hoaDon.tenKhachHang }}</td>
+      <td>{{ hoaDon.tenNhanVien }}</td>
+      <td>{{ hoaDon.ngayTao | date:'yyyy-MM-dd' }}</td>
+      <td>{{ hoaDon.trangThai }}</td>
+      <td>
+        <button (click)="selectHoaDon(hoaDon)">Chọn</button>
+        <button (click)="cancelHoaDon(hoaDon.id)">Hủy</button>
+      </td>
     </tr>
     </tbody>
-  </ng-template>
-</table>
+  </table>
 
-<!-- Phân trang -->
-<button (click)="onPageChange(page - 1)" [disabled]="page === 0">Trước</button>
-<span>Trang {{ page }}</span>
-<button (click)="onPageChange(page + 1)" [disabled]="(page + 1) * pageSize >= totalRecords">Sau</button>
+  <!-- Phân trang -->
+  <div *ngIf="hoaDons">
+    <button [disabled]="searchRequest.page <= 1" (click)="prevPage()">Trước</button>
+    <span>Trang {{ searchRequest.page }} / {{ hoaDons.totalPages || 1 }}</span>
+    <button [disabled]="searchRequest.page >= hoaDons.totalPages" (click)="nextPage()">Sau</button>
+  </div>
 
 
-</body>
-</html>
+  <!-- Form tạo/cập nhật hóa đơn -->
+  <div class="form-section">
+    <h3>{{ selectedHoaDon ? 'Cập Nhật Hóa Đơn' : 'Tạo Mới Hóa Đơn' }}</h3>
+    <label>
+      Tên Khách Hàng:
+      <input type="text" [(ngModel)]="formRequest.tenKhachHang">
+    </label>
+
+    <button (click)="selectedHoaDon ? updateHoaDon() : createHoaDon()">
+      {{ selectedHoaDon ? 'Cập Nhật' : 'Tạo Mới' }}
+    </button>
+  </div>
+</div>

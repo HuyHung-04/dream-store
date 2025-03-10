@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
 
   xoaSanPham(id: number) {
     this.headerService.deleteFromCart(id).subscribe(() => {
+      alert('Bạn chắc chán muốn xoá');
       this.headerService.notifyGioHangUpdated(); // Cập nhật giỏ hàng sau khi xoá
     });
   }
@@ -54,8 +55,6 @@ export class HeaderComponent implements OnInit {
     }, 0);
   }
   
-  
-  
   cardModal(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
@@ -67,6 +66,7 @@ export class HeaderComponent implements OnInit {
     console.log("Nút Thanh toán được ấn!"); // Debug
     this.headerService.openModalThanhToan();
   }
+
 
   // Gọi phương thức tìm kiếm khi người dùng nhấn nút tìm kiếm hoặc Enter
   searchSanPham(page: number = 0): void {
