@@ -5,6 +5,7 @@ import com.example.dreambackend.repositories.MauSacRepository;
 import com.example.dreambackend.repositories.SanPhamChiTietRepository;
 import com.example.dreambackend.repositories.SizeRepository;
 import com.example.dreambackend.requests.SanPhamChiTietRequest;
+import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -87,7 +88,6 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
                 idSanPham, gia, soLuong, idMauSac, idSize, trangThai, pageable);
     }
 
-
     @Override
     public ResponseEntity<byte[]> exportSanPhamChiTietToExcel(List<SanPhamChiTietRespone> sanPhamChiTiets) {
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -120,5 +120,10 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @Override
+    public Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable) {
+        return sanPhamChiTietRepository.getSanPhamForBanHang(pageable);
     }
 }

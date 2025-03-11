@@ -55,6 +55,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
     Page<TopSanPhamResponse> getTopSanPhamTatCa(Pageable pageable);
+
     List<HoaDonChiTiet> findByHoaDonId(int id);
 
     Optional<HoaDonChiTiet> findByHoaDonAndSanPhamChiTiet(HoaDon hoaDon, SanPhamChiTiet sanPhamChiTiet);

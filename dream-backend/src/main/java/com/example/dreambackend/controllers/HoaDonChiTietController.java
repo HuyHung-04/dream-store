@@ -7,14 +7,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hoa-don-chi-tiet")
+@CrossOrigin(origins = "http://localhost:4200")
 public class HoaDonChiTietController {
 
     @Autowired
     private IHoaDonChiTietService hoaDonChiTietService;
+
+//    @PostMapping("/{hoaDonId}/add/{sanPhamChiTietId}")
+//    public ResponseEntity<?> addSanPhamToHoaDon(
+//            @PathVariable Integer hoaDonId,
+//            @PathVariable Integer sanPhamChiTietId,
+//            @RequestParam Integer soLuong) {
+//        try {
+//            HoaDonChiTietResponse response = hoaDonChiTietService.addSanPhamToHoaDon(hoaDonId, sanPhamChiTietId, soLuong);
+//            return ResponseEntity.ok(response);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @PostMapping("/{hoaDonId}/add/{sanPhamChiTietId}")
     public ResponseEntity<?> addSanPhamToHoaDon(
@@ -25,9 +41,12 @@ public class HoaDonChiTietController {
             HoaDonChiTietResponse response = hoaDonChiTietService.addSanPhamToHoaDon(hoaDonId, sanPhamChiTietId, soLuong);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
+
 
     @PutMapping("/{id}/update")
     public ResponseEntity<?> updateHoaDonChiTiet(@PathVariable Integer id, @RequestParam Integer soLuong) {

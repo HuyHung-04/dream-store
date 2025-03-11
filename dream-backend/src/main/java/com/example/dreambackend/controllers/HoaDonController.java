@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:4300")
+
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/hoa-don")
 public class HoaDonController {
 
@@ -24,9 +27,13 @@ public class HoaDonController {
             HoaDonResponse response = hoaDonService.createHoaDon(request);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            // Đảm bảo phản hồi luôn là JSON hợp lệ
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
+
 
     @PutMapping("/{id}/update")
     public ResponseEntity<?> updateHoaDon(@PathVariable Integer id, @RequestBody HoaDonRequest request) {

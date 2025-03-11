@@ -1,5 +1,6 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.dtos.KhachHangBanHangDto;
 import com.example.dreambackend.dtos.KhachHangDto;
 import com.example.dreambackend.dtos.OtpRequest;
 import com.example.dreambackend.entities.KhachHang;
@@ -63,4 +64,12 @@ public class KhachHangController {
     public ResponseEntity<KhachHang> compareOtp(@RequestBody OtpRequest otpRequest) {
         return ResponseEntity.ok(khachHangService.compareOtp(otpRequest.getEmail(),otpRequest.getOtp()));
     }
+
+    @GetMapping("/tim-khach-hang")
+    public ResponseEntity<KhachHangBanHangDto> getKhachHang(@RequestParam String soDienThoai) {
+        return khachHangService.getKhachHangBySoDienThoai(soDienThoai)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.requests.SanPhamChiTietRequest;
+import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
 import com.example.dreambackend.services.mausac.MauSacService;
 import com.example.dreambackend.services.sanpham.SanPhamService;
@@ -103,6 +104,17 @@ public class SanPhamChiTietController {
                 .getSanPhamChiTietBySanPhamId(idSanPham, Pageable.unpaged()).getContent();
         // Gọi service để xuất file Excel
         return sanPhamChiTietService.exportSanPhamChiTietToExcel(sanPhamChiTiets);
+    }
+
+    @GetMapping("/ban-hang")
+    public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getSanPhamBanHang(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GetSanPhamToBanHangRespone> danhSachSanPham = sanPhamChiTietService.laySanPhamChoBanHang(pageable);
+
+        return ResponseEntity.ok(danhSachSanPham);
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.dreambackend.repositories;
 
 import com.example.dreambackend.dtos.SanPhamChiTietDto;
 import com.example.dreambackend.entities.SanPhamChiTiet;
+import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -88,14 +89,23 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     WHERE spct.trangThai = 1
     """)
     List<SanPhamChiTietDto> findAvailableProducts(@Param("khuyenMaiId") Integer khuyenMaiId);
-    // Phương thức để tìm tất cả sản phẩm liên kết với một khuyến mãi cụ thể
+
     List<SanPhamChiTiet> findAllByKhuyenMaiId(Integer khuyenMaiId);
 
 
     @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.khuyenMai.id IN :khuyenMaiIds")
     List<SanPhamChiTiet> findAllByKhuyenMaiIdIn(@Param("khuyenMaiIds") List<Integer> khuyenMaiIds);
 
-
     boolean existsByMa(String ma);
 
+    @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
+            + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
+            + "m.ten, s.ten, km.giaTriGiam) "
+            + "FROM SanPhamChiTiet spct "
+            + "JOIN spct.sanPham sp "
+            + "JOIN spct.mauSac m "
+            + "JOIN spct.size s "
+            + "LEFT JOIN spct.khuyenMai km "
+            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
+    Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
 }

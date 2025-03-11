@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +53,7 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
             HoaDonChiTiet newHdct = HoaDonChiTiet.builder()
                     .hoaDon(hoaDon)
                     .sanPhamChiTiet(spct)
+                    .ma(UUID.randomUUID().toString().substring(0, 4))
                     .soLuong(soLuong)
                     .donGia(Optional.ofNullable(spct.getGia()).orElse(0.0))
                     .ngayTao(LocalDate.now())
