@@ -1,5 +1,6 @@
 package com.example.dreambackend.services.khachhang;
 
+import com.example.dreambackend.dtos.KhachHangBanHangDto;
 import com.example.dreambackend.dtos.KhachHangDto;
 import com.example.dreambackend.entities.KhachHang;
 
@@ -19,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -36,6 +38,11 @@ public class KhachHangService implements IKhachHangService{
 
         return khachhangs;
     }
+    public Optional<KhachHang BanHangDto> getKhachHangBySoDienThoai(String soDienThoai) {
+        return khachHangRepository.findBySoDienThoai(soDienThoai)
+                .map(kh -> new KhachHang BanHangDto(kh.getId(), kh.getTen(), kh.getSoDienThoai()));
+    }
+
 
     @Override
     public KhachHang getKhachHangById(Integer id) {
