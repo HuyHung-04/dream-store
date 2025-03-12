@@ -1,6 +1,7 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   isPlatformBrowser
-} from "./chunk-UH4BSZTV.js";
+} from "./chunk-F4MFAZJG.js";
 import {
   ElementRef,
   Injectable,
@@ -12,7 +13,7 @@ import {
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵdefineNgModule
-} from "./chunk-7JKHU26Z.js";
+} from "./chunk-PHGGHVQS.js";
 
 // node_modules/@angular/cdk/fesm2022/coercion.mjs
 function coerceBooleanProperty(value) {
@@ -29,6 +30,12 @@ function _isNumberValue(value) {
 }
 function coerceArray(value) {
   return Array.isArray(value) ? value : [value];
+}
+function coerceCssPixelValue(value) {
+  if (value == null) {
+    return "";
+  }
+  return typeof value === "string" ? value : `${value}px`;
 }
 function coerceElement(elementOrRef) {
   return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
@@ -212,6 +219,15 @@ function _getFocusedElementPierceShadowDom() {
 function _getEventTarget(event) {
   return event.composedPath ? event.composedPath()[0] : event.target;
 }
+function _isTestEnvironment() {
+  return (
+    // @ts-ignore
+    typeof __karma__ !== "undefined" && !!__karma__ || // @ts-ignore
+    typeof jasmine !== "undefined" && !!jasmine || // @ts-ignore
+    typeof jest !== "undefined" && !!jest || // @ts-ignore
+    typeof Mocha !== "undefined" && !!Mocha
+  );
+}
 function _bindEventWithOptions(renderer, target, eventName, callback, options) {
   const major = parseInt(VERSION.major);
   const minor = parseInt(VERSION.minor);
@@ -228,6 +244,7 @@ export {
   coerceBooleanProperty,
   coerceNumberProperty,
   coerceArray,
+  coerceCssPixelValue,
   coerceElement,
   Platform,
   normalizePassiveListenerOptions,
@@ -237,6 +254,7 @@ export {
   _getShadowRoot,
   _getFocusedElementPierceShadowDom,
   _getEventTarget,
+  _isTestEnvironment,
   _bindEventWithOptions
 };
-//# sourceMappingURL=chunk-UVN5L7GD.js.map
+//# sourceMappingURL=chunk-ABMCFBUH.js.map

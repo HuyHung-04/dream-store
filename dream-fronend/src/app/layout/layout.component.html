@@ -37,8 +37,8 @@
         <mat-icon>bar_chart</mat-icon>
         Thống Kê
       </a>
-      <a mat-button routerLink="/layout/dangnhap" routerLinkActive="active-link">
-        <mat-icon>bar_chart</mat-icon>
+      <a mat-button (click)="confirmLogout()"> <!-- ✅ Gọi sự kiện thay vì routerLink -->
+        <mat-icon>exit_to_app</mat-icon>
         Đăng Xuất
       </a>
     </nav>

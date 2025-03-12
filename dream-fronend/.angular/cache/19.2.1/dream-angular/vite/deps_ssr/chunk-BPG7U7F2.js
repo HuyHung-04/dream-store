@@ -9,7 +9,7 @@ import {
   coerceElement,
   coerceNumberProperty,
   normalizePassiveListenerOptions
-} from "./chunk-U42SRPDM.js";
+} from "./chunk-ABMCFBUH.js";
 import {
   BidiModule
 } from "./chunk-YBU35GFW.js";
@@ -4805,9 +4805,11 @@ export {
   InteractivityChecker,
   FocusTrapFactory,
   FocusMonitor,
+  A11yModule,
+  _IdGenerator,
   MatCommonModule,
   _StructuralStylesLoader,
   MatRippleModule,
   MatRippleLoader
 };
-//# sourceMappingURL=chunk-CAAIFORP.js.map
+//# sourceMappingURL=chunk-BPG7U7F2.js.map

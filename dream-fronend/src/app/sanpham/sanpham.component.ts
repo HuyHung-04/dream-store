@@ -922,11 +922,33 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         apiCall.subscribe(response => {
           alert('Thêm thành công!');
           this.loadData(); // Load lại danh sách
-          this.showModalThuocTinh = false; // Đóng modal sau khi thêm
+          this.resetForm();
         }, error => {
           alert('Thêm thất bại! Vui lòng thử lại.');
         });
       });
     } 
-    
+
+    resetForm() {
+      switch (this.selectedThuocTinh) {
+        case 'thuongHieu':
+          this.thuongHieuRequest = { ten: '', trangThai: 1 };
+          break;
+        case 'chatLieu':
+          this.chatLieuRequest = { ten: '', trangThai: 1 };
+          break;
+        case 'coAo':
+          this.coAoRequest = { ten: '', trangThai: 1 };
+          break;
+        case 'mauSac':
+          this.mauSacRequest = { ten: '', trangThai: 1 };
+          break;
+        case 'size':
+          this.sizeRequest = { ten: '', trangThai: 1 };
+          break;
+        case 'xuatXu':
+          this.xuatXuRequest = { ten: '', trangThai: 1 };
+          break;
+      }
+    }
 }
