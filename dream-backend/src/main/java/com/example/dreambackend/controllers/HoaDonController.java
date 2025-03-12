@@ -27,14 +27,11 @@ public class HoaDonController {
             HoaDonResponse response = hoaDonService.createHoaDon(request);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            // Đảm bảo phản hồi luôn là JSON hợp lệ
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(errorResponse);
         }
     }
-
-
     @PutMapping("/{id}/update")
     public ResponseEntity<?> updateHoaDon(@PathVariable Integer id, @RequestBody HoaDonRequest request) {
         try {

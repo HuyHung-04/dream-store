@@ -89,16 +89,14 @@
 /* Table styling */
 .product-table {
   width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  border: 1px solid #ccc; /* Viền cho cả bảng */
+  border: 0.5px solid #babfc3; /* Viền ngoài bảng */
 }
 
 .product-table th, .product-table td {
   padding: 12px 15px;
   font-size: 10px;
   text-align: center; /* Căn giữa nội dung trong ô */
-  word-wrap: break-word; 
+  border: 0.5px solid #cfd0d1; /* Viền giữa các ô */
 }
 
 .product-table td {
