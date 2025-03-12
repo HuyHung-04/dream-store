@@ -181,13 +181,13 @@ button {
 
 /*css nút tạo hoá đơn và hoá đơn*/
 .invoice-container {
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .invoice-list {
   display: flex;
-  gap: 10px; 
+  gap: 10px;
 }
 .create-btn {
   background-color: #294764;
@@ -216,6 +216,29 @@ button {
 .invoice-btn.active {
   background-color: #648cb4 !important; /* Màu khi được chọn */
 }
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* Làm mờ nền */
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 300px; /* Giảm kích thước modal */
+  text-align: center;
+}
+
 
 
 

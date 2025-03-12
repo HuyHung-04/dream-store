@@ -4,9 +4,9 @@
         <i class="bi bi-plus-circle-fill"></i> Tạo hoá đơn
       </button>
       <div class="invoice-list">
-        <button 
-          *ngFor="let invoice of invoices1" 
-          class="invoice-btn" 
+        <button
+          *ngFor="let invoice of invoices1"
+          class="invoice-btn"
           [class.active]="selectedInvoice === invoice"
           (click)="selectInvoice(invoice)">
           {{ invoice.ma }}
@@ -21,30 +21,32 @@
         <table class="cart-table">
           <thead>
             <tr>
-              <th>Mã hoá đơn chi tiết</th>
               <th>Tên sản phẩm</th>
               <th>Số lượng</th>
-              <th>Giá</th>
-              <th>Đơn giá</th>
+              <th>Đơn Giá</th>
+              <th>Màu Sắc</th>
+              <th>Size</th>
+              <th>Tổng giá</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of cart">
-              <td>{{ item.idHoaDonChiTiet }}</td> <!-- Mã hóa đơn chi tiết -->
               <td>{{ item.tenSanPham }}</td> <!-- Tên sản phẩm -->
               <td>
                 <input type="number" [(ngModel)]="item.quantity" min="1" class="item-quantity" (change)="validateQuantity(item)">
               </td>
-              <td>{{ item.donGia | number }}</td> <!-- Đơn giá -->
-              <td>{{ item.quantity * item.donGia | number }}</td> <!-- Tổng giá -->
+              <td>{{ item.gia | number }}</td> <!-- Đơn giá -->
+              <td>{{item.tenMau}}</td>
+              <td>{{item.tenSize}}</td>
+              <td>{{ item.quantity * item.gia | number }}</td> <!-- Tổng giá -->
               <td>
                 <button class="item-remove" (click)="removeFromCart(item)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
             </tr>
-          </tbody>                   
+          </tbody>
         </table>
       </div>
     </div>
@@ -74,7 +76,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let sp of filteredSanPhams()" (click)="viewProductDetails(sp)">
+        <ng-container *ngFor="let sp of filteredSanPhams()">
+          <tr *ngIf="sp.soLuong > 0" (click)="viewProductDetails(sp)">
             <td>{{ sp.maSanPhamChiTiet }}</td>
             <td>{{ sp.tenSanPham }}</td>
             <td>{{ sp.gia | currency }}</td>
@@ -88,6 +91,7 @@
               </button>
             </td>
           </tr>
+        </ng-container>
         </tbody>
       </table>
       <!-- phân trang -->
@@ -100,18 +104,32 @@
 
     <!-- khách hàng -->
     <div class="right-container border rounded-3">
-      <div class="khach-hang">
-        <div class="input-group">
-          <input type="text" class="custom-input" placeholder="Tên khách hàng..." [(ngModel)]="tenKhachHang" readonly>
-        </div>
-        <div class="input-group">
-          <input type="text" class="custom-input" placeholder="Số điện thoại..." [(ngModel)]="soDienThoai" (blur)="timKhachHang()">
-        </div>
-        <div class="input-group">
-          <input type="text" class="custom-input" placeholder="Tên nhân viên">
-        </div>
-      </div>
-    
+      <!-- Chọn khách hàng -->
+     <div class="khach-hang">
+       <div class="input-group">
+         <input type="text" class="custom-input" placeholder="Tên khách hàng..." [(ngModel)]="tenKhachHang" readonly>
+
+         <!-- Nút chọn khách hàng -->
+         <button class="btn btn-primary" (click)="moDanhSachKhachHang()">
+           <i class="bi bi-search"></i> Chọn
+         </button>
+       </div>
+
+       <!-- Nhập số điện thoại -->
+       <div class="input-group">
+         <input type="text" class="custom-input" placeholder="Số điện thoại..." [(ngModel)]="soDienThoai" (blur)="timKhachHang()">
+       </div>
+
+       <!-- Chọn nhân viên -->
+       <div class="input-group">
+         <select class="custom-input" [(ngModel)]="selectedNhanVien">
+           <option *ngFor="let nv of danhSachNhanVien" [value]="nv.id">
+             {{ nv.ten }}
+           </option>
+         </select>
+       </div>
+     </div>
+
     <!-- mã giảm giá -->
     <div class="cart-total">
       <p>Tạm tính: <span></span></p>
@@ -135,3 +153,21 @@
       </button>
     </div>
   </div>
+
+    <!-- Danh sách khách hàng -->
+    <div class="modal" *ngIf="hienThiDanhSachKhachHang">
+      <div class="modal-content">
+        <h3>Chọn khách hàng</h3>
+        <table>
+          <tr *ngFor="let kh of danhSachKhachHang">
+            <td>{{ kh.ten }}</td>
+            <td>{{ kh.soDienThoai }}</td>
+            <td>
+              <button class="btn btn-success" (click)="chonKhachHang(kh)">Chọn</button>
+            </td>
+          </tr>
+        </table>
+        <button class="btn btn-danger" (click)="hienThiDanhSachKhachHang = false">Đóng</button>
+      </div>
+    </div>
+
