@@ -6,15 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/responses/HoaDonResponse$HoaDonResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/responses/HoaDonResponse$HoaDonResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/responses/HoaDonResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/responses/HoaDonResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr_node.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr_node.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/chunk-VYDFAPOT.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/chunk-VYDFAPOT.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.1/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.1/dream-angular/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +63,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.DreamBackendApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;huy-hung&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Downloads/dream-store-051ec61dbf21c2f650d3a7da9a8c9c3a0c43d6b7/dream-store-051ec61dbf21c2f650d3a7da9a8c9c3a0c43d6b7/dream-backend&quot;,
@@ -192,6 +185,7 @@
       <workItem from="1741264735461" duration="4272000" />
       <workItem from="1741355604875" duration="644000" />
       <workItem from="1741619337002" duration="472000" />
+      <workItem from="1741761766447" duration="2113000" />
     </task>
     <servers />
   </component>

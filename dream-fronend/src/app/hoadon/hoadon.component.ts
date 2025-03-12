@@ -29,28 +29,26 @@ export class AppModule { }
 export class HoaDonComponent implements OnInit {
   searchRequest = { page: 1, maHoaDon: '', tenKhachHang: '', ngayTaoFrom: null, ngayTaoTo: null, listTrangThai: [] };
   hoaDons: HoaDonPageResponse = { totalPages: 1, content: [], totalElements: 0, currentPage: 1, pageSize: 10 };
-
-  trangThaiOptions = [
-    { value: 0, label: 'Chờ xử lý' },
-    { value: 1, label: 'Đã xác nhận' },
-    { value: 2, label: 'Đang giao' },
-    { value: 3, label: 'Hoàn thành' },
-    { value: 4, label: 'Đã hủy' }
-  ];
   selectedHoaDon: HoaDonResponse | null = null;
   formRequest: HoaDonCRUDRequest = {};
 
-  constructor(private hoaDonService: HoaDonService) {}
+  // đổi trạng thái duyệt đơn online
+  trangThai: number = 0;
+  trangThaiText: string[] = ["Chờ xác nhận", "Đã xác nhận", "Đang giao hàng", "Đã giao hàng"];
 
+  constructor(private hoaDonService: HoaDonService) {}
   ngOnInit(): void {
     this.loadHoaDons();
   }
-
+  // cập nhật trạng thái duyệt
+  capNhatTrangThai() {
+    if (this.trangThai < this.trangThaiText.length - 1) {
+      this.trangThai++;
+    }
+  }
   loadHoaDons(): void {
     this.hoaDonService.getHoaDons(this.searchRequest).subscribe(response => {
-
     console.log("Dữ liệu từ API:", response);
-
       if (Array.isArray(response)) {
         this.hoaDons.content = response;
         this.hoaDons.totalElements = response.length;
@@ -75,7 +73,6 @@ export class HoaDonComponent implements OnInit {
     };
     this.loadHoaDons();
   }
-
 
   createHoaDon(): void {
     this.hoaDonService.createHoaDon(this.formRequest).subscribe(
