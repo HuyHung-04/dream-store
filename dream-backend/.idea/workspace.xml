@@ -5,34 +5,208 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/requests/SanPhamRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/requests/SanPhamRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanpham/SanPhamService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanpham/SanPhamService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/controllers/KhuyenMaiController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/controllers/KhuyenMaiController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamChiTietRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamChiTietRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/requests/SanPhamRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/requests/SanPhamRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanpham/SanPhamService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanpham/SanPhamService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.1/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.1/dream-angular/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/.bin/voc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/.bin/voc.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/.bin/voc.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/.bin/xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/.bin/xlsx.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/.bin/xlsx.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/adler-32/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/adler-32/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/adler-32/adler32.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/adler-32/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/adler-32/types/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/adler-32/types/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/adler-32/types/tslint.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/cfb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/dist/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/dist/cfb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/dist/cfb.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/dist/cfb.min.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/dist/xlscfb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/types/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/types/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/cfb/xlscfb.flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/MIT-LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/ReadMe.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/colors.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/example.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/example.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/themes/winston-dark.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/colors/themes/winston-light.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/concat-stream/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/concat-stream/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/concat-stream/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/concat-stream/readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/.jshintignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/.jshintrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/.npmignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/CHANGES.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/CHANGES.md.orig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/LICENSE.markdown" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/README.markdown" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/index.html.orig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/base64.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/compressedObject.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/compressions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/crc32.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/dataReader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/defaults.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/deprecatedPublicUtils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/flate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/license_header.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/load.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/nodeBuffer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/nodeBufferReader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/object.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/signature.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/stringReader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/stringWriter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/support.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/uint8ArrayReader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/uint8ArrayWriter.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/utf8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/zipEntries.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/lib/zipEntry.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/jszip/vendor/FileSaver.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/dist/pako.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/dist/pako.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/dist/pako_deflate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/dist/pako_deflate.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/dist/pako_inflate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/dist/pako_inflate.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/deflate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/inflate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/utils/common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/utils/strings.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/adler32.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/constants.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/crc32.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/deflate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/gzheader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/inffast.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/inflate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/inftrees.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/messages.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/trees.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/lib/zlib/zstream.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/pako/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/example/tarray.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/readme.markdown" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/test/server/undef_globals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/typedarray/test/tarray.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/voc/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/voc/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/voc/marked.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/voc/mkdirp.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/voc/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/voc/voc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/voc/voc.njs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/.idea/js-xlsx.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/bin/xlsx.njs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/bower.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/cpexcel.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/jszip.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/ods.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/xlsx.core.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/xlsx.core.min.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/xlsx.full.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/xlsx.full.min.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/xlsx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/xlsx.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/dist/xlsx.min.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/example2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/jszip.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example2/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example2/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example3/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example3/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example4/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/example4/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/header-none/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/header-none/docProps/thumbnail.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/header-none/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/header/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/header/docProps/thumbnail.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/header/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/illinois/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/illinois/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/illinois2/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/illinois2/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/ion/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/ion/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/ion2/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/ion2/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/issue29/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/issue29/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/issue32/downloaded/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/issue32/downloaded/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/issue32/saved/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/issue32/saved/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/vina/_rels/.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/vina/docProps/thumbnail.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/lab/vina/xl/_rels/workbook.xml.rels" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/.bin/codepage" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/.bin/codepage.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/.bin/codepage.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/.bin/ssf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/.bin/ssf.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/.bin/ssf.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/bin/codepage.njs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/cptable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/cputils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/dist/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/dist/cpexcel.full.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/codepage/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/.npmignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/frac.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/frac.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/frac/test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/ssf/.npmignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/ssf/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/ssf/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/ssf/bin/ssf.njs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/ssf/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/ssf/ssf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/node_modules/ssf/ssf.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/ods.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/xlsx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/xlsxworker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/xlsxworker1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/node_modules/xlsx-style/xlsxworker2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,7 +388,7 @@
       <workItem from="1741785322296" duration="1648000" />
       <workItem from="1741841203567" duration="1216000" />
       <workItem from="1741848374908" duration="8424000" />
-      <workItem from="1741871539292" duration="3059000" />
+      <workItem from="1741871539292" duration="3367000" />
     </task>
     <servers />
   </component>
