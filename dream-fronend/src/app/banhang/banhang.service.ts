@@ -8,11 +8,11 @@ import {map} from 'rxjs/operators';
 })
 export class BanhangService {
 
-  private apiUrl = 'http://localhost:8889/api/san-pham-chi-tiet/ban-hang';
-  private apiUrlHD = 'http://localhost:8889/api/hoa-don-chi-tiet';
-  private apiUrlKH = 'http://localhost:8889/api/khach-hang';
-  private apiUrlTaoHoaDon = 'http://localhost:8889/api/hoa-don';
-  private apiUrlNhanVien = 'http://localhost:8889/api';
+  private apiUrl = 'http://localhost:8080/api/san-pham-chi-tiet/ban-hang';
+  private apiUrlHD = 'http://localhost:8080/api/hoa-don-chi-tiet';
+  private apiUrlKH = 'http://localhost:8080/api/khach-hang';
+  private apiUrlTaoHoaDon = 'http://localhost:8080/api/hoa-don';
+  private apiUrlNhanVien = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) { }
 

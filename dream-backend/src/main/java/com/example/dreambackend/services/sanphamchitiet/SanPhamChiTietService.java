@@ -1,8 +1,10 @@
 package com.example.dreambackend.services.sanphamchitiet;
 
+import com.example.dreambackend.entities.SanPham;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.repositories.MauSacRepository;
 import com.example.dreambackend.repositories.SanPhamChiTietRepository;
+import com.example.dreambackend.repositories.SanPhamRepository;
 import com.example.dreambackend.repositories.SizeRepository;
 import com.example.dreambackend.requests.SanPhamChiTietRequest;
 import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
@@ -20,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,10 +36,7 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
     SanPhamChiTietRepository sanPhamChiTietRepository;
 
     @Autowired
-    SizeRepository sizeRepository;
-
-    @Autowired
-    MauSacRepository mauSacRepository;
+    SanPhamRepository sanPhamRepository;
 
     @Override
     public Page<SanPhamChiTietRespone> getSanPhamChiTietBySanPhamId(Integer idSanPham, Pageable pageable) {
@@ -73,12 +73,19 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
 
     @Override
     public SanPhamChiTiet updateSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest) {
-        SanPhamChiTiet sanphamChiTietUpdate = sanPhamChiTietRepository.findById(sanPhamChiTietRequest.getId()).orElseThrow(()->
-                new RuntimeException("Không tìm thấy sản phẩm chi tiết với id: "+sanPhamChiTietRequest.getId()));
-        BeanUtils.copyProperties(sanPhamChiTietRequest, sanphamChiTietUpdate,"id","ngayTao");
+        SanPhamChiTiet sanphamChiTietUpdate = sanPhamChiTietRepository.findById(sanPhamChiTietRequest.getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm chi tiết với id: " + sanPhamChiTietRequest.getId()));
+        // Kiểm tra trạng thái sản phẩm cha
+        SanPham sanPhamCha = sanPhamRepository.findById(sanphamChiTietUpdate.getSanPham().getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm cha"));
+        if (sanPhamCha.getTrangThai() == 0) { // 0 là "không hoạt động"
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sản phẩm không hoạt động, không thể sửa trạng thái!");
+        }
+        BeanUtils.copyProperties(sanPhamChiTietRequest, sanphamChiTietUpdate, "id", "ngayTao");
         sanphamChiTietUpdate.setNgaySua(LocalDate.now());
         return sanPhamChiTietRepository.save(sanphamChiTietUpdate);
     }
+
 
     @Override
     public Page<SanPhamChiTietRespone> timKiemSanPhamChiTiet(

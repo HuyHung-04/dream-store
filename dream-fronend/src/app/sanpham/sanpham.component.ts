@@ -4,6 +4,9 @@ import { SanphamService } from './sanpham.service';
 import { FormsModule } from '@angular/forms';
 import { Anh } from './sanpham.service';
 import { ChangeDetectorRef } from '@angular/core';
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-sanpham',
@@ -523,7 +526,6 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
     });
   }
   
-  
       // thuộc tính
       openModalThuocTinh(){
         this.showModalThuocTinh = true;
@@ -748,39 +750,109 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       });
     }       
     
-
-    xuatFileExcel(): void {
-      this.sanphamService.exportExcel().subscribe(response => {
-        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'sanpham.xlsx';
-        a.click();
-        window.URL.revokeObjectURL(url);
-        alert("Xuất file thành công");
-      }, error => {
-        console.error("Lỗi khi xuất file Excel:", error);
-        alert("Xuất file thất bại");
-      });
-    }
-
-    xuatFileExcelSanPhamChiTiet(idSanPham: number): void {
-      this.sanphamService.exportExcelSanPhamChiTiet(idSanPham).subscribe(response => {
-        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `sanphamchitiet${idSanPham}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        alert("Xuất file thành công");
-      }, error => {
-        console.error("Lỗi khi xuất file Excel:", error);
-        alert("Xuất file thất bại");
-      });
-    }
+  xuatFileExcel(): void {
+    this.sanphamService.exportExcel().subscribe(response => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const arrayBuffer = e.target?.result as ArrayBuffer;
+        // Tạo workbook từ buffer nhận được
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(arrayBuffer);
+        // Lấy sheet đầu tiên
+        const worksheet = workbook.worksheets[0];
+        // Định dạng tiêu đề (dòng đầu tiên)
+        const headerRow = worksheet.getRow(1);
+        headerRow.eachCell(cell => {
+          cell.font = { bold: true, color: { argb: '000000' } }; // Chữ đen
+          cell.alignment = { horizontal: 'center', vertical: 'middle' };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'D9EAD3' } // Màu xanh nhạt (mã ARGB)
+          };
+        });
+        // Thêm border cho toàn bộ bảng (bao gồm cả dữ liệu)
+        worksheet.eachRow((row) => {
+          row.eachCell((cell) => {
+            cell.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' }
+            };
+          });
+        });
+        // Xuất file Excel
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          saveAs(blob, 'sanpham.xlsx');
+          alert("Xuất file thành công");
+        });
+      };
+      reader.readAsArrayBuffer(response);
+    }, error => {
+      console.error("Lỗi khi tải file Excel:", error);
+      alert("Xuất file thất bại");
+    });
+  }
     
+  xuatFileExcelSanPhamChiTiet(idSanPham: number): void {
+    this.sanphamService.exportExcelSanPhamChiTiet(idSanPham).subscribe(response => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const arrayBuffer = e.target?.result as ArrayBuffer;
+        // Tạo workbook từ buffer nhận được
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(arrayBuffer);
+        // Lấy sheet đầu tiên
+        const worksheet = workbook.worksheets[0];
+        // Định dạng tiêu đề (dòng đầu tiên)
+        const headerRow = worksheet.getRow(1);
+        headerRow.eachCell(cell => {
+          cell.font = { bold: true, color: { argb: '000000' } }; // Chữ đen
+          cell.alignment = { horizontal: 'center', vertical: 'middle' };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+          };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'D9EAD3' }
+          };
+        });
+        // Thêm border cho toàn bộ bảng
+        worksheet.eachRow((row) => {
+          row.eachCell((cell) => {
+            cell.border = {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' }
+            };
+          });
+        });
+        // Xuất file Excel
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          saveAs(blob, `sanphamchitiet${idSanPham}.xlsx`);
+          alert("Xuất file thành công");
+        });
+      };
+      reader.readAsArrayBuffer(response);
+    }, error => {
+      console.error("Lỗi khi tải file Excel:", error);
+      alert("Xuất file thất bại");
+    });
+  }
     
     updateSanPhamChiTiet(): void {
       this.validateSanPhamChiTiet().then((isValid) => {
@@ -804,7 +876,11 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
             this.closeModalSanPhamChiTietThem();
           },
           error: (error) => {
-            console.error("Lỗi khi cập nhật sản phẩm chi tiết:", error);
+            if (error.status === 400 && error.error) {
+              alert(error.error.message || "Sản phẩm không hoạt động, không thể sửa trạng thái!");
+            } else {
+              alert("Có lỗi xảy ra khi cập nhật sản phẩm chi tiết.");
+            }
           }
         });
       });

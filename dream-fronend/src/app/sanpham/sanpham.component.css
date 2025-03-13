@@ -16,20 +16,19 @@
   padding-left: 15px;
 }
 
-/* Ô tìm kiếm */
 .search-input {
-  padding: 5px 10px;
+  border: none; /* Bỏ viền */
+  border-bottom: 1px solid #294764; /* Chỉ có gạch dưới */
+  border-radius: 0; /* Không bo góc */
+  padding: 5px 0; /* Căn chỉnh padding */
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-  width: 300px;
-  border: 2px solid #294764; /* Thay đổi màu viền thành xanh dương */
-  position: relative; /* Thêm position để top và left hoạt động */
-  top: -5px;  /* Dịch lên trên */
-  left: 815px; /* Dịch sang trái */
+  color: #294764; /* Màu chữ */
+  outline: none; /* Khi click vào không có viền xanh */
+  background: transparent; /* Nền trong suốt */
+  width: 19%; /* Chiều rộng tự động theo form */
+  margin-left: 870px;
+  margin-top: -20px;
 }
-
 
 .title {
   padding-left: 15px;

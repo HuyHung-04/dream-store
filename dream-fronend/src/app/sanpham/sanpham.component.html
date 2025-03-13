@@ -12,7 +12,7 @@
     <!-- Combobox 1 -->
     <div class="input-field">
       <select class="input" id="thuongHieu" name="thuongHieu" [(ngModel)]="searchFilter.thuongHieu.id" (change)="onSearchFilterChange()">
-        <option value="" selected>Chọn thương hiệu</option>
+        <option value="" selected>Tất cả thương hiệu</option>
         <option *ngFor="let thuongHieu of thuongHieus" [value]="thuongHieu.id">{{thuongHieu.ten}}</option>
       </select>
       <label for="thuongHieu">Thương hiệu</label>
@@ -21,7 +21,7 @@
     <!-- Combobox 2 -->
     <div class="input-field">
       <select class="input" id="xuatXu" name="xuatXu" [(ngModel)]="searchFilter.xuatXu.id" (change)="onSearchFilterChange()">
-        <option value="" selected>Chọn xuất xứ</option>
+        <option value="" selected>Tất cả xuất xứ</option>
         <option *ngFor="let xuatXu of xuatXus" [value]="xuatXu.id">{{xuatXu.ten}}</option>
       </select>
       <label for="xuatXu">Xuất xứ</label>
@@ -30,7 +30,7 @@
     <!-- Combobox 3 -->
     <div class="input-field">
       <select class="input" id="chatLieu" name="chatLieu" [(ngModel)]="searchFilter.chatLieu.id" (change)="onSearchFilterChange()">
-        <option value="" selected>Chọn chất liệu</option>
+        <option value="" selected>Tất cả chất liệu</option>
         <option *ngFor="let chatLieu of chatLieus" [value]="chatLieu.id">{{chatLieu.ten}}</option>
       </select>
       <label for="chatLieu">Chất liệu</label>
@@ -39,7 +39,7 @@
     <!-- Combobox 4 -->
     <div class="input-field">
       <select class="input" id="coAo" name="coAo" [(ngModel)]="searchFilter.coAo.id" (change)="onSearchFilterChange()">
-        <option value="" selected>Chọn cổ áo</option>
+        <option value="" selected>Tất cả cổ áo</option>
         <option *ngFor="let coAo of coAos" [value]="coAo.id">{{coAo.ten}}</option>
       </select>
       <label for="coAo">Cổ áo</label>
@@ -48,7 +48,7 @@
     <!-- Combobox 5 -->
     <div class="input-field">
       <select class="input" id="trangThai" name="trangThai" [(ngModel)]="searchFilter.trangThai" (change)="onSearchFilterChange()">
-        <option value="" selected>Chọn trạng thái</option>
+        <option value="" selected>Tất cả trạng thái</option>
         <option value="1">Hoạt động</option>
         <option value="0">Không hoạt động</option>
       </select>
@@ -146,7 +146,7 @@
               <label for="ten">Tên thuộc tính</label>
               <div *ngIf="validationErrors['ten']" class="error-message">{{ validationErrors['ten'] }}</div>
             </div>
-            <div class="input-field error">
+            <!-- <div class="input-field error">
               <select class="input" id="trangThai1" name="trangThai" [(ngModel)]="getSelectedRequest().trangThai">
                 <option value="" disabled selected>Chọn trạng thái</option>
                 <option value="1">Hoạt động</option>
@@ -154,7 +154,7 @@
               </select>
               <label for="trangThai">Trạng thái</label>
               <div *ngIf="validationErrors['trangThai']" class="error-message">{{ validationErrors['trangThai'] }}</div>
-            </div>
+            </div> -->
           </div>
             
             <div class="radio-group">
@@ -282,7 +282,7 @@
         <!-- Combobox 3 -->
         <div class="input-field">
           <select class="input" id="size" name="size" [(ngModel)]="searchFilterSanPhamChiTiet.size.id" (ngModelChange)="onSearchSanPhamChiTiet()">
-            <option value="" selected>Chọn size</option>
+            <option value="" selected>Tất cả size</option>
             <option *ngFor="let size of sizes" [value]="size.id">{{size.ten}}</option>
           </select>
           <label for="size">Size</label>
@@ -291,7 +291,7 @@
         <!-- Combobox 4 -->
         <div class="input-field">
           <select class="input" id="mauSac" name="mauSac" [(ngModel)]="searchFilterSanPhamChiTiet.mauSac.id" (ngModelChange)="onSearchSanPhamChiTiet()">
-            <option value="" selected>Chọn màu sắc</option>
+            <option value="" selected>Tất cả màu sắc</option>
             <option *ngFor="let mauSac of mauSacs" [value]="mauSac.id">{{mauSac.ten}}</option>
           </select>
           <label for="mauSac">Màu sắc</label>
@@ -300,7 +300,7 @@
         <!-- Combobox 5 -->
         <div class="input-field">
           <select class="input" id="trangThai" name="trangThai" [(ngModel)]="searchFilterSanPhamChiTiet.trangThai" (ngModelChange)="onSearchSanPhamChiTiet()">
-            <option value="" selected>Chọn trạng thái</option>
+            <option value="" selected>Tất cả trạng thái</option>
             <option value="1">Hoạt động</option>
             <option value="0">Không hoạt động</option>
           </select>

@@ -423,7 +423,7 @@ getNhanVienDetail(id: number): void {
       this.filteredNhanViens = [...this.nhanViens]; // Hiển thị tất cả nếu không có tìm kiếm
     }
   }
-  // 🟢 Tìm kiếm nhân viên
+  //  Tìm kiếm nhân viên
   searchNhanVien(): void {
     if (this.searchText.trim() === '') {
       alert('Vui lòng nhập tên nhân viên để tìm kiếm.');

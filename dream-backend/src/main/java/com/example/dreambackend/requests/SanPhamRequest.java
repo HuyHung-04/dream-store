@@ -26,7 +26,7 @@ public class SanPhamRequest {
     private LocalDate ngaySua;
 
     @Range(min = 0, max = 1, message = "Vui lòng chọn trạng thái")
-    private int trangThai;
+    private Integer trangThai;
 
     @NotNull(message = "Vui lòng chọn chất liệu")
     private ChatLieu chatLieu;

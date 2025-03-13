@@ -6,6 +6,33 @@
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/requests/SanPhamRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/requests/SanPhamRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanpham/SanPhamService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanpham/SanPhamService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/controllers/KhuyenMaiController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/controllers/KhuyenMaiController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamChiTietRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamChiTietRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/requests/SanPhamRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/requests/SanPhamRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanpham/SanPhamService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanpham/SanPhamService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/sanphamchitiet/SanPhamChiTietService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.1/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.1/dream-angular/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,35 +72,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.DreamBackendApplication.executor": "Run",
-    "JUnit.All in dream-backend.executor": "Run",
-    "Maven.dream-backend [clean,install].executor": "Run",
-    "Maven.dream-backend [clean].executor": "Run",
-    "Maven.dream-backend [spring-boot:debug].executor": "Run",
-    "Maven.dream-backend [spring-boot:run].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.DreamBackendApplication.executor": "Run",
-    "Spring Boot.Unnamed.executor": "Run",
-    "git-widget-placeholder": "huy-hung",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Admin/Downloads/dream-store-051ec61dbf21c2f650d3a7da9a8c9c3a0c43d6b7/dream-store-051ec61dbf21c2f650d3a7da9a8c9c3a0c43d6b7/dream-backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.3.1.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.DreamBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in dream-backend.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dream-backend [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dream-backend [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dream-backend [spring-boot:debug].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.dream-backend [spring-boot:run].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DreamBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;huy-hung&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Downloads/dream-store-051ec61dbf21c2f650d3a7da9a8c9c3a0c43d6b7/dream-store-051ec61dbf21c2f650d3a7da9a8c9c3a0c43d6b7/dream-backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.3.1.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers" />
@@ -185,6 +212,9 @@
       <workItem from="1741619337002" duration="472000" />
       <workItem from="1741761766447" duration="2191000" />
       <workItem from="1741785322296" duration="1648000" />
+      <workItem from="1741841203567" duration="1216000" />
+      <workItem from="1741848374908" duration="8424000" />
+      <workItem from="1741871539292" duration="3059000" />
     </task>
     <servers />
   </component>

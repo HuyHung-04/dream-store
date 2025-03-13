@@ -59,10 +59,13 @@ public class KhuyenMaiController {
     }
 
     @GetMapping("/{khuyenMaiId}/select-products")
-    public ResponseEntity<List<SanPhamChiTietDto>> getAvailableProducts(@PathVariable Integer khuyenMaiId) {
-        List<SanPhamChiTietDto> products = khuyenMaiService.findAvailableProducts(khuyenMaiId);
+    public ResponseEntity<List<SanPhamChiTietDto>> getAvailableProducts(
+            @PathVariable Integer khuyenMaiId,
+            @RequestParam(required = false) String tenSanPham) {
+        List<SanPhamChiTietDto> products = khuyenMaiService.findAvailableProducts(tenSanPham, khuyenMaiId);
         return ResponseEntity.ok(products);
     }
+
 
     @PostMapping("/{khuyenMaiId}/update-products")
     public ResponseEntity<Map<String, String>> updateKhuyenMaiProducts(

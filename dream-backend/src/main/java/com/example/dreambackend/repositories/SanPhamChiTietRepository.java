@@ -52,8 +52,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     )
     FROM SanPhamChiTiet spct
     WHERE spct.sanPham.id = :idSanPham
-      AND (:gia IS NULL OR spct.gia = :gia)
-      AND (:soLuong IS NULL OR spct.soLuong = :soLuong)
+      AND (:gia IS NULL OR spct.gia >= :gia)
+      AND (:soLuong IS NULL OR spct.soLuong >= :soLuong)
       AND (:idMauSac IS NULL OR spct.mauSac.id = :idMauSac)
       AND (:idSize IS NULL OR spct.size.id = :idSize)
       AND (:trangThai IS NULL OR spct.trangThai = :trangThai)
@@ -87,14 +87,15 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     JOIN spct.mauSac ms
     JOIN spct.size sz
     WHERE spct.trangThai = 1
+    AND (:tenSanPham IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :tenSanPham, '%')))
     """)
-    List<SanPhamChiTietDto> findAvailableProducts(@Param("khuyenMaiId") Integer khuyenMaiId);
-
+    List<SanPhamChiTietDto> findAvailableProducts(@Param("tenSanPham") String tenSanPham, @Param("khuyenMaiId") Integer khuyenMaiId);
     List<SanPhamChiTiet> findAllByKhuyenMaiId(Integer khuyenMaiId);
-
 
     @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.khuyenMai.id IN :khuyenMaiIds")
     List<SanPhamChiTiet> findAllByKhuyenMaiIdIn(@Param("khuyenMaiIds") List<Integer> khuyenMaiIds);
+
+    List<SanPhamChiTiet> findBySanPhamId(Integer sanPhamId);
 
     boolean existsByMa(String ma);
 
