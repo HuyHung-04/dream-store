@@ -28,8 +28,8 @@ public class KhuyenMai {
     @Column(name = "hinh_thuc_giam", nullable = false)
     private Boolean hinhThucGiam;
 
-    @Column(name = "gia_tri_giam", nullable = false, precision = 10, scale = 2)
-    private BigDecimal giaTriGiam;
+    @Column(name = "gia_tri_giam", nullable = false)
+    private Double giaTriGiam;
 
     @Column(name = "trang_thai", nullable = false)
     private Integer trangThai;

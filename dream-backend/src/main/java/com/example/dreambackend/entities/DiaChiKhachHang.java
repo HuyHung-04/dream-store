@@ -18,8 +18,14 @@ public class DiaChiKhachHang {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "thon")
-    private String thon;
+    @Column(name = "dia_chi_cu_the")
+    private String diaChiCuThe;
+
+    @Column(name ="ten_nguoi_nhan")
+    private  String tenNguoiNhan;
+
+    @Column(name = "sdt_nguoi_nhan")
+    private  String sdtNguoiNhan;
 
     @Column(name = "phuong_xa")
     private String phuongXa;

@@ -15,7 +15,7 @@ public class DiaChiKhachHangRequest {
     private Integer id;
 
     @NotBlank(message = "Thông tin không được để trống")
-    private String thon;
+    private String diaChiCuThe;
 
     private String phuongXa;
 
@@ -25,6 +25,10 @@ public class DiaChiKhachHangRequest {
     private String tinhThanhPho;
 
     private String moTa;
+
+    private String tenNguoiNhan;
+
+    private  String sdtNguoiNhan;
 
     private LocalDate ngayTao;
 

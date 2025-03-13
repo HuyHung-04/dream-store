@@ -38,6 +38,34 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
 
 
     Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietId(Integer idKhachHang, Integer idSanPhamChiTiet);
+
+    @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
+            "g.id, " +
+            "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham = spct.sanPham AND a.trangThai = 1 ORDER BY a.ngayTao ASC LIMIT 1), " +
+            "s.ten, spct.mauSac.ten, spct.size.ten, " +
+            "g.soLuong, " +
+            "CASE " +
+            "   WHEN km.id IS NOT NULL THEN " +
+            "       CASE " +
+            "           WHEN km.hinhThucGiam = TRUE THEN CAST(g.soLuong * (spct.gia - km.giaTriGiam) AS double) " +
+            "           ELSE CAST(g.soLuong * (spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
+            "       END " +
+            "   ELSE CAST(g.soLuong * spct.gia AS double) " +
+            "END, " +
+            "CASE WHEN km.hinhThucGiam IS NOT NULL AND km.hinhThucGiam = TRUE THEN TRUE ELSE FALSE END, " + // Ép kiểu Boolean
+            "km.giaTriGiam, " +
+            "g.trangThai, k.id, spct.id) " +
+            "FROM GioHangChiTiet g " +
+            "JOIN g.khachHang k " +
+            "JOIN g.sanPhamChiTiet spct " +
+            "JOIN spct.sanPham s " +
+            "LEFT JOIN spct.khuyenMai km ON km.trangThai = 1 " +
+            "WHERE k.id = :idKhachHang AND g.trangThai=0")
+    List<GioHangChiTietResponse> findGioHangChiTietByStatus(@Param("idKhachHang") Integer idKhachHang);
+
+
+
+
 }
 
 

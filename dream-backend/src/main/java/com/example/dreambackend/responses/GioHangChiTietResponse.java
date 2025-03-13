@@ -1,5 +1,6 @@
 package com.example.dreambackend.responses;
 
+import com.example.dreambackend.entities.SanPhamChiTiet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,13 +28,16 @@ public class GioHangChiTietResponse {
 
         private Boolean hinhThucGiam; // True: Giảm tiền, False: Giảm %
 
-        private BigDecimal giaTriGiam;
+        private Double giaTriGiam;
 
         private Integer trangThai;
 
         private Integer idKhachHang;
 
         private Integer idSanPhamChiTiet;
+
+
+
 }
 
 

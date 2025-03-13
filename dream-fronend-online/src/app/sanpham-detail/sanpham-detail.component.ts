@@ -37,9 +37,7 @@ import { HeaderService } from '../header/header.service'
       quanHuyen: null,
       phuongXa: null
     };
-    tinhThanhPhoList: any[] = [];
-    quanHuyenList: any[] = [];
-    phuongXaList: any[] = [];
+   
     payMent: any[] = []
 
   private route = inject(ActivatedRoute);
@@ -49,7 +47,7 @@ import { HeaderService } from '../header/header.service'
 
   ngOnInit(): void {
     this.loadSanPhamChiTiet();
-    this.loadTinhThanh();
+    
     this.filteredDanhSachSize = this.danhSachSize;
     this.filteredDanhSachMauSac = this.danhSachMauSac;
     this.updateFilteredLists();
@@ -233,7 +231,7 @@ import { HeaderService } from '../header/header.service'
     };
     console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
     this.headerService.addToCart(sanPhamGioHang).subscribe(response => {
-        // console.log("Thêm vào giỏ hàng thành công:", response);
+        console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
         this.soLuongMua = 1;
     }, error => {
@@ -241,12 +239,12 @@ import { HeaderService } from '../header/header.service'
     });
   }
 
-  // code modalThanhToan khi ấn mua ngay/////////////////////////////////
+  // // code modalThanhToan khi ấn mua ngay/////////////////////////////////
 
-  openModalThanhToan() {
-    this.loadKhachHang(this.idKhachHang);
-    this.loadPayMent();
-  }
+  // openModalThanhToan() {
+  //   this.loadKhachHang(this.idKhachHang);
+  //   this.loadPayMent();
+  // }
 
   loadKhachHang(idKhachHang: number) {
     this.sanphamService.getThongTinKhachHang(idKhachHang).subscribe(
@@ -302,31 +300,5 @@ import { HeaderService } from '../header/header.service'
     this.headerService.closeModalThanhToan();
   }
 
-  // Lấy danh sách tỉnh thành
-  loadTinhThanh() {
-    this.sanphamService.getTinhThanh().subscribe((data) => {
-      this.tinhThanhPhoList = data;
-    });
-  }
-
-  // Khi chọn tỉnh, lấy danh sách quận huyện
-  onSelectTinhThanh(event: any) {
-    const maTinh = event.target.value;
-    this.khachHang.tinhThanhPho = maTinh;
-    this.sanphamService.getQuanHuyen(maTinh).subscribe((data) => {
-      this.quanHuyenList = data.districts;
-      this.khachHang.quanHuyen = null;
-      this.phuongXaList = [];
-    });
-  }
-
-  // Khi chọn huyện, lấy danh sách phường xã
-  onSelectQuanHuyen(event: any) {
-    const maHuyen = event.target.value;
-    this.khachHang.quanHuyen = maHuyen;
-    this.sanphamService.getPhuongXa(maHuyen).subscribe((data) => {
-      this.phuongXaList = data.wards;
-      this.khachHang.phuongXa = null;
-    });
-  }
+  
 }

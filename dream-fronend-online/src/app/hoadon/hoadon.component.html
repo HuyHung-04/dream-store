@@ -1,0 +1,167 @@
+<!-- Hiển thị địa chỉ đã chọn -->
+<div *ngIf="diaChiList.length > 0; else noAddresses" class="address-list">
+  <div class="address-item-select" (click)="openModal()">
+    <div class="address-container">
+      <p class="map"><i class="bi bi-geo-alt-fill"> Địa chỉ người nhận</i></p>
+      <div class="customer-info">
+      <p class="customer-name">Tên người nhận: {{ selectedAddress?.tenNguoiNhan }}</p>
+      <p class="customer-phone"> (+84 | {{ selectedAddress?.sdtNguoiNhan }} ) </p>
+    </div>
+      <p class="address-text">
+       Địa chỉ: {{ selectedAddress?.diaChiCuThe }}, {{ selectedAddress?.phuongXa }}, {{ selectedAddress?.quanHuyen }}, {{ selectedAddress?.tinhThanhPho }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Nếu chưa có địa chỉ -->
+<ng-template #noAddresses>
+  <p class="no-address">Chưa có địa chỉ nào được thêm.</p>
+</ng-template>
+
+<!-- Modal -->
+<div *ngIf="isModalOpen" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button [class.active]="activeTab === 'select'" (click)="activeTab='select'">Chọn Địa Chỉ</button>
+      <button [class.active]="activeTab === 'add'" (click)="activeTab='add'">Thêm Địa Chỉ Mới</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Tab Chọn Địa Chỉ -->
+      <div *ngIf="activeTab === 'select'">
+        <ul>
+          <li *ngFor="let diaChi of diaChiList; let i = index"
+              class="address-item"
+              [class.selected]="selectedIndex === i"
+              (click)="selectAddress(i)">
+            <div class="address-container">
+              <div class="customer-info">
+              <p class="customer-name">Tên người nhận: {{ diaChi.tenNguoiNhan}}</p>
+              <p class="customer-phone">(+84 | {{diaChi.sdtNguoiNhan}})</p>
+            </div>
+              <p>Địa chỉ: {{ diaChi.diaChiCuThe }}, {{ diaChi.phuongXa }}, {{ diaChi.quanHuyen }}, {{ diaChi.tinhThanhPho }}</p>
+              <div class="btn-container">
+              <button class="btn-edit" (click)="editDiaChi(diaChi.id); $event.stopPropagation()"><i class="bi bi-pencil-square"></i> Sửa</button>
+              <button class="btn-delete" (click)="deleteDiaChi(diaChi.id,i); $event.stopPropagation()"><i class="bi bi-trash"></i> Xóa</button>
+            </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Tab Thêm Địa Chỉ Mới -->
+      <div *ngIf="activeTab === 'add'" class="add-address-form">
+        <input [(ngModel)]="newAddress.tenNguoiNhan" placeholder="Tên người nhận" class="form-control">
+        <input [(ngModel)]="newAddress.sdtNguoiNhan" placeholder="Số điện thoại người nhận" class="form-control">
+        <select [(ngModel)]="newAddress.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="form-control">
+          <option value="" disabled [selected]="!AddressEdit.tinhThanhPho">Chọn Tỉnh/Thành Phố</option>
+          <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.code">{{ tinh.name }}</option>
+        </select>
+        <select [(ngModel)]="newAddress.quanHuyen" (change)="onSelectQuanHuyen($event)" class="form-control">
+          <option *ngFor="let quan of quanHuyenList"  [value]="quan.code" >{{ quan.name }}</option>
+          <option value="" disabled selected>Chọn Quận/Huyện</option>
+        </select>
+        <select [(ngModel)]="newAddress.phuongXa" class="form-control">
+          <option *ngFor="let xa of phuongXaList" [value]="xa.name">{{ xa.name }}</option>
+          <option value="" disabled selected>Chọn Phường/Xã</option>  <!-- Placeholder -->
+        </select>
+        <input [(ngModel)]="newAddress.diaChiCuThe" class="form-control" placeholder="Địa chỉ cụ thể">
+        <button class="btn-save" (click)="addDiaChi()">Lưu Địa Chỉ</button>
+      </div>
+    </div>
+
+    <button class="close-btn" (click)="closeModal()">Đóng</button>
+  </div>
+</div>
+
+<!-- Modal Chỉnh sửa Địa Chỉ -->
+<div *ngIf="isEditModalOpen" class="edit-modal-overlay" (click)="$event.stopPropagation()">
+  <div class="edit-modal">
+    <div class="edit-modal-header">
+      <h2>Sửa Địa Chỉ</h2>
+     
+    </div>
+
+    <div class="edit-modal-body">
+      <input [(ngModel)]="AddressEdit.tenNguoiNhan" placeholder="Tên người nhận" class="edit-input">
+      <input [(ngModel)]="AddressEdit.sdtNguoiNhan" placeholder="Số điện thoại người nhận" class="edit-input">
+      
+      <select [(ngModel)]="AddressEdit.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="edit-select">
+        <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.code">{{ tinh.name }}</option>
+      </select>
+      
+      <select [(ngModel)]="AddressEdit.quanHuyen" (change)="onSelectQuanHuyen($event)" class="edit-select">
+        <option *ngFor="let quan of quanHuyenList" [value]="quan.code">{{ quan.name }}</option>
+      </select>
+      
+      <select [(ngModel)]="AddressEdit.phuongXa" class="edit-select">
+        <option *ngFor="let xa of phuongXaList" [value]="xa.name">{{ xa.name }}</option>
+      </select>
+      
+      <input [(ngModel)]="AddressEdit.diaChiCuThe" class="edit-input" placeholder="Địa chỉ cụ thể">
+      <button class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
+      <button class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="chiTietGioHang.length > 0; else noItems" class="gio-hang">
+  <div *ngFor="let item of chiTietGioHang" class="gio-hang-item">
+    <div class="item-image">
+      <img [src]="'http://localhost:8080' + item.anhUrl" alt="{{ item.tenSanPham }}" />
+    </div>
+ 
+    <div class="item-details">
+      <div class="item-header">
+        <h3 class="item-title">{{ item.tenSanPham }}</h3>
+        <p class="item-price">{{ item.donGia | currency }}</p>
+      </div>
+      
+      <div class="item-info">
+        <p><strong>Màu sắc:</strong> {{ item.mauSac }}</p>
+        <p><strong>Size:</strong> {{ item.size }}</p>
+        <p><strong>Số lượng:</strong> {{ item.soLuong }}</p>
+      </div>
+      <div *ngIf="item.khuyenMai" class="discount-info">
+        <p><strong>Giảm giá:</strong> {{ item.giaTriGiam }} ({{ item.hinhThucGiam ? 'Giảm trực tiếp' : 'Giảm phần trăm' }})</p>
+        <p><strong>Giá sau giảm:</strong> {{ item.donGiaSauGiam | currency }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hiển thị thông báo nếu giỏ hàng trống -->
+<ng-template #noItems>
+  <p>Giỏ hàng của bạn hiện tại trống.</p>
+</ng-template>
+
+
+<!-- Phần thanh toán bên phải -->
+<div class="payment-summary">
+  <div class="summary-header">
+    <label for="">Tạm tính: {{ totalPrice }} VND</label>
+  </div>
+  
+  <div class="summary-item">
+    <label for="voucher">Voucher:</label>
+    <select id="voucher" [(ngModel)]="selectedVoucherId" (change)="updateTotalPrice()" class="selectoption">
+      <option value="">Chọn voucher</option>
+      <option *ngFor="let voucher of vouchers" [value]="voucher.id">
+        {{ voucher.ten}} VND
+      </option>
+    </select>
+  </div>
+  <div class="summary-item">
+    <label>Phí vận chuyển:</label>
+    <p></p>
+  </div>
+
+  <div class="summary-item">
+    <label for="total">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
+    
+  </div>
+
+  <button class="btn-checkout" >Thanh toán</button>
+</div>

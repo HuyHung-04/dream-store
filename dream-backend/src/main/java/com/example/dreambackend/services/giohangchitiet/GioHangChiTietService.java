@@ -1,10 +1,7 @@
 package com.example.dreambackend.services.giohangchitiet;
 
 import com.example.dreambackend.entities.*;
-import com.example.dreambackend.repositories.AnhRepository;
-import com.example.dreambackend.repositories.GioHangChiTietRepository;
-import com.example.dreambackend.repositories.KhachHangRepository;
-import com.example.dreambackend.repositories.SanPhamChiTietRepository;
+import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.GioHangChiTietRequest;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,13 @@ public class GioHangChiTietService implements IGioHangChiTietService {
     SanPhamChiTietRepository sanPhamChiTietRepository;
 
     @Autowired
+    private HoaDonRepository hoaDonRepository;
+
+    @Autowired
     AnhRepository anhRepository;
+
+    @Autowired
+    HoaDonChiTietRepository hoaDonChiTietRepository;
 
     public List<GioHangChiTietResponse> getGioHangChiTietByKhachHangId(Integer idKhachHang) {
         return gioHangChiTietRepository.findGioHangChiTietByKhachHangId(idKhachHang);
@@ -46,6 +49,7 @@ public class GioHangChiTietService implements IGioHangChiTietService {
             gioHangChiTiet = existingItem.get();
             gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + request.getSoLuong());
             gioHangChiTiet.setNgaySua(LocalDate.now());
+
             gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong());
         } else {
             gioHangChiTiet = new GioHangChiTiet();
@@ -53,8 +57,8 @@ public class GioHangChiTietService implements IGioHangChiTietService {
             gioHangChiTiet.setSanPhamChiTiet(sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet()).orElseThrow());
             gioHangChiTiet.setSoLuong(request.getSoLuong());
             // Tính đơn giá: giá sản phẩm × số lượng
-            gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong());
             gioHangChiTiet.setTrangThai(1);
+            gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong());
             gioHangChiTiet.setNgayTao(LocalDate.now());
             gioHangChiTiet.setNgaySua(LocalDate.now());
         }
@@ -69,7 +73,7 @@ public class GioHangChiTietService implements IGioHangChiTietService {
 
         KhuyenMai khuyenMai = gioHangChiTiet.getSanPhamChiTiet().getKhuyenMai();
         Boolean hinhThucGiam = (khuyenMai != null) ? khuyenMai.getHinhThucGiam() : null;
-        BigDecimal giaTriGiam = (khuyenMai != null) ? khuyenMai.getGiaTriGiam() : null;
+        Double giaTriGiam = (khuyenMai != null) ? khuyenMai.getGiaTriGiam() : null;
 
         return new GioHangChiTietResponse(
                 gioHangChiTiet.getId(),
@@ -127,6 +131,11 @@ public class GioHangChiTietService implements IGioHangChiTietService {
                 gioHangChiTiet.getSanPhamChiTiet().getId()
         );
     }
+
+
+
+
+
 
 
 }
