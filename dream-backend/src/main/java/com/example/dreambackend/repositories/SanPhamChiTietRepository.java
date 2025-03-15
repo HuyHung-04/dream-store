@@ -1,7 +1,10 @@
 package com.example.dreambackend.repositories;
 
 import com.example.dreambackend.dtos.SanPhamChiTietDto;
+import com.example.dreambackend.entities.MauSac;
+import com.example.dreambackend.entities.SanPham;
 import com.example.dreambackend.entities.SanPhamChiTiet;
+import com.example.dreambackend.entities.Size;
 import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
 import org.springframework.data.domain.Page;
@@ -12,6 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, Integer> {
@@ -109,4 +113,6 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             + "LEFT JOIN spct.khuyenMai km "
             + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
     Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
+    // check trùng spct khi thêm cùng màu và size
+    Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
 }

@@ -17,7 +17,7 @@ public interface ISanPhamChiTietService {
 
     SanPhamChiTiet getsanPhamChiTietById(Integer id);
 
-   SanPhamChiTiet addSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest);
+    List<SanPhamChiTiet> addSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest);
 
     SanPhamChiTiet updateSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest);
 

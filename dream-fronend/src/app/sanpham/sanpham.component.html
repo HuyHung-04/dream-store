@@ -340,21 +340,42 @@
                   <div *ngIf="validationErrors['soLuong']" class="error-message">{{ validationErrors['soLuong'] }}</div>
                 </div>
                 <div class="input-field error">
-                  <select class="input" id="size" name="size" [(ngModel)]="sanPhamChiTietRequest.size.id">
-                    <option value="" disabled selected>Chọn size</option>
-                    <option *ngFor="let size of sizes" [value]="size.id">{{size.ten}}</option>
-                  </select>
-                  <label for="size">Size</label>
-                  <div *ngIf="validationErrors['size']" class="error-message">{{ validationErrors['size'] }}</div>                  
+                  <label for="sizes">Size</label>
+                  <ng-select class="input"
+                    name="sizes"
+                    [items]="sizes"
+                    bindLabel="ten"
+                    [compareWith]="compareFn"
+                    [multiple]="true"
+                    [(ngModel)]="sanPhamChiTietRequest.sizes"
+                    (change)="onSizeChange($event)">
+                  </ng-select>
+                  <div *ngIf="validationErrors['sizes']" class="error-message">
+                    {{ validationErrors['sizes'] }}
+                  </div>
+                  <div *ngIf="validationErrors['sanPhamChiTiet']" class="error-message">
+                    {{ validationErrors['sanPhamChiTiet'] }}
+                  </div>                  
                 </div>
+
                 <div class="input-field error">
-                  <select class="input" id="mauSac" name="mauSac" [(ngModel)]="sanPhamChiTietRequest.mauSac.id">
-                    <option value="" disabled selected>Chọn màu sắc</option>
-                    <option *ngFor="let mauSac of mauSacs" [value]="mauSac.id">{{mauSac.ten}}</option>
-                  </select>
-                  <label for="mauSac">Màu sắc</label>
-                  <div *ngIf="validationErrors['mauSac']" class="error-message">{{ validationErrors['mauSac'] }}</div>                  
-                </div>
+                  <label for="mauSacs">Màu sắc</label>
+                  <ng-select class="input"
+                    name="mauSacs"
+                    [items]="mauSacs"
+                    bindLabel="ten"
+                    [compareWith]="compareFn"
+                    [multiple]="true"
+                    [(ngModel)]="sanPhamChiTietRequest.mauSacs"
+                    (change)="onMauSacChange($event)">
+                  </ng-select>
+                  <div *ngIf="validationErrors['mauSacs']" class="error-message">
+                    {{ validationErrors['mauSacs'] }}
+                  </div>
+                  <div *ngIf="validationErrors['sanPhamChiTiet']" class="error-message">
+                    {{ validationErrors['sanPhamChiTiet'] }}
+                  </div>                  
+                </div> 
               </div>
               <div class="input-row">
                 <div class="input-field error">

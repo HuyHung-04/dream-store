@@ -1,7 +1,9 @@
 package com.example.dreambackend.services.sanphamchitiet;
 
+import com.example.dreambackend.entities.MauSac;
 import com.example.dreambackend.entities.SanPham;
 import com.example.dreambackend.entities.SanPhamChiTiet;
+import com.example.dreambackend.entities.Size;
 import com.example.dreambackend.repositories.MauSacRepository;
 import com.example.dreambackend.repositories.SanPhamChiTietRepository;
 import com.example.dreambackend.repositories.SanPhamRepository;
@@ -27,7 +29,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -37,6 +41,12 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
 
     @Autowired
     SanPhamRepository sanPhamRepository;
+
+    @Autowired
+    SizeRepository sizeRepository;
+
+    @Autowired
+    MauSacRepository mauSacRepository;
 
     @Override
     public Page<SanPhamChiTietRespone> getSanPhamChiTietBySanPhamId(Integer idSanPham, Pageable pageable) {
@@ -50,13 +60,44 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
     }
 
     @Override
-    public SanPhamChiTiet addSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest) {
-        SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
-        BeanUtils.copyProperties(sanPhamChiTietRequest,sanPhamChiTiet);
-        sanPhamChiTiet.setMa(taoMaSanPhamChiTiet());
-        sanPhamChiTiet.setNgayTao(LocalDate.now());
-        sanPhamChiTiet.setNgaySua(LocalDate.now());
-        return sanPhamChiTietRepository.save(sanPhamChiTiet);
+    public List<SanPhamChiTiet> addSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest) {
+        List<SanPhamChiTiet> sanPhamChiTietList = new ArrayList<>();
+        if (sanPhamChiTietRequest.getSanPham() == null) {
+            throw new RuntimeException("Sản phẩm không được để trống");
+        }
+        for (Integer sizeId : sanPhamChiTietRequest.getSizes()) {
+            Optional<Size> optionalSize = sizeRepository.findById(sizeId);
+            if (optionalSize.isEmpty()) {
+                throw new RuntimeException("Size không tồn tại với ID: " + sizeId);
+            }
+            Size size = optionalSize.get();
+            for (Integer mauSacId : sanPhamChiTietRequest.getMauSacs()) {
+                Optional<MauSac> optionalMauSac = mauSacRepository.findById(mauSacId);
+                if (optionalMauSac.isEmpty()) {
+                    throw new RuntimeException("Màu sắc không tồn tại với ID: " + mauSacId);
+                }
+                MauSac mauSac = optionalMauSac.get();
+                // Kiểm tra xem sản phẩm đã tồn tại chưa
+                Optional<SanPhamChiTiet> existingSanPhamChiTiet = sanPhamChiTietRepository
+                        .findBySanPhamAndSizeAndMauSac(sanPhamChiTietRequest.getSanPham(), size, mauSac);
+                if (existingSanPhamChiTiet.isPresent()) {
+                    throw new RuntimeException("Sản phẩm chi tiết với size và màu sắc đã tồn tại");
+                }
+                // Nếu chưa tồn tại -> Tạo mới
+                SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
+                sanPhamChiTiet.setMa(taoMaSanPhamChiTiet());
+                sanPhamChiTiet.setNgayTao(LocalDate.now());
+                sanPhamChiTiet.setNgaySua(LocalDate.now());
+                sanPhamChiTiet.setGia(sanPhamChiTietRequest.getGia());
+                sanPhamChiTiet.setSoLuong(sanPhamChiTietRequest.getSoLuong());
+                sanPhamChiTiet.setTrangThai(sanPhamChiTietRequest.getTrangThai());
+                sanPhamChiTiet.setSanPham(sanPhamChiTietRequest.getSanPham());
+                sanPhamChiTiet.setSize(size);
+                sanPhamChiTiet.setMauSac(mauSac);
+                sanPhamChiTietList.add(sanPhamChiTietRepository.save(sanPhamChiTiet));
+            }
+        }
+        return sanPhamChiTietList;
     }
 
     private String taoMaSanPhamChiTiet() {
@@ -75,13 +116,18 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
     public SanPhamChiTiet updateSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest) {
         SanPhamChiTiet sanphamChiTietUpdate = sanPhamChiTietRepository.findById(sanPhamChiTietRequest.getId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm chi tiết với id: " + sanPhamChiTietRequest.getId()));
-        // Kiểm tra trạng thái sản phẩm cha
-        SanPham sanPhamCha = sanPhamRepository.findById(sanphamChiTietUpdate.getSanPham().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm cha"));
-        if (sanPhamCha.getTrangThai() == 0) { // 0 là "không hoạt động"
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sản phẩm không hoạt động, không thể sửa trạng thái!");
+        // Copy dữ liệu nhưng loại bỏ danh sách sizes và mauSacs
+        BeanUtils.copyProperties(sanPhamChiTietRequest, sanphamChiTietUpdate, "id", "ngayTao", "sizes", "mauSacs");
+        // Gán size mới nếu có
+        if (sanPhamChiTietRequest.getSizes() != null && !sanPhamChiTietRequest.getSizes().isEmpty()) {
+            sanphamChiTietUpdate.setSize(sizeRepository.findById(sanPhamChiTietRequest.getSizes().get(0))
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy size với id: " + sanPhamChiTietRequest.getSizes().get(0))));
         }
-        BeanUtils.copyProperties(sanPhamChiTietRequest, sanphamChiTietUpdate, "id", "ngayTao");
+        // Gán màu sắc mới nếu có
+        if (sanPhamChiTietRequest.getMauSacs() != null && !sanPhamChiTietRequest.getMauSacs().isEmpty()) {
+            sanphamChiTietUpdate.setMauSac(mauSacRepository.findById(sanPhamChiTietRequest.getMauSacs().get(0))
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy màu sắc với id: " + sanPhamChiTietRequest.getMauSacs().get(0))));
+        }
         sanphamChiTietUpdate.setNgaySua(LocalDate.now());
         return sanPhamChiTietRepository.save(sanphamChiTietUpdate);
     }
