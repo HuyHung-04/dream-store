@@ -58,5 +58,10 @@ public class GioHangChiTietController {
         return ResponseEntity.ok(gioHangIds);
     }
 
+    @PostMapping("/mua-ngay")
+    public ResponseEntity<GioHangChiTietResponse> muaNgay(@RequestBody GioHangChiTietRequest request) {
+        GioHangChiTietResponse response = gioHangChiTietService.muaNgay(request);
+        return ResponseEntity.ok(response);
+    }
 
 }

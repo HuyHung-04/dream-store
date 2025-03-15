@@ -4,6 +4,7 @@ import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.GioHangChiTietRequest;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -39,24 +40,27 @@ public class GioHangChiTietService implements IGioHangChiTietService {
     }
 
     @Override
+    @Transactional
     public GioHangChiTietResponse themSanPhamVaoGio(GioHangChiTietRequest request) {
-        Optional<GioHangChiTiet> existingItem = gioHangChiTietRepository.findByKhachHangIdAndSanPhamChiTietId(
+        // ✅ Tìm giỏ hàng có `trangThai = 0 hoặc 1`
+        Optional<GioHangChiTiet> existingItem = gioHangChiTietRepository.findByKhachHangIdAndSanPhamChiTietIdAndTrangThai(
                 request.getIdKhachHang(), request.getIdSanPhamChiTiet()
         );
 
         GioHangChiTiet gioHangChiTiet;
+
         if (existingItem.isPresent()) {
+            // ✅ Nếu giỏ hàng có `trangThai = 1`, cộng dồn số lượng
             gioHangChiTiet = existingItem.get();
             gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + request.getSoLuong());
             gioHangChiTiet.setNgaySua(LocalDate.now());
-
             gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong());
         } else {
+            // ✅ Nếu không tìm thấy giỏ hàng `trangThai = 1`, tạo mới
             gioHangChiTiet = new GioHangChiTiet();
             gioHangChiTiet.setKhachHang(khachHangRepository.findById(request.getIdKhachHang()).orElseThrow());
             gioHangChiTiet.setSanPhamChiTiet(sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet()).orElseThrow());
             gioHangChiTiet.setSoLuong(request.getSoLuong());
-            // Tính đơn giá: giá sản phẩm × số lượng
             gioHangChiTiet.setTrangThai(1);
             gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong());
             gioHangChiTiet.setNgayTao(LocalDate.now());
@@ -65,24 +69,26 @@ public class GioHangChiTietService implements IGioHangChiTietService {
 
         gioHangChiTiet = gioHangChiTietRepository.save(gioHangChiTiet);
 
-        // Lấy ảnh đầu tiên từ bảng Anh
+        // 🔹 Lấy ảnh sản phẩm đầu tiên
         String anhUrl = anhRepository.findFirstBySanPhamIdAndTrangThaiOrderByNgayTaoAsc(
                         gioHangChiTiet.getSanPhamChiTiet().getSanPham().getId(), 1)
                 .map(Anh::getAnhUrl)
-                .orElse(null); // Nếu không có ảnh thì để null
+                .orElse(null);
 
+        // 🔹 Kiểm tra khuyến mãi
         KhuyenMai khuyenMai = gioHangChiTiet.getSanPhamChiTiet().getKhuyenMai();
         Boolean hinhThucGiam = (khuyenMai != null) ? khuyenMai.getHinhThucGiam() : null;
         Double giaTriGiam = (khuyenMai != null) ? khuyenMai.getGiaTriGiam() : null;
 
+        // ✅ Trả về thông tin giỏ hàng sau khi cập nhật
         return new GioHangChiTietResponse(
                 gioHangChiTiet.getId(),
-                anhUrl, // Đã sửa lỗi lấy ảnh đúng
+                anhUrl,
                 gioHangChiTiet.getSanPhamChiTiet().getSanPham().getTen(),
-                gioHangChiTiet.getSanPhamChiTiet().getMauSac().getTen(), // Lấy tên màu sắc
-                gioHangChiTiet.getSanPhamChiTiet().getSize().getTen(), // Lấy tên kích thước
+                gioHangChiTiet.getSanPhamChiTiet().getMauSac().getTen(),
+                gioHangChiTiet.getSanPhamChiTiet().getSize().getTen(),
                 gioHangChiTiet.getSoLuong(),
-                gioHangChiTiet.getDonGia(), // Đơn giá đã cập nhật
+                gioHangChiTiet.getDonGia(),
                 hinhThucGiam,
                 giaTriGiam,
                 gioHangChiTiet.getTrangThai(),
@@ -90,6 +96,58 @@ public class GioHangChiTietService implements IGioHangChiTietService {
                 gioHangChiTiet.getSanPhamChiTiet().getId()
         );
     }
+
+
+    @Override
+    @Transactional
+    public GioHangChiTietResponse muaNgay(GioHangChiTietRequest request) {
+        // ✅ Cập nhật tất cả giỏ hàng có `trangThai = 0` thành `1`
+        int updatedRows = gioHangChiTietRepository.updateAllTrangThaiFrom0To1(request.getIdKhachHang());
+        System.out.println("🔥 Đã cập nhật " + updatedRows + " sản phẩm từ trạng thái 0 → 1.");
+
+        // ✅ Xóa tất cả giỏ hàng có trạng thái 2 trước khi tạo mới
+        int deletedRows = gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai2(request.getIdKhachHang());
+        System.out.println("🔥 Đã xóa " + deletedRows + " sản phẩm có trạng thái 2.");
+
+        // ✅ Tạo giỏ hàng mới với trạng thái 2
+        GioHangChiTiet gioHangMoi = new GioHangChiTiet();
+        gioHangMoi.setKhachHang(khachHangRepository.findById(request.getIdKhachHang()).orElseThrow());
+        gioHangMoi.setSanPhamChiTiet(sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet()).orElseThrow());
+        gioHangMoi.setSoLuong(request.getSoLuong());
+        gioHangMoi.setTrangThai(2);
+        gioHangMoi.setDonGia(gioHangMoi.getSanPhamChiTiet().getGia() * gioHangMoi.getSoLuong());
+        gioHangMoi.setNgayTao(LocalDate.now());
+        gioHangMoi.setNgaySua(LocalDate.now());
+        gioHangMoi = gioHangChiTietRepository.save(gioHangMoi);
+
+        // 🔹 Lấy ảnh sản phẩm đầu tiên
+        String anhUrl = anhRepository.findFirstBySanPhamIdAndTrangThaiOrderByNgayTaoAsc(
+                        gioHangMoi.getSanPhamChiTiet().getSanPham().getId(), 1)
+                .map(Anh::getAnhUrl)
+                .orElse(null);
+
+        // 🔹 Kiểm tra khuyến mãi
+        KhuyenMai khuyenMai = gioHangMoi.getSanPhamChiTiet().getKhuyenMai();
+        Boolean hinhThucGiam = (khuyenMai != null) ? khuyenMai.getHinhThucGiam() : null;
+        Double giaTriGiam = (khuyenMai != null) ? khuyenMai.getGiaTriGiam() : null;
+
+        // ✅ Trả về thông tin giỏ hàng sau khi cập nhật
+        return new GioHangChiTietResponse(
+                gioHangMoi.getId(),
+                anhUrl,
+                gioHangMoi.getSanPhamChiTiet().getSanPham().getTen(),
+                gioHangMoi.getSanPhamChiTiet().getMauSac().getTen(),
+                gioHangMoi.getSanPhamChiTiet().getSize().getTen(),
+                gioHangMoi.getSoLuong(),
+                gioHangMoi.getDonGia(),
+                hinhThucGiam,
+                giaTriGiam,
+                gioHangMoi.getTrangThai(),
+                gioHangMoi.getKhachHang().getId(),
+                gioHangMoi.getSanPhamChiTiet().getId()
+        );
+    }
+
 
     @Override
     public void xoaSanPhamKhoiGio(Integer idGioHangChiTiet) {

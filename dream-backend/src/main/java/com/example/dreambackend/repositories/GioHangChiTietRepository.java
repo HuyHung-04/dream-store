@@ -1,8 +1,12 @@
 package com.example.dreambackend.repositories;
 
 import com.example.dreambackend.entities.GioHangChiTiet;
+import com.example.dreambackend.entities.KhachHang;
+import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -33,11 +37,11 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "JOIN g.sanPhamChiTiet spct " +
             "JOIN spct.sanPham s " +
             "LEFT JOIN spct.khuyenMai km ON km.trangThai = 1 " +
-            "WHERE k.id = :idKhachHang")
+            "WHERE k.id = :idKhachHang AND g.trangThai IN (0, 1)")
     List<GioHangChiTietResponse> findGioHangChiTietByKhachHangId(@Param("idKhachHang") Integer idKhachHang);
 
 
-    Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietId(Integer idKhachHang, Integer idSanPhamChiTiet);
+
 
     @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
             "g.id, " +
@@ -60,11 +64,35 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "JOIN g.sanPhamChiTiet spct " +
             "JOIN spct.sanPham s " +
             "LEFT JOIN spct.khuyenMai km ON km.trangThai = 1 " +
-            "WHERE k.id = :idKhachHang AND g.trangThai=0")
+            "WHERE k.id = :idKhachHang AND g.trangThai IN (0, 2)")
     List<GioHangChiTietResponse> findGioHangChiTietByStatus(@Param("idKhachHang") Integer idKhachHang);
 
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.trangThai = :trangThai")
+    void deleteByKhachHangIdAndTrangThai(@Param("khachHangId") Integer khachHangId, @Param("trangThai") int trangThai);
 
+    @Query("SELECT g FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.sanPhamChiTiet.id = :sanPhamChiTietId AND g.trangThai IN (0,1)")
+    List<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTiet(@Param("khachHangId") Integer khachHangId, @Param("sanPhamChiTietId") Integer sanPhamChiTietId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.trangThai = 2")
+    int deleteByKhachHangIdAndTrangThai2(@Param("khachHangId") Integer khachHangId);
+
+
+    @Query("SELECT g FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.sanPhamChiTiet.id = :sanPhamChiTietId AND (g.trangThai = 0 OR g.trangThai = 1)")
+    Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietIdAndTrangThai(@Param("khachHangId") Integer khachHangId,
+                                                                              @Param("sanPhamChiTietId") Integer sanPhamChiTietId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE GioHangChiTiet g SET g.trangThai = 1, g.ngaySua = CURRENT_DATE WHERE g.khachHang.id = :khachHangId AND g.trangThai = 0")
+    int updateAllTrangThaiFrom0To1(@Param("khachHangId") Integer khachHangId);
+
+    // Tìm sản phẩm trong giỏ hàng theo KhachHang và SanPhamChiTiet (Không phải SanPham)
+    Optional<GioHangChiTiet> findByKhachHangAndSanPhamChiTiet(KhachHang khachHang, SanPhamChiTiet sanPhamChiTiet);
 
 }
 

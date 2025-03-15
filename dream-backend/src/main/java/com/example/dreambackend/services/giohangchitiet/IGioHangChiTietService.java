@@ -16,5 +16,5 @@ public interface IGioHangChiTietService {
 
     GioHangChiTietResponse suaSoLuongSanPham(Integer idGioHangChiTiet, Integer soLuongMoi);
 
-
+    GioHangChiTietResponse muaNgay(GioHangChiTietRequest request);
 }

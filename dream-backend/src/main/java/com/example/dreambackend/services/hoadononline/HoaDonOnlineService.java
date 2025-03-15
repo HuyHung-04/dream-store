@@ -45,6 +45,8 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
 @Override
     public List<Integer> getGioHangIdsForThanhToan(Integer idKhachHang) {
+    gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai(idKhachHang, 2);
+
     // Lấy danh sách giỏ hàng của khách hàng
     List<GioHangChiTietResponse> gioHangChiTietList = gioHangChiTietRepository.findGioHangChiTietByKhachHangId(idKhachHang);
 

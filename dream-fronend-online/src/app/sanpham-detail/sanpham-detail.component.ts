@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SanphamDetailService } from './sanpham-detail.service';
 import { HeaderComponent } from '../header/header.component';
 import { HeaderService } from '../header/header.service'
-
+import { Router } from '@angular/router'; 
 @Component({
   selector: 'app-sanpham-detail',
   standalone: true,
@@ -43,7 +43,7 @@ import { HeaderService } from '../header/header.service'
   private route = inject(ActivatedRoute);
   private sanphamService = inject(SanphamDetailService);
   // thao tác 2 component
-  constructor(private headerService: HeaderService) {}
+  constructor(private headerService: HeaderService,private router: Router) {}
 
   ngOnInit(): void {
     this.loadSanPhamChiTiet();
@@ -234,6 +234,25 @@ import { HeaderService } from '../header/header.service'
         console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
         this.soLuongMua = 1;
+    }, error => {
+        console.error("Lỗi khi thêm vào giỏ hàng:", error);
+    });
+  }
+
+  muaNgay() {
+    const sanPhamGioHang = {
+        idKhachHang: this.idKhachHang,
+        idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, // Đúng field
+        mauSac: this.selectedMauSac,
+        size: this.selectedSize,
+        soLuong: this.soLuongMua
+    };
+    console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
+    this.headerService.muaNgay(sanPhamGioHang).subscribe(response => {
+        console.log("Thêm vào giỏ hàng thành công:", response);
+        this.headerService.notifyGioHangUpdated();
+        this.soLuongMua = 1;
+        this.router.navigate(['/hoadon']);
     }, error => {
         console.error("Lỗi khi thêm vào giỏ hàng:", error);
     });

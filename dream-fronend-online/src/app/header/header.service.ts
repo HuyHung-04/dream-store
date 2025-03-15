@@ -28,6 +28,10 @@ export class HeaderService {
     return this.http.post(`${this.apiUrl}/add`, sanPham);
   }
 
+  muaNgay(sanPham: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/mua-ngay`, sanPham);
+  }
+
   addToPayment(sanPham: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, sanPham);
   }
