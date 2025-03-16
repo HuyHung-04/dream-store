@@ -2,6 +2,7 @@ package com.example.dreambackend.services.diachikhachhang;
 
 import com.example.dreambackend.entities.DiaChiKhachHang;
 import com.example.dreambackend.entities.KhachHang;
+import com.example.dreambackend.entities.KhuyenMai;
 import com.example.dreambackend.repositories.DiaChiKhachHangRepository;
 import com.example.dreambackend.repositories.KhachHangRepository;
 import com.example.dreambackend.requests.DiaChiKhachHangRequest;
@@ -20,45 +21,53 @@ public class DiaChiKhachHangService implements IDiaChiKhachHangService{
     KhachHangRepository khachHangRepository;
 
     @Override
-    public List<DiaChiKhachHangRespone> getDiaChiKhachHang(Integer idKhachHang) {
+    public List<DiaChiKhachHang> getDiaChiKhachHang(Integer idKhachHang) {
         return diaChiKhachHangRepository.getAllDiaChiKhachHang(idKhachHang);
     }
 
-    @Override
     public DiaChiKhachHang addDiaChi(DiaChiKhachHangRequest request) {
+        // Kiểm tra xem khách hàng có tồn tại không
+        KhachHang khachHang = khachHangRepository.findById(request.getIdKhachHang())
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại!"));
+
         DiaChiKhachHang diaChi = new DiaChiKhachHang();
-        diaChi.setThon(request.getThon());
+        diaChi.setDiaChiCuThe(request.getDiaChiCuThe());
+        diaChi.setTenNguoiNhan(request.getTenNguoiNhan());
+        diaChi.setSdtNguoiNhan(request.getSdtNguoiNhan());
         diaChi.setPhuongXa(request.getPhuongXa());
         diaChi.setQuanHuyen(request.getQuanHuyen());
         diaChi.setTinhThanhPho(request.getTinhThanhPho());
         diaChi.setMoTa(request.getMoTa());
-        diaChi.setNgayTao(LocalDate.now());
+        diaChi.setNgayTao(LocalDate.now()); // Tự động lấy ngày hiện tại
+        diaChi.setNgaySua(LocalDate.now());
         diaChi.setTrangThai(request.getTrangThai());
+        diaChi.setKhachHang(khachHang);
 
         return diaChiKhachHangRepository.save(diaChi);
     }
 
     @Override
-    public DiaChiKhachHang updateDiaChi(Integer id, DiaChiKhachHangRequest request) {
-        DiaChiKhachHang diaChi = diaChiKhachHangRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy địa chỉ khách hàng"));
-
-        // Cập nhật thông tin địa chỉ
-        diaChi.setThon(request.getThon());
-        diaChi.setPhuongXa(request.getPhuongXa());
-        diaChi.setQuanHuyen(request.getQuanHuyen());
-        diaChi.setTinhThanhPho(request.getTinhThanhPho());
-        diaChi.setMoTa(request.getMoTa());
-        diaChi.setNgaySua(LocalDate.now());
-        diaChi.setTrangThai(request.getTrangThai());
-
-        KhachHang khachHang = diaChi.getKhachHang();
-        if (khachHang != null) {
-            khachHang.setTen(request.getTenKhachHang());
-            khachHang.setSoDienThoai(request.getSoDienThoai());
-            khachHangRepository.save(khachHang);
-        }
-
+    public DiaChiKhachHang updateDiaChi( DiaChiKhachHang diaChi) {
         return diaChiKhachHangRepository.save(diaChi);
+    }
+
+
+@Override
+    public Integer getIdBySdtNguoiNhan(String sdtNguoiNhan) {
+        return diaChiKhachHangRepository.findIdBySdtNguoiNhan(sdtNguoiNhan);
+    }
+
+    @Override
+    public DiaChiKhachHang getDiaChiById(Integer id) {
+        return diaChiKhachHangRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Khuyến mãi không tồn tại với id: " + id));
+    }
+
+    @Override
+    public void deleteDiaChi(Integer id) {
+        if (!diaChiKhachHangRepository.existsById(id)) {
+            throw new IllegalArgumentException("Địa chỉ không tồn tại với id: " + id);
+        }
+        diaChiKhachHangRepository.deleteById(id);
     }
 }

@@ -52,7 +52,7 @@
           <p><strong>Tổng tiền: </strong> <span>{{ getTongTien() | number }} VND</span></p>
         </div>
         <div class="payment">
-          <button class="btn-payment" (click)="openModalThanhToan()">Thanh toán</button>
+          <button class="btn-payment" (click)="onThanhToan()" [disabled]="gioHang.length === 0" >Thanh toán</button>
         </div>
       </div>
       <ng-template #emptyCart>

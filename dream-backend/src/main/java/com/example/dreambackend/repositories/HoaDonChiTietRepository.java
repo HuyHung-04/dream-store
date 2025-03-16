@@ -61,4 +61,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     Optional<HoaDonChiTiet> findByHoaDonAndSanPhamChiTiet(HoaDon hoaDon, SanPhamChiTiet sanPhamChiTiet);
 
     List<HoaDonChiTiet> findByHoaDon(HoaDon hoaDon);
+
+    Optional<HoaDonChiTiet> findBySanPhamChiTietId(Integer idSanPhamChiTiet);
+
 }

@@ -1,5 +1,10 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
+  ROUTES,
+  Router,
+  loadChildren
+} from "./chunk-WSGK3KWN.js";
+import {
   INITIAL_CONFIG,
   SERVER_CONTEXT,
   platformServer,
@@ -7,11 +12,14 @@ import {
   renderModule
 } from "./chunk-6IZM3YC7.js";
 import {
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps_ssr/chunk-T37JABMG.js
+========
   ROUTES,
   Router,
   loadChildren
 } from "./chunk-6WQNOWSL.js";
 import {
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps_ssr/chunk-6PZOMXA6.js
   APP_BASE_HREF,
   PlatformLocation
 } from "./chunk-QT4UI2K2.js";
@@ -11582,4 +11590,8 @@ export {
   AngularAppEngine,
   createRequestHandler
 };
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps_ssr/chunk-T37JABMG.js
+//# sourceMappingURL=chunk-T37JABMG.js.map
+========
 //# sourceMappingURL=chunk-6PZOMXA6.js.map
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps_ssr/chunk-6PZOMXA6.js

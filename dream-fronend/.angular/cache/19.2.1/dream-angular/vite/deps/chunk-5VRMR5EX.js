@@ -14,6 +14,8 @@ import {
   ɵɵdefineNgModule
 } from "./chunk-PE5BZMCS.js";
 
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-TWBKOVC2.js
+========
 // node_modules/@angular/cdk/fesm2022/coercion.mjs
 function coerceBooleanProperty(value) {
   return value != null && `${value}` !== "false";
@@ -40,6 +42,7 @@ function coerceElement(elementOrRef) {
   return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
 }
 
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-5VRMR5EX.js
 // node_modules/@angular/cdk/fesm2022/platform.mjs
 var hasV8BreakIterator;
 try {
@@ -239,12 +242,35 @@ function _bindEventWithOptions(renderer, target, eventName, callback, options) {
   };
 }
 
+// node_modules/@angular/cdk/fesm2022/coercion.mjs
+function coerceBooleanProperty(value) {
+  return value != null && `${value}` !== "false";
+}
+function coerceNumberProperty(value, fallbackValue = 0) {
+  if (_isNumberValue(value)) {
+    return Number(value);
+  }
+  return arguments.length === 2 ? fallbackValue : 0;
+}
+function _isNumberValue(value) {
+  return !isNaN(parseFloat(value)) && !isNaN(Number(value));
+}
+function coerceArray(value) {
+  return Array.isArray(value) ? value : [value];
+}
+function coerceElement(elementOrRef) {
+  return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+}
+
 export {
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-TWBKOVC2.js
+========
   coerceBooleanProperty,
   coerceNumberProperty,
   coerceArray,
   coerceCssPixelValue,
   coerceElement,
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-5VRMR5EX.js
   Platform,
   normalizePassiveListenerOptions,
   RtlScrollAxisType,
@@ -253,7 +279,17 @@ export {
   _getShadowRoot,
   _getFocusedElementPierceShadowDom,
   _getEventTarget,
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-TWBKOVC2.js
+  _bindEventWithOptions,
+  coerceBooleanProperty,
+  coerceNumberProperty,
+  coerceArray,
+  coerceElement
+};
+//# sourceMappingURL=chunk-TWBKOVC2.js.map
+========
   _isTestEnvironment,
   _bindEventWithOptions
 };
 //# sourceMappingURL=chunk-5VRMR5EX.js.map
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-5VRMR5EX.js

@@ -8,7 +8,11 @@ import {
   coerceElement,
   coerceNumberProperty,
   normalizePassiveListenerOptions
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-F6HA77NP.js
+} from "./chunk-TWBKOVC2.js";
+========
 } from "./chunk-5VRMR5EX.js";
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-QQ2LUBKM.js
 import {
   BidiModule
 } from "./chunk-OFIQEZYF.js";
@@ -4814,4 +4818,8 @@ export {
   MatRippleModule,
   MatRippleLoader
 };
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-F6HA77NP.js
+//# sourceMappingURL=chunk-F6HA77NP.js.map
+========
 //# sourceMappingURL=chunk-QQ2LUBKM.js.map
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-QQ2LUBKM.js

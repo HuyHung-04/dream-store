@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class SanPhamRequest {
     private Integer id;
 
+
     private String ma;
 
     @NotBlank(message = "Tên sản phẩm không được để trống")
@@ -39,4 +40,6 @@ public class SanPhamRequest {
 
     @NotNull(message = "Vui lòng chọn xuất xứ")
     private XuatXu xuatXu;
+
+
 }

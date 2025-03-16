@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class DiaChiKhachHangRespone {
     private Integer id;
 
-    private String thon;
+    private String diaChiCuThe;
 
     private String phuongXa;
 
@@ -20,6 +20,10 @@ public class DiaChiKhachHangRespone {
     private String tinhThanhPho;
 
     private String moTa;
+
+    private  String tenNguoiNhan;
+
+    private String sdtNguoiNhan;
 
     private LocalDate ngayTao;
 

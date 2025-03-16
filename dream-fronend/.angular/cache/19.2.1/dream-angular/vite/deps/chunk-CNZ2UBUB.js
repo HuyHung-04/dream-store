@@ -5,7 +5,11 @@ import {
   coerceNumberProperty,
   getRtlScrollAxisType,
   supportsScrollBehavior
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-AFP6WVTH.js
+} from "./chunk-TWBKOVC2.js";
+========
 } from "./chunk-5VRMR5EX.js";
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-CNZ2UBUB.js
 import {
   BidiModule,
   Directionality
@@ -1722,4 +1726,8 @@ export {
   CdkScrollableModule,
   ScrollingModule
 };
+<<<<<<<< HEAD:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-AFP6WVTH.js
+//# sourceMappingURL=chunk-AFP6WVTH.js.map
+========
 //# sourceMappingURL=chunk-CNZ2UBUB.js.map
+>>>>>>>> 19a3d72d8d143521c3b509808646668160c01eef:dream-fronend/.angular/cache/19.2.1/dream-angular/vite/deps/chunk-CNZ2UBUB.js

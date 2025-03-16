@@ -1,8 +1,12 @@
 package com.example.dreambackend.repositories;
 
 import com.example.dreambackend.entities.GioHangChiTiet;
+import com.example.dreambackend.entities.KhachHang;
+import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,10 +24,10 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "CASE " +
             "   WHEN km.id IS NOT NULL THEN " +
             "       CASE " +
-            "           WHEN km.hinhThucGiam = TRUE THEN CAST(g.soLuong * (spct.gia - km.giaTriGiam) AS double) " +
-            "           ELSE CAST(g.soLuong * (spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
+            "           WHEN km.hinhThucGiam = TRUE THEN CAST((spct.gia - km.giaTriGiam) AS double) " +
+            "           ELSE CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
             "       END " +
-            "   ELSE CAST(g.soLuong * spct.gia AS double) " +
+            "   ELSE CAST(spct.gia AS double) " +
             "END, " +
             "CASE WHEN km.hinhThucGiam IS NOT NULL AND km.hinhThucGiam = TRUE THEN TRUE ELSE FALSE END, " + // Ép kiểu Boolean
             "km.giaTriGiam, " +
@@ -33,11 +37,66 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "JOIN g.sanPhamChiTiet spct " +
             "JOIN spct.sanPham s " +
             "LEFT JOIN spct.khuyenMai km ON km.trangThai = 1 " +
-            "WHERE k.id = :idKhachHang")
+            "WHERE k.id = :idKhachHang AND g.trangThai IN (0, 1)")
     List<GioHangChiTietResponse> findGioHangChiTietByKhachHangId(@Param("idKhachHang") Integer idKhachHang);
 
 
-    Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietId(Integer idKhachHang, Integer idSanPhamChiTiet);
+
+
+    @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
+            "g.id, " +
+            "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham = spct.sanPham AND a.trangThai = 1 ORDER BY a.ngayTao ASC LIMIT 1), " +
+            "s.ten, spct.mauSac.ten, spct.size.ten, " +
+            "g.soLuong, " +
+            "CASE " +
+            "   WHEN km.id IS NOT NULL THEN " +
+            "       CASE " +
+            "           WHEN km.hinhThucGiam = TRUE THEN CAST( (spct.gia - km.giaTriGiam) AS double) " +
+            "           ELSE CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
+            "       END " +
+            "   ELSE CAST(spct.gia AS double) " +
+            "END, " +
+            "CASE WHEN km.hinhThucGiam IS NOT NULL AND km.hinhThucGiam = TRUE THEN TRUE ELSE FALSE END, " + // Ép kiểu Boolean
+            "km.giaTriGiam, " +
+            "g.trangThai, k.id, spct.id) " +
+            "FROM GioHangChiTiet g " +
+            "JOIN g.khachHang k " +
+            "JOIN g.sanPhamChiTiet spct " +
+            "JOIN spct.sanPham s " +
+            "LEFT JOIN spct.khuyenMai km ON km.trangThai = 1 " +
+            "WHERE k.id = :idKhachHang AND g.trangThai IN (0, 2)")
+    List<GioHangChiTietResponse> findGioHangChiTietByStatus(@Param("idKhachHang") Integer idKhachHang);
+
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.trangThai = :trangThai")
+    void deleteByKhachHangIdAndTrangThai(@Param("khachHangId") Integer khachHangId, @Param("trangThai") int trangThai);
+
+
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.trangThai = 2")
+    int deleteByKhachHangIdAndTrangThai2(@Param("khachHangId") Integer khachHangId);
+
+
+    @Query("SELECT g FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.sanPhamChiTiet.id = :sanPhamChiTietId AND (g.trangThai = 0 OR g.trangThai = 1)")
+    Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietIdAndTrangThai(@Param("khachHangId") Integer khachHangId,
+                                                                              @Param("sanPhamChiTietId") Integer sanPhamChiTietId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE GioHangChiTiet g SET g.trangThai = 1, g.ngaySua = CURRENT_DATE WHERE g.khachHang.id = :khachHangId AND g.trangThai = 0")
+    int updateAllTrangThaiFrom0To1(@Param("khachHangId") Integer khachHangId);
+
+    // Xóa tất cả các mục giỏ hàng có trạng thái là 0 hoặc 2
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GioHangChiTiet g WHERE g.trangThai IN :trangThaiList")
+    void deleteByTrangThaiIn(List<Integer> trangThaiList);
+
+
 }
 
 

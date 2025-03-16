@@ -100,19 +100,17 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     List<SanPhamChiTiet> findAllByKhuyenMaiIdIn(@Param("khuyenMaiIds") List<Integer> khuyenMaiIds);
 
     List<SanPhamChiTiet> findBySanPhamId(Integer sanPhamId);
-
     boolean existsByMa(String ma);
-
-    @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
-            + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
-            + "m.ten, s.ten, km.giaTriGiam) "
-            + "FROM SanPhamChiTiet spct "
-            + "JOIN spct.sanPham sp "
-            + "JOIN spct.mauSac m "
-            + "JOIN spct.size s "
-            + "LEFT JOIN spct.khuyenMai km "
-            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
-    Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
+//    @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
+//            + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
+//            + "m.ten, s.ten, km.giaTriGiam) "
+//            + "FROM SanPhamChiTiet spct "
+//            + "JOIN spct.sanPham sp "
+//            + "JOIN spct.mauSac m "
+//            + "JOIN spct.size s "
+//            + "LEFT JOIN spct.khuyenMai km "
+//            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
+//    Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
     // check trùng spct khi thêm cùng màu và size
     Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
 }
