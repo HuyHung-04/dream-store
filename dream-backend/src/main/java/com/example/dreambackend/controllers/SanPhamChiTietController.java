@@ -115,15 +115,15 @@ public class SanPhamChiTietController {
         return sanPhamChiTietService.exportSanPhamChiTietToExcel(sanPhamChiTiets);
     }
 
-//    @GetMapping("/ban-hang")
-//    public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getSanPhamBanHang(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "3") int size) {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<GetSanPhamToBanHangRespone> danhSachSanPham = sanPhamChiTietService.laySanPhamChoBanHang(pageable);
-//
-//        return ResponseEntity.ok(danhSachSanPham);
-//    }
+    @GetMapping("/ban-hang")
+    public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getSanPhamBanHang(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GetSanPhamToBanHangRespone> danhSachSanPham = sanPhamChiTietService.laySanPhamChoBanHang(pageable);
+
+        return ResponseEntity.ok(danhSachSanPham);
+    }
 
 }
