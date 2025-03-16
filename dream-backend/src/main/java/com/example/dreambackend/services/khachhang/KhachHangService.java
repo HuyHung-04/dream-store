@@ -1,6 +1,6 @@
 package com.example.dreambackend.services.khachhang;
 
-import com.example.dreambackend.dtos.KhachHangBanHangDto;
+//import com.example.dreambackend.dtos.KhachHangBanHangDto;
 import com.example.dreambackend.dtos.KhachHangDto;
 import com.example.dreambackend.entities.KhachHang;
 
@@ -38,16 +38,17 @@ public class KhachHangService implements IKhachHangService{
 
         return khachhangs;
     }
-    public Optional<KhachHang BanHangDto> getKhachHangBySoDienThoai(String soDienThoai) {
-        return khachHangRepository.findBySoDienThoai(soDienThoai)
-                .map(kh -> new KhachHang BanHangDto(kh.getId(), kh.getTen(), kh.getSoDienThoai()));
-    }
+//    public Optional<KhachHangBanHangDto> getKhachHangBySoDienThoai(String soDienThoai) {
+//        return khachHangRepository.findBySoDienThoai(soDienThoai)
+//                .map(kh -> new KhachHang BanHangDto(kh.getId(), kh.getTen(), kh.getSoDienThoai()));
+//    }
 
 
     @Override
     public KhachHang getKhachHangById(Integer id) {
         return khachHangRepository.findById(id).orElseThrow(()
                 -> new RuntimeException("Không tim được id cua khach hang"));
+
     }
     @Override
     public KhachHang addKhachHang(KhachHangDto khachHangDto) {
@@ -127,6 +128,7 @@ public class KhachHangService implements IKhachHangService{
 
         if(khachHangRepository.findKhachHangByEmail(email).getOtpHash().equals(hashOtpSHA256(otp))){
             khachHangRepository.findKhachHangByEmail(email).setTrangThaiOtp(1);
+            khachHangRepository.findKhachHangByEmail(email).setOtpHash(null);
         }else{
             khachHangRepository.findKhachHangByEmail(email).setTrangThaiOtp(0);
         }

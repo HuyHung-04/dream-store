@@ -34,4 +34,8 @@ public class SanPhamOnlineService implements ISanPhamOnlineService {
         return sanPhamOnlineRepository.searchSanPhamByName(name, pageable);
     }
 
+    @Override
+    public List<SanPhamChiTietOnlineDto> searchSanPhamChiTietByName(String tenSanPham) {
+        return sanPhamChiTietOnlineRepository.getSanPhamChiTietByTen(tenSanPham);
+    }
 }

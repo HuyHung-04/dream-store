@@ -1,67 +1,97 @@
 <div class="header">
-    <div class="logo">
-      <img src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs" alt="Logo">
+  <div class="logo">
+    <a href=""><img src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs" alt="Logo"></a>
+  </div>
+  <nav class="nav-icons">
+    <div class="search-modal">
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Nhập tên sản phẩm..." (keyup)="onSearchChange()" (focus)="onSearchFocus()" (blur)="onSearchBlur()">
+      <button (click)="searchSanPham(0)">
+          <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
+      </button>
+      <div class="search-results" *ngIf="searchResults.length > 0">
+        <ul>
+            <li *ngFor="let sanpham of searchResults" >
+                <img [src]="'http://localhost:8080' + sanpham.anhUrl" alt="{{ sanpham.tenSanPham }}" class="search-img">
+                <span>{{ sanpham.tenSanPham }}</span>
+            </li>
+        </ul>
     </div>
-    <nav class="nav-icons">
-      <div class="search-modal">
-        <input type="text" [(ngModel)]="searchQuery" placeholder="Nhập tên sản phẩm..." (keyup.enter)="searchSanPham(0)">
-        <button (click)="searchSanPham(0)">
-            <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
-        </button>
-    </div>
-      <a href="#" (click)="cardModal($event)" class="cart-icon">
-        <i class="bi bi-cart4"></i>
-        <span *ngIf="gioHang.length > 0" class="cart-count">{{ gioHang.length }}</span>
+  </div>
+    <a href="#" (click)="cardModal($event)" class="cart-icon">
+      <i class="bi bi-cart4"></i>
+      <span *ngIf="gioHang.length > 0" class="cart-count">{{ gioHang.length }}</span>
+    </a>
+    <div class="profile-icon-container">
+      <a  class="profile-icon">
+          <i (click)="dangnhap()" class="bi bi-person-circle"></i>
+          <span class="user-name">{{ khachhang.ten }}</span>
+          
       </a>
-      <a href="#"><i class="bi bi-person-circle"></i></a>
-    </nav>
-  </div>
-
-  <div class="cart-overlay" [class.show]="modalCard" (click)="cardModal($event)"></div>
-
-  <div class="cart-modal" [class.show]="modalCard">
-    <div class="cart-content">
-      <button class="close-btn" (click)="cardModal($event)">x</button>
-      <h2>Giỏ hàng</h2>
-      
-      <div *ngIf="gioHang.length > 0; else emptyCart">
-        <div *ngFor="let item of gioHang" class="cart-item">
-          <!-- Ảnh sản phẩm -->
-          <img [src]="'http://localhost:8080' + item.anhUrl" alt="Ảnh sản phẩm" class="product-img">
-  
-          <!-- Thông tin sản phẩm -->
-          <div>
-            <p><strong>{{ item.tenSanPham }}</strong></p>
-            <p>{{ item.mau }} / {{ item.size }}</p>
-            <p>Số lượng</p>
-            <div class="quantity-control">
-              <button class="quantity-btn" (click)="suaSoLuong(item.id, item.soLuong - 1)" [disabled]="item.soLuong <= 1">-</button>
-              <span>{{ item.soLuong }}</span>
-              <button class="quantity-btn" (click)="suaSoLuong(item.id, item.soLuong + 1)">+</button>
-              <button class="delete-btn" (click)="xoaSanPham(item.id)">
-                <i class="bi bi-trash3"></i>
-              </button>
-            </div>
-          </div>
-  
-          <!-- Giá sản phẩm -->
-          <p>{{ item.donGia | number }} VND</p>
-        </div>
+      <div *ngIf="luachon" class="profile-dropdown">
+          <a  class="profile-option" (click)="hoso()">Hồ sơ</a>
+          <a href="dang-xuat" class="profile-option" (click)="xoacookie()">Đăng xuất</a>
       </div>
-      <div class="cart-footer">
-        <div class="cart-total">
-          <p><strong>Tổng tiền: </strong> <span>{{ getTongTien() | number }} VND</span></p>
-        </div>
-        <div class="payment">
-          <button class="btn-payment" >Thanh toán</button>
-        </div>
-      </div>
-      <ng-template #emptyCart>
-        <p>Giỏ hàng trống</p>
-      </ng-template>
     </div>
+  </nav>
+</div>
+
+<div class="cart-overlay" [class.show]="modalCard" (click)="cardModal($event)"></div>
+
+<div class="cart-modal" [class.show]="modalCard">
+  <div class="cart-content">
+    <button class="close-btn" (click)="cardModal($event)">x</button>
+    <h2>Giỏ hàng</h2>
+    
+    <div *ngIf="gioHang.length > 0; else emptyCart">
+      <div *ngFor="let item of gioHang" class="cart-item">
+        <!-- Ảnh sản phẩm -->
+        <img [src]="'http://localhost:8080' + item.anhUrl" alt="Ảnh sản phẩm" class="product-img">
+
+        <!-- Thông tin sản phẩm -->
+        <div>
+          <p><strong>{{ item.tenSanPham }}</strong></p>
+          <p>{{ item.mau }} / {{ item.size }}</p>
+          <p>Số lượng</p>
+          <div class="quantity-control">
+            <button class="quantity-btn" (click)="suaSoLuong(item.id, item.soLuong - 1)" [disabled]="item.soLuong <= 1">-</button>
+            <span>{{ item.soLuong }}</span>
+            <button class="quantity-btn" (click)="suaSoLuong(item.id, item.soLuong + 1)">+</button>
+            <button class="delete-btn" (click)="xoaSanPham(item.id)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Giá sản phẩm -->
+        <p>{{ item.donGia | number }} VND</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <p><strong>Tổng tiền: </strong> <span>{{ getTongTien() | number }} VND</span></p>
+      </div>
+      <div class="payment">
+        <button class="btn-payment" >Thanh toán</button>
+      </div>
+    </div>
+    <ng-template #emptyCart>
+      <p>Giỏ hàng trống</p>
+    </ng-template>
   </div>
   
-  
-  
+</div>
+<div class="c" *ngIf="showResults">
+  <h2>Kết quả tìm kiếm:</h2>
+  <div *ngFor="let item of gioHang" class="cart-item">
+    <!-- Ảnh sản phẩm -->
+    <img [src]="'http://localhost:8080' + item.anhUrl" alt="Ảnh sản phẩm" class="product-img">
 
+    <!-- Thông tin sản phẩm -->
+    <div>
+      <p><strong>{{ item.tenSanPham }}</strong></p>
+    </div>
+
+    <!-- Giá sản phẩm -->
+    <p>{{ item.donGia | number }} VND</p>
+  </div>
+</div>

@@ -54,4 +54,9 @@ public class BanHangOnlineController {
 
         return ResponseEntity.ok(sanPhamDtos);
     }
+    @GetMapping("/tim-kiem")
+    public ResponseEntity<List<SanPhamChiTietOnlineDto>> searchSanPhamChiTiet(@RequestParam String tenSanPham) {
+        List<SanPhamChiTietOnlineDto> result = chiTietOnlineRepository.getSanPhamChiTietByTen(tenSanPham);
+        return ResponseEntity.ok(result);
+    }
 }

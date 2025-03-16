@@ -31,7 +31,9 @@ export class HeaderService {
   updateSoLuong(id: number, soLuongMoi: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/update-soluong/${id}?soLuongMoi=${soLuongMoi}`, {});
   }
-
+  searchSanPhamByName(name: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/khach-hang/tim-kiem?ten=${name}`);
+  }
   notifyGioHangUpdated() {
     this.gioHangUpdated.next(true);
   }

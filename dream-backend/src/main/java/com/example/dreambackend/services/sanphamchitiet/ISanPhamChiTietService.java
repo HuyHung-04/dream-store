@@ -1,5 +1,7 @@
 package com.example.dreambackend.services.sanphamchitiet;
 
+import com.example.dreambackend.dtos.SanPhamChiTietOnlineDto;
+import com.example.dreambackend.entities.KhachHang;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.requests.SanPhamChiTietRequest;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
@@ -21,4 +23,6 @@ public interface ISanPhamChiTietService {
     SanPhamChiTiet updateSanPhamChiTiet(SanPhamChiTietRequest sanPhamChiTietRequest);
 
     ResponseEntity<byte[]> exportSanPhamChiTietToExcel(List<SanPhamChiTietRespone> sanPhamChiTiets);
+
+
 }

@@ -1,6 +1,7 @@
 package com.example.dreambackend.repositories;
 
 import com.example.dreambackend.dtos.SanPhamDto;
+import com.example.dreambackend.entities.KhachHang;
 import com.example.dreambackend.entities.SanPham;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
 @Repository
 public interface SanPhamOnlineRepository extends JpaRepository<SanPham, Integer> {
     @Query("SELECT new com.example.dreambackend.dtos.SanPhamDto(sp.id, sp.ten, " +

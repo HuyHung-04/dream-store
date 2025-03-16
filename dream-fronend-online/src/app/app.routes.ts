@@ -4,6 +4,7 @@ import { SanphamDetailComponent } from './sanpham-detail/sanpham-detail.componen
 import { DangkyComponent } from './dangky/dangky.component';
 import { DangnhapComponent } from './dangnhap/dangnhap.component';
 import { LayotpComponent } from './layotp/layotp.component';
+import { TaikhoanComponent } from './taikhoan/taikhoan.component';
 
 // Các routes được cấu hình cho ứng dụng
 export const routes: Routes = [
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'dangnhap', component: DangnhapComponent }, // Đăng nhập
   { path: 'dangky', component: DangkyComponent }, // Đăng ký
   { path: 'layotp', component: LayotpComponent },
+  { path: 'taikhoan', component: TaikhoanComponent },
   { path: '**', redirectTo: '' } // Nếu không tìm thấy trang thì về trang chính
 ];
