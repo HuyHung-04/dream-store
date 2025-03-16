@@ -164,7 +164,7 @@
             </select>
             <label for="hinhThucGiam">Hình thức giảm</label>
             <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-              {{ errors.hinhThucGiam}
+              {{ errors.hinhThucGiam}}
             </div>
           </div>
           <div class="input-field">
@@ -314,6 +314,11 @@
   <div class="modal-overlay" *ngIf="showProductSelectionModal" (click)="closeProductSelectionModal()">
     <div class="modal-box-select" (click)="$event.stopPropagation()">
       <p class="title">Chọn Sản Phẩm</p>
+      <div class="search-container" style="margin-top: -70px;">
+        <p>Tìm Kiếm:</p>
+        <input 
+        type="text" class="input search-input"placeholder="Nhập tên sản phẩm cần tìm..." [(ngModel)]="searchText" (ngModelChange)="searchSanPham()"/>
+      </div>
       <div class="table-scrollable-select">
         <table class="product-table-select">
           <thead>

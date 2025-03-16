@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { KhuyenmaiService, SanPhamChiTietDto } from './khuyenmai.service';
 import { FormsModule } from '@angular/forms';
+import { SanphamService } from '../sanpham/sanpham.service';
 
 @Component({
   selector: 'app-khuyenmai',
@@ -41,7 +42,8 @@ export class KhuyenmaiComponent implements OnInit {
     trangThai: null,
   };
 
-  constructor(private khuyenmaiService: KhuyenmaiService) { }
+  constructor(private khuyenmaiService: KhuyenmaiService, sanphamService: SanphamService) { }
+ 
   ngOnInit(): void {
     this.loadData()
   }
@@ -364,12 +366,29 @@ export class KhuyenmaiComponent implements OnInit {
     this.visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
   }
 
-
   goToNextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
       this.loadPage(this.currentPage + 1);
     }
   }
+
+  searchSanPham(): void {
+    if (!this.selectedKhuyenMaiId) {
+      alert('Vui lòng chọn khuyến mãi trước khi tìm kiếm sản phẩm.');
+      return;
+    }
+  
+    this.khuyenmaiService.getAvailableProducts(this.selectedKhuyenMaiId, this.searchText).subscribe(
+      (products) => {
+        this.availableProducts = products.filter((product) => !product.disabled);
+      },
+      (error) => {
+        console.error('Lỗi khi tìm kiếm sản phẩm:', error);
+        alert('Đã xảy ra lỗi khi tìm kiếm.');
+      }
+    );
+  }
+  
 
   openModal() {
     this.resetForm();

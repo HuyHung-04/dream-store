@@ -142,6 +142,15 @@ export class SanphamService {
     return this.http.delete(`${this.apiUrl}/anh/delete/${idAnh}`);
   }
   
+  searchSanPhamKhuyenMai(ten: string) {
+    const params: any = {};  // Không có phân trang
+    if (ten && ten.trim() !== '') {
+      params.ten = ten;  // Chỉ gửi tên
+    }
+    return this.http.get<any>(this.apiUrl + '/san-pham/tim-kiem', { params });
+  }
+  
+  
   
 }
 export interface SanPham {

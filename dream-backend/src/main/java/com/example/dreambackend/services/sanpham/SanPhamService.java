@@ -4,6 +4,7 @@ import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.SanPhamRequest;
 import com.example.dreambackend.responses.SanPhamRespone;
+import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -29,13 +30,7 @@ public class SanPhamService implements ISanPhamService {
     @Autowired
     SanPhamRepository sanPhamRepository;
     @Autowired
-    ThuongHieuRepository thuongHieuRepository;
-    @Autowired
-    XuatXuRepository xuatXuRepository;
-    @Autowired
-    CoAoRepository coAoRepository;
-    @Autowired
-    ChatLieuRepository chatLieuRepository;
+    SanPhamChiTietRepository sanPhamChiTietRepository;
     @Override
     public Page<SanPhamRespone> getAllSanPham(Pageable pageable) {
         return sanPhamRepository.getAllSanPhamRepone(pageable);
@@ -71,13 +66,27 @@ public class SanPhamService implements ISanPhamService {
 
 
     @Override
+    @Transactional
     public SanPham updateSanPham(SanPhamRequest sanPhamRequest) {
-        SanPham sanPhamUpdate = sanPhamRepository.findById(sanPhamRequest.getId()).orElseThrow(()->
-                new RuntimeException("Không tìm thấy sản phẩm với id: " + sanPhamRequest.getId()));
-        BeanUtils.copyProperties(sanPhamRequest, sanPhamUpdate,"id","ngayTao");
+        // Tìm sản phẩm cần cập nhật
+        SanPham sanPhamUpdate = sanPhamRepository.findById(sanPhamRequest.getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với id: " + sanPhamRequest.getId()));
+        // Sao chép dữ liệu nhưng giữ nguyên id và ngày tạo
+        BeanUtils.copyProperties(sanPhamRequest, sanPhamUpdate, "id", "ngayTao");
         sanPhamUpdate.setNgaySua(LocalDate.now());
-        return sanPhamRepository.save(sanPhamUpdate);
+        // Lưu sản phẩm đã cập nhật
+        sanPhamUpdate = sanPhamRepository.save(sanPhamUpdate);
+        // Cập nhật trạng thái sản phẩm chi tiết nếu có sự thay đổi trạng thái
+        if (sanPhamRequest.getTrangThai() != null) {
+            List<SanPhamChiTiet> danhSachChiTiet = sanPhamChiTietRepository.findBySanPhamId(sanPhamUpdate.getId());
+            for (SanPhamChiTiet chiTiet : danhSachChiTiet) {
+                chiTiet.setTrangThai(sanPhamRequest.getTrangThai()); // Đồng bộ trạng thái
+                sanPhamChiTietRepository.save(chiTiet);
+            }
+        }
+        return sanPhamUpdate;
     }
+
 
     @Override
     public SanPham getSanPhamById(Integer id) {

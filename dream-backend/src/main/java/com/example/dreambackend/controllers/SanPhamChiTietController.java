@@ -1,6 +1,8 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.requests.SanPhamChiTietRequest;
+import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
 import com.example.dreambackend.services.mausac.MauSacService;
 import com.example.dreambackend.services.sanpham.SanPhamService;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +60,17 @@ public class SanPhamChiTietController {
             }
             return ResponseEntity.badRequest().body(errors);
         }
-        sanPhamChiTietService.addSanPhamChiTiet(sanPhamChiTietRequest);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Thêm thành công");
-        return ResponseEntity.ok(response);
+
+        try {
+            List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietService.addSanPhamChiTiet(sanPhamChiTietRequest);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Thêm thành công");
+            response.put("soLuongSanPhamChiTiet", sanPhamChiTietList.size());
+            response.put("sanPhamChiTietList", sanPhamChiTietList);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @PutMapping("/update")
@@ -74,7 +84,7 @@ public class SanPhamChiTietController {
         }
         sanPhamChiTietService.updateSanPhamChiTiet(sanPhamChiTietRequest);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Thêm thành công");
+        response.put("message", "Sửa thành công");
         return ResponseEntity.ok(response);
     }
 
@@ -103,6 +113,17 @@ public class SanPhamChiTietController {
                 .getSanPhamChiTietBySanPhamId(idSanPham, Pageable.unpaged()).getContent();
         // Gọi service để xuất file Excel
         return sanPhamChiTietService.exportSanPhamChiTietToExcel(sanPhamChiTiets);
+    }
+
+    @GetMapping("/ban-hang")
+    public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getSanPhamBanHang(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GetSanPhamToBanHangRespone> danhSachSanPham = sanPhamChiTietService.laySanPhamChoBanHang(pageable);
+
+        return ResponseEntity.ok(danhSachSanPham);
     }
 
 }

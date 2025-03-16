@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -38,9 +39,7 @@ public class SanPhamChiTietRequest {
 
     private SanPham sanPham;
 
-    @NotNull(message = "Vui lòng chọn size")
-    private Size size;
+    private List<Integer> sizes;
 
-    @NotNull(message = "Vui lòng chọn màu sắc")
-    private MauSac mauSac;
+    private List<Integer> mauSacs;
 }

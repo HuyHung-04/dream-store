@@ -22,9 +22,9 @@ public class HoaDonRequest {
     private Double phiVanChuyen;
     private Double tongTienTruocVoucher;
     private Double tongTienThanhToan;
-    private String ngayNhanDuKien;
-    private String ngayTao;
-    private String ngaySua;
+    private LocalDate ngayNhanDuKien;
+    private LocalDate ngayTao;
+    private LocalDate ngaySua;
     private Integer trangThai;
     private String ghiChu;
 }

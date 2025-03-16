@@ -12,7 +12,7 @@ public interface IKhuyenMaiService {
     KhuyenMai updateKhuyenMai(KhuyenMai khuyenMai);
     KhuyenMai getKhuyenMaiById(Integer id);
     List<KhuyenMai> searchKhuyenMaiByName(String ten);
-    List<SanPhamChiTietDto> findAvailableProducts(Integer khuyenMaiId);
+    List<SanPhamChiTietDto> findAvailableProducts(String tenSanPham, Integer khuyenMaiId);
     void updateKhuyenMaiProducts(Integer khuyenMaiId, List<Integer> productIds);
 
 

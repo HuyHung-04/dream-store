@@ -1,88 +1,207 @@
-<div class="hoa-don-container">
-  <!-- Bộ lọc tìm kiếm -->
-  <div class="filter-section">
-    <h3>Bộ lọc tìm kiếm</h3>
-    <label>
-      Mã Hóa Đơn:
-      <input type="text" [(ngModel)]="searchRequest.maHoaDon" placeholder="Nhập mã hóa đơn">
-    </label>
-
-    <label>
-      Tên Khách Hàng:
-      <input type="text" [(ngModel)]="searchRequest.tenKhachHang" placeholder="Nhập tên khách hàng">
-    </label>
-
-    <label>
-      Ngày Tạo Từ:
-      <input type="date" [(ngModel)]="searchRequest.ngayTaoFrom">
-    </label>
-
-    <label>
-      Ngày Tạo Đến:
-      <input type="date" [(ngModel)]="searchRequest.ngayTaoTo">
-    </label>
-
-    <label>
-      Trạng Thái:
-      <select [(ngModel)]="searchRequest.listTrangThai" multiple>
-        <option *ngFor="let option of trangThaiOptions" [value]="option.value">
-          {{ option.label }}
-        </option>
-      </select>
-    </label>
-
-    <button (click)="search()">Tìm Kiếm</button>
-    <button (click)="resetFilters()">Đặt Lại</button>
+<div class="hoa-don">
+  <p style="color: #294764; font-weight: bold; font-size: 18px;">Hoá đơn onlile</p>
+  <!-- lọc hoá đơn online -->
+  <div class="tim-kiem">
+    <p style="color: #294764; margin-top: -20px; font-weight: bold; font-size: 14px;">Tìm kiếm</p>
+    <div class="input-row">
+        <div class="input-field">
+          <label for="gia">Tên khách hàng</label>
+          <input type="text" class="input" id="" name="" placeholder="Nhập tên khách hàng...">
+        </div>
+        <div class="input-field">
+          <label for="">Số điện thoại</label>
+          <input type="text" class="input" id="" name="" placeholder="Nhập số điện thoại...">
+        </div>
+        <div class="input-field">
+          <label for="">Ngày đặt</label>
+          <input type="date" class="input" id="" name="" placeholder="Nhập ngày đặt...">
+        </div>
+        <div class="input-field">
+          <label for="trangThai">Trạng thái</label>
+          <select class="input" id="trangThai" name="trangThai">
+            <option value="" selected>Chọn trạng thái</option>
+            <option value="0">Chờ xác nhận</option>
+            <option value="1">Đã xác nhận</option>
+            <option value="2">Đang giao hàng</option>
+            <option value="3">Đã giao hàng</option>
+            <option value="4">Đã huỷ</option>
+          </select>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <!-- Danh sách hóa đơn -->
-  <h3>Danh sách hóa đơn</h3>
-  <table>
-    <thead>
-    <tr>
-      <th>Mã Hóa Đơn</th>
-      <th>Voucher</th>
-      <th>Tên Khách Hàng</th>
-      <th>Nhân Viên</th>
-      <th>Ngày Tạo</th>
-      <th>Trạng Thái</th>
-      <th>Hành Động</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let hoaDon of hoaDons?.content">
-      <td>{{ hoaDon.maHoaDon }}</td>
-      <td>{{ hoaDon.tenVoucher }}</td>
-      <td>{{ hoaDon.tenKhachHang }}</td>
-      <td>{{ hoaDon.tenNhanVien }}</td>
-      <td>{{ hoaDon.ngayTao | date:'yyyy-MM-dd' }}</td>
-      <td>{{ hoaDon.trangThai }}</td>
-      <td>
-        <button (click)="selectHoaDon(hoaDon)">Chọn</button>
-        <button (click)="cancelHoaDon(hoaDon.id)">Hủy</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-  <!-- Phân trang -->
-  <div *ngIf="hoaDons">
-    <button [disabled]="searchRequest.page <= 1" (click)="prevPage()">Trước</button>
-    <span>Trang {{ searchRequest.page }} / {{ hoaDons.totalPages || 1 }}</span>
-    <button [disabled]="searchRequest.page >= hoaDons.totalPages" (click)="nextPage()">Sau</button>
+  <!-- bảng hoa đơn online -->
+  <div class="table-don-on">
+    <table>
+      <thead>
+       <tr>
+        <th>Mã hoá đơn</th>
+        <th>Tên khách hàng</th>
+        <th>Số điện thoại</th>
+        <th>Địa chỉ</th>
+        <th>Tổng tiền</th>
+        <th>Ghi chú</th>
+        <th>Trạng thái</th>
+        <th>Xem chi tiết</th>
+       </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HD001</td>
+          <td>Nguyễn Văn A</td>
+          <td>0987654321</td>
+          <td>49/99, Cầu diễn, kiều mai, Bắc từ liêm, Hà Nội</td>
+          <td>930,000</td>
+          <td>Không</td>
+          <td>
+            <button 
+              class="btn-xac-nhan" 
+              [ngClass]="{ 'disabled-btn': trangThai === 3 }"
+              [disabled]="trangThai === 3" 
+              (click)="capNhatTrangThai()">
+              {{ trangThaiText[trangThai] }}
+            </button>
+          </td>                             
+          <td>
+            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
+          </td>
+        </tr>
+        <tr>
+          <td>HD001</td>
+          <td>Nguyễn Văn A</td>
+          <td>0987654321</td>
+          <td>49/99, Cầu diễn, kiều mai, Bắc từ liêm, Hà Nội</td>
+          <td>930,000</td>
+          <td>Không</td>
+          <td>
+            <button 
+              class="btn-xac-nhan" 
+              [ngClass]="{ 'disabled-btn': trangThai === 3 }"
+              [disabled]="trangThai === 3" 
+              (click)="capNhatTrangThai()">
+              {{ trangThaiText[trangThai] }}
+            </button>
+          </td>                             
+          <td>
+            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
+          </td>
+        </tr>
+        <tr>
+          <td>HD001</td>
+          <td>Nguyễn Văn A</td>
+          <td>0987654321</td>
+          <td>49/99, Cầu diễn, kiều mai, Bắc từ liêm, Hà Nội</td>
+          <td>930,000</td>
+          <td>Không</td>
+          <td>
+            <button 
+              class="btn-xac-nhan" 
+              [ngClass]="{ 'disabled-btn': trangThai === 3 }"
+              [disabled]="trangThai === 3" 
+              (click)="capNhatTrangThai()">
+              {{ trangThaiText[trangThai] }}
+            </button>
+          </td>                             
+          <td>
+            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
+          </td>
+        </tr>
+      </tbody>      
+    </table>
   </div>
-
-
-  <!-- Form tạo/cập nhật hóa đơn -->
-  <div class="form-section">
-    <h3>{{ selectedHoaDon ? 'Cập Nhật Hóa Đơn' : 'Tạo Mới Hóa Đơn' }}</h3>
-    <label>
-      Tên Khách Hàng:
-      <input type="text" [(ngModel)]="formRequest.tenKhachHang">
-    </label>
-
-    <button (click)="selectedHoaDon ? updateHoaDon() : createHoaDon()">
-      {{ selectedHoaDon ? 'Cập Nhật' : 'Tạo Mới' }}
-    </button>
+  <p style="color: #294764; padding-top: 10px; font-weight: bold; font-size: 18px;">Hoá đơn tại quầy</p>
+  <!-- lọc hoá đơn offline -->
+  <div class="tim-kiem">
+    <p style="color: #294764; margin-top: -20px; font-weight: bold; font-size: 14px;">Tìm kiếm</p>
+    <div class="input-row">
+      <div class="input-field">
+        <label for="gia">Tên khách hàng</label>
+        <input type="text" class="input" id="" name="" placeholder="Nhập tên khách hàng...">
+      </div>
+      <div class="input-field">
+        <label for="">Tên nhân viên</label>
+        <input type="text" class="input" id="" name="" placeholder="Nhập tên nhân viên...">
+      </div>
+      <div class="input-field">
+        <label for="trangThai">Phương thức thanh toán</label>
+        <select class="input" id="" name="trangThai">
+          <option value="" selected>Chọn phương thức</option>
+          <option value="0">Tiền mặt</option>
+          <option value="1">Chuyển khoản</option>
+        </select>
+      </div>
+      <div class="input-field">
+        <label for="trangThai">Trạng thái</label>
+        <select class="input" id="trangThai" name="trangThai">
+          <option value="" selected>Chọn trạng thái</option>
+          <option value="0">Đã thanh toán</option>
+          <option value="1">Đã huỷ</option>
+        </select>
+      </div>
+    </div>
   </div>
-</div>
+  <!-- bảng hoá đơn online -->
+  <div class="table-don-off">
+    <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Mã hoá đơn</th>
+          <th>Tên khách hàng</th>
+          <th>Tên nhân viên</th>
+          <th>Phương thức thanh toán</th>
+          <th>Tiền trước voucher</th>
+          <th>Voucher</th>
+          <th>Tổng tiền</th>
+          <th>Ghi chú</th>
+          <th>Trạng thái</th>
+          <th>Xem chi tiết</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HD001</td>
+          <td>Nguyễn Văn A</td>
+          <td>Nguyễn Văn B</td>
+          <td>Chuyển khoản</td>
+          <td>100,000</td>
+          <td>Giảm 10 %</td>
+          <td>90,000</td>
+          <td>Không</td>
+          <td>Đã thanh toán</td>
+          <td>
+            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
+          </td>
+        </tr>
+        <tr>
+          <td>HD001</td>
+          <td>Nguyễn Văn A</td>
+          <td>Nguyễn Văn B</td>
+          <td>Chuyển khoản</td>
+          <td>100,000</td>
+          <td>Giảm 10 %</td>
+          <td>90,000</td>
+          <td>Không</td>
+          <td>Đã thanh toán</td>
+          <td>
+            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
+          </td>
+        </tr>
+        <tr>
+          <td>HD001</td>
+          <td>Nguyễn Văn A</td>
+          <td>Nguyễn Văn B</td>
+          <td>Chuyển khoản</td>
+          <td>100,000</td>
+          <td>Giảm 10 %</td>
+          <td>90,000</td>
+          <td>Không</td>
+          <td>Đã thanh toán</td>
+          <td>
+            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+ </div>

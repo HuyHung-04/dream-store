@@ -1,7 +1,11 @@
 package com.example.dreambackend.repositories;
 
 import com.example.dreambackend.dtos.SanPhamChiTietDto;
+import com.example.dreambackend.entities.MauSac;
+import com.example.dreambackend.entities.SanPham;
 import com.example.dreambackend.entities.SanPhamChiTiet;
+import com.example.dreambackend.entities.Size;
+import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, Integer> {
@@ -51,8 +56,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     )
     FROM SanPhamChiTiet spct
     WHERE spct.sanPham.id = :idSanPham
-      AND (:gia IS NULL OR spct.gia = :gia)
-      AND (:soLuong IS NULL OR spct.soLuong = :soLuong)
+      AND (:gia IS NULL OR spct.gia >= :gia)
+      AND (:soLuong IS NULL OR spct.soLuong >= :soLuong)
       AND (:idMauSac IS NULL OR spct.mauSac.id = :idMauSac)
       AND (:idSize IS NULL OR spct.size.id = :idSize)
       AND (:trangThai IS NULL OR spct.trangThai = :trangThai)
@@ -86,16 +91,28 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     JOIN spct.mauSac ms
     JOIN spct.size sz
     WHERE spct.trangThai = 1
+    AND (:tenSanPham IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :tenSanPham, '%')))
     """)
-    List<SanPhamChiTietDto> findAvailableProducts(@Param("khuyenMaiId") Integer khuyenMaiId);
-    // Phương thức để tìm tất cả sản phẩm liên kết với một khuyến mãi cụ thể
+    List<SanPhamChiTietDto> findAvailableProducts(@Param("tenSanPham") String tenSanPham, @Param("khuyenMaiId") Integer khuyenMaiId);
     List<SanPhamChiTiet> findAllByKhuyenMaiId(Integer khuyenMaiId);
-
 
     @Query("SELECT spct FROM SanPhamChiTiet spct WHERE spct.khuyenMai.id IN :khuyenMaiIds")
     List<SanPhamChiTiet> findAllByKhuyenMaiIdIn(@Param("khuyenMaiIds") List<Integer> khuyenMaiIds);
 
+    List<SanPhamChiTiet> findBySanPhamId(Integer sanPhamId);
 
     boolean existsByMa(String ma);
 
+    @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
+            + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
+            + "m.ten, s.ten, km.giaTriGiam) "
+            + "FROM SanPhamChiTiet spct "
+            + "JOIN spct.sanPham sp "
+            + "JOIN spct.mauSac m "
+            + "JOIN spct.size s "
+            + "LEFT JOIN spct.khuyenMai km "
+            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
+    Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
+    // check trùng spct khi thêm cùng màu và size
+    Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
 }

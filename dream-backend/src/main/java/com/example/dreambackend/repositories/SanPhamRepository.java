@@ -53,7 +53,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
         and (:chatLieuId is null or sp.chatLieu.id = :chatLieuId)
         and (:coAoId is null or sp.coAo.id = :coAoId)
         and (:trangThai is null or sp.trangThai = :trangThai)
-        and (:ten is null or sp.ten like %:ten%) 
+        and (:ten IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :ten, '%')))
         ORDER BY sp.id DESC
     """)
     Page<SanPhamRespone> searchSanPham(

@@ -48,10 +48,12 @@ public class KhuyenMaiService implements IKhuyenMaiService{
     }
 
     @Override
-    public List<SanPhamChiTietDto> findAvailableProducts(Integer khuyenMaiId) {
+    public List<SanPhamChiTietDto> findAvailableProducts(String tenSanPham, Integer khuyenMaiId) {
         // Đảm bảo các sản phẩm của khuyến mãi hết hạn có idKhuyenMai = null trước khi chọn sản phẩm mới
         resetExpiredKhuyenMaiProducts();
-        return sanPhamChiTietRepository.findAvailableProducts(khuyenMaiId);
+
+        // Gọi phương thức với tham số tìm kiếm theo tên (nếu có)
+        return sanPhamChiTietRepository.findAvailableProducts(tenSanPham, khuyenMaiId);
     }
 
     @Override

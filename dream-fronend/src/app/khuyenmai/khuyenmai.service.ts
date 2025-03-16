@@ -38,11 +38,14 @@ export class KhuyenmaiService {
     return this.http.get<any[]>(`${this.apiUrl}/khuyenmai/search?ten=${name}`);
   }
  
-  getAvailableProducts(khuyenMaiId: number): Observable<SanPhamChiTietDto[]> {
-    return this.http.get<SanPhamChiTietDto[]>(`${this.apiUrl}/khuyenmai/${khuyenMaiId}/select-products`);
-    
-  }
-  
+  getAvailableProducts(khuyenMaiId: number, tenSanPham?: string): Observable<SanPhamChiTietDto[]> {
+    let url = `${this.apiUrl}/khuyenmai/${khuyenMaiId}/select-products`;
+    if (tenSanPham) {
+        url += `?tenSanPham=${encodeURIComponent(tenSanPham)}`;
+    }
+    return this.http.get<SanPhamChiTietDto[]>(url);
+}
+
   updateKhuyenMaiProducts(khuyenMaiId: number, productIds: number[]): Observable<string> {
     return this.http.post(`${this.apiUrl}/khuyenmai/${khuyenMaiId}/update-products`, productIds, {
       responseType: 'text', // Expect a plain text response

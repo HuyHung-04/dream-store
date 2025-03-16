@@ -40,7 +40,6 @@ public class HoaDonService implements IHoaDonService {
     public HoaDonResponse updateHoaDon(Integer id, HoaDonRequest request) {
         HoaDon hoaDon = hoaDonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
-
         hoaDon.setTenNguoiNhan(request.getTenNguoiNhan());
         hoaDon.setSdtNguoiNhan(request.getSdtNguoiNhan());
         hoaDon.setDiaChiNhanHang(request.getDiaChiNhanHang());
@@ -59,17 +58,11 @@ public class HoaDonService implements IHoaDonService {
     @Override
     public HoaDonResponse createHoaDon(HoaDonRequest request) {
         HoaDon hoaDon = convertToEntity(request);
-        return convertToDTO(hoaDonRepository.save(hoaDon));
+        String maHoaDon = generateMaHoaDon();
+        hoaDon.setMa(maHoaDon);
+        HoaDon savedHoaDon = hoaDonRepository.save(hoaDon);
+        return convertToDTO(savedHoaDon);
     }
-
-//    @Override
-//    public void deleteHoaDon(Integer id) {
-//        HoaDon hoaDon = hoaDonRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
-//        hoaDon.setTrangThai(0); // Đánh dấu đã xóa
-//        hoaDon.setNgaySua(LocalDate.now());
-//        hoaDonRepository.save(hoaDon);
-//    }
 
     @Override
     public HoaDonResponse findById(Integer id) {
@@ -137,9 +130,9 @@ public class HoaDonService implements IHoaDonService {
                 .phiVanChuyen(request.getPhiVanChuyen())
                 .tongTienTruocVoucher(request.getTongTienTruocVoucher())
                 .tongTienThanhToan(request.getTongTienThanhToan())
-                .ngayNhanDuKien(parseDate(request.getNgayNhanDuKien()))
-                .ngayTao(parseDate(request.getNgayTao()))
-                .ngaySua(parseDate(request.getNgaySua()))
+                .ngayNhanDuKien(request.getNgayNhanDuKien())
+                .ngayTao(request.getNgayTao())
+                .ngaySua(request.getNgaySua())
                 .trangThai(request.getTrangThai() != null ? request.getTrangThai() : 1)
                 .ghiChu(request.getGhiChu())
                 .build();
@@ -152,6 +145,7 @@ public class HoaDonService implements IHoaDonService {
                 .idNhanVien(hoaDon.getNhanVien().getId())
                 .idVoucher(hoaDon.getVoucher() != null ? hoaDon.getVoucher().getId() : null)
                 .idPhuongThucThanhToan(hoaDon.getPhuongThucThanhToan().getId())
+                .maHoaDon(hoaDon.getMa())
                 .tenNguoiNhan(hoaDon.getTenNguoiNhan())
                 .sdtNguoiNhan(hoaDon.getSdtNguoiNhan())
                 .diaChiNhanHang(hoaDon.getDiaChiNhanHang())
@@ -172,10 +166,11 @@ public class HoaDonService implements IHoaDonService {
     }
 
     private String generateMaHoaDon() {
-            String ma;
-            do {
-                ma = "HD" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss"));
-            } while (hoaDonRepository.findByMa(ma).isPresent());
-            return ma;
+        String ma;
+        do {
+            int randomNum = (int) (Math.random() * 9000) + 1000; // Tạo số ngẫu nhiên từ 1000 - 9999
+            ma = "HD" + randomNum;
+        } while (hoaDonRepository.findByMa(ma).isPresent()); // Kiểm tra trùng mã trong DB
+        return ma;
     }
 }
