@@ -24,10 +24,10 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "CASE " +
             "   WHEN km.id IS NOT NULL THEN " +
             "       CASE " +
-            "           WHEN km.hinhThucGiam = TRUE THEN CAST(g.soLuong * (spct.gia - km.giaTriGiam) AS double) " +
-            "           ELSE CAST(g.soLuong * (spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
+            "           WHEN km.hinhThucGiam = TRUE THEN CAST((spct.gia - km.giaTriGiam) AS double) " +
+            "           ELSE CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
             "       END " +
-            "   ELSE CAST(g.soLuong * spct.gia AS double) " +
+            "   ELSE CAST(spct.gia AS double) " +
             "END, " +
             "CASE WHEN km.hinhThucGiam IS NOT NULL AND km.hinhThucGiam = TRUE THEN TRUE ELSE FALSE END, " + // Ép kiểu Boolean
             "km.giaTriGiam, " +
@@ -51,10 +51,10 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "CASE " +
             "   WHEN km.id IS NOT NULL THEN " +
             "       CASE " +
-            "           WHEN km.hinhThucGiam = TRUE THEN CAST(g.soLuong * (spct.gia - km.giaTriGiam) AS double) " +
-            "           ELSE CAST(g.soLuong * (spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
+            "           WHEN km.hinhThucGiam = TRUE THEN CAST( (spct.gia - km.giaTriGiam) AS double) " +
+            "           ELSE CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
             "       END " +
-            "   ELSE CAST(g.soLuong * spct.gia AS double) " +
+            "   ELSE CAST(spct.gia AS double) " +
             "END, " +
             "CASE WHEN km.hinhThucGiam IS NOT NULL AND km.hinhThucGiam = TRUE THEN TRUE ELSE FALSE END, " + // Ép kiểu Boolean
             "km.giaTriGiam, " +
@@ -73,8 +73,7 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     @Query("DELETE FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.trangThai = :trangThai")
     void deleteByKhachHangIdAndTrangThai(@Param("khachHangId") Integer khachHangId, @Param("trangThai") int trangThai);
 
-    @Query("SELECT g FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.sanPhamChiTiet.id = :sanPhamChiTietId AND g.trangThai IN (0,1)")
-    List<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTiet(@Param("khachHangId") Integer khachHangId, @Param("sanPhamChiTietId") Integer sanPhamChiTietId);
+
 
     @Modifying
     @Transactional
@@ -91,8 +90,12 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     @Query("UPDATE GioHangChiTiet g SET g.trangThai = 1, g.ngaySua = CURRENT_DATE WHERE g.khachHang.id = :khachHangId AND g.trangThai = 0")
     int updateAllTrangThaiFrom0To1(@Param("khachHangId") Integer khachHangId);
 
-    // Tìm sản phẩm trong giỏ hàng theo KhachHang và SanPhamChiTiet (Không phải SanPham)
-    Optional<GioHangChiTiet> findByKhachHangAndSanPhamChiTiet(KhachHang khachHang, SanPhamChiTiet sanPhamChiTiet);
+    // Xóa tất cả các mục giỏ hàng có trạng thái là 0 hoặc 2
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GioHangChiTiet g WHERE g.trangThai IN :trangThaiList")
+    void deleteByTrangThaiIn(List<Integer> trangThaiList);
+
 
 }
 

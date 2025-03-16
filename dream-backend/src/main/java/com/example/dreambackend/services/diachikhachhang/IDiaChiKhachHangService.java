@@ -9,7 +9,7 @@ import java.util.List;
 public interface IDiaChiKhachHangService {
     List<DiaChiKhachHang> getDiaChiKhachHang(Integer idKhachHang);
 
-    DiaChiKhachHang addDiaChi(DiaChiKhachHang diaChiKhachHang);
+    DiaChiKhachHang addDiaChi(DiaChiKhachHangRequest request);
 
     DiaChiKhachHang updateDiaChi(DiaChiKhachHang diachi);
 

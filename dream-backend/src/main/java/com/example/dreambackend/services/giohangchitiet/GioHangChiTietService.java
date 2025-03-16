@@ -54,7 +54,8 @@ public class GioHangChiTietService implements IGioHangChiTietService {
             gioHangChiTiet = existingItem.get();
             gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + request.getSoLuong());
             gioHangChiTiet.setNgaySua(LocalDate.now());
-            gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong());
+            Double ThanhTien = gioHangChiTiet.getSanPhamChiTiet().getGia()*gioHangChiTiet.getSoLuong();
+            gioHangChiTiet.setDonGia(ThanhTien / gioHangChiTiet.getSoLuong());
         } else {
             // ✅ Nếu không tìm thấy giỏ hàng `trangThai = 1`, tạo mới
             gioHangChiTiet = new GioHangChiTiet();
@@ -62,7 +63,7 @@ public class GioHangChiTietService implements IGioHangChiTietService {
             gioHangChiTiet.setSanPhamChiTiet(sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet()).orElseThrow());
             gioHangChiTiet.setSoLuong(request.getSoLuong());
             gioHangChiTiet.setTrangThai(1);
-            gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong());
+            gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() / gioHangChiTiet.getSoLuong());
             gioHangChiTiet.setNgayTao(LocalDate.now());
             gioHangChiTiet.setNgaySua(LocalDate.now());
         }
@@ -164,7 +165,8 @@ public class GioHangChiTietService implements IGioHangChiTietService {
         }
 
         gioHangChiTiet.setSoLuong(soLuongMoi);
-        gioHangChiTiet.setDonGia(gioHangChiTiet.getSanPhamChiTiet().getGia() * soLuongMoi);
+        double ThanhTien = gioHangChiTiet.getSanPhamChiTiet().getGia()*soLuongMoi;
+        gioHangChiTiet.setDonGia(ThanhTien / soLuongMoi);
         gioHangChiTiet.setNgaySua(LocalDate.now());
 
         gioHangChiTiet = gioHangChiTietRepository.save(gioHangChiTiet);

@@ -518,7 +518,7 @@ li.address-item {
 }
 
 .btn-checkout {
-  width: 100%;
+  width: 97%;
   padding: 10px;
   background-color:black;
   color: white;
@@ -526,8 +526,9 @@ li.address-item {
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  position: relative;
-  top: 470px;
+  position: absolute;
+  top: 670px;
+  left: 10px;
 }
 
 .btn-checkout:hover {
@@ -536,4 +537,8 @@ li.address-item {
 
 .selectoption{
   margin-right: 370px;
+}
+
+.max-sale{
+  color: red;
 }

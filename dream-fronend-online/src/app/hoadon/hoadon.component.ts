@@ -2,12 +2,22 @@ import { Component } from '@angular/core';
 import { HoadonService } from '../hoadon/hoadon.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+interface Voucher {
+  id: number;
+  ten: string;
+  giamToiDa: number;
+}
+
+
 @Component({
   selector: 'app-hoadon',
   imports: [CommonModule, FormsModule],
   templateUrl: './hoadon.component.html',
   styleUrl: './hoadon.component.css'
 })
+
 export class HoadonComponent {
 
   // Mảng chứa danh sách địa chỉ khách hàng
@@ -27,6 +37,8 @@ export class HoadonComponent {
   // Mảng chứa chi tiết giỏ hàng
   chiTietGioHang: any[] = [];
   selectedTinh: any = null;
+  selectedSdtNguoiNhan: any = null
+  selectedTenNguoiNhan: any = null
   selectedQuan: any = null;
   selectedPhuongXa: any = null;
   selectedIndex: number | null = null;
@@ -37,12 +49,40 @@ export class HoadonComponent {
   isModalOpen = false;
   isEditModalOpen = false;
   totalPrice: number = 0;
+  selectedVoucher: Voucher | null = null;
+  errorMessage: string = '';
+  availableServices: any[] = [];
+  // Các thông tin đơn hàng
+  serviceId: number = 53321;    // ID gói dịch vụ
+  insuranceValue: number = 500000;  // Giá trị bảo hiểm
+  coupon: string | null = null; // Mã giảm giá (có thể là null)
+  fromDistrictId: number = 1542;  // Quận xuất phát
+  toDistrictId: number = 1444;    // Quận đích đến
+  toWardCode: string = "20314";   // Mã phường xã đích đến
+  height: number = 15;         // Chiều cao gói hàng (cm)
+  length: number = 15;         // Chiều dài gói hàng (cm)
+  weight: number = 1000;       // Khối lượng gói hàng (gram)
+  width: number = 15;          // Chiều rộng gói hàng (cm)
+  shippingFee: number | null = null;
+  selectedPaymentMethod: number | null = null;
+  paymentMethods: any[] = [];
+  selectedVoucherMaxDiscount: number | null = null;
   vouchers: any[] = []; // Danh sách voucher
   totalPriceAfterDiscount: number = 0;
-  selectedVoucherId: number | null = null; // ID của voucher đã chọn
-  newAddress = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
+  selectedVoucherId: number = 0; // ID của voucher đã chọn
+  fullAddress: string = '';
+  newAddress = {
+    id: '',
+    tenNguoiNhan: '',
+    sdtNguoiNhan: '',
+    diaChiCuThe: '',
+    tinhThanhPho: null,
+    quanHuyen: null,
+    phuongXa: null,
+    idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
+  };
   AddressEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
-  constructor(private hoadonService: HoadonService) { }
+  constructor(private hoadonService: HoadonService, private router: Router) { }
 
   // Phương thức gọi API khi component được khởi tạo
   ngOnInit(): void {
@@ -52,7 +92,19 @@ export class HoadonComponent {
     this.getTotalPrice();
     this.getVoucherIdAndTen();
     console.log('Voucher list:', this.vouchers);
-
+    this.getAvailableShippingServices();
+    // Chọn địa chỉ đầu tiên và tính phí vận chuyển
+    if (this.diaChiList.length > 0) {
+      this.selectedAddress = this.diaChiList[0];  // Chọn địa chỉ đầu tiên
+      this.selectedQuan = Number(this.selectedAddress.quanHuyen);  // Lưu quận
+      this.selectedPhuongXa = this.selectedAddress.phuongXa;  // Lưu phường xã
+      this.selectedSdtNguoiNhan = this.selectedAddress.sdtNguoiNhan
+      this.selectedTenNguoiNhan = this.selectedAddress.tenNguoiNhan
+      this.selectedTinh = this.selectedAddress.tinhThanhPho
+      this.fullAddress = `${this.selectedTinh}-${this.selectedQuan}-${this.selectedPhuongXa}`;
+      this.calculateFee();  // Tính phí vận chuyển cho địa chỉ đầu tiên
+    }
+    this.loadPaymentMethods();
   }
 
   // Phương thức gọi API để lấy danh sách địa chỉ của khách hàng
@@ -64,6 +116,14 @@ export class HoadonComponent {
           this.diaChiList = response || []; // Nếu không có dữ liệu, gán mảng trống
           if (this.diaChiList.length > 0) {
             this.selectedAddress = this.diaChiList[0]; // Chọn địa chỉ đầu tiên để hiển thị
+            this.selectedQuan = Number(this.selectedAddress.quanHuyen); // Lưu quận
+            this.selectedPhuongXa = this.selectedAddress.phuongXa; // Lưu phường xã
+            this.selectedSdtNguoiNhan = this.selectedAddress.sdtNguoiNhan
+            this.selectedTenNguoiNhan = this.selectedAddress.tenNguoiNhan
+            this.selectedTinh = this.selectedAddress.tinhThanhPho
+            this.fullAddress = `${this.selectedTinh}-${this.selectedQuan}-${this.selectedPhuongXa}`;
+            // Tính phí vận chuyển cho địa chỉ đầu tiên
+            this.calculateFee();
           }
         },
         (error) => {
@@ -107,36 +167,67 @@ export class HoadonComponent {
 
   // Phương thức để chọn địa chỉ từ danh sách trong modal
   selectAddress(index: number): void {
+    console.log(this.selectedAddress)
     this.selectedIndex = index;
     this.selectedAddress = this.diaChiList[index];
-    this.closeModal();
+    // Ghép selectedTinh, selectedQuan, selectedPhuongXa thành một chuỗi
+    this.fullAddress = `${this.selectedTinh}-${this.selectedQuan}-${this.selectedPhuongXa}`;
+    // Lưu tên quận/huyện và phường/xã vào biến riêng biệt
+    this.selectedTinh = this.selectedAddress.tinhThanhPho
+    this.selectedQuan = Number(this.selectedAddress.quanHuyen);
+    this.selectedPhuongXa = this.selectedAddress.phuongXa;
+    this.selectedSdtNguoiNhan = this.selectedAddress.sdtNguoiNhan
+    this.selectedTenNguoiNhan = this.selectedAddress.tenNguoiNhan
+    console.log("quan", this.selectedQuan)
+    console.log("tinh", this.selectedTinh)
+    console.log("huyen", this.selectedPhuongXa)
+    // Gọi phương thức tính phí vận chuyển khi chọn địa chỉ
+    this.calculateFee();
+    this.closeModal(); // Đóng modal sau khi chọn
   }
 
-  // Lấy danh sách tỉnh thành
-  loadTinhThanh() {
-    this.hoadonService.getTinhThanh().subscribe((data) => {
-      this.tinhThanhPhoList = data;
+  // Lấy tỉnh thành
+  loadTinhThanh(): void {
+    this.hoadonService.getTinhThanh().subscribe((response: any) => {
+
+      console.log("Danh sách tỉnh thành:", response.data);
+
+      // Nếu response là mảng, gán trực tiếp; nếu không, kiểm tra xem có response.data hay không
+      this.tinhThanhPhoList = response.data
+      console.log("tỉnh thành", this.tinhThanhPhoList);
+
+
     });
   }
 
-  // Khi chọn tỉnh, lấy danh sách quận huyện
-  onSelectTinhThanh(event: any) {
-    const maTinh = event.target.value;
-    this.khachHang.tinhThanhPho = maTinh;
-    this.hoadonService.getQuanHuyen(maTinh).subscribe((data) => {
-      this.quanHuyenList = data.districts;
-      this.khachHang.quanHuyen = null;
-      this.phuongXaList = [];
-    });
+  onSelectTinhThanh(event: any): void {
+    const ProvinceID = event.target.value;
+    console.log("Province ID chọn:", ProvinceID);
+
+    if (!ProvinceID || ProvinceID === 'undefined') {
+      console.error("Province ID invalid:", ProvinceID);
+      return;
+    }
+
+    this.hoadonService.getQuanHuyen(ProvinceID).subscribe(
+      (response: any) => {
+        console.log("Danh sách quận huyện:", response);
+        this.quanHuyenList = response.data || [];
+      },
+      (error) => {
+        console.error("Lỗi khi lấy quận huyện:", error);
+      }
+    );
   }
 
-  // Khi chọn huyện, lấy danh sách phường xã
-  onSelectQuanHuyen(event: any) {
-    const maHuyen = event.target.value;
-    this.khachHang.quanHuyen = maHuyen;
-    this.hoadonService.getPhuongXa(maHuyen).subscribe((data) => {
-      this.phuongXaList = data.wards;
-      this.khachHang.phuongXa = null;
+
+
+  // Lấy phường xã theo huyện
+  onSelectQuanHuyen(event: any): void {
+    const districtId = event.target.value;
+    this.hoadonService.getPhuongXa(districtId).subscribe((response: any) => {
+      console.log(response)
+      this.phuongXaList = response.data || [];
     });
   }
 
@@ -153,23 +244,45 @@ export class HoadonComponent {
     );
   }
 
- // Cập nhật tổng tiền thanh toán sau khi áp dụng voucher
- updateTotalPrice(): void {
-  if (this.selectedVoucherId) {
-    // Gọi API tính tổng tiền sau khi áp dụng voucher
-    this.hoadonService.calculateTotalWithVoucher(this.idKhachHang, this.selectedVoucherId).subscribe(
-      (response: number) => {
-        this.totalPriceAfterDiscount = response;
-        console.log('Số tiền cần thanh toán sau khi áp dụng voucher:', this.totalPriceAfterDiscount);
+  // Cập nhật tổng tiền thanh toán sau khi áp dụng voucher
+  updateTotalPrice(): void {
+    if (this.selectedVoucher) {
+      console.log("Voucher đã chọn:", this.selectedVoucher);
+
+      this.selectedVoucherMaxDiscount = this.selectedVoucher.giamToiDa ?? 0;
+      console.log("Giảm tối đa:", this.selectedVoucherMaxDiscount);
+      console.log(this.idKhachHang)
+      console.log(this.shippingFee)
+      // Gọi API tính tổng tiền sau khi áp dụng voucher
+      this.hoadonService.calculateTotalWithVoucher(this.idKhachHang, this.selectedVoucher.id, this.shippingFee ?? 0).subscribe(
+        (response: number) => {
+          this.totalPriceAfterDiscount = response;
+          console.log('Số tiền cần thanh toán sau khi áp dụng voucher:', this.totalPriceAfterDiscount);
+        },
+        (error) => {
+          console.error("Lỗi khi tính tổng tiền", error);
+        }
+      );
+    } else {
+      console.warn("Không có voucher nào được chọn!");
+      this.selectedVoucherMaxDiscount = 0;
+      this.totalPriceAfterDiscount = this.totalPrice;
+    }
+  }
+
+  // Phương thức gọi API lấy danh sách phương thức thanh toán
+  loadPaymentMethods(): void {
+    this.hoadonService.getPaymentMethods().subscribe(
+      (response: any) => {
+        this.paymentMethods = response; // Gán dữ liệu lấy được vào mảng paymentMethods
+        console.log("phuong thuc", this.paymentMethods)
       },
       (error) => {
-        console.error("Lỗi khi tính tổng tiền", error);
+        this.errorMessage = 'Có lỗi xảy ra khi lấy danh sách phương thức thanh toán.'; // Hiển thị lỗi nếu có
+        console.error(error);
       }
     );
-  } else {
-    this.totalPriceAfterDiscount = this.totalPrice; // Nếu không có voucher, tổng tiền không thay đổi
   }
-}
   // Gọi API để cập nhật thông tin địa chỉ
   updateDiaChi(): void {
     if (this.AddressEdit.id) {
@@ -211,7 +324,16 @@ export class HoadonComponent {
         this.diaChiList.push(response); // Thêm địa chỉ mới vào danh sách
         alert("Địa chỉ đã được thêm thành công!");
         // Reset lại dữ liệu nhập
-        this.newAddress = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
+        this.newAddress = {
+          id: '',
+          tenNguoiNhan: '',
+          sdtNguoiNhan: '',
+          diaChiCuThe: '',
+          tinhThanhPho: null,
+          quanHuyen: null,
+          phuongXa: null,
+          idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
+        };
         // Quay lại tab chọn địa chỉ
         this.activeTab = 'select';
       },
@@ -259,8 +381,8 @@ export class HoadonComponent {
 
   // Phương thức gọi API để lấy danh sách voucher
   getVoucherIdAndTen(): void {
-    
-    this.hoadonService.getVoucherIdAndTen().subscribe(
+
+    this.hoadonService.getAvailableVouchers(this.idKhachHang).subscribe(
       (response: any) => {
         this.vouchers = response;
         console.log('Danh sách voucher:', response); // Log danh sách voucher để kiểm tra
@@ -271,5 +393,79 @@ export class HoadonComponent {
         console.error("Lỗi khi lấy danh sách voucher", error);
       }
     );
+  }
+
+  getAvailableShippingServices(): void {
+    const shopId = 4697468;
+    this.hoadonService.getAvailableServices(this.fromDistrictId, this.toDistrictId, shopId)
+      .subscribe(
+        (response) => {
+          console.log('Danh sách gói dịch vụ:', response);
+          this.availableServices = response.data || [];
+        },
+        (error) => {
+          console.error('Lỗi khi lấy danh sách gói dịch vụ:', error);
+        }
+      );
+  }
+
+  // Phương thức tính phí vận chuyển
+  calculateFee(): void {
+    console.log(this.fromDistrictId)
+    console.log(this.selectedQuan)
+    console.log(this.selectedPhuongXa)
+    this.hoadonService.calculateShippingFee(
+      this.serviceId,
+      this.insuranceValue,
+      this.coupon,
+      this.fromDistrictId,
+      this.selectedQuan,
+      this.selectedPhuongXa,
+      this.height,
+      this.length,
+      this.weight,
+      this.width,
+    )
+      .subscribe(
+        (response) => {
+          console.log('Phí vận chuyển:', response);
+          this.shippingFee = response.data.total;
+          console.log(this.shippingFee)
+        },
+        (error: HttpErrorResponse) => {
+          // In ra message lỗi trả về từ API
+          console.error('Lỗi khi tính phí vận chuyển:', error.error.message);
+        }
+      );
+  }
+
+  // Phương thức gọi API để tạo hóa đơn và thêm các sản phẩm
+  createHoaDon(): void {
+    if (this.selectedVoucher) {
+      const paymentMethodId = this.selectedPaymentMethod ?? 0; // Chọn phương thức thanh toán, nếu không chọn thì mặc định là 0
+      console.log("voucher", this.selectedVoucher.id)
+      console.log("phi van chuyen",this.shippingFee)
+      this.hoadonService.createHoaDon(
+        this.idKhachHang,
+        this.selectedVoucher.id,
+        this.totalPrice,
+        paymentMethodId,
+        this.totalPriceAfterDiscount,
+        this.selectedSdtNguoiNhan,
+        this.selectedTenNguoiNhan,
+        this.fullAddress,
+        this.shippingFee ?? 0
+      ).subscribe(
+        (response) => {
+          console.log('Hóa đơn đã được tạo thành công:', response);
+          alert('Hóa đơn đã được tạo thành công!');
+          this.router.navigate(['/donhang']);
+        },
+        (error) => {
+          console.error('Lỗi khi tạo hóa đơn:', error);
+          alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
+        }
+      );
+    }
   }
 }

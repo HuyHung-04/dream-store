@@ -2,6 +2,7 @@ package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.dtos.VoucherDto;
 import com.example.dreambackend.entities.GioHangChiTiet;
+import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.Voucher;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
 import com.example.dreambackend.services.hoadononline.HoaDonOnlineService;
@@ -40,19 +41,42 @@ public class HoaDonOnlineController {
         return ResponseEntity.ok(totalPrice);
     }
 
-    @GetMapping("/vouchers")
-    public List<VoucherDto> getVoucherIdAndTen() {
-        return hoaDonOnlineService.getVoucherIdAndTen();
+    @GetMapping("/vouchers/{idKhachHang}")
+    public ResponseEntity<List<VoucherDto>> getAvailableVouchers(@PathVariable Integer idKhachHang) {
+        List<VoucherDto> vouchers = hoaDonOnlineService.getVoucherIdAndTen(idKhachHang);
+        return ResponseEntity.ok(vouchers);
     }
 
     // Phương thức để tính tổng tiền thanh toán sau khi áp dụng voucher
     @PostMapping("/tong-tien-thanh-toan")
-    public ResponseEntity<Double> calculateTotalWithVoucher(@RequestParam Integer idKhachHang,@RequestParam Integer idVoucher) {
-        // Gọi service để tính toán tổng tiền sau khi áp dụng voucher
-        Double totalPriceAfterDiscount = hoaDonOnlineService.calculateTotalPriceWithVoucher(
-             idKhachHang,idVoucher
-        );
+    public ResponseEntity<Double> getTotalPrice(
+            @RequestParam Integer idKhachHang,
+            @RequestParam Integer voucherId,
+            @RequestParam Double shippingFee) {
+        Double totalPrice = hoaDonOnlineService.calculateTotalPriceWithVoucher(idKhachHang, voucherId, shippingFee);
+        return ResponseEntity.ok(totalPrice);
+    }
 
-        return ResponseEntity.ok(totalPriceAfterDiscount);
+    // Tạo hóa đơn và thêm sản phẩm
+    @PostMapping("/create")
+    public ResponseEntity<HoaDon> createHoaDon(
+            @RequestParam Integer idKhachHang,
+            @RequestParam Integer voucherId,
+            @RequestParam Double tongTienTruocGiam,
+            @RequestParam Integer paymentMethodId,
+            @RequestParam Double TongTienSauGiam,
+            @RequestParam String sdtNguoiNhan,
+            @RequestParam String tenNguoiNhan,
+            @RequestParam String diaChi,
+            @RequestParam Double shippingFee
+    ) {
+
+        try {
+            HoaDon hoaDon = hoaDonOnlineService.createHoaDonAndAddProducts(
+                    idKhachHang, voucherId, tongTienTruocGiam, paymentMethodId, TongTienSauGiam,sdtNguoiNhan,tenNguoiNhan,diaChi,shippingFee     );
+            return new ResponseEntity<>(hoaDon, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

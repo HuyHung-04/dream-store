@@ -28,7 +28,7 @@ public class DiaChiKhachHangController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addDiaChiKhachHang( @RequestBody DiaChiKhachHang diaChiKhachHang) {
+    public ResponseEntity<?> addDiaChiKhachHang( @RequestBody DiaChiKhachHangRequest diaChiKhachHang) {
 
         DiaChiKhachHang diaChi = diaChiKhachHangService.addDiaChi(diaChiKhachHang);
         return ResponseEntity.ok(diaChi);

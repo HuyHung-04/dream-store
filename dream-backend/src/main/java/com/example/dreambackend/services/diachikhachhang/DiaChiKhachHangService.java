@@ -25,10 +25,25 @@ public class DiaChiKhachHangService implements IDiaChiKhachHangService{
         return diaChiKhachHangRepository.getAllDiaChiKhachHang(idKhachHang);
     }
 
-    @Override
-    public DiaChiKhachHang addDiaChi(DiaChiKhachHang diaChiKhachHang) {
+    public DiaChiKhachHang addDiaChi(DiaChiKhachHangRequest request) {
+        // Kiểm tra xem khách hàng có tồn tại không
+        KhachHang khachHang = khachHangRepository.findById(request.getIdKhachHang())
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại!"));
 
-        return diaChiKhachHangRepository.save(diaChiKhachHang);
+        DiaChiKhachHang diaChi = new DiaChiKhachHang();
+        diaChi.setDiaChiCuThe(request.getDiaChiCuThe());
+        diaChi.setTenNguoiNhan(request.getTenNguoiNhan());
+        diaChi.setSdtNguoiNhan(request.getSdtNguoiNhan());
+        diaChi.setPhuongXa(request.getPhuongXa());
+        diaChi.setQuanHuyen(request.getQuanHuyen());
+        diaChi.setTinhThanhPho(request.getTinhThanhPho());
+        diaChi.setMoTa(request.getMoTa());
+        diaChi.setNgayTao(LocalDate.now()); // Tự động lấy ngày hiện tại
+        diaChi.setNgaySua(LocalDate.now());
+        diaChi.setTrangThai(request.getTrangThai());
+        diaChi.setKhachHang(khachHang);
+
+        return diaChiKhachHangRepository.save(diaChi);
     }
 
     @Override

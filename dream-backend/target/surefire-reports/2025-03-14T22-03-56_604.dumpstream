@@ -1,5 +1,0 @@
-# Created at 2025-03-14T22:03:56.798
-Boot Manifest-JAR contains absolute paths in classpath 'D:\dream-store\dream-backend\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-
