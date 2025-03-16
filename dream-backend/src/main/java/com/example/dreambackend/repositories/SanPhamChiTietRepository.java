@@ -74,7 +74,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
 
 
-    @Query("""
+    @Query("""  
     SELECT new com.example.dreambackend.dtos.SanPhamChiTietDto(
         spct.id,
         spct.ma,
@@ -100,9 +100,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     List<SanPhamChiTiet> findAllByKhuyenMaiIdIn(@Param("khuyenMaiIds") List<Integer> khuyenMaiIds);
 
     List<SanPhamChiTiet> findBySanPhamId(Integer sanPhamId);
-
     boolean existsByMa(String ma);
-
     @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
             + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
             + "m.ten, s.ten, km.giaTriGiam) "

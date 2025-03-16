@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject  } from 'rxjs';
 
 @Injectable({
@@ -28,6 +28,10 @@ export class HeaderService {
     return this.http.post(`${this.apiUrl}/add`, sanPham);
   }
 
+  muaNgay(sanPham: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/mua-ngay`, sanPham);
+  }
+
   addToPayment(sanPham: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, sanPham);
   }
@@ -50,6 +54,11 @@ export class HeaderService {
 
   closeModalThanhToan() {
     this.modalThanhToanSubject.next(false);
+  }
+  
+  // 🛒 Lấy danh sách ID giỏ hàng khi nhấn thanh toán
+  getGioHangIdsForThanhToan(idKhachHang: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.apiUrl}/thanh-toan/${idKhachHang}`);
   }
   
 }

@@ -3,6 +3,7 @@ import { HeaderService } from './header.service';
 import { CommonModule } from '@angular/common';
 import { BanhangService } from '../banhang/banhang.service'; 
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; 
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -17,8 +18,8 @@ export class HeaderComponent implements OnInit {
   searchQuery: string = ''; // Từ khóa tìm kiếm
   isSearching: boolean = false; // Trạng thái tìm kiếm
   searchResults: any[] = []; // Kết quả tìm kiếm
-  
-  constructor(private headerService: HeaderService,private banhangService: BanhangService) {}
+  gioHangIds: number[] = [];
+  constructor(private headerService: HeaderService,private banhangService: BanhangService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadGioHang();
@@ -31,6 +32,7 @@ export class HeaderComponent implements OnInit {
   loadGioHang(): void {
     this.headerService.getGioHang(this.idKhachHang).subscribe((data) => {
       this.gioHang = data;
+      console.log(data)
     });
   }
   
@@ -62,12 +64,22 @@ export class HeaderComponent implements OnInit {
     this.headerService.closeModalThanhToan();
   }
 
-  openModalThanhToan() {
-    console.log("Nút Thanh toán được ấn!"); // Debug
-    this.headerService.openModalThanhToan();
+  // openModalThanhToan() {
+  //   console.log("Nút Thanh toán được ấn!"); // Debug
+  //   this.headerService.openModalThanhToan();
+  // }
+
+  onThanhToan() {
+    this.headerService.getGioHangIdsForThanhToan(this.idKhachHang).subscribe(
+      (ids) => {
+        this.gioHangIds = ids;
+        this.router.navigate(['/hoadon']);
+      },
+      (error) => {
+        console.error('Lỗi khi lấy giỏ hàng:', error);
+      }
+    );
   }
-
-
   // Gọi phương thức tìm kiếm khi người dùng nhấn nút tìm kiếm hoặc Enter
   searchSanPham(page: number = 0): void {
     if (this.searchQuery.trim()) {
@@ -78,7 +90,7 @@ export class HeaderComponent implements OnInit {
           this.isSearching = false;
   
           // Kiểm tra nếu không có sản phẩm nào được tìm thấy
-          if (data.length ==null) {
+          if (data.content.length ===0) {
             alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
           }
         },

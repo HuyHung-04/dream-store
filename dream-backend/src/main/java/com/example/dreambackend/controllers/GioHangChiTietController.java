@@ -1,11 +1,17 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.entities.GioHangChiTiet;
+import com.example.dreambackend.entities.HoaDon;
+import com.example.dreambackend.entities.HoaDonChiTiet;
 import com.example.dreambackend.requests.GioHangChiTietRequest;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
 import com.example.dreambackend.services.giohangchitiet.GioHangChiTietService;
+import com.example.dreambackend.services.hoadononline.HoaDonOnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -15,7 +21,8 @@ import java.util.List;
 public class GioHangChiTietController {
     @Autowired
     GioHangChiTietService gioHangChiTietService;
-
+    @Autowired
+    HoaDonOnlineService hoaDonOnlineService;
     @GetMapping("/hien-thi")
     public ResponseEntity<List<GioHangChiTietResponse>> getGioHangChiTiet(@RequestParam Integer idKhachHang) {
         List<GioHangChiTietResponse> responseList = gioHangChiTietService.getGioHangChiTietByKhachHangId(idKhachHang);
@@ -39,4 +46,22 @@ public class GioHangChiTietController {
         GioHangChiTietResponse response = gioHangChiTietService.suaSoLuongSanPham(id, soLuongMoi);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/thanh-toan/{idKhachHang}")
+    public ResponseEntity<List<Integer>> getGioHangIdsForThanhToan(@PathVariable Integer idKhachHang) {
+        List<Integer> gioHangIds = hoaDonOnlineService.getGioHangIdsForThanhToan(idKhachHang);
+
+        if (gioHangIds.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Trả về 204 nếu không có sản phẩm nào trong giỏ
+        }
+
+        return ResponseEntity.ok(gioHangIds);
+    }
+
+    @PostMapping("/mua-ngay")
+    public ResponseEntity<GioHangChiTietResponse> muaNgay(@RequestBody GioHangChiTietRequest request) {
+        GioHangChiTietResponse response = gioHangChiTietService.muaNgay(request);
+        return ResponseEntity.ok(response);
+    }
+
 }

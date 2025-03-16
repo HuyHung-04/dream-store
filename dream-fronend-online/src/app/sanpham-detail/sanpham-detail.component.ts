@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SanphamDetailService } from './sanpham-detail.service';
 import { HeaderComponent } from '../header/header.component';
 import { HeaderService } from '../header/header.service'
-
+import { Router } from '@angular/router'; 
 @Component({
   selector: 'app-sanpham-detail',
   standalone: true,
@@ -37,19 +37,17 @@ import { HeaderService } from '../header/header.service'
       quanHuyen: null,
       phuongXa: null
     };
-    tinhThanhPhoList: any[] = [];
-    quanHuyenList: any[] = [];
-    phuongXaList: any[] = [];
+   
     payMent: any[] = []
 
   private route = inject(ActivatedRoute);
   private sanphamService = inject(SanphamDetailService);
   // thao tác 2 component
-  constructor(private headerService: HeaderService) {}
+  constructor(private headerService: HeaderService,private router: Router) {}
 
   ngOnInit(): void {
     this.loadSanPhamChiTiet();
-    this.loadTinhThanh();
+    
     this.filteredDanhSachSize = this.danhSachSize;
     this.filteredDanhSachMauSac = this.danhSachMauSac;
     this.updateFilteredLists();
@@ -233,7 +231,7 @@ import { HeaderService } from '../header/header.service'
     };
     console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
     this.headerService.addToCart(sanPhamGioHang).subscribe(response => {
-        // console.log("Thêm vào giỏ hàng thành công:", response);
+        console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
         this.soLuongMua = 1;
     }, error => {
@@ -241,12 +239,31 @@ import { HeaderService } from '../header/header.service'
     });
   }
 
-  // code modalThanhToan khi ấn mua ngay/////////////////////////////////
-
-  openModalThanhToan() {
-    this.loadKhachHang(this.idKhachHang);
-    this.loadPayMent();
+  muaNgay() {
+    const sanPhamGioHang = {
+        idKhachHang: this.idKhachHang,
+        idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, // Đúng field
+        mauSac: this.selectedMauSac,
+        size: this.selectedSize,
+        soLuong: this.soLuongMua
+    };
+    console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
+    this.headerService.muaNgay(sanPhamGioHang).subscribe(response => {
+        console.log("Thêm vào giỏ hàng thành công:", response);
+        this.headerService.notifyGioHangUpdated();
+        this.soLuongMua = 1;
+        this.router.navigate(['/hoadon']);
+    }, error => {
+        console.error("Lỗi khi thêm vào giỏ hàng:", error);
+    });
   }
+
+  // // code modalThanhToan khi ấn mua ngay/////////////////////////////////
+
+  // openModalThanhToan() {
+  //   this.loadKhachHang(this.idKhachHang);
+  //   this.loadPayMent();
+  // }
 
   loadKhachHang(idKhachHang: number) {
     this.sanphamService.getThongTinKhachHang(idKhachHang).subscribe(
@@ -302,31 +319,5 @@ import { HeaderService } from '../header/header.service'
     this.headerService.closeModalThanhToan();
   }
 
-  // Lấy danh sách tỉnh thành
-  loadTinhThanh() {
-    this.sanphamService.getTinhThanh().subscribe((data) => {
-      this.tinhThanhPhoList = data;
-    });
-  }
-
-  // Khi chọn tỉnh, lấy danh sách quận huyện
-  onSelectTinhThanh(event: any) {
-    const maTinh = event.target.value;
-    this.khachHang.tinhThanhPho = maTinh;
-    this.sanphamService.getQuanHuyen(maTinh).subscribe((data) => {
-      this.quanHuyenList = data.districts;
-      this.khachHang.quanHuyen = null;
-      this.phuongXaList = [];
-    });
-  }
-
-  // Khi chọn huyện, lấy danh sách phường xã
-  onSelectQuanHuyen(event: any) {
-    const maHuyen = event.target.value;
-    this.khachHang.quanHuyen = maHuyen;
-    this.sanphamService.getPhuongXa(maHuyen).subscribe((data) => {
-      this.phuongXaList = data.wards;
-      this.khachHang.phuongXa = null;
-    });
-  }
+  
 }
