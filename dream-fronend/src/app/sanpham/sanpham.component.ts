@@ -17,7 +17,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
   styleUrls: ['./sanpham.component.css']
 })
 export class SanphamComponent implements OnInit {
-  newSanPham: any = {};
+  // khai báo mảng
   sanPhams: any[] = [];
   sanPhamChiTiets: any[] = [];
   thuongHieus: any[] = [];
@@ -26,15 +26,32 @@ export class SanphamComponent implements OnInit {
   xuatXus: any[] = [];
   sizes: any[] = [];
   mauSacs: any[] = [];
+  // khai báo modal
   showModal: boolean = false;
   showModalSanPhamChiTiet: boolean = false;
   showModalThuocTinh: boolean = false;
   showModalQuanLyAnh: boolean = false;
+  showModalSanPhamChiTietThem: boolean = false; 
+  // vallidate
   validationErrors: { [key: string]: string } = {};
+  // id sản phẩm
   idSanPham: number = 0;
+  // list ảnh
   anhHienCo: Anh[] = [];
   selectedFiles: File[] = [];
-
+  // thêm sản phẩm
+  sanPhamRequest: any = {
+    ma: '',
+    ten: '',
+    thuongHieu: { id: '' },
+    xuatXu: { id: '' },
+    chatLieu: { id: '' },
+    coAo: { id: '' },
+    trangThai: 1,
+    ngayTao: '',
+    ngaySua: ''
+  };
+  // thêm sản phẩm chi tiết
   sanPhamChiTietRequest: any = {
     id: '',              
     ma: '',             
@@ -47,8 +64,7 @@ export class SanphamComponent implements OnInit {
     ngayTao: '',         
     ngaySua: ''          
   }; 
-  showModalSanPhamChiTietThem: boolean = false;   // Trạng thái để kiểm tra modal hiển thị hay không
-
+  // lọc sản phẩm theo thuộc tính
   searchFilter: any = {
     thuongHieu: { id: '' },
     xuatXu: { id: '' },
@@ -56,7 +72,7 @@ export class SanphamComponent implements OnInit {
     coAo: { id: '' },
     trangThai: ''
   };
-
+  // lọc sản phẩm chi tiết
   searchFilterSanPhamChiTiet: any = {
     gia: '',            
     soLuong: '',         
@@ -68,22 +84,10 @@ export class SanphamComponent implements OnInit {
     },
     trangThai: ''
   };
-  
-  sanPhamRequest: any = {
-    ma: '',
-    ten: '',
-    thuongHieu: { id: '' },
-    xuatXu: { id: '' },
-    chatLieu: { id: '' },
-    coAo: { id: '' },
-    trangThai: 1,
-    ngayTao: '',
-    ngaySua: ''
-  };
-
+  // sửa sản phẩm
   editSanPham(sanPham: any): void {
     this.sanPhamRequest = { 
-      id: sanPham.id, // Thêm ID vào đây
+      id: sanPham.id, 
       ma: sanPham.ma,
       ten: sanPham.ten,
       thuongHieu: { id: sanPham.idThuongHieu },
@@ -92,33 +96,34 @@ export class SanphamComponent implements OnInit {
       coAo: { id: sanPham.idCoAo },
       trangThai: sanPham.trangThai,
       ngayTao: sanPham.ngayTao,
-      ngaySua: new Date().toISOString().split('T')[0], // Ngày sửa là ngày hiện tại
+      ngaySua: new Date().toISOString().split('T')[0],// ngày hiện tại
     };
     this.showModal = true; // Mở modal
-}
+  }
+  // sửa sản phẩm chi tiết
+  editSanPhamChiTiet(sanPhamChiTiet: any): void {
+    // console.log("Dữ liệu đầu vào sanPhamChiTiet:", sanPhamChiTiet);
+    this.sanPhamChiTietRequest = { 
+      id: sanPhamChiTiet.id,
+      ma: sanPhamChiTiet.ma,
+      gia: sanPhamChiTiet.gia,
+      soLuong: sanPhamChiTiet.soLuong,
+      sanPham: {
+        id: sanPhamChiTiet.idSanPham || '', 
+        ten: sanPhamChiTiet.tenSanPham || ''
+      },
+      //Hiển thị tên thay vì id
+      sizes: sanPhamChiTiet.tenSize ? [{ id: sanPhamChiTiet.idSize, ten: sanPhamChiTiet.tenSize }] : [],
+      mauSacs: sanPhamChiTiet.tenMauSac ? [{ id: sanPhamChiTiet.idMauSac, ten: sanPhamChiTiet.tenMauSac }] : [],
+      trangThai: sanPhamChiTiet.trangThai ?? 1, 
+      ngayTao: sanPhamChiTiet.ngayTao || '',
+      ngaySua: new Date().toISOString().split('T')[0], 
+    };
+    // console.log("Dữ liệu sau khi map:", this.sanPhamChiTietRequest);
+    this.showModalSanPhamChiTietThem = true; // Mở modal sửa
+  }
 
-editSanPhamChiTiet(sanPhamChiTiet: any): void {
-  // console.log("🔍 Dữ liệu đầu vào sanPhamChiTiet:", sanPhamChiTiet);
-  this.sanPhamChiTietRequest = { 
-    id: sanPhamChiTiet.id,
-    ma: sanPhamChiTiet.ma,
-    gia: sanPhamChiTiet.gia,
-    soLuong: sanPhamChiTiet.soLuong,
-    sanPham: {
-      id: sanPhamChiTiet.idSanPham || '', 
-      ten: sanPhamChiTiet.tenSanPham || ''
-    },
-    //Hiển thị tên thay vì ID
-    sizes: sanPhamChiTiet.tenSize ? [{ id: sanPhamChiTiet.idSize, ten: sanPhamChiTiet.tenSize }] : [],
-    mauSacs: sanPhamChiTiet.tenMauSac ? [{ id: sanPhamChiTiet.idMauSac, ten: sanPhamChiTiet.tenMauSac }] : [],
-    trangThai: sanPhamChiTiet.trangThai ?? 1, 
-    ngayTao: sanPhamChiTiet.ngayTao || '',
-    ngaySua: new Date().toISOString().split('T')[0], 
-  };
-  // console.log("Dữ liệu sau khi map:", this.sanPhamChiTietRequest);
-  this.showModalSanPhamChiTietThem = true; // Mở modal sửa
-}
-
+  // định chọn thương hiệu đầu
   selectedThuocTinh: string = 'thuongHieu';
   // thuộc tính
   thuongHieuRequest: any = {
@@ -187,7 +192,8 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
   this.listSize()
   this.listMauSac()
   }
-
+  
+  // phân trang và danh sách sản phẩm
   currentSanPhamPage: number = 0; // Trang hiện tại của sản phẩm
   sanPhamPageSize: number = 7; // Số sản phẩm mỗi trang
   totalSanPhamPages: number = 0; // Tổng số trang sản phẩm
@@ -207,7 +213,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         this.totalSanPhamPages = data.totalPages;
       });
   }
-
+  // lọc sản phẩm
   searchSanPham(): void {
     this.sanphamService.searchSanPham(
       this.searchFilter.thuongHieu.id,
@@ -224,13 +230,11 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       this.totalSanPhamPages = data.totalPages;
     });
   }
-
-  
   onSearchFilterChange(): void {
     this.searchSanPham();
   }
 
-  
+  // phân trang và list sản phẩm chi tiết
   currentSanPhamId: number = 0; // ID sản phẩm đang xem chi tiết
   currentPage: number = 0; // Trang hiện tại
   pageSize: number = 5; // Số sản phẩm chi tiết mỗi trang
@@ -239,16 +243,14 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
   changePage(newPage: number): void {
     if (newPage >= 0 && newPage < this.totalPages) {
       this.currentPage = newPage;
-      this.listSanPhamChiTiet(); // Gọi lại API để lấy dữ liệu mới
+      this.listSanPhamChiTiet(); 
     }
   }   
-  
   listSanPhamChiTiet(): void {
     if (!this.currentSanPhamId) {
-      console.warn("Không có sản phẩm nào được chọn để hiển thị chi tiết.");
+      // console.warn("Không có sản phẩm nào được chọn để hiển thị chi tiết.");
       return;
     }
-  
     this.sanphamService.getSanPhamChiTiet(this.currentSanPhamId, this.currentPage, this.pageSize)
       .subscribe(dataSanPhamChiTiet => {
         console.log("Dữ liệu sản phẩm chi tiết:", dataSanPhamChiTiet);
@@ -256,13 +258,12 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         this.totalPages = dataSanPhamChiTiet.totalPages;
       });
   }
-
+  // lọc sản phẩm chi tiết
   searchSanPhamChiTiet(): void {
     if (!this.selectedProduct || !this.selectedProduct.id) {
       console.warn("Chưa chọn sản phẩm để lọc sản phẩm chi tiết.");
       return;
     }
-  
     this.sanphamService.searchSanPhamChiTiet(
       this.selectedProduct.id, // Thêm idSanPham vào tham số
       this.searchFilterSanPhamChiTiet.gia,
@@ -282,10 +283,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
   onSearchSanPhamChiTiet(): void {
     this.searchSanPhamChiTiet();
   }
-  
-  
-  
-  
+  // danh sách thuộc tính
   listThuongHieu(): void {
     this.sanphamService.getThuongHieu().subscribe(data => {
       console.log("Thương Hiệu Data", data); // Log dữ liệu
@@ -329,7 +327,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       this.mauSacs = Array.isArray(data) ? data : []; 
     });
   } 
-  // Hàm mở modal sản phẩm
+  // mở modal sản phẩm
   openModalSanPham() {
     this.sanPhamRequest = {
       ma: '',
@@ -344,7 +342,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
     };
     this.showModal = true;
   }
-
+  // mở modal sản phẩm chi tiết khi thêm và sửa
   openModalSanPhamChiTietThem(sanPhamChiTiet?: any): void {
     // console.log("Dữ liệu đầu vào sanPhamChiTiet:", sanPhamChiTiet);
     if (sanPhamChiTiet) {
@@ -391,23 +389,22 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
     this.showModalSanPhamChiTietThem = true;
   }
 
-    /** Mở modal và tải ảnh theo ID sản phẩm */
+    /*Mở modal và tải ảnh theo id sản phẩm */
     openModalQuanLyAnh(idSanPham: number) {
       this.idSanPham = idSanPham;
       this.showModalQuanLyAnh = true;
       this.loadAnhCuaSanPham();
     }
 
-    /** Đóng modal */
+    /* Đóng modal quản lý ảnh */
     closeQuanLyAnh() {
       this.showModalQuanLyAnh = false;
       this.selectedFiles = [];
     }
 
-    /** Gọi API lấy ảnh theo sản phẩm */
+    /*Gọi API lấy ảnh theo sản phẩm */
     loadAnhCuaSanPham() {
       if (!this.idSanPham) return;
-    
       this.sanphamService.getAllAnh(this.idSanPham).subscribe(response => {
         if (Array.isArray(response)) {
           this.anhHienCo = response.map(anh => ({
@@ -421,9 +418,6 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       });
     }
     
-    
-
-    /** Khi người dùng chọn file */
     onFileSelected(event: any, fileInput: HTMLInputElement) {
       if (!event.target.files) return; // Kiểm tra nếu không có file nào được chọn
       let selectedFiles: File[] = Array.from(event.target.files); // Chuyển FileList thành mảng File[]
@@ -434,10 +428,10 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         fileInput.value = '';
         return;
       }
-
       this.selectedFiles = selectedFiles; // Gán danh sách file đã chọn
     }
-    /** Hiển thị preview ảnh mới */
+
+    /** Hiển thị ảnh mới */
     private filePreviewMap = new Map<File, string>();
 
     getImagePreview(file: File): string {
@@ -447,7 +441,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       return this.filePreviewMap.get(file)!;
     }
 
-    /** Upload ảnh lên server */
+    /* Upload ảnh lên server */
     uploadAnh() {
       if (this.selectedFiles.length === 0) {
         alert('Vui lòng chọn ảnh trước khi lưu.');
@@ -468,7 +462,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       });
     }
 
-
+    // xoá ảnh
     xoaAnh(idAnh: number) {
       if (confirm('Bạn có chắc muốn xóa ảnh này không?')) {
         this.sanphamService.xoaAnh(idAnh).subscribe(response => {
@@ -480,37 +474,33 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       }
     }
 
-    /** Xóa ảnh đã chọn */
+    /* Xóa ảnh đã chọn */
     xoaAnhDaChon(index: number, fileInput: any) {
       this.selectedFiles.splice(index, 1);
-    
       // Nếu không còn file nào được chọn, reset input file
       if (this.selectedFiles.length === 0 && fileInput) {
         fileInput.value = "";
       }
     }
-
+    // đóng modal thêm sửa sản phảm chi tiết
   closeModalSanPhamChiTietThem(){
     this.showModalSanPhamChiTietThem = false;
     this.validationErrors = {};
   }
 
-  // Hàm đóng modal sản phẩm
+  // đóng modal sản phẩm
   closeModalSanPham() {
     this.showModal = false;
     this.validationErrors = {}; 
   }
 
-  // Hàm mở modal sản phẩm chi tiết
+  //mở modal sản phẩm chi tiết
   openModalSanPhamChiTiet(idSanPham: number, page: number = 0, size: number = 5): void {
     this.sanPhamChiTiets = [];
     this.currentSanPhamId = idSanPham;
-    
     // Gán selectedProduct
     this.selectedProduct = this.sanPhams.find(sp => sp.id === idSanPham);
-    
-    console.log("Selected Product:", this.selectedProduct); // Kiểm tra xem sản phẩm có được gán hay không
-    
+    // console.log("Selected Product:", this.selectedProduct);
     this.sanphamService.getSanPhamChiTiet(idSanPham, page, size).subscribe(dataSanPhamChiTiet => {
       if (dataSanPhamChiTiet && Array.isArray(dataSanPhamChiTiet.content)) {
         this.sanPhamChiTiets = dataSanPhamChiTiet.content;
@@ -522,28 +512,28 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       this.showModalSanPhamChiTiet = true;
     });
   }
-  
-      // thuộc tính
+      // mở modal thuộc tính
       openModalThuocTinh(){
         this.showModalThuocTinh = true;
       }
-  
+
+      // đóng modal thuộc tính
       closeModalThuocTinh(){
         this.showModalThuocTinh = false;
         this.validationErrors = {}; 
       }
   
-  selectedProduct: any = {};
+    selectedProduct: any = {};
     
-    // Hàm đóng modal sản phẩm chi tiết
+    // đóng modal sản phẩm chi tiết
     closeModalSanPhamChiTiet() {
       this.showModalSanPhamChiTiet = false;
     }
 
-   // Sửa validateSanPham để trả về Promise
+   //validateSanPham thêm
     validateSanPham(): Promise<boolean> {
       return new Promise((resolve) => {
-        this.validationErrors = {}; // Reset lỗi trước khi kiểm tra
+        this.validationErrors = {}; 
 
         if (!this.sanPhamRequest.ten.trim()) {
           this.validationErrors["ten"] = "Tên sản phẩm không được để trống";
@@ -552,7 +542,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
           this.validationErrors["ten"] = "Tên quá dài";
           resolve(false);
         } else {
-          // Kiểm tra trùng tên bằng API
+          // Kiểm tra trùng tên
           this.sanphamService.existsTenSanPham(this.sanPhamRequest.ten).subscribe(
             (exists: boolean) => {
               if (exists) {
@@ -584,14 +574,13 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         if (this.sanPhamRequest.trangThai === '') {
           this.validationErrors["trangThai"] = "Hãy chọn trạng thái";
         }
-
         // Nếu có lỗi khác, không cần tiếp tục kiểm tra tên
         if (Object.keys(this.validationErrors).length > 0) {
           resolve(false);
         }
       });
     }
-
+    // validate sản phẩm sửa
     validateSanPhamUpdate(): Promise<boolean> {
       return new Promise((resolve) => {
         this.validationErrors = {}; // Reset lỗi trước khi kiểm tra
@@ -617,7 +606,6 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         if (this.sanPhamRequest.trangThai === '') {
           this.validationErrors["trangThai"] = "Hãy chọn trạng thái";
         }
-    
         // Nếu có lỗi khác, không cần tiếp tục kiểm tra tên
         if (Object.keys(this.validationErrors).length > 0) {
           resolve(false);
@@ -627,14 +615,13 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       });
     }    
 
-    // Sửa addSanPham để chờ validateSanPham
+    // thêm sản phẩm
     addSanPham(): void {
       this.validateSanPham().then((isValid) => {
         if (!isValid) {
           let errorMessages = Object.values(this.validationErrors).join('\n');
           return; // Dừng lại nếu có lỗi
         }
-        
         // Nếu không có lỗi, thực hiện thêm sản phẩm
         this.sanPhamRequest.ngayTao = new Date().toISOString().split('T')[0];
         this.sanPhamRequest.ngaySua = new Date().toISOString().split('T')[0]; 
@@ -653,16 +640,14 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         });
       });
     }
-
+    // update sản phẩm
     updateSanPham(): void {
       this.validateSanPhamUpdate().then((isValid) => {
         if (!isValid) {
           let errorMessages = Object.values(this.validationErrors).join('\n');
-          return; // Dừng lại nếu có lỗi
+          return; 
         }
-        
         this.sanPhamRequest.ngaySua = new Date().toISOString().split('T')[0]; // Ngày sửa hiện tại
-        
         console.log("Update SanPham Request:", this.sanPhamRequest);
         
         this.sanphamService.updateSanPham(this.sanPhamRequest).subscribe({
@@ -679,11 +664,10 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       });
     }
     
-
+    // validate sản phẩm  chi tiết
     validateSanPhamChiTiet(): Promise<boolean> {
       return new Promise((resolve) => {
         this.validationErrors = {}; // Reset lỗi trước khi kiểm tra
-    
         let hasErrors = false; // Biến kiểm tra có lỗi không
     
         if (!this.sanPhamChiTietRequest.gia || this.sanPhamChiTietRequest.gia.toString().trim() === "") {
@@ -716,9 +700,12 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
           this.validationErrors["trangThai"] = "Hãy chọn trạng thái";
           hasErrors = true;
         }
-        if (this.isSanPhamChiTietTrung()) {
-          this.validationErrors["sanPhamChiTiet"] = "Sản phẩm chi tiết với màu sắc và size này đã tồn tại.";
-          hasErrors = true;
+          // **Chỉ kiểm tra trùng nếu đang thêm mới hoặc nếu có thay đổi size/màu**
+        if (!this.sanPhamChiTietRequest.id || this.isSanPhamChiTietThayDoi()) {
+          if (this.isSanPhamChiTietTrung()) {
+            this.validationErrors["sanPhamChiTiet"] = "Sản phẩm chi tiết với màu sắc và size này đã tồn tại.";
+            hasErrors = true;
+          }
         }
         if (this.sanPhamChiTietRequest.id) { // Kiểm tra nếu đang sửa (có ID)
           if (this.sanPhamChiTietRequest.sizes.length > 1) {
@@ -730,29 +717,42 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
             hasErrors = true;
           }
         }
-    
         resolve(!hasErrors); // Trả về true nếu không có lỗi
       });
     }   
     
+    // check trùng màu size
     isSanPhamChiTietTrung(): boolean {
       if (!this.sanPhamChiTiets || this.sanPhamChiTiets.length === 0) {
         return false;
       }
-    
       return this.sanPhamChiTiets.some((sp) => {
         const isMauTrung = this.sanPhamChiTietRequest.mauSacs?.some((m: { id: number }) => m.id === sp.idMauSac);
-        const isSizeTrung = this.sanPhamChiTietRequest.sizes?.some((s: { id: number }) => s.id === sp.idSize);
-    
-        // console.log(`🔍 Kiểm tra sản phẩm: ${sp.ma} | Trùng màu: ${isMauTrung}, Trùng size: ${isSizeTrung}`);
-    
+        const isSizeTrung = this.sanPhamChiTietRequest.sizes?.some((s: { id: number }) => s.id === sp.idSize);  
         return isMauTrung && isSizeTrung;
       });
     }
-    
+
+    // check nếu sửa màu và size mới bắt lỗi
+    isSanPhamChiTietThayDoi(): boolean {
+      if (!this.sanPhamChiTietRequest.id) return true; // Nếu đang thêm mới thì luôn kiểm tra trùng
+      const sanPhamGoc = this.sanPhamChiTiets.find(sp => sp.id === this.sanPhamChiTietRequest.id);
+      if (!sanPhamGoc) return true;
+      const danhSachSizeGoc: number[] = sanPhamGoc.idSize ? [sanPhamGoc.idSize] : [];
+      const danhSachMauGoc: number[] = sanPhamGoc.idMauSac ? [sanPhamGoc.idMauSac] : [];
+      const danhSachSizeMoi: number[] = this.sanPhamChiTietRequest.sizes.map((s: { id: number }) => s.id);
+      const danhSachMauMoi: number[] = this.sanPhamChiTietRequest.mauSacs.map((m: { id: number }) => m.id);
+      // Kiểm tra xem có sự khác biệt giữa danh sách cũ và mới hay không
+      const sizeThayDoi = danhSachSizeMoi.length !== danhSachSizeGoc.length || 
+                          danhSachSizeMoi.some(size => !danhSachSizeGoc.includes(size));
+      const mauThayDoi = danhSachMauMoi.length !== danhSachMauGoc.length || 
+                         danhSachMauMoi.some(mau => !danhSachMauGoc.includes(mau));
+      return sizeThayDoi || mauThayDoi;
+    }      
+
+    // thêm sản phẩm chi tiết
     addSanPhamChiTiet(): void {
       // console.log("Hàm addSanPhamChiTiet() được gọi");
-    
       this.validateSanPhamChiTiet().then((isValid) => {
         // console.log("Kết quả validate:", isValid);
         if (!isValid) {
@@ -783,7 +783,6 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       return o1 && o2 ? o1.id === o2.id : o1 === o2;
     }    
           
-    
     onSizeChange(event: any) {
       this.sanPhamChiTietRequest.sizes = event; // Lưu danh sách các size được chọn
       // console.log("Cập nhật sizes:", this.sanPhamChiTietRequest.sizes);
@@ -897,7 +896,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       alert("Xuất file thất bại");
     });
   }
-    
+  // sửa sản phẩm chi tiết
   updateSanPhamChiTiet(): void {
     this.validateSanPhamChiTiet().then((isValid) => {
       if (!isValid) {
@@ -919,17 +918,13 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         sizes: this.sanPhamChiTietRequest.sizes.map((size: Size) => size.id),
         mauSacs: this.sanPhamChiTietRequest.mauSacs.map((mau: Mau) => mau.id),
       };
-      console.log("Dữ liệu size sau khi chọn:", this.sanPhamChiTietRequest.sizes);
-      console.log("Dữ liệu màu sau khi chọn:", this.sanPhamChiTietRequest.mauSacs);
-
-  
-      console.log("Cập nhật sản phẩm chi tiết request:", requestData);
-  
+      // console.log("Dữ liệu size sau khi chọn:", this.sanPhamChiTietRequest.sizes);
+      // console.log("Dữ liệu màu sau khi chọn:", this.sanPhamChiTietRequest.mauSacs);
+      // console.log("Cập nhật sản phẩm chi tiết request:", requestData);
       this.sanphamService.updateSanPhamChiTiet(requestData).subscribe({
         next: (response) => {
           console.log("Cập nhật sản phẩm chi tiết thành công:", response);
           alert("Cập nhật sản phẩm chi tiết thành công");
-  
           // Cập nhật dữ liệu trên table mà không cần load lại trang
           this.listSanPhamChiTiet();
           this.openModalSanPhamChiTiet(this.selectedProduct.id);
@@ -941,7 +936,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
       });
     });
   }
-
+  // chon tuộc tính
     getSelectedRequest() {
       switch (this.selectedThuocTinh) {
         case 'thuongHieu': return this.thuongHieuRequest;
@@ -953,24 +948,19 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         default: return {};
       }
     } 
-    
-    
+    // validate thuộc tính
     validateThuocTinh(): Promise<boolean> {
       return new Promise((resolve) => {
         this.validationErrors = {}; // Reset lỗi trước khi kiểm tra
-    
         const request = this.getSelectedRequest();
-    
         // Kiểm tra tên không được để trống
         if (!request.ten || request.ten.trim() === '') {
           this.validationErrors["ten"] = 'Tên thuộc tính không được để trống';
         }
-    
         // Kiểm tra trạng thái phải được chọn
         if (request.trangThai === undefined || request.trangThai === null || request.trangThai === '') {
           this.validationErrors["trangThai"] = 'Hãy chọn trạng thái';
         }
-    
         // Kiểm tra riêng cho từng thuộc tính
         if (this.selectedThuocTinh === 'size') {
           const validSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
@@ -978,7 +968,6 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
             this.validationErrors["ten"] = 'Size chỉ được nhập XS, S, M, L, XL, XXL, XXXL';
           }
         }
-    
         // Kiểm tra tên có bị trùng không (gọi API để kiểm tra)
         this.sanphamService.checkTenExists(request.ten, this.selectedThuocTinh).subscribe((exists: boolean) => {
           if (exists) {
@@ -989,20 +978,17 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         });
       });
     }
-    
+    // thêm thuộc tính
     addThuocTinh() {
       this.validateThuocTinh().then((isValid) => {
         if (!isValid) {
           let errorMessages = Object.values(this.validationErrors).join('\n');
           return; // Dừng lại nếu có lỗi
         }
-    
         const ngayTao = new Date().toISOString().split('T')[0];
         const ngaySua = ngayTao;
-    
         let request;
         let apiCall;
-    
         switch (this.selectedThuocTinh) {
           case 'thuongHieu':
             this.thuongHieuRequest.ngayTao = ngayTao;
@@ -1060,7 +1046,7 @@ editSanPhamChiTiet(sanPhamChiTiet: any): void {
         });
       });
     } 
-
+    // load lại input khi thêm xong thuộc tính
     resetForm() {
       switch (this.selectedThuocTinh) {
         case 'thuongHieu':

@@ -151,6 +151,19 @@
   border-bottom: 1px solid #294764;
 }
 
+/* Định dạng riêng cho ng-select (Size và Màu sắc) */
+.input-field ng-select {
+  position: relative;
+}
+
+.input-field ng-select + label {
+  position: absolute;
+  top: -10px; /* Đẩy label lên trên */
+  left: 0;
+  font-size: 12px;
+  color: #294764;
+}
+
 /* Button styling */
 .btn-primary {
   background-color: #294764;
@@ -202,12 +215,12 @@ form:last-child {
 /* Label căn trái */
 .input-field label {
   position: absolute;
-  top: 50%; /* Đặt label ngang với input */
   left: 0; /* Đặt label ở bên trái */
   transform: translateY(-50%); /* Căn giữa theo chiều dọc */
   color: #294764;
   pointer-events: none; /* Đảm bảo label không ảnh hưởng đến tương tác */
   transition: all 0.3s ease; 
+  top: -10px;
   /* Hiệu ứng chuyển đổi */
 }
 
@@ -412,6 +425,14 @@ form:last-child {
   top: 55px;
   left: 0; /* Đặt thông báo lỗi ở bên trái */
   display: none; /* Ẩn thông báo lỗi khi không có lỗi */
+}
+
+.input-field.error .error-message:nth-child(1) {
+  top: 55px; /* Lỗi đầu tiên */
+}
+
+.input-field.error .error-message:nth-child(2) {
+  top: 75px; /* Lỗi thứ hai, tạo khoảng cách để không đè nhau */
 }
 
 /* Hiển thị thông báo lỗi khi có lỗi */
