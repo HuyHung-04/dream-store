@@ -2,7 +2,7 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   DOCUMENT,
   isPlatformBrowser
-} from "./chunk-LWORY74U.js";
+} from "./chunk-SSNMLJY4.js";
 import {
   ANIMATION_MODULE_TYPE,
   APP_ID,
@@ -35,7 +35,6 @@ import {
   createComponent,
   inject,
   isSignal,
-  require_operators,
   setClassMetadata,
   ɵɵNgOnChangesFeature,
   ɵɵProvidersFeature,
@@ -63,10 +62,13 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate1,
   ɵɵviewQuery
-} from "./chunk-GAKRZWTD.js";
+} from "./chunk-T2KLVP2Y.js";
 import {
   require_cjs
-} from "./chunk-AQYIT73X.js";
+} from "./chunk-NEB74DX2.js";
+import {
+  require_operators
+} from "./chunk-4HVWSRNV.js";
 import {
   __spreadProps,
   __spreadValues,
@@ -5171,4 +5173,4 @@ export {
   MatRippleModule,
   MatRippleLoader
 };
-//# sourceMappingURL=chunk-4G7RPPEY.js.map
+//# sourceMappingURL=chunk-NJ5KF6SR.js.map

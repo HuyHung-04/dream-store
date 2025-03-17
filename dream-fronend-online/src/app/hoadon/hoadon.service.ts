@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,BehaviorSubject  } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,6 +15,8 @@ export class HoadonService {
   private ghnToken = '83fc5ffa-009a-11f0-8431-a60a80081d29';
   private phuongThuc = 'http://localhost:8080/api/phuong-thuc-thanh-toan/payment-methods';
   private shopId = 5686289;
+  // Tạo BehaviorSubject để chia sẻ dữ liệu
+  private hoaDonSubject = new BehaviorSubject<any>(null);
   constructor(private http: HttpClient) {  
    }
 
@@ -204,7 +208,18 @@ calculateShippingCost(city: string, district: string, ward: string, latWarehouse
       .set('tenNguoiNhan', tenNguoiNhan.toString()) 
       .set('diaChi', diaChi.toString()) // Tổng tiền sau khi giảm giá
       .set('shippingFee', shippingFee.toString());
-    // Gửi yêu cầu POST, dữ liệu rỗng vì tất cả tham số đã có trong `params`
-    return this.http.post<any>(url, {}, { params });
+  
+      return this.http.post<any>(`${this.apiHoaDon}/create`, {}, { params }).pipe(
+        switchMap((response) => this.setHoaDonData(response))
+      );
+  }
+
+  setHoaDonData(data: any): Observable<any> {
+    this.hoaDonSubject.next(data);
+    return this.hoaDonSubject.asObservable();
+  }
+  
+  getHoaDonData(): Observable<any> {
+    return this.hoaDonSubject.asObservable();
   }
 }
