@@ -1,5 +1,6 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.dtos.HoaDonChiTietDto;
 import com.example.dreambackend.dtos.VoucherDto;
 import com.example.dreambackend.entities.GioHangChiTiet;
 import com.example.dreambackend.entities.HoaDon;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -78,5 +80,20 @@ public class HoaDonOnlineController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/chi-tiet/{maHoaDon}")
+    public ResponseEntity<?> getChiTietHoaDon(@PathVariable String maHoaDon) {
+        try {
+            List<HoaDonChiTietDto> chiTietList = hoaDonOnlineService.getChiTietHoaDonByMa(maHoaDon);
+            return ResponseEntity.ok(chiTietList);
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+        }
+    }
+
+    @GetMapping("/hoa-don-chi-tiet")
+    public List<Object[]> getHoaDonChiTiet() {
+        return hoaDonOnlineService.getHoaDonChiTiet();
     }
 }

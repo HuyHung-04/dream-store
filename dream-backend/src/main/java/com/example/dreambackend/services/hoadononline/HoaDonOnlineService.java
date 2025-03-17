@@ -1,5 +1,6 @@
 package com.example.dreambackend.services.hoadononline;
 
+import com.example.dreambackend.dtos.HoaDonChiTietDto;
 import com.example.dreambackend.dtos.VoucherDto;
 import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
@@ -12,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -215,4 +217,41 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return hoaDon; // Trả về hóa đơn đã tạo với thông tin chi tiết
     }
 
+
+    public List<HoaDonChiTietDto> getChiTietHoaDonByMa(String maHoaDon) {
+        // Lấy dữ liệu từ repository
+        List<Object[]> results = hoaDonChiTietRepository.findChiTietByMaHoaDon(maHoaDon);
+
+        // Kiểm tra nếu không có dữ liệu
+        if (results.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn chi tiết với mã: " + maHoaDon);
+        }
+
+        // Xử lý dữ liệu và map vào DTO
+        List<HoaDonChiTietDto> chiTietDtos = new ArrayList<>();
+        for (Object[] row : results) {
+            String maSanPham = (String) row[0];
+            String tenSanPham = (String) row[1];
+            Double donGia = row[2] != null ? ((Number) row[2]).doubleValue() : 0.0;
+            Integer soLuong = row[3] != null ? ((Number) row[3]).intValue() : 0;
+            String mauSac = (String) row[4];
+            String size = (String) row[5];
+            String anhUrl = (String) row[6];
+
+            // Nếu ảnh tồn tại, thêm vào list, nếu không thì trả về list rỗng
+            List<String> anhUrls = anhUrl != null ? List.of(anhUrl) : List.of();
+
+            // Thêm vào danh sách DTO
+            chiTietDtos.add(new HoaDonChiTietDto(
+                    maSanPham, tenSanPham, donGia, soLuong, mauSac, size, anhUrls
+            ));
+        }
+
+        return chiTietDtos;
+    }
+
+    @Override
+    public List<Object[]> getHoaDonChiTiet() {
+        return hoaDonChiTietRepository.getHoaDonChiTiet();
+    }
 }

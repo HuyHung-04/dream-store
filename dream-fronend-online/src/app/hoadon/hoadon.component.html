@@ -194,3 +194,15 @@
   <button class="btn-checkout" (click)="createHoaDon()">Thanh toán</button>
   
 </div>
+
+
+
+<!-- Modal Chức Năng Sau Thanh Toán -->
+<div *ngIf="modalthongbao" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content">
+    <h3>Chọn hành động</h3>
+    <button (click)="viewInvoiceDetails()">Xem Chi Tiết Đơn Hàng</button>
+    <button (click)="viewInvoiceHistory()">Xem Lịch Sử Đơn Hàng</button>
+    <button (click)="goHome()">Quay Về Trang Chủ</button>
+  </div>
+</div>

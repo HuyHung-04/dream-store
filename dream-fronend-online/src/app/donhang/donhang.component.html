@@ -1,1 +1,94 @@
-<p>donhang works!</p>
+<div *ngIf="hoaDonData; else noData" class="invoice-container">
+  
+  
+    <!-- Mã hóa đơn (Căn phải) -->
+    <div class="invoice-header">
+      <h2>Chi tiết Hóa Đơn</h2>
+      <p class="invoice-code"><strong>Mã hóa đơn:</strong> {{ hoaDonData.ma }}</p>
+    </div>
+    <div class="status-tracker">
+        <div class="status-step" [class.active]="hoaDonData.trangThai >= 1">
+          <div class="status-icon">📄</div>
+          <p>Đơn Hàng Đã Đặt</p>
+          <small>{{ hoaDonData.ngayTao }}</small>
+        </div>
+    
+        <div class="status-line" [class.active]="hoaDonData.trangThai >= 2"></div>
+    
+        <div class="status-step" [class.active]="hoaDonData.trangThai >= 2">
+          <div class="status-icon">💳</div>
+          <p>Đã Xác Nhận Thanh Toán</p>
+          <small>{{ hoaDonData.ngayXacNhan || '---' }}</small>
+        </div>
+    
+        <div class="status-line" [class.active]="hoaDonData.trangThai >= 3"></div>
+    
+        <div class="status-step" [class.active]="hoaDonData.trangThai >= 3">
+          <div class="status-icon">🚚</div>
+          <p>Đã Giao Cho ĐVVC</p>
+          <small>{{ hoaDonData.ngayGiao || '---' }}</small>
+        </div>
+    
+        <div class="status-line" [class.active]="hoaDonData.trangThai >= 4"></div>
+    
+        <div class="status-step" [class.active]="hoaDonData.trangThai >= 4">
+          <div class="status-icon">📦</div>
+          <p>Đã Nhận Được Hàng</p>
+          <small>{{ hoaDonData.ngayNhan || '---' }}</small>
+        </div>
+    
+        <div class="status-line" [class.active]="hoaDonData.trangThai === 5"></div>
+    
+        <div class="status-step" [class.active]="hoaDonData.trangThai === 5">
+          <div class="status-icon">⭐</div>
+          <p>Đơn Hàng Đã Hoàn Thành</p>
+          <small>{{ hoaDonData.ngayHoanThanh || '---' }}</small>
+        </div>
+      </div>
+    
+    <!-- Địa chỉ nhận hàng -->
+    <section class="section">
+      <h3>Địa chỉ nhận hàng</h3>
+      <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
+      <p><strong>Số điện thoại:</strong> {{ hoaDonData.sdtNguoiNhan }}</p>
+      <p><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
+    </section>
+  
+ <!-- Chi tiết hóa đơn -->
+ <section class="section" *ngIf="chiTietHoaDonData?.length > 0">
+  <h3>Chi tiết Hóa Đơn</h3>
+  
+  <div *ngFor="let item of chiTietHoaDonData" class="invoice-details-item">
+    <img [src]="'http://localhost:8080' + item.anhUrls" alt="{{ item.tenSanPham }}" />
+    
+    <div class="invoice-details-info">
+      <p><strong>Tên Sản Phẩm:</strong> {{ item.tenSanPham }}</p>
+      <p><strong>Đơn Giá:</strong> {{ item.donGia | number }}</p>
+      <p><strong>Số Lượng:</strong> {{ item.soLuong }}</p>
+      <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
+      <p><strong>Màu Sắc:</strong> {{ item.mauSac }}</p>
+    </div>
+  </div>
+</section>
+  
+    <!-- Chi tiết thanh toán -->
+    <section class="section">
+      <h3>Chi tiết thanh toán</h3>
+      <p><strong>Tổng tiền trước voucher:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
+      <p><strong>Tên voucher:</strong> {{ hoaDonData.voucher?.ten }}</p>
+      <p><strong>Giá trị giảm:</strong> 
+        {{ hoaDonData.voucher?.hinhThucGiam ? (hoaDonData.voucher?.giaTriGiam + '%') : (hoaDonData.voucher?.giaTriGiam + ' VNĐ') }}
+      </p>
+      <p><strong>Giảm tối đa:</strong> {{ hoaDonData.voucher?.giamToiDa }} VNĐ</p>
+      <p><strong>Tên phương thức:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
+      <p><strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ</p>
+      <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
+    </section>
+  
+  </div>
+  
+  <!-- Nếu chưa có dữ liệu -->
+  <ng-template #noData>
+    <p>Chưa có dữ liệu hóa đơn để hiển thị.</p>
+  </ng-template>
+  

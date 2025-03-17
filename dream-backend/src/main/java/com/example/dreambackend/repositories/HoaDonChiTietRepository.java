@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -63,5 +64,66 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     List<HoaDonChiTiet> findByHoaDon(HoaDon hoaDon);
 
     Optional<HoaDonChiTiet> findBySanPhamChiTietId(Integer idSanPhamChiTiet);
+
+    @Query(value = """
+        SELECT 
+            spct.ma AS maSanPham,
+            sp.ten AS tenSanPham,
+            hct.don_gia AS donGia,
+            hct.so_luong AS soLuong,
+            ms.ten AS mauSac,
+            sz.ten AS size,
+            (
+                SELECT TOP 1 a.anh_url 
+                FROM anh a 
+                WHERE a.id_san_pham = sp.id AND a.trang_thai = 1
+            ) AS anhUrl
+        FROM hoa_don_chi_tiet hct
+        JOIN san_pham_chi_tiet spct ON hct.id_san_pham_chi_tiet = spct.id
+        JOIN san_pham sp ON spct.id_san_pham = sp.id
+        JOIN mau_sac ms ON spct.id_mau_sac = ms.id
+        JOIN size sz ON spct.id_size = sz.id
+        JOIN hoa_don hd ON hct.id_hoa_don = hd.id
+        WHERE hd.ma = :maHoaDon
+    """, nativeQuery = true)
+    List<Object[]> findChiTietByMaHoaDon(@Param("maHoaDon") String maHoaDon);
+
+    @Query(value = """
+    SELECT 
+         hct.id_hoa_don,
+        spct.ma AS maSanPham,
+        sp.ten AS tenSanPham,
+        hct.don_gia AS donGia,
+        hct.so_luong AS soLuong,
+        ms.ten AS mauSac,
+        sz.ten AS size,
+        (
+            SELECT TOP 1 a.anh_url
+            FROM anh a
+            WHERE a.id_san_pham = sp.id AND a.trang_thai = 1
+        ) AS anhUrl
+    FROM (
+        SELECT
+            hct.id,
+            hct.ma,
+            hct.don_gia,
+            hct.so_luong,
+            hct.ngay_sua,
+            hct.ngay_tao,
+            hct.trang_thai,
+            hct.id_hoa_don,
+            spct.id AS id_san_pham_chi_tiet,  -- Sửa ở đây
+            ROW_NUMBER() OVER (PARTITION BY hct.id_hoa_don ORDER BY hct.id) AS row_num
+        FROM hoa_don_chi_tiet hct
+        JOIN san_pham_chi_tiet spct ON hct.id_san_pham_chi_tiet = spct.id
+        JOIN hoa_don hd ON hct.id_hoa_don = hd.id
+    ) AS hct
+    JOIN san_pham_chi_tiet spct ON hct.id_san_pham_chi_tiet = spct.id
+    JOIN san_pham sp ON spct.id_san_pham = sp.id
+    JOIN mau_sac ms ON spct.id_mau_sac = ms.id
+    JOIN size sz ON spct.id_size = sz.id
+    WHERE hct.row_num = 1
+""", nativeQuery = true)
+    List<Object[]> getHoaDonChiTiet();
 
 }

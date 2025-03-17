@@ -47,6 +47,7 @@ export class HoadonComponent {
   selectedAddress: any = null; // Địa chỉ được chọn để hiển thị trong modal và giao diện chính
   activeTab = 'select';
   isModalOpen = false;
+  modalthongbao = false;
   isEditModalOpen = false;
   totalPrice: number = 0;
   selectedVoucher: Voucher | null = null;
@@ -459,7 +460,8 @@ export class HoadonComponent {
         (response) => {
           console.log('Hóa đơn đã được tạo thành công:', response);
           alert('Hóa đơn đã được tạo thành công!');
-          this.router.navigate(['/donhang']);
+          this.modalthongbao = true;
+         
         },
         (error) => {
           console.error('Lỗi khi tạo hóa đơn:', error);
@@ -467,5 +469,32 @@ export class HoadonComponent {
         }
       );
     }
+  }
+
+
+
+
+    // Đóng modal khi click bên ngoài
+    closeModalThongBao() {
+      this.modalthongbao = false;
+    }
+   // Các hàm chức năng trong modal
+   viewInvoiceDetails() {
+    console.log('Xem chi tiết đơn hàng');
+    this.router.navigate(['/donhang']);
+    this.closeModalThongBao();  // Đóng modal khi thực hiện hành động
+  }
+
+  viewInvoiceHistory() {
+    console.log('Xem lịch sử đơn hàng');
+    this.router.navigate(['/lichsudonhang']);
+    this.closeModalThongBao();
+  }
+
+  goHome() {
+    console.log('Quay về trang chủ');
+    this.closeModalThongBao();
+    // Ví dụ quay về trang chủ
+    this.router.navigate(['/banhang']);
   }
 }

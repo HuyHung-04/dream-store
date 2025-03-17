@@ -15,10 +15,10 @@ import {
   getRtlScrollAxisType,
   hasModifierKey,
   supportsScrollBehavior
-} from "./chunk-4G7RPPEY.js";
+} from "./chunk-PUMPWSSC.js";
 import {
   DOCUMENT
-} from "./chunk-LWORY74U.js";
+} from "./chunk-5RO6C5VN.js";
 import {
   ANIMATION_MODULE_TYPE,
   ChangeDetectionStrategy,
@@ -50,7 +50,6 @@ import {
   booleanAttribute,
   forwardRef,
   inject,
-  require_operators,
   setClassMetadata,
   ɵɵInheritDefinitionFeature,
   ɵɵNgOnChangesFeature,
@@ -81,10 +80,14 @@ import {
   ɵɵstyleProp,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-GAKRZWTD.js";
+} from "./chunk-HDPSV3GH.js";
+import {
+  require_operators
+} from "./chunk-XCIYP5SE.js";
 import {
   require_cjs
-} from "./chunk-AQYIT73X.js";
+} from "./chunk-ZUJ64LXG.js";
+import "./chunk-OYTRG5F6.js";
 import {
   __toESM
 } from "./chunk-YHCV7DAQ.js";
