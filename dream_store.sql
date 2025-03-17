@@ -67,7 +67,7 @@ CREATE TABLE co_ao (
 )
 
 GO
-
+select * from khuyen_mai
 CREATE TABLE san_pham (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	id_thuong_hieu INT,
@@ -198,7 +198,9 @@ GO
 CREATE TABLE dia_chi_khach_hang (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	id_khach_hang INT,
-	thon VARCHAR(20) DEFAULT '',
+	ten_nguoi_nhan NVARCHAR(50) DEFAULT '',
+	sdt_nguoi_nhan VARCHAR(15) DEFAULT'',
+	dia_chi_cu_the VARCHAR(20) DEFAULT '',
 	phuong_xa NVARCHAR(20) DEFAULT '',
 	quan_huyen NVARCHAR(20) DEFAULT '',
 	tinh_thanh_pho NVARCHAR(20) DEFAULT'',
