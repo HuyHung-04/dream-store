@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/NhanVienRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/NhanVienRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietOnlineRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietOnlineRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadononline/HoaDonOnlineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadononline/HoaDonOnlineService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/hoadononline/HoaDonOnlineService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/hoadononline/HoaDonOnlineService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/src/app/header/header.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/src/app/header/header.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/src/app/hoadon/hoadon.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/src/app/hoadon/hoadon.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream_store.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../dream_store.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +194,7 @@
       <workItem from="1742104808317" duration="76000" />
       <workItem from="1742104927434" duration="1516000" />
       <workItem from="1742129224394" duration="628000" />
-      <workItem from="1742190691400" duration="2564000" />
+      <workItem from="1742190691400" duration="2889000" />
     </task>
     <servers />
   </component>
