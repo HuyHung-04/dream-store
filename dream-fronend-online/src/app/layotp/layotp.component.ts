@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayOtpService } from './layotp.service';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layotp',
@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './layotp.component.css',
 })
 export class LayotpComponent implements OnInit {
-constructor(private layOtpService: LayOtpService) { }
+constructor(private layOtpService: LayOtpService,private router: Router) { }
 newPassword: string = '';
 confirmPassword: string = '';
 email: string = '';
@@ -77,6 +77,7 @@ otpVerified: boolean = false;
             this.layOtpService.updateKhachHang(this.khachhang).subscribe(
               (response) => {
                 alert('Cập nhật mật khẩu thành công!');
+                this.router.navigate(['']);
               },
               (error) => {
                 console.error('Error:', error);
