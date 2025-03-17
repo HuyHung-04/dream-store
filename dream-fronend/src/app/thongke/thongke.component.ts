@@ -14,7 +14,7 @@ import { ThongKeService, ThongKeResponse, ThongKeThangResponse, ThongKeThangNayR
 })
 export class ThongkeComponent implements OnInit {
   thongKeData: ThongKeResponse | null = null;
-  selectedType: string = 'nam-nay';
+  selectedType: string = 'Năm nay';
   chart: any;
   pieChart: any;
   topSanPhamData: TopSanPhamResponse[] = [];
@@ -40,11 +40,11 @@ export class ThongkeComponent implements OnInit {
         this.thongKeData = data || { soHoaDon: 0, tongDoanhThu: 0, soKhachHang: 0 };
   
         // Hiển thị biểu đồ phù hợp với loại thống kê
-        if (type === 'tat-ca') {
+        if (type === 'Tất cả') {
           this.loadBieuDoNam();
-        } else if (type === 'nam-nay') {
+        } else if (type === 'Năm nay') {
           this.loadBieuDoThang();
-        } else if (type === 'thang-nay') {
+        } else if (type === 'Tháng này') {
           this.loadBieuDoNgayTrongThang();
         } else {
           this.loadBieuDoHomNay();
@@ -60,7 +60,7 @@ export class ThongkeComponent implements OnInit {
 // Biểu đồ doanh thu từng ngày trong tháng
 loadBieuDoNgayTrongThang(): void {
   // Kiểm tra nếu đang ở chế độ "Hôm nay" thì không vẽ biểu đồ tháng
-  if (this.selectedType === 'hom-nay') {
+  if (this.selectedType === 'Hôm nay') {
     console.log('Đang ở chế độ Hôm nay, không hiển thị dữ liệu tháng.');
     this.destroyChart();
     return;
@@ -263,17 +263,18 @@ renderChart(labels: string[], data: number[], label: string): void {
   }
    // Vẽ biểu đồ tròn cho top sản phẩm bán chạy
    renderPieChart(): void {
-    const topProducts = this.topSanPhamData.slice(0, 3); // Lấy 3 sản phẩm đầu tiên
-    const otherProducts = this.topSanPhamData.slice(3); // Các sản phẩm còn lại
+    const topProducts = this.topSanPhamData.slice(0, 5); // Lấy 3 sản phẩm đầu tiên
+    //const otherProducts = this.topSanPhamData.slice(3);
+     // Các sản phẩm còn lại
 
     const labels = topProducts.map(product => product.tenSanPham);
     const data = topProducts.map(product => product.tongSoLuong);
 
     // Thêm phần "Các sản phẩm khác"
-    if (otherProducts.length > 0) {
-      labels.push('Các sản phẩm khác');
-      data.push(otherProducts.reduce((sum, product) => sum + product.tongSoLuong, 0));
-    }
+    // if (otherProducts.length > 0) {
+    //   labels.push('Các sản phẩm khác');
+    //   data.push(otherProducts.reduce((sum, product) => sum + product.tongSoLuong, 0));
+    // }
 
     // Vẽ biểu đồ tròn
     const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
@@ -294,8 +295,8 @@ renderChart(labels: string[], data: number[], label: string): void {
           {
             label: 'Top sản phẩm bán chạy',
             data: data,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#B0B0B0'],
-            borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#B0B0B0'],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#B0B0B0','#4BC0C0'],
+            borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#B0B0B0','#4BC0C0'],
             borderWidth: 1,
           },
         ],
