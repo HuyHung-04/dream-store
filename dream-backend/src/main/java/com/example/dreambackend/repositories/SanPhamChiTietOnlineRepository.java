@@ -27,10 +27,13 @@ public interface SanPhamChiTietOnlineRepository extends JpaRepository<SanPhamChi
             "JOIN Size s ON spct.size.id = s.id " +
             "LEFT JOIN GioHangChiTiet ghct ON spct.id = ghct.sanPhamChiTiet.id " +
             "LEFT JOIN KhuyenMai km ON spct.khuyenMai.id = km.id " +
-            "WHERE sp.trangThai = 1 AND sp.id = :idSanPham " +
-            "AND (km.trangThai = 1 OR km IS NULL) " + // lấy khuyến mãi có trạng thái = 1 hoặc không có khuyến mãi
+            "WHERE sp.trangThai = 1 " +
+            "AND spct.soLuong > 0 " +  //  THÊM ĐIỀU KIỆN KIỂM TRA SỐ LƯỢNG 
+            "AND sp.id = :idSanPham " +
+            "AND (km.trangThai = 1 OR km IS NULL) " +
             "ORDER BY a.id ASC")
     List<SanPhamChiTietOnlineDto> getSanPhamChiTiet(@Param("idSanPham") Integer idSanPham);
+
 }
 
 

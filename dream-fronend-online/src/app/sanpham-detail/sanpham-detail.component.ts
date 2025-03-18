@@ -7,6 +7,7 @@ import { SanphamDetailService } from './sanpham-detail.service';
 import { HeaderComponent } from '../header/header.component';
 import { HeaderService } from '../header/header.service'
 import { Router } from '@angular/router'; 
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-sanpham-detail',
   standalone: true,
@@ -27,7 +28,6 @@ import { Router } from '@angular/router';
     soLuongMua: number = 1;
     filteredDanhSachMauSac: any[] = [];
     filteredDanhSachSize: any[] = [];
-    idKhachHang: number = 2; // Giả sử ID khách hàng = 1
     showModalThanhToan: boolean = false; // mở modal thanh toán
     khachHang: any = {
       tenKhachHang: '',
@@ -37,15 +37,36 @@ import { Router } from '@angular/router';
       quanHuyen: null,
       phuongXa: null
     };
+
+    khachhang: any = {
+      id: '',
+      ma: '',
+      ten: '',
+      gioiTinh: true,
+      email: '',
+      soDienThoai: '',
+      matKhau: '',
+      ngayTao: '',
+      ngaySua: '',
+      trangThai: null,
+      otpHash: '',
+      trangThaiOtp:null
+    };
    
     payMent: any[] = []
 
   private route = inject(ActivatedRoute);
   private sanphamService = inject(SanphamDetailService);
   // thao tác 2 component
-  constructor(private headerService: HeaderService,private router: Router, private sanPhamDetailService: SanphamDetailService) {}
+  constructor(private headerService: HeaderService,private router: Router, private sanPhamDetailService: SanphamDetailService, private cookieService: CookieService) {}
 
   ngOnInit(): void {
+    const khachhangCookie = this.cookieService.get('khachhang'); 
+    if (khachhangCookie) {
+      this.khachhang = JSON.parse(khachhangCookie);
+    }
+  
+    console.log("Khách hàng hiện tại:", this.khachhang); 
     this.loadSanPhamChiTiet();
     
     this.filteredDanhSachSize = this.danhSachSize;
@@ -222,42 +243,63 @@ import { Router } from '@angular/router';
   }
 
   themVaoGio() {
+    if (!this.khachhang.id) {
+      alert("Bạn cần đăng nhập mới có thể thêm sản phảm vào giỏ");
+      return;
+    }
+  
     const sanPhamGioHang = {
-        idKhachHang: this.idKhachHang,
-        idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, // Đúng field
-        mauSac: this.selectedMauSac,
-        size: this.selectedSize,
-        soLuong: this.soLuongMua
+      idKhachHang: this.khachhang.id, // Lấy ID khách hàng từ đối tượng `khachhang`
+      idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, 
+      mauSac: this.selectedMauSac,
+      size: this.selectedSize,
+      soLuong: this.soLuongMua
     };
+  
     console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
-    this.headerService.addToCart(sanPhamGioHang).subscribe(response => {
+  
+    this.headerService.addToCart(sanPhamGioHang).subscribe(
+      (response) => {
         console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
         this.soLuongMua = 1;
         this.hienToast();
-    }, error => {
+      },
+      (error) => {
         console.error("Lỗi khi thêm vào giỏ hàng:", error);
-    });
+      }
+    );
   }
-
+  
   muaNgay() {
+    if (!this.khachhang.id) {
+      alert("Bạn cần đăng nhập mới có thể mua sản phẩm");
+      return;
+    }
+  
     const sanPhamGioHang = {
-        idKhachHang: this.idKhachHang,
-        idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, // Đúng field
-        mauSac: this.selectedMauSac,
-        size: this.selectedSize,
-        soLuong: this.soLuongMua
+      idKhachHang: this.khachhang.id, // Lấy ID khách hàng từ đối tượng `khachhang`
+      idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, 
+      mauSac: this.selectedMauSac,
+      size: this.selectedSize,
+      soLuong: this.soLuongMua
     };
+  
     console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
-    this.headerService.muaNgay(sanPhamGioHang).subscribe(response => {
+  
+    this.headerService.muaNgay(sanPhamGioHang).subscribe(
+      (response) => {
         console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
         this.soLuongMua = 1;
         this.router.navigate(['/hoadon']);
-    }, error => {
+      },
+      (error) => {
         console.error("Lỗi khi thêm vào giỏ hàng:", error);
-    });
+      }
+    );
   }
+  
 
   // // code modalThanhToan khi ấn mua ngay/////////////////////////////////
 
@@ -295,28 +337,47 @@ import { Router } from '@angular/router';
   }
 
   loadPayMent(): void {
-    this.headerService.getPayMent(this.idKhachHang).subscribe((data) => {
-      this.payMent = data;
-    });
+    if (!this.khachhang.id) {
+      console.warn("Chưa có khách hàng đăng nhập, không thể tải phương thức thanh toán!");
+      return;
+    }
+  
+    this.headerService.getPayMent(this.khachhang.id).subscribe(
+      (data) => {
+        this.payMent = data;
+      },
+      (error) => {
+        console.error("Lỗi khi tải phương thức thanh toán:", error);
+      }
+    );
   }
-
-  addSanPhamPayMent(){
+  
+  addSanPhamPayMent() {
+    if (!this.khachhang.id) {
+      console.warn("Chưa có khách hàng đăng nhập, không thể thêm sản phẩm vào thanh toán!");
+      return;
+    }
+  
     const sanPhamPayment = {
-      idKhachHang: this.idKhachHang,
-      idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, // Đúng field
+      idKhachHang: this.khachhang.id, // Lấy ID khách hàng từ đối tượng `khachhang`
+      idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet,
       mauSac: this.selectedMauSac,
       size: this.selectedSize,
       soLuong: this.soLuongMua
-  };
-  console.log("Dữ liệu gửi lên API:", sanPhamPayment);
-  this.headerService.addToPayment(sanPhamPayment).subscribe(response => {
-      // console.log("Thêm vào giỏ hàng thành công:", response);
-      this.headerService.notifyGioHangUpdated();
-      this.soLuongMua = 1;
-  }, error => {
-      console.error("Lỗi khi thêm vào giỏ hàng:", error);
-  });
-  }
+    };
+  
+    console.log("Dữ liệu gửi lên API:", sanPhamPayment);
+  
+    this.headerService.addToPayment(sanPhamPayment).subscribe(
+      (response) => {
+        this.headerService.notifyGioHangUpdated();
+        this.soLuongMua = 1;
+      },
+      (error) => {
+        console.error("Lỗi khi thêm vào thanh toán:", error);
+      }
+    );
+  }  
   
   closeModalThanhToan(){
     this.showModalThanhToan = false;

@@ -7,7 +7,7 @@
 }
 
 .product-filters{
-  padding-top: 300px;
+  padding-top: 230px;
 }
 
 .product-table th {
@@ -79,7 +79,7 @@ button:hover {
 
 /*css text bên phải*/
 .right-container {
-  margin-top: -700px; /* Dịch phần khách hàng lên */
+  margin-top: -670px; /* Dịch phần khách hàng lên */
   width: 30%;
   float: right;
   margin-right: 20px;
@@ -89,7 +89,6 @@ button:hover {
   width: 100%;
   height: 250px;
   padding: 15px; /* Thêm khoảng cách giữa nội dung và border */
-  border-radius: 5px; /* Bo góc nhẹ cho đẹp */
   box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
 }
 
@@ -122,7 +121,7 @@ button {
 /*css thanh input*/
 .custom-input {
   border: none;
-  border-bottom: 2px solid #294764; /* Định dạng gạch ngang */
+  border-bottom: 0.5px solid #294764; /* Định dạng gạch ngang */
   outline: none; /* Loại bỏ viền khi focus */
   width: 70%; /* Độ rộng tối đa */
   padding: 5px;
@@ -213,8 +212,11 @@ button {
 .invoice-btn:hover {
   background-color: #e2e6ea;
 }
+
 .invoice-btn.active {
-  background-color: #648cb4 !important; /* Màu khi được chọn */
+  background-color: #ff9900 !important;
+  color: black;
+  border-color: #ff9900;
 }
 
 .modal {
@@ -239,7 +241,11 @@ button {
   text-align: center;
 }
 
-
+.checkout-btn{
+  font-size: 18px;
+  width: 100%;
+  height: 70px;
+}
 
 
 

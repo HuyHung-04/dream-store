@@ -7,6 +7,7 @@ import { LayotpComponent } from './layotp/layotp.component';
 import { HoadonComponent } from './hoadon/hoadon.component';
 import { DonhangComponent } from './donhang/donhang.component';
 import { HeaderComponent } from './header/header.component';
+import { TaikhoanComponent } from './taikhoan/taikhoan.component';
 // Các routes được cấu hình cho ứng dụng
 export const routes: Routes = [
   { path: '', component: BanhangComponent }, // Trang chính là danh sách sản phẩm
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'hoadon', component: HoadonComponent },
   { path: 'donhang', component: DonhangComponent },
   { path: 'header', component: HeaderComponent },
+  { path: 'taikhoan', component: TaikhoanComponent },
   { path: '**', redirectTo: '' } // Nếu không tìm thấy trang thì về trang chính
 ];

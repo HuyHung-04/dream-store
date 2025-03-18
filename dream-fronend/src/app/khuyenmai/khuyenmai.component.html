@@ -116,7 +116,7 @@
 
         <div class="input-row">
           <div class="input-field">
-            <input type="text" class="input" [value]="selectedKhuyenMai.trangThai ? 'Hoạt động' : 'Không hoạt động'"
+            <input type="text" class="input" [value]="selectedKhuyenMai.trangThai ? 'Hoạt động' : 'Không hoạt động'" style="width:185px;"
               readonly />
             <label for="trangThai">Trạng thái</label>
           </div>
@@ -133,11 +133,11 @@
       <!-- Form hiển thị chi tiết khuyến mãi và cho phép sửa -->
       <form (ngSubmit)="updateKhuyenMai()" #khuyenmaiForm="ngForm">
         <div class="input-row">
-          <div class="input-field">
+          <!-- <div class="input-field"> -->
             <!-- Trường ID là readonly -->
-            <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.id" name="id" readonly />
+            <!-- <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.id" name="id" readonly />
             <label for="id">Id</label>
-          </div>
+          </div> -->
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.ma" name="ma" required readonly />
             <label for="ma">Mã khuyến mãi</label>
@@ -202,7 +202,7 @@
 
         <div class="input-row">
           <div class="input-field">
-            <select class="input" [(ngModel)]="khuyenmaiEdit.trangThai" name="trangThai" required
+            <select class="input" [(ngModel)]="khuyenmaiEdit.trangThai" name="trangThai" required style="width:185px;"
               (change)="clearError('trangThai')">
               <option [value]="1">Hoạt động</option>
               <option [value]="0">Không hoạt động</option>
@@ -292,7 +292,7 @@
         </div>
         <div class="input-row">
           <div class="input-field">
-            <select class="input" [(ngModel)]="khuyenmai.trangThai" name="trangThai" required
+            <select class="input" [(ngModel)]="khuyenmai.trangThai" name="trangThai" required style="width:185px;"
               (change)="clearError('trangThai')">
               <option [value]="1">Hoạt động</option>
               <option [value]="0">Không hoạt động</option>

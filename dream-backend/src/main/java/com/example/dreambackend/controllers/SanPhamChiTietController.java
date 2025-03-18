@@ -118,7 +118,7 @@ public class SanPhamChiTietController {
     @GetMapping("/ban-hang")
     public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getSanPhamBanHang(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size) {
+            @RequestParam(defaultValue = "4") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<GetSanPhamToBanHangRespone> danhSachSanPham = sanPhamChiTietService.laySanPhamChoBanHang(pageable);

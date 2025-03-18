@@ -13,7 +13,16 @@
         <i class="bi bi-cart4"></i>
         <span *ngIf="gioHang.length > 0" class="cart-count">{{ gioHang.length }}</span>
       </a>
-      <a href="#"><i class="bi bi-person-circle"></i></a>
+      <div class="profile-icon-container">
+        <a  class="profile-icon">
+            <i (click)="dangnhap()" class="bi bi-person-circle"></i>
+            <span class="user-name">{{ khachhang.ten }}</span>
+        </a>
+        <div *ngIf="luachon" class="profile-dropdown">
+            <a  class="profile-option" (click)="hoso()">Hồ sơ</a>
+            <a href="dang-xuat" class="profile-option" (click)="xoacookie()">Đăng xuất</a>
+        </div>
+      </div>
     </nav>
   </div>
 

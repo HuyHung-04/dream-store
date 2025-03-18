@@ -1,5 +1,9 @@
 package com.example.dreambackend.responses;
 
+import com.example.dreambackend.entities.KhachHang;
+import com.example.dreambackend.entities.NhanVien;
+import com.example.dreambackend.entities.PhuongThucThanhToan;
+import com.example.dreambackend.entities.Voucher;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
