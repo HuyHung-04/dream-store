@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayOtpService } from './layotp.service';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-layotp',
@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './layotp.component.css',
 })
 export class LayotpComponent implements OnInit {
-constructor(private layOtpService: LayOtpService) { }
+constructor(private layOtpService: LayOtpService, private router: Router) { }
 newPassword: string = '';
 confirmPassword: string = '';
 email: string = '';
@@ -37,6 +37,8 @@ errorPass: any = {};
 passwordError:any = {};
 showOtpSection: boolean = false;
 otpVerified: boolean = false;
+timer: number = 60;
+timerInterval: any;
   ngOnInit(): void {
   }
   verifyOtp(){
@@ -50,7 +52,15 @@ otpVerified: boolean = false;
                 if(this.khachhang.trangThaiOtp===1){
                   alert('So sanh thành công!');
                   this.otpVerified=true;
-                  this.layOtpService.deleteOtp(this.email);
+                  console.log(this.email);
+                  this.layOtpService.deleteOtp(this.email).subscribe(
+                    (response) => {
+                      console.log('Xóa OTP thành công:', response);
+                    },
+                    (error) => {
+                      console.error('Lỗi khi xóa OTP:', error);
+                    }
+                  );
                 }else{
                   alert('Mã Otp không chính xác');
                 }
@@ -77,6 +87,8 @@ otpVerified: boolean = false;
             this.layOtpService.updateKhachHang(this.khachhang).subscribe(
               (response) => {
                 alert('Cập nhật mật khẩu thành công!');
+                // this.layOtpService.deleteOtp(this.email);
+                this.router.navigate(['']);
               },
               (error) => {
                 console.error('Error:', error);
@@ -103,15 +115,13 @@ otpVerified: boolean = false;
           console.log('re:',response);
           alert('Gửi otp thành công!');
           this.showOtpSection=true;
+          this.startTimer(this.email);
           
         }
       );
-    }else{
+    } else {
       return;
     }
-
-    
-    
   }
   validateForm(): boolean {
     
@@ -146,5 +156,31 @@ otpVerified: boolean = false;
       }
     
     return Object.keys(this.errorPass).length === 0;
+  }
+
+  startTimer(email:string) {
+    this.timer = 60;
+    clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      if (this.timer > 0) {
+        this.timer--;
+      } else {
+        clearInterval(this.timerInterval);
+        this.layOtpService.deleteOtp(this.email).subscribe(
+          (response) => {
+            console.log('Xóa OTP thành công:', response);
+          },
+          (error) => {
+            console.error('Lỗi khi xóa OTP:', error);
+          }
+        );
+        this.showOtpSection=false;
+      }
+    }, 1000);
+  }
+  get formattedTimer(): string {
+    const minutes = Math.floor(this.timer / 60);
+    const seconds = this.timer % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 }

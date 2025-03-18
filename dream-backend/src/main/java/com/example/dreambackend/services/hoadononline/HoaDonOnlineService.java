@@ -128,10 +128,11 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         Double discountAmount;
         if (voucher.isHinhThucGiam()) {
             // Giảm theo tỷ lệ phần trăm
-            discountAmount = totalPrice * voucher.getGiaTriGiam().doubleValue() / 100;
+            discountAmount = voucher.getGiaTriGiam().doubleValue();
         } else {
             // Giảm theo giá trị cố định
-            discountAmount = voucher.getGiaTriGiam().doubleValue();
+
+            discountAmount = totalPrice * voucher.getGiaTriGiam().doubleValue() / 100;
         }
 
         // Đảm bảo giảm giá không vượt quá mức tối đa của voucher

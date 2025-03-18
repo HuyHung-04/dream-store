@@ -1,5 +1,6 @@
 package com.example.dreambackend.entities;
 
+import com.example.dreambackend.responses.HoaDonResponse;
 import jakarta.persistence.*;
 import lombok.*;
 

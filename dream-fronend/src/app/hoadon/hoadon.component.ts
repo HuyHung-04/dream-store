@@ -20,8 +20,6 @@ export class AppModule { }
   templateUrl: './hoadon.component.html',
   imports: [
     FormsModule,
-    NgForOf,
-    NgIf,
     CommonModule
   ],
   styleUrls: ['./hoadon.component.css']
@@ -57,7 +55,7 @@ export class HoaDonComponent implements OnInit {
       }
     });
   }
-  
+
   search(): void {
     this.loadHoaDons();
   }

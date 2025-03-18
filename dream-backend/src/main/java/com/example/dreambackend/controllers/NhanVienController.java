@@ -74,7 +74,7 @@ public class NhanVienController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-    private static final String UPLOAD_DIR = "F:/DuAnTotNghiep/dream-store-main/dream-backend/uploads/images/";
+    private static final String UPLOAD_DIR = "D:/dream-store/dream-backend/uploads/images/";
 
     @GetMapping("/image/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
