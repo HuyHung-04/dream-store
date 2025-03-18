@@ -1,135 +1,130 @@
-import {Component, NgModule, OnInit} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HoaDonService, HoaDonSearchRequest, HoaDonPageResponse, HoaDonCRUDRequest, HoaDonResponse } from './hoadon.service';
-import {CommonModule, NgForOf, NgIf} from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { HoaDonService, HoaDonSearchRequest, HoaDonResponse } from './hoadon.service';
 
-@NgModule({
-  declarations: [
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    CommonModule
-  ],
-  providers: []
-})
-export class AppModule { }
 @Component({
   selector: 'app-hoadon',
   templateUrl: './hoadon.component.html',
-  imports: [
-    FormsModule,
-    CommonModule
-  ],
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   styleUrls: ['./hoadon.component.css']
 })
 export class HoaDonComponent implements OnInit {
-  searchRequest = { page: 1, maHoaDon: '', tenKhachHang: '', ngayTaoFrom: null, ngayTaoTo: null, listTrangThai: [] };
-  hoaDons: HoaDonPageResponse = { totalPages: 1, content: [], totalElements: 0, currentPage: 1, pageSize: 10 };
-  selectedHoaDon: HoaDonResponse | null = null;
-  formRequest: HoaDonCRUDRequest = {};
+  // Yêu cầu tìm kiếm hóa đơn
+  searchRequest: HoaDonSearchRequest = {
+    maHoaDon: '',
+    tenKhachHang: '',
+    tenNhanVien: '',
+    ngayTaoFrom: null,
+    ngayTaoTo: null,
+    listTrangThai: null,
+    pageSize: 10,
+    page: 1
+  };
 
-  // đổi trạng thái duyệt đơn online
-  trangThai: number = 0;
-  trangThaiText: string[] = ["Chờ xác nhận", "Đã xác nhận", "Đang giao hàng", "Đã giao hàng"];
+  // Dữ liệu hóa đơn dạng phân trang (định nghĩa inline)
+  hoaDons: {
+    content: HoaDonResponse[];
+    totalElements: number;
+    currentPage: number;
+    pageSize: number;
+    totalPages?: number;
+  } = {
+    content: [],
+    totalElements: 0,
+    currentPage: 1,
+    pageSize: 10
+  };
 
   constructor(private hoaDonService: HoaDonService) {}
+
   ngOnInit(): void {
     this.loadHoaDons();
   }
-  // cập nhật trạng thái duyệt
-  capNhatTrangThai() {
-    if (this.trangThai < this.trangThaiText.length - 1) {
-      this.trangThai++;
-    }
-  }
+
   loadHoaDons(): void {
-    this.hoaDonService.getHoaDons(this.searchRequest).subscribe(response => {
-    console.log("Dữ liệu từ API:", response);
-      if (Array.isArray(response)) {
-        this.hoaDons.content = response;
-        this.hoaDons.totalElements = response.length;
-      } else {
-        console.error("Dữ liệu API không phải là mảng:", response);
+    this.hoaDonService.getHoaDons(this.searchRequest).subscribe(
+      (response: any) => {
+        console.log("Dữ liệu từ API:", response);
+        if (response && response.data) {
+          const totalRecords = response.recordsTotal || 0;
+          this.hoaDons = {
+            totalPages: Math.ceil(totalRecords / this.searchRequest.pageSize),
+            content: response.data,
+            totalElements: totalRecords,
+            currentPage: this.searchRequest.page,
+            pageSize: this.searchRequest.pageSize
+          };
+        }
+        else if (response && response.content) {
+          // Nếu API trả về định dạng cũ với "content"
+          this.hoaDons = response;
+        }
+        else if (Array.isArray(response)) {
+          this.hoaDons = {
+            totalPages: Math.ceil(response.length / this.searchRequest.pageSize),
+            content: response,
+            totalElements: response.length,
+            currentPage: this.searchRequest.page,
+            pageSize: this.searchRequest.pageSize
+          };
+        }
+        else {
+          console.error("Dữ liệu API không đúng định dạng:", response);
+        }
+      },
+      error => {
+        console.error("Lỗi khi tải hóa đơn:", error);
       }
-    });
+    );
   }
 
+  // Hàm trackBy cho *ngFor
+  trackById(index: number, invoice: HoaDonResponse): number {
+    return invoice.id;
+  }
+
+  // Hàm tìm kiếm hóa đơn
   search(): void {
+    this.searchRequest.page = 1;
     this.loadHoaDons();
   }
 
+  // Hàm reset bộ lọc tìm kiếm
   resetFilters(): void {
     this.searchRequest = {
       maHoaDon: '',
       tenKhachHang: '',
+      tenNhanVien: '',
       ngayTaoFrom: null,
       ngayTaoTo: null,
-      listTrangThai: [],
+      listTrangThai: null,
+      pageSize: 10,
       page: 1
     };
     this.loadHoaDons();
   }
 
-  createHoaDon(): void {
-    this.hoaDonService.createHoaDon(this.formRequest).subscribe(
-      (response: HoaDonResponse) => {
-        alert('Hóa đơn đã được tạo thành công');
-        this.formRequest = {}; // Reset form
-        this.loadHoaDons();
-      },
-      (error: any) => {
-        console.error('Error creating hoa don:', error);
-      }
-    );
-  }
-
-  selectHoaDon(hoaDon: HoaDonResponse): void {
-    this.selectedHoaDon = hoaDon;
-    this.formRequest = { tenKhachHang: hoaDon.tenKhachHang };
-  }
-
-  updateHoaDon(): void {
-    if (!this.selectedHoaDon) return;
-    this.hoaDonService.updateHoaDon(this.selectedHoaDon.id, this.formRequest).subscribe(
-      (response: HoaDonResponse) => {
-        alert('Hóa đơn đã được cập nhật thành công');
-        this.selectedHoaDon = null; // Reset selection
-        this.formRequest = {};
-        this.loadHoaDons();
-      },
-      (error: any) => {
-        console.error('Error updating hoa don:', error);
-      }
-    );
-  }
-
-  cancelHoaDon(id: number): void {
-    this.hoaDonService.cancelHoaDon(id).subscribe(
-      () => {
-        alert('Hóa đơn đã được hủy thành công');
-        this.loadHoaDons();
-      },
-      (error: any) => {
-        console.error('Error canceling hoa don:', error);
-      }
-    );
-  }
-
+  // Hàm chuyển trang về trang trước
   prevPage(): void {
-    if (this.searchRequest?.page && this.searchRequest.page > 1) {
-      this.searchRequest.page -= 1;
+    if (this.searchRequest.page > 1) {
+      this.searchRequest.page--;
       this.loadHoaDons();
     }
   }
 
+  // Hàm chuyển trang về trang tiếp theo
   nextPage(): void {
-    if (this.searchRequest?.page && this.hoaDons?.totalPages && this.searchRequest.page < this.hoaDons.totalPages) {
-      this.searchRequest.page += 1;
+    if (this.searchRequest.page < (this.hoaDons.totalPages || 1)) {
+      this.searchRequest.page++;
       this.loadHoaDons();
     }
   }
 
-
+  // Hàm chọn hóa đơn để xem chi tiết
+  selectHoaDonChiTiet(invoice: HoaDonResponse): void {
+    console.log("Hóa đơn được chọn:", invoice);
+    // Triển khai logic hiển thị chi tiết (ví dụ mở modal) nếu cần
+  }
 }

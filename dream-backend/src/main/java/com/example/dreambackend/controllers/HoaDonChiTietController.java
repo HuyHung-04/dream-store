@@ -1,7 +1,6 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.entities.HoaDon;
-import com.example.dreambackend.requests.HoaDonChiTietSearchRequest;
 import com.example.dreambackend.responses.HoaDonChiTietResponse;
 import com.example.dreambackend.services.hoadonchitiet.IHoaDonChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,19 @@ public class HoaDonChiTietController {
 
     @Autowired
     private IHoaDonChiTietService hoaDonChiTietService;
+
+//    @PostMapping("/{hoaDonId}/add/{sanPhamChiTietId}")
+//    public ResponseEntity<?> addSanPhamToHoaDon(
+//            @PathVariable Integer hoaDonId,
+//            @PathVariable Integer sanPhamChiTietId,
+//            @RequestParam Integer soLuong) {
+//        try {
+//            HoaDonChiTietResponse response = hoaDonChiTietService.addSanPhamToHoaDon(hoaDonId, sanPhamChiTietId, soLuong);
+//            return ResponseEntity.ok(response);
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @PostMapping("/{hoaDonId}/add/{sanPhamChiTietId}")
     public ResponseEntity<?> addSanPhamToHoaDon(
@@ -73,14 +85,6 @@ public class HoaDonChiTietController {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setId(hoaDonId);
         List<HoaDonChiTietResponse> response = hoaDonChiTietService.findByHoaDon(hoaDon);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/all")
-    public ResponseEntity<List<HoaDonChiTietResponse>> findByHoaDon(
-            @RequestBody HoaDonChiTietSearchRequest searchRequest
-    ) {
-        List<HoaDonChiTietResponse> response = hoaDonChiTietService.search(searchRequest);
         return ResponseEntity.ok(response);
     }
 }

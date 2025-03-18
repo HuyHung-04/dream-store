@@ -29,28 +29,6 @@ body {
   padding: 30px;
   width: 400px;
 }
-input[type="email"],
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-.send-otp {
-  background-color: black;
-  color: white;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  
-}
 
 .logo {
   text-align: center;

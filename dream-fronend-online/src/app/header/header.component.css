@@ -168,7 +168,6 @@ body {
 
 /* Giá sản phẩm */
 .cart-item p:last-child {
-  padding-left: 100px;
   font-size: 16px;
   color: red;
 }
@@ -257,38 +256,4 @@ background-color: white;
   cursor: pointer;
 }
 
-.profile-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  min-width: 160px;
-  z-index: 1;
-}
 
-.profile-dropdown .profile-option {
-  display: block;
-  padding: 10px;
-  text-decoration: none;
-  color: #000;
-}
-
-.profile-dropdown .profile-option:hover {
-  background-color: #f1f1f1;
-}
-
-.profile-icon-container:hover .profile-dropdown {
-  display: block;
-}
-
-/* Tên người dùng */
-.user-name {
-  font-size: 1rem;
-  color: #294764;
-  font-weight: bold;
-  text-decoration: none;
-  margin-left: 5px;
-  cursor: pointer;
-}

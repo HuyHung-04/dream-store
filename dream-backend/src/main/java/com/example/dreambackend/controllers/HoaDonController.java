@@ -49,11 +49,5 @@ public class HoaDonController {
         List<HoaDonResponse> response = hoaDonService.getAllHoaDon(request);
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<HoaDonResponse> getHoaDon(@PathVariable Integer id) {
-        HoaDonResponse response = hoaDonService.findById(id);
-        return ResponseEntity.ok(response);
-    }
 }
 

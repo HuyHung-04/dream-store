@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
-    @Data
+@Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Entity
@@ -46,4 +47,8 @@ import java.time.LocalDate;
         @ManyToOne
         @JoinColumn(name = "id_xuat_xu", referencedColumnName = "id")
         private XuatXu xuatXu;
+
+        // ✅ Liên kết với ảnh (OneToMany)
+        @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        private List<Anh> anhs;
     }

@@ -72,6 +72,7 @@
         <button class="btn-save" (click)="addDiaChi()">Lưu Địa Chỉ</button>
       </div>
     </div>
+
     <button class="close-btn" (click)="closeModal()">Đóng</button>
   </div>
 </div>
@@ -81,6 +82,7 @@
   <div class="edit-modal">
     <div class="edit-modal-header">
       <h2>Sửa Địa Chỉ</h2>
+
     </div>
 
     <div class="edit-modal-body">
@@ -101,14 +103,14 @@
 
       <!-- Phường/Xã -->
       <select [(ngModel)]="newAddress.phuongXa" class="edit-input">
-        <option  value="" disabled selected>Chọn Phường/Xã</option>
+        <option value="" disabled selected>Chọn Phường/Xã</option>
         <option *ngFor="let xa of phuongXaList" [value]="xa.WardCode">{{ xa.WardName }}</option>
       </select>
 
 
       <input [(ngModel)]="AddressEdit.diaChiCuThe" class="edit-input" placeholder="Địa chỉ cụ thể">
-      <button style="background-color: #294764;" class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
-      <button style="background-color: #5a6268;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
+      <button class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
+      <button class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
     </div>
   </div>
 </div>
@@ -123,7 +125,7 @@
     <div class="item-details">
       <div class="item-header">
         <h3 class="item-title">{{ item.tenSanPham }}</h3>
-        <p class="item-price">{{ item.donGia }} VND</p>
+        <p class="item-price">{{ item.donGia | currency }}</p>
       </div>
 
       <div class="item-info">
@@ -134,7 +136,7 @@
       <div *ngIf="item.khuyenMai" class="discount-info">
         <p><strong>Giảm giá:</strong> {{ item.giaTriGiam }} ({{ item.hinhThucGiam ? 'Giảm trực tiếp' : 'Giảm phần trăm'
           }})</p>
-        <p><strong>Giá sau giảm:</strong> {{ item.donGiaSauGiam }} VND</p>
+        <p><strong>Giá sau giảm:</strong> {{ item.donGiaSauGiam | currency }}</p>
       </div>
     </div>
   </div>
@@ -152,16 +154,17 @@
     <label for="">Tạm tính: {{ totalPrice }} VND</label>
   </div>
 
-  <div class="form-group">
-    <label class="input-label" for="voucher">Chọn voucher:</label>
+  <div class="summary-item">
+    <label for="voucher">Voucher:</label>
     <select id="voucher" [(ngModel)]="selectedVoucher" (change)="updateTotalPrice()" class="selectoption">
+      <option value="">Chọn voucher</option>
       <option *ngFor="let voucher of vouchers" [ngValue]="voucher">
-        {{ voucher.ten }} VND
+        {{ voucher.ten}} VND
       </option>
     </select>
   </div>
 
-  <!-- Hiển thị "Giảm tối đa" nếu có voucher được chọn -->
+  <!-- 💰 Hiển thị "Giảm tối đa" nếu có voucher được chọn -->
   <div class="max-sale" *ngIf="selectedVoucherMaxDiscount">
     <label>Giảm tối đa: {{ selectedVoucherMaxDiscount | number }} VND</label>
   </div>
@@ -171,9 +174,11 @@
     <p></p>
   </div>
 
-  <div class="form-group">
-    <label class="input-label" for="payment-method">Chọn phương thức thanh toán:</label>
+   <!-- Hiển thị phương thức thanh toán -->
+   <div class="payment">
+    <label >Phương thức thanh toán:</label>
     <select id="payment-method" [(ngModel)]="selectedPaymentMethod" class="selectoption">
+      <option value="" disabled>Chọn phương thức thanh toán</option>
       <option *ngFor="let method of paymentMethods" [value]="method.id">
         {{ method.ten }}
       </option>
@@ -183,7 +188,21 @@
   <div></div>
   <div class="summary-item">
     <label for="total">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
+
   </div>
-  <a href="" class="back-to-cart"> <--Quay lại</a>
-  <button class="btn-checkout" (click)="createHoaDon()">Đặt hàng</button>
+
+  <button class="btn-checkout" (click)="createHoaDon()">Thanh toán</button>
+  
+</div>
+
+
+
+<!-- Modal Chức Năng Sau Thanh Toán -->
+<div *ngIf="modalthongbao" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content">
+    <h3>Chọn hành động</h3>
+    <button (click)="viewInvoiceDetails()">Xem Chi Tiết Đơn Hàng</button>
+    <button (click)="viewInvoiceHistory()">Xem Lịch Sử Đơn Hàng</button>
+    <button (click)="goHome()">Quay Về Trang Chủ</button>
+  </div>
 </div>

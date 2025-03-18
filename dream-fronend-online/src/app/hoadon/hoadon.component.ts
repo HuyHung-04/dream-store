@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+
 interface Voucher {
   id: number;
   ten: string;
@@ -47,6 +48,7 @@ export class HoadonComponent {
   selectedAddress: any = null; // Địa chỉ được chọn để hiển thị trong modal và giao diện chính
   activeTab = 'select';
   isModalOpen = false;
+  modalthongbao = false;
   isEditModalOpen = false;
   totalPrice: number = 0;
   selectedVoucher: Voucher | null = null;
@@ -71,6 +73,7 @@ export class HoadonComponent {
   totalPriceAfterDiscount: number = 0;
   selectedVoucherId: number = 0; // ID của voucher đã chọn
   fullAddress: string = '';
+  invoiceId: string =''; 
   newAddress = {
     id: '',
     tenNguoiNhan: '',
@@ -459,7 +462,11 @@ export class HoadonComponent {
         (response) => {
           console.log('Hóa đơn đã được tạo thành công:', response);
           alert('Hóa đơn đã được tạo thành công!');
-          this.router.navigate(['/donhang']);
+          this.modalthongbao = true;
+          this.invoiceId = response.ma;  // Assuming the response contains the ID
+
+  
+   
         },
         (error) => {
           console.error('Lỗi khi tạo hóa đơn:', error);
@@ -467,5 +474,31 @@ export class HoadonComponent {
         }
       );
     }
+  }
+
+
+
+
+    // Đóng modal khi click bên ngoài
+    closeModalThongBao() {
+      this.modalthongbao = false;
+    }
+    viewInvoiceDetails(): void {
+      console.log('Xem chi tiết đơn hàng');
+      this.router.navigate(['/donhang', this.invoiceId]);
+      this.closeModalThongBao();  // Đóng modal khi thực hiện hành động
+    }
+
+  viewInvoiceHistory() {
+    console.log('Xem lịch sử đơn hàng');
+    this.router.navigate(['/lichsudonhang']);
+    this.closeModalThongBao();
+  }
+
+  goHome() {
+    console.log('Quay về trang chủ');
+    this.closeModalThongBao();
+    // Ví dụ quay về trang chủ
+    this.router.navigate(['/banhang']);
   }
 }
