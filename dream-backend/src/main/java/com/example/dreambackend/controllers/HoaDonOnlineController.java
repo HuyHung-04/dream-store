@@ -1,6 +1,7 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.dtos.HoaDonChiTietDto;
+import com.example.dreambackend.dtos.HoaDonDto;
 import com.example.dreambackend.dtos.VoucherDto;
 import com.example.dreambackend.entities.GioHangChiTiet;
 import com.example.dreambackend.entities.HoaDon;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/hoa-don-online")
@@ -93,7 +95,18 @@ public class HoaDonOnlineController {
     }
 
     @GetMapping("/hoa-don-chi-tiet")
-    public List<Object[]> getHoaDonChiTiet() {
-        return hoaDonOnlineService.getHoaDonChiTiet();
+    public ResponseEntity<List<HoaDonDto>> getHoaDonChiTiet() {
+        try {
+            List<HoaDonDto> hoaDonDtos = hoaDonOnlineService.getHoaDonChiTietDto();
+            return ResponseEntity.ok(hoaDonDtos);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+
+    @GetMapping("/find-by-ma/{ma}")
+    public Optional<HoaDon> getHoaDonWithDetailsByMa(@PathVariable("ma") String ma) {
+        return hoaDonOnlineService.getHoaDonWithDetailsByMa(ma);
     }
 }

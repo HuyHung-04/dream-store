@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 
 
 export class LichsudonhangService {
-  private apiUrl = 'http://localhost:8080/api/hoa-don-online/hoa-don-chi-tiet';
+  private apiUrl = 'http://localhost:8080/api/hoa-don-online';
   constructor(private http: HttpClient) { }
 
   getHoaDonChiTiet(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);  // Send GET request
+    return this.http.get<any>(`${this.apiUrl}/hoa-don-chi-tiet`);  // Send GET request
   }
 }

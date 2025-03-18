@@ -1,11 +1,13 @@
 package com.example.dreambackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "hoa_don")
 public class HoaDon {
     @Id
@@ -73,4 +76,6 @@ public class HoaDon {
     @ManyToOne
     @JoinColumn(name = "id_phuong_thuc_thanh_toan", referencedColumnName = "id")
     private PhuongThucThanhToan phuongThucThanhToan;
+
+
 }

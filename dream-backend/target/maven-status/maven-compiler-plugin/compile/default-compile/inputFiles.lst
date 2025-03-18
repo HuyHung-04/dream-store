@@ -8,6 +8,7 @@ D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\san
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\voucher\VoucherService.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\configs\WebMvcConfig.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\responses\GioHangChiTietResponse.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\HoaDonChiTietDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\DreamBackendApplication.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\ThuongHieuDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\repositories\SizeRepository.java
@@ -22,6 +23,7 @@ D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\nha
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\sanphamonline\ISanPhamOnlineService.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\SanPhamChiTietRequest.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\responses\HoaDonChiTietResponse.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\responses\GetSanPhamToBanHangRespone.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\size\SizeService.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\GioHangChiTietController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\thuonghieu\ThuongHieuService.java
@@ -49,9 +51,11 @@ D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\ThongKeRequest.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\BanHangOnlineController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\NhanVienRequest.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\PhuongThucThanhToanController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\CoAoDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\ThuongHieuRequest.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\KhuyenMaiController.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\PhuongThucThanhToanDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\XuatXu.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\HoaDonOnlineController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\SanPhamRequest.java
@@ -73,6 +77,7 @@ D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\repositories
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\repositories\SanPhamRepository.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\xuatxu\XuatXuService.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\MauSacRequest.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\HoaDonDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\DiaChiKhachHang.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\VoucherDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\responses\ThongKeResponse.java
@@ -89,6 +94,7 @@ D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\repositories
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\ChatLieuController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\responses\SanPhamChiTietRespone.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\NhanVien.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\dtos\KhachHangBanHangDto.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\voucher\IVoucherService.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\controllers\SanPhamChiTietController.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\coao\ICoAoService.java
@@ -135,6 +141,7 @@ D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\repositories
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\responses\ChatLieuRespone.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\entities\HoaDonChiTiet.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\VaiTroRequest.java
+D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\services\phuongthucthanhtoan\PhuongThucThanhToanService.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\repositories\HoaDonRepository.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\responses\SizeRespone.java
 D:\dream-store\dream-backend\src\main\java\com\example\dreambackend\requests\AnhRequest.java

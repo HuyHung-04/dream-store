@@ -88,42 +88,34 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     """, nativeQuery = true)
     List<Object[]> findChiTietByMaHoaDon(@Param("maHoaDon") String maHoaDon);
 
+
     @Query(value = """
     SELECT 
-         hct.id_hoa_don,
+        hd.id AS idHoaDon,
+        hd.ma AS maHoaDon,
+        hd.tong_tien_thanh_toan AS tongTienThanhToan,
+        hct.id AS idHoaDonChiTiet,
         spct.ma AS maSanPham,
         sp.ten AS tenSanPham,
-        hct.don_gia AS donGia,
         hct.so_luong AS soLuong,
         ms.ten AS mauSac,
+        hct.don_gia AS donGia,
         sz.ten AS size,
         (
             SELECT TOP 1 a.anh_url
             FROM anh a
             WHERE a.id_san_pham = sp.id AND a.trang_thai = 1
         ) AS anhUrl
-    FROM (
-        SELECT
-            hct.id,
-            hct.ma,
-            hct.don_gia,
-            hct.so_luong,
-            hct.ngay_sua,
-            hct.ngay_tao,
-            hct.trang_thai,
-            hct.id_hoa_don,
-            spct.id AS id_san_pham_chi_tiet,  -- Sửa ở đây
-            ROW_NUMBER() OVER (PARTITION BY hct.id_hoa_don ORDER BY hct.id) AS row_num
-        FROM hoa_don_chi_tiet hct
-        JOIN san_pham_chi_tiet spct ON hct.id_san_pham_chi_tiet = spct.id
-        JOIN hoa_don hd ON hct.id_hoa_don = hd.id
-    ) AS hct
+    FROM hoa_don hd
+    JOIN hoa_don_chi_tiet hct ON hd.id = hct.id_hoa_don
     JOIN san_pham_chi_tiet spct ON hct.id_san_pham_chi_tiet = spct.id
     JOIN san_pham sp ON spct.id_san_pham = sp.id
     JOIN mau_sac ms ON spct.id_mau_sac = ms.id
     JOIN size sz ON spct.id_size = sz.id
-    WHERE hct.row_num = 1
+    ORDER BY hd.id DESC  -- Sắp xếp hóa đơn theo id giảm dần
 """, nativeQuery = true)
     List<Object[]> getHoaDonChiTiet();
+
+
 
 }

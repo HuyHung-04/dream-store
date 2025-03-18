@@ -146,4 +146,13 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         }
         return list;
     }
+
+    // Lấy các trường cần thiết của hóa đơn với voucher, khách hàng và phương thức thanh toán
+    @Query("SELECT h FROM HoaDon h " +
+            "LEFT JOIN FETCH h.voucher " +
+            "LEFT JOIN FETCH h.khachHang " +
+            "LEFT JOIN FETCH h.phuongThucThanhToan " +
+            "WHERE h.ma = :ma")
+    Optional<HoaDon> findHoaDonWithDetailsByMa(String ma);
+
 }
