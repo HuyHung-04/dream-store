@@ -49,6 +49,7 @@ export class KhachhangComponent implements OnInit {
     ma: '',
     ten: '',
     gioiTinh: null,
+    email:'',
     soDienThoai: '',
     matKhau: '',
     ngayTao: '',
@@ -121,6 +122,13 @@ export class KhachhangComponent implements OnInit {
   } else if (!phoneRegex.test(this.khachhang.soDienThoai)) {
     this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
   }
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  if (!this.khachhang.email.trim()) {
+    this.errors.email = 'Email không được để trống!';
+  } else if (!emailRegex.test(this.khachhang.email)) {
+    this.errors.email = 'Email phải có định dạng @gmail.com!';
+  }
     if (!this.khachhang.matKhau.trim()) {
       this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
     }
@@ -131,6 +139,15 @@ export class KhachhangComponent implements OnInit {
     }
 
     return Object.keys(this.errors).length === 0;
+  }
+  filterKhachHangs() {
+    if (this.searchText.trim()) {
+      this.filteredKhachHangs = this.khachhangs.filter((khachhang) =>
+        khachhang.ten.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    } else {
+      this.filteredKhachHangs = [...this.khachhangs]; // Hiển thị tất cả nếu không tìm kiếm
+    }
   }
 
   searchAndShowSearch(): void {
@@ -178,6 +195,13 @@ export class KhachhangComponent implements OnInit {
     this.errors.soDienThoai = 'Số điện thoại khách hàng không được để trống!';
   } else if (!phoneRegex.test(this.khachHangEdit.soDienThoai)) {
     this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
+  }
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  if (!this.khachhang.email.trim()) {
+    this.errors.email = 'Email không được để trống!';
+  } else if (!emailRegex.test(this.khachhang.email)) {
+    this.errors.email = 'Email phải có định dạng @gmail.com!';
   }
     if (!this.khachHangEdit.matKhau.trim()) {
       this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
@@ -251,15 +275,7 @@ export class KhachhangComponent implements OnInit {
       console.warn('Invalid page number:', page);
     }
   }
-  filterKhachHangs() {
-    if (this.searchText.trim()) {
-      this.filteredKhachHangs = this.khachhangs.filter((khachhang) =>
-        khachhang.ten.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    } else {
-      this.filteredKhachHangs = [...this.khachhangs]; // Hiển thị tất cả nếu không tìm kiếm
-    }
-  }
+  
   goToPreviousPage(): void {
     if (this.currentPage > 0) {
       this.loadPage(this.currentPage - 1);

@@ -213,8 +213,11 @@ button {
 .invoice-btn:hover {
   background-color: #e2e6ea;
 }
+
 .invoice-btn.active {
-  background-color: #648cb4 !important; /* Màu khi được chọn */
+  background-color: #ff9900 !important;
+  color: black;
+  border-color: #ff9900;
 }
 
 .modal {
