@@ -392,19 +392,23 @@ export class BanhangComponent implements OnInit {
       return;
     }
     console.log(this.selectedInvoice);
+
+    // Sử dụng selectedPaymentMethod (đã được load từ DB) cho idPhuongThucThanhToan
     const updatedInvoice = {
       ...this.selectedInvoice,
       trangThai: 7,
-      idPhuongThucThanhToan: this.selectedDiscount
-    }
+      idPhuongThucThanhToan: this.selectedPaymentMethod
+    };
+
     this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
       response => {
-        debugger
-        // Sau khi cập nhật thành công trạng thái hóa đơn, hiển thị thông báo và reset giỏ hàng, voucher, v.v.
-        alert(`Thanh toán thành công bằng ${this.selectedPaymentMethod.toUpperCase()}!`);
+        alert(`Thanh toán thành công`);
         this.cart = [];
         this.discountCode = '';
         this.discountAmount = 0;
+        // Nếu cần, cập nhật lại selectedInvoice từ response
+        this.selectedInvoice = response;
+        this.loadInvoices();
       },
       error => {
         console.error('Lỗi khi cập nhật trạng thái hóa đơn:', error);
@@ -412,6 +416,7 @@ export class BanhangComponent implements OnInit {
       }
     );
   }
+
 
 
   trackById(index: number, item: any) {
