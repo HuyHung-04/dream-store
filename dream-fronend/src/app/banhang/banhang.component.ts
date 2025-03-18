@@ -19,9 +19,8 @@ export class BanhangComponent implements OnInit {
   searchText: string = '';
   selectedCategory: string = '';
   invoices: any[] = [];
-  discountCode: string = ''; // không sử dụng khi dùng voucher qua select box
+  discountCode: string = '';
   discountAmount: number = 0;
-  selectedPaymentMethod: string = 'cash';
   hienThiDanhSachKhachHang: boolean = false;
   danhSachKhachHang: any[] = [];
   danhSachNhanVien: any[] = [];
@@ -38,6 +37,8 @@ export class BanhangComponent implements OnInit {
   selectedKhachHang: any = null;
   discountCodes: any[] = [];
   selectedDiscount: any = null;
+  paymentMethods: any[] = [];
+  selectedPaymentMethod: string = '';
 
 
   constructor(private banhangService: BanhangService, private cdr: ChangeDetectorRef) { }
@@ -46,7 +47,10 @@ export class BanhangComponent implements OnInit {
     this.layDanhSachNhanVien();
     this.loadSanPhamToBanHang();
     this.getVoucher();
+    this.loadPaymentMethods();
+    this.loadInvoices();
     this.cart = [];
+
   }
 
   // Tạo hóa đơn mới
@@ -70,7 +74,7 @@ export class BanhangComponent implements OnInit {
       ngayNhanDuKien: '',
       ngayTao: new Date().toISOString(),
       ngaySua: new Date().toISOString(),
-      trangThai: 0,
+      trangThai: 5,
       ghiChu: ''
     };
 
@@ -387,11 +391,28 @@ export class BanhangComponent implements OnInit {
       alert('Giỏ hàng đang trống!');
       return;
     }
-    alert(`Thanh toán thành công bằng ${this.selectedPaymentMethod.toUpperCase()}!`);
-    this.cart = [];
-    this.discountCode = '';
-    this.discountAmount = 0;
+    console.log(this.selectedInvoice);
+    const updatedInvoice = {
+      ...this.selectedInvoice,
+      trangThai: 7,
+      idPhuongThucThanhToan: this.selectedDiscount
+    }
+    this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
+      response => {
+        debugger
+        // Sau khi cập nhật thành công trạng thái hóa đơn, hiển thị thông báo và reset giỏ hàng, voucher, v.v.
+        alert(`Thanh toán thành công bằng ${this.selectedPaymentMethod.toUpperCase()}!`);
+        this.cart = [];
+        this.discountCode = '';
+        this.discountAmount = 0;
+      },
+      error => {
+        console.error('Lỗi khi cập nhật trạng thái hóa đơn:', error);
+        alert('Thanh toán thất bại!');
+      }
+    );
   }
+
 
   trackById(index: number, item: any) {
     return item.id;
@@ -402,7 +423,6 @@ export class BanhangComponent implements OnInit {
     this.banhangService.getVoucher().subscribe(
       (data: any[]) => {
         this.discountCodes = data;
-        console.log(data);
       },
       (error) => {
         console.error('Lỗi khi lấy danh sách mã giảm giá:', error);
@@ -413,10 +433,7 @@ export class BanhangComponent implements OnInit {
   // Cập nhật tổng tiền hóa đơn: tongTienTruocVoucher và tongTienThanhToan
   updateInvoiceTotal(): void {
     const preVoucher = this.getTotal();
-    console.log('Tổng tiền trước voucher:', preVoucher);
     const totalAfterVoucher = preVoucher - this.discountAmount;
-    console.log('Discount Amount:', this.discountAmount);
-    // Tạo bản sao của selectedInvoice và ghi đè 2 trường cần cập nhật
     const updatedInvoice = {
       ...this.selectedInvoice,
       tongTienTruocVoucher: preVoucher,
@@ -449,6 +466,35 @@ export class BanhangComponent implements OnInit {
         }
       );
     }
+  }
+
+  loadPaymentMethods(): void {
+    this.banhangService.getDanhSachPTTT().subscribe(
+      (data: any[]) => {
+        this.paymentMethods = data;
+        console.log(data);
+        if (data.length > 0) {
+          this.selectedPaymentMethod = data[0].id;
+        }
+      },
+      error => {
+        console.error('Lỗi khi lấy dữ liệu phương thức thanh toán:', error);
+      }
+    );
+  }
+
+  loadInvoices(): void {
+    const request = {};
+    this.banhangService.getDanhSachHD(request).subscribe(
+      (response: any) => {
+        // Nếu response.content không tồn tại, giả sử response là mảng các hóa đơn
+        const invoicesArray = response.content || response;
+        this.invoices = invoicesArray.filter((invoice: any) => invoice.trangThai === 5);
+      },
+      error => {
+        console.error("Lỗi khi lấy danh sách hóa đơn:", error);
+      }
+    );
   }
 
 }
