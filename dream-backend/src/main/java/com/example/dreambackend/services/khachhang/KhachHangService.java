@@ -127,6 +127,7 @@ public class KhachHangService implements IKhachHangService{
 
         if(khachHangRepository.findKhachHangByEmail(email).getOtpHash().equals(hashOtpSHA256(otp))){
             khachHangRepository.findKhachHangByEmail(email).setTrangThaiOtp(1);
+            khachHangRepository.findKhachHangByEmail(email).setOtpHash(null);
         }else{
             khachHangRepository.findKhachHangByEmail(email).setTrangThaiOtp(0);
         }

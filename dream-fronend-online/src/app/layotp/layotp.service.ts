@@ -18,7 +18,7 @@ export class LayOtpService {
       return this.http.post<any>(`${this.apiUrl}/khach-hang/send`, params);
     }
     
-    getKhachHangByEmail(email: String): Observable<any[]> {
+    getKhachHangByEmail(email: string): Observable<any[]> {
       return this.http.get<any[]>(`${this.apiUrl}/khach-hang/detail?email=${email}`);
     }
     updateKhachHang(khachhang: any): Observable<any> {
@@ -28,7 +28,10 @@ export class LayOtpService {
       const body = { email: email, otp: otp }; // Định dạng đúng của JSON body
       return this.http.post<any>(`${this.apiUrl}/khach-hang/compare`, body);
     }
-    deleteOtp(email: String): Observable<any> {
-      return this.http.post<any>(`${this.apiUrl}/khach-hang/deleteotp`, email);
+    deleteOtp(email: string): Observable<any> {
+      const params = new HttpParams()
+      .set('email', email)
+      ; 
+      return this.http.post<any>(`${this.apiUrl}/khach-hang/deleteotp`,params);
     }
   }

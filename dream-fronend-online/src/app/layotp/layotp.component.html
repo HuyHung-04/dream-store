@@ -12,6 +12,7 @@
     <!-- Hiển thị nhập OTP khi đã gửi email -->
     <div *ngIf="showOtpSection" class="c">
         <input type="text" [(ngModel)]="otp" placeholder="Nhập mã OTP">
+        <div class="countdown">{{ formattedTimer }}</div>
         <button class="verify-otp" (click)="verifyOtp()">Xác thực OTP</button>
         <button class="resend-otp" (click)="sendOtp()">Gửi lại mã OTP</button>
     </div>
