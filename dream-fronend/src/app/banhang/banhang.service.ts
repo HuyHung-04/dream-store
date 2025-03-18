@@ -8,20 +8,25 @@ import {map} from 'rxjs/operators';
 })
 export class BanhangService {
 
-  private apiUrl = 'http://localhost:8080/api/san-pham-chi-tiet/ban-hang';
-  private apiUrlHD = 'http://localhost:8080/api/hoa-don-chi-tiet';
-  private apiUrlKH = 'http://localhost:8080/api/khach-hang';
-  private apiUrlTaoHoaDon = 'http://localhost:8080/api/hoa-don';
-  private apiUrlNhanVien = 'http://localhost:8080/api';
-  private apiUrlHDCT = 'http://localhost:8080/api/hoa-don-chi-tiet';
-  private apiUrlPhuongThucThanhToan = 'http://localhost:8080/api/';
-  private apiVoucher = 'http://localhost:8080/api/voucher';
+  private apiUrl = 'http://localhost:8889/api/san-pham-chi-tiet/ban-hang';
+  private apiUrlHD = 'http://localhost:8889/api/hoa-don';
+  private apiUrlKH = 'http://localhost:8889/api/khach-hang';
+  private apiUrlTaoHoaDon = 'http://localhost:8889/api/hoa-don';
+  private apiUrlNhanVien = 'http://localhost:8889/api';
+  private apiUrlHDCT = 'http://localhost:8889/api/hoa-don-chi-tiet';
+  private apiUrlPTTT = 'http://localhost:8889/api/phuong-thuc-thanh-toan';
+  private apiVoucher = 'http://localhost:8889/api/voucher';
 
   constructor(private http: HttpClient) { }
 
   getSanPham(page: number, size: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${size}`);
   }
+
+  getDanhSachHD(request: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrlHD}/all`, request);
+  }
+
 
   addSanPhamToHoaDon(hoaDonId: number, sanPhamChiTietId: number, soLuong: number): Observable<any> {
     return this.http.post(`${this.apiUrlHDCT}/${hoaDonId}/add/${sanPhamChiTietId}?soLuong=${soLuong}`, {});
@@ -92,6 +97,11 @@ export class BanhangService {
   getPhuongThucById(idPhuongThucThanhToan: number) {
 
   }
+
+  getDanhSachPTTT(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrlPTTT}/payment-methods`);
+  }
+
   getNhanVienById(idNhanVien: number) {
     if (!idNhanVien) {
       console.error("Lỗi: idNhanVien không hợp lệ!", idNhanVien);

@@ -175,9 +175,9 @@
     <div class="payment-container">
       <h2 class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán</h2>
       <select [(ngModel)]="selectedPaymentMethod" class="payment-method">
-        <option value="cash">Tiền mặt</option>
-        <option value="bank">Chuyển khoản</option>
-        <option value="qr">Quét QR</option>
+        <option *ngFor="let method of paymentMethods" [value]="method.id">
+          {{ method.ten}}
+        </option>
       </select>
       <div style="padding-top: 22px;">
         <button class="checkout-btn" (click)="checkout()">

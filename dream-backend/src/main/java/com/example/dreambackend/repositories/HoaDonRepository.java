@@ -19,34 +19,44 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
 
     @Query("SELECT new com.example.dreambackend.responses.ThongKeResponse(COUNT(h.id), SUM(h.tongTienThanhToan), COUNT(DISTINCT h.khachHang.id)) " +
             "FROM HoaDon h " +
-            "WHERE (:startDate IS NULL OR h.ngayNhanDuKien >= :startDate) AND (:endDate IS NULL OR h.ngayNhanDuKien <= :endDate)")
+            "WHERE (:startDate IS NULL OR h.ngayTao >= :startDate) " +
+            "AND (:endDate IS NULL OR h.ngayTao <= :endDate) " +
+            "AND h.trangThai IN (4, 7)")
     ThongKeResponse getTongQuan(LocalDate startDate, LocalDate endDate);
 
-    @Query("SELECT new com.example.dreambackend.responses.ThongKeThangResponse(MONTH(h.ngayNhanDuKien), SUM(h.tongTienThanhToan)) " +
+    @Query("SELECT new com.example.dreambackend.responses.ThongKeThangResponse(MONTH(h.ngayTao), SUM(h.tongTienThanhToan)) " +
             "FROM HoaDon h " +
-            "WHERE YEAR(h.ngayNhanDuKien) = YEAR(CURRENT_DATE) " +
-            "GROUP BY MONTH(h.ngayNhanDuKien) " +
-            "ORDER BY MONTH(h.ngayNhanDuKien)")
+            "WHERE YEAR(h.ngayTao) = YEAR(CURRENT_DATE) " +
+            "AND h.trangThai IN (4, 7) " +
+            "GROUP BY MONTH(h.ngayTao) " +
+            "ORDER BY MONTH(h.ngayTao)")
     List<ThongKeThangResponse> getDoanhThuTungThang();
-    @Query("SELECT YEAR(h.ngayNhanDuKien) AS year, SUM(h.tongTienThanhToan) AS totalRevenue " +
+
+    @Query("SELECT YEAR(h.ngayTao) AS year, SUM(h.tongTienThanhToan) AS totalRevenue " +
             "FROM HoaDon h " +
-            "GROUP BY YEAR(h.ngayNhanDuKien) " +
-            "ORDER BY YEAR(h.ngayNhanDuKien)")
+            "WHERE h.trangThai IN (4, 7) " +
+            "GROUP BY YEAR(h.ngayTao) " +
+            "ORDER BY YEAR(h.ngayTao)")
     List<Object[]> getDoanhThuTungNam();
+
     @Query("SELECT new com.example.dreambackend.responses.ThongKeThangNayResponse(" +
-            "DAY(h.ngayNhanDuKien), SUM(h.tongTienThanhToan)) " +
+            "DAY(h.ngayTao), SUM(h.tongTienThanhToan)) " +
             "FROM HoaDon h " +
-            "WHERE MONTH(h.ngayNhanDuKien) = MONTH(CURRENT_DATE) " +
-            "AND YEAR(h.ngayNhanDuKien) = YEAR(CURRENT_DATE) " +
-            "GROUP BY DAY(h.ngayNhanDuKien) " +
-            "ORDER BY DAY(h.ngayNhanDuKien)")
+            "WHERE MONTH(h.ngayTao) = MONTH(CURRENT_DATE) " +
+            "AND YEAR(h.ngayTao) = YEAR(CURRENT_DATE) " +
+            "AND h.trangThai IN (4, 7) " +
+            "GROUP BY DAY(h.ngayTao) " +
+            "ORDER BY DAY(h.ngayTao)")
     List<ThongKeThangNayResponse> getDoanhThuTungNgayTrongThang();
     // Truy vấn doanh thu hôm nay
+
     @Query("SELECT new com.example.dreambackend.responses.ThongKeHomNayResponse(" +
-            "COUNT(DISTINCT h.khachHang.id), SUM(h.tongTienThanhToan), COUNT(DISTINCT h.khachHang.id)) " +
+            "COUNT(h.id), SUM(h.tongTienThanhToan), COUNT(DISTINCT h.khachHang.id)) " +
             "FROM HoaDon h " +
-            "WHERE h.ngayNhanDuKien = CURRENT_DATE")
+            "WHERE h.ngayTao = CURRENT_DATE " +
+            "AND h.trangThai IN (4, 7)")
     ThongKeHomNayResponse getDoanhThuHomNay();
+
     List<HoaDon> findAllByTrangThai(int i);
 
     Optional<HoaDon> findByMa(String ma);
@@ -56,30 +66,30 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         StringBuilder sql = new StringBuilder();
         sql.append("""
                 SELECT
-                  hd.id,
-                  hd.id_khach_hang idKhachHang,
-                  hd.id_nhan_vien idNhanVien,
-                  hd.id_voucher idVoucher,
-                  hd.id_phuong_thuc_thanh_toan idPhuongThucThanhToan,
-                	kh.ten AS tenKhachHang,
-                	nv.ten AS tenNhanVien,
-                	vc.ten AS tenVoucher,
-                	vc.hinh_thuc_giam AS hinhThucGiam,
-                	vc.gia_tri_giam AS giaTriGiam,
-                	hd.ma AS maHoaDon,
-                	hd.ten_nguoi_nhan AS tenNguoiNhan,
-                	hd.sdt_nguoi_nhan AS sdtNguoiNhan,
-                	hd.dia_chi_nhan_hang AS diaChiNhanHang,
-                	hd.hinh_thuc_thanh_toan AS hinhThucThanhToan,
-                	hd.phi_van_chuyen AS phiVanChuyen,
-                	hd.tong_tien_truoc_voucher tongTienTruocVoucher,
-                	hd.tong_tien_thanh_toan AS tongTienThanhToan,
-                	hd.ngay_nhan_du_kien AS ngayNhanDuKien,
-                	hd.ngay_sua AS ngaySua,
-                	hd.ngay_tao AS ngayTao,
-                	hd.trang_thai AS trangThai,
-                	hd.ghi_chu AS ghiChu,
-                	COUNT(1) OVER () AS totalRecords
+                    hd.id,
+                    hd.id_khach_hang idKhachHang,
+                    hd.id_nhan_vien idNhanVien,
+                    hd.id_voucher idVoucher,
+                    hd.id_phuong_thuc_thanh_toan idPhuongThucThanhToan,
+                    kh.ten AS tenKhachHang,
+                    nv.ten AS tenNhanVien,
+                    vc.ten AS tenVoucher,
+                    vc.hinh_thuc_giam AS hinhThucGiam,
+                    vc.gia_tri_giam AS giaTriGiam,
+                    hd.ma AS maHoaDon,
+                    hd.ten_nguoi_nhan AS tenNguoiNhan,
+                    hd.sdt_nguoi_nhan AS sdtNguoiNhan,
+                    hd.dia_chi_nhan_hang AS diaChiNhanHang,
+                    hd.hinh_thuc_thanh_toan AS hinhThucThanhToan,
+                    hd.phi_van_chuyen AS phiVanChuyen,
+                    hd.tong_tien_truoc_voucher tongTienTruocVoucher,
+                    hd.tong_tien_thanh_toan AS tongTienThanhToan,
+                    hd.ngay_nhan_du_kien AS ngayNhanDuKien,
+                    hd.ngay_sua AS ngaySua,
+                    hd.ngay_tao AS ngayTao,
+                    hd.trang_thai AS trangThai,
+                    hd.ghi_chu AS ghiChu,
+                    COUNT(1) OVER () AS totalRecords
                 FROM hoa_don hd
                 LEFT JOIN khach_hang kh ON kh.id = hd.id_khach_hang
                 LEFT JOIN nhan_vien nv ON nv.id = hd.id_nhan_vien
@@ -102,7 +112,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getNgayTaoTo() != null) {
             sql.append(" AND CAST(hd.ngay_tao AS DATE) <= :ngayTaoTo");
         }
-        if (searchRequest.getListTrangThai() != null && !searchRequest.getListTrangThai().isEmpty()) {
+        if (searchRequest.getListTrangThai() != null) {
             sql.append(" AND hd.trang_thai IN (:listTrangThai)");
         }
         if (searchRequest.getIdHoaDon() != null) {
@@ -127,7 +137,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getNgayTaoTo() != null) {
             query.setParameter("ngayTaoTo", sdf.format(searchRequest.getNgayTaoTo()));
         }
-        if (searchRequest.getListTrangThai() != null && !searchRequest.getListTrangThai().isEmpty()) {
+        if (searchRequest.getListTrangThai() != null) {
             query.setParameter("listTrangThai", searchRequest.getListTrangThai());
         }
         if (searchRequest.getIdHoaDon() != null) {
