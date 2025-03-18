@@ -1,0 +1,12 @@
+{
+  "routes": {
+    "/": {},
+    "/banhang": {},
+    "/khachhang": {},
+    "/khuyenmai": {},
+    "/nhanvien": {},
+    "/sanpham": {},
+    "/thongke": {},
+    "/voucher": {}
+  }
+}

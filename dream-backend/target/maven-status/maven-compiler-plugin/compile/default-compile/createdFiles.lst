@@ -34,6 +34,7 @@ com\example\dreambackend\responses\HoaDonChiTietResponse$HoaDonChiTietResponseBu
 com\example\dreambackend\services\chatlieu\IChatLieuService.class
 com\example\dreambackend\entities\PhuongThucThanhToan.class
 com\example\dreambackend\requests\GhnShippingRequest.class
+com\example\dreambackend\controllers\PhuongThucThanhToanController.class
 com\example\dreambackend\repositories\GioHangChiTietRepository.class
 com\example\dreambackend\repositories\HoaDonChiTietRepository.class
 com\example\dreambackend\services\anh\AnhService.class
@@ -56,6 +57,7 @@ com\example\dreambackend\entities\Size.class
 com\example\dreambackend\configs\WebConfig$1.class
 com\example\dreambackend\entities\ChatLieu$ChatLieuBuilder.class
 com\example\dreambackend\requests\SanPhamRequest.class
+com\example\dreambackend\responses\GetSanPhamToBanHangRespone.class
 com\example\dreambackend\controllers\DiaChiKhachHangController.class
 com\example\dreambackend\repositories\SanPhamChiTietRepository.class
 com\example\dreambackend\responses\CoAoRespone.class
@@ -67,6 +69,7 @@ com\example\dreambackend\controllers\SanPhamChiTietController.class
 com\example\dreambackend\services\hoadonchitiet\HoaDonChiTietService.class
 com\example\dreambackend\services\sanpham\ISanPhamService.class
 com\example\dreambackend\dtos\XuatXuDto.class
+com\example\dreambackend\services\nhanvien\NhanVienService.class
 com\example\dreambackend\dtos\ChatLieuDto$ChatLieuDtoBuilder.class
 com\example\dreambackend\dtos\CoAoDto.class
 com\example\dreambackend\services\size\ISizeService.class
@@ -76,7 +79,9 @@ com\example\dreambackend\repositories\XuatXuRepository.class
 com\example\dreambackend\controllers\VoucherController.class
 com\example\dreambackend\services\voucher\VoucherService.class
 com\example\dreambackend\services\thuonghieu\ThuongHieuService.class
+com\example\dreambackend\dtos\KhachHangBanHangDto.class
 com\example\dreambackend\repositories\AnhRepository.class
+com\example\dreambackend\dtos\HoaDonDto.class
 com\example\dreambackend\dtos\SanPhamDto.class
 com\example\dreambackend\services\thongke\ThongKeService.class
 com\example\dreambackend\controllers\MauSacController.class
@@ -98,15 +103,18 @@ com\example\dreambackend\services\coao\ICoAoService.class
 com\example\dreambackend\responses\SanPhamRespone.class
 com\example\dreambackend\repositories\SanPhamOnlineRepository.class
 com\example\dreambackend\controllers\AnhController$WebMvcConfig.class
+com\example\dreambackend\dtos\PhuongThucThanhToanDto.class
 com\example\dreambackend\repositories\NhanVienRepository.class
 com\example\dreambackend\requests\ThuongHieuRequest.class
 com\example\dreambackend\controllers\GioHangChiTietController.class
 com\example\dreambackend\controllers\KhachHangController.class
 com\example\dreambackend\responses\AnhRespone.class
 com\example\dreambackend\requests\HoaDonSearchRequest.class
+com\example\dreambackend\dtos\HoaDonChiTietDto.class
 com\example\dreambackend\entities\ThuongHieu.class
 com\example\dreambackend\services\size\SizeService.class
 com\example\dreambackend\repositories\ChatLieuRepository.class
+com\example\dreambackend\services\nhanvien\INhanVienService.class
 com\example\dreambackend\responses\ThuongHieuRespone.class
 com\example\dreambackend\services\diachikhachhang\DiaChiKhachHangService.class
 com\example\dreambackend\requests\DiaChiKhachHangRequest.class
@@ -125,7 +133,6 @@ com\example\dreambackend\requests\ThongKeRequest.class
 com\example\dreambackend\repositories\SanPhamChiTietOnlineRepository.class
 com\example\dreambackend\services\mausac\IMauSacService.class
 com\example\dreambackend\entities\CoAo$CoAoBuilder.class
-com\example\dreambackend\services\NhanVien\INhanVienService.class
 com\example\dreambackend\responses\HoaDonResponse$HoaDonResponseBuilder.class
 com\example\dreambackend\entities\Voucher.class
 com\example\dreambackend\entities\SanPhamChiTiet.class
@@ -156,7 +163,6 @@ com\example\dreambackend\services\diachikhachhang\IDiaChiKhachHangService.class
 com\example\dreambackend\repositories\CoAoRepository.class
 com\example\dreambackend\entities\ThuongHieu$ThuongHieuBuilder.class
 com\example\dreambackend\services\thuonghieu\IThuongHieuService.class
-com\example\dreambackend\services\NhanVien\NhanVienService.class
 com\example\dreambackend\requests\HoaDonRequest.class
 com\example\dreambackend\services\hoadononline\HoaDonOnlineService.class
 com\example\dreambackend\responses\HoaDonResponse.class
@@ -173,6 +179,7 @@ com\example\dreambackend\controllers\HoaDonOnlineController.class
 com\example\dreambackend\requests\SizeRequest.class
 com\example\dreambackend\repositories\DiaChiKhachHangRepository.class
 com\example\dreambackend\responses\ThongKeHomNayResponse.class
+com\example\dreambackend\services\phuongthucthanhtoan\PhuongThucThanhToanService.class
 com\example\dreambackend\services\sanpham\SanPhamService.class
 com\example\dreambackend\dtos\SanPhamChiTietDto.class
 com\example\dreambackend\controllers\AnhController.class

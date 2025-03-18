@@ -1,88 +1,95 @@
 <div class="container">
-  <div class="logo">
-    <a href=""><img src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs" alt="Logo"></a>
-  </div>
-  <div class="form-container">
-      <h2>Đăng ký tài khoản</h2>
+    <div class="logo">
+        <img src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs" alt="Logo của cửa hàng" />
+    </div>
+    <div class="form-container">
+        <h2>Đăng ký tài khoản</h2>
 
-      <form (ngSubmit)="addKhachHang()" #khachHangForm="ngForm">
-          <div class="input-group">
-            <label for="ten">Tên khách hàng</label>
-            <input type="text" class="input" [(ngModel)]="khachhang.ten" name="ten" required #ten="ngModel"
-              (input)="clearError('ten')" />
-            <div class="tooltip-error" *ngIf="errors.ten">
-              {{ errors.ten}}
-            </div>
-          </div>
-
-          <div class="input-group">
-            <label for="gioiTinh">Giới tính</label>
-            <select class="input" [(ngModel)]="khachhang.gioiTinh" name="gioiTinh" required
-              (change)="clearError('gioiTinh')">
-              <option [value]="true">Nam</option>
-              <option [value]="false">Nữ</option>
-            </select>
-            <div class="tooltip-error" *ngIf="errors.gioiTinh">
-              {{ errors.gioiTinh}}
-            </div>
-          </div>
-
-          <div class="input-group">
-            <label for="email">Email</label>
-            <input type="email" class="input" [(ngModel)]="khachhang.email" name="email" required #email="ngModel"
-              (input)="clearError('email')" />
-            <div class="tooltip-error" *ngIf="errors.email">
-              {{ errors.email}}
-            </div>
-          </div>
+        <form (ngSubmit)="addKhachHang()" #khachHangForm="ngForm">
           
-          <div class="input-group">
-            <label for="soDienThoai">Số điện thoại</label>
-            <input type="text" class="input" [(ngModel)]="khachhang.soDienThoai" name="soDienThoai" required #soDienThoai="ngModel"
-              (input)="clearError('soDienThoai')" />
-            <div class="tooltip-error" *ngIf="errors.soDienThoai">
-              {{ errors.soDienThoai}}
+            <!-- <div class="input-group">
+              <input type="text" class="input" [(ngModel)]="khachhang.ma" name="ma" autocomplete="off" required
+                autocomplete="off" #ma="ngModel" (input)="clearError('ma')" />
+              <label for="ma">Mã khách hàng</label>
+              <div class="tooltip-error" *ngIf="errors.ma">
+                {{ errors.ma}}
+              </div>
+            </div> -->
+            <div class="input-group">
+              <label for="ten">Tên khách hàng</label>
+              <input type="text" class="input" [(ngModel)]="khachhang.ten" name="ten" required #ten="ngModel"
+                (input)="clearError('ten')" />
+              <div class="tooltip-error" *ngIf="errors.ten">
+                {{ errors.ten}}
+              </div>
             </div>
-          </div>
-        
-        
-          <div class="input-group">
-            <label for="matKhau">Mật khẩu</label>
-            <input type="password" class="input" [(ngModel)]="khachhang.matKhau" name="matKhau" required #matKhau="ngModel"
-              (input)="clearError('matKhau')" />
-            <div class="tooltip-error" *ngIf="errors.matKhau">
-              {{ errors.matKhau}}
-            </div>
-          </div>
-          <div class="input-group">
-            <label for="matKhau">Xác nhận mật khẩu</label>
-            <input type="password" class="input" [(ngModel)]="xacNhanMatKhau" name="xacNhanMatKhau" required 
-               />
-            <div class="tooltip-error" *ngIf="errors.xacNhanMatKhau">
-              {{ errors.xacNhanMatKhau}}
-            </div>
-          </div>
-          <!-- <div class="input-group">
-            <label for="trangThai">Trạng thái</label>
-            <select class="input" [(ngModel)]="khachhang.trangThai" name="trangThai" required
-              (change)="clearError('trangThai')">
-              <option [value]="1">Hoạt động</option>
-              <option [value]="0">Không hoạt động</option>
-            </select>
-            <div class="tooltip-error" *ngIf="errors.trangThai">
-              {{ errors.trangThai}}
-            </div>
-          </div> -->
-        
-        
-        <div class="button-container">
-          <button type="submit" class="submit-btn">Đăng ký</button>
-        </div>
-        <div class="signup">
-          <p>Bạn đã có tài khoản? <a href="dangnhap">Đăng nhập</a></p>
-      </div>
-      </form>
 
-      
-  </div>
+            <div class="input-group">
+              <label for="gioiTinh">Giới tính</label>
+              <select class="input" [(ngModel)]="khachhang.gioiTinh" name="gioiTinh" required
+                (change)="clearError('gioiTinh')">
+                <option [value]="true">Nam</option>
+                <option [value]="false">Nữ</option>
+              </select>
+              <div class="tooltip-error" *ngIf="errors.gioiTinh">
+                {{ errors.gioiTinh}}
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="email">Email</label>
+              <input type="email" class="input" [(ngModel)]="khachhang.email" name="email" required #email="ngModel"
+                (input)="clearError('email')" />
+              <div class="tooltip-error" *ngIf="errors.email">
+                {{ errors.email}}
+              </div>
+            </div>
+            
+            <div class="input-group">
+              <label for="soDienThoai">Số điện thoại</label>
+              <input type="text" class="input" [(ngModel)]="khachhang.soDienThoai" name="soDienThoai" required #soDienThoai="ngModel"
+                (input)="clearError('soDienThoai')" />
+              <div class="tooltip-error" *ngIf="errors.soDienThoai">
+                {{ errors.soDienThoai}}
+              </div>
+            </div>
+          
+          
+            <div class="input-group">
+              <label for="matKhau">Mật khẩu</label>
+              <input type="password" class="input" [(ngModel)]="khachhang.matKhau" name="matKhau" required #matKhau="ngModel"
+                (input)="clearError('matKhau')" />
+              <div class="tooltip-error" *ngIf="errors.matKhau">
+                {{ errors.matKhau}}
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="matKhau">Xác nhận mật khẩu</label>
+              <input type="password" class="input" [(ngModel)]="xacNhanMatKhau" name="xacNhanMatKhau" required 
+                 />
+              <div class="tooltip-error" *ngIf="errors.xacNhanMatKhau">
+                {{ errors.xacNhanMatKhau}}
+              </div>
+            </div>
+            <!-- <div class="input-group">
+              <label for="trangThai">Trạng thái</label>
+              <select class="input" [(ngModel)]="khachhang.trangThai" name="trangThai" required
+                (change)="clearError('trangThai')">
+                <option [value]="1">Hoạt động</option>
+                <option [value]="0">Không hoạt động</option>
+              </select>
+              <div class="tooltip-error" *ngIf="errors.trangThai">
+                {{ errors.trangThai}}
+              </div>
+            </div> -->
+          
+          
+          <div class="button-container">
+            <button type="submit" class="submit-btn">Đăng ký</button>
+          </div>
+          <div class="signup">
+            <p>Bạn đã có tài khoản? <a href="dangnhap">Đăng nhập</a></p>
+        </div>
+        </form>
+    </div>
 </div>

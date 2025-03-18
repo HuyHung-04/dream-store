@@ -1,6 +1,5 @@
 package com.example.dreambackend.services.hoadon;
 
-import com.example.dreambackend.dtos.DataTableResults;
 import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.HoaDonRequest;
@@ -45,9 +44,6 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setSdtNguoiNhan(request.getSdtNguoiNhan());
         hoaDon.setDiaChiNhanHang(request.getDiaChiNhanHang());
         hoaDon.setPhiVanChuyen(request.getPhiVanChuyen());
-        hoaDon.setTongTienThanhToan(request.getTongTienThanhToan());
-        hoaDon.setTongTienTruocVoucher(request.getTongTienTruocVoucher());
-        hoaDon.setTrangThai(request.getTrangThai());
         hoaDon.setNgaySua(LocalDate.now());
 
         if (request.getIdVoucher() != null) {
@@ -77,16 +73,8 @@ public class HoaDonService implements IHoaDonService {
     @PersistenceContext
     private EntityManager em;
     @Override
-    public DataTableResults<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request) {
-        List<HoaDonResponse> list = hoaDonRepository.search(request,em);
-        DataTableResults<HoaDonResponse> results = new DataTableResults<>();
-        results.setData(list);
-        if (!list.isEmpty()) {
-            results.setRecordsTotal(request.getTotalRecords());
-        } else {
-            results.setRecordsTotal(0);
-        }
-        return results;
+    public List<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request) {
+        return hoaDonRepository.search(request, em);
     }
 
     @Override

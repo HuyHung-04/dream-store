@@ -4,20 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/dtos/DataTableResults.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/dtos/DataTableResults.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/HoaDonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/HoaDonRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/requests/HoaDonSearchRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/requests/HoaDonSearchRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/IHoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/IHoaDonService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/hoadon/IHoaDonService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/hoadon/IHoaDonService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.service.ts" afterDir="false" />
-    </list>
+    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,21 +22,21 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
-    &quot;lastFilter&quot;: {
+  &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
     &quot;assignee&quot;: &quot;HuyHung-04&quot;
-    }
-    }</component>
+  }
+}</component>
   <component name="GithubPullRequestsUISettings">{
-    &quot;selectedUrlAndAccountId&quot;: {
+  &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/HuyHung-04/dream-store.git&quot;,
     &quot;accountId&quot;: &quot;add14f03-1032-4f59-855a-6b1a22e7c834&quot;
-    }
-    }</component>
+  }
+}</component>
   <component name="ProjectColorInfo">{
-    &quot;customColor&quot;: &quot;&quot;,
-    &quot;associatedIndex&quot;: 7
-    }</component>
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2szj47W1qDqpDOBRuOSuqxhiyDI" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -72,7 +59,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.DreamBackendApplication.executor": "Run",
     "Spring Boot.Unnamed.executor": "Run",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "le-hoang",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/dream-store/dream-backend",
@@ -256,7 +243,7 @@
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
           <line>97</line>
-          <properties class="com.example.dreambackend.controllers.HoaDonOnlineController">
+          <properties class="com.example.dreambackend.controllers.HoaDonOnlineController" method="getHoaDonChiTiet">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
@@ -265,7 +252,7 @@
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
           <line>87</line>
-          <properties class="com.example.dreambackend.controllers.HoaDonOnlineController">
+          <properties class="com.example.dreambackend.controllers.HoaDonOnlineController" method="getChiTietHoaDon">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>

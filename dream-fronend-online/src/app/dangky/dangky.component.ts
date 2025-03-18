@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DangKyService } from './dangky.service';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 @Component({
   selector: 'app-dangky',
   imports: [CommonModule, FormsModule],
@@ -10,9 +9,6 @@ import { Router } from '@angular/router';
   styleUrl: './dangky.component.css',
 })
 export class DangkyComponent implements OnInit {
-  
-  
-  showOtpSection: boolean = false;
   xacNhanMatKhau: string = '';
   khachhangs: any[] = [];
   showModal: boolean = false;
@@ -43,7 +39,7 @@ export class DangkyComponent implements OnInit {
     
   };
 
-  constructor(private dangKyService: DangKyService, private router: Router) { }
+  constructor(private dangKyService: DangKyService) { }
   ngOnInit(): void {
     
   }
@@ -55,7 +51,6 @@ export class DangkyComponent implements OnInit {
     gioiTinh: true,
     soDienThoai: '',
     matKhau: '',
-    xacNhanMatKhau:'',
     ngayTao: '',
     ngaySua: '',
     trangThai: 1,
@@ -71,7 +66,7 @@ export class DangkyComponent implements OnInit {
     this.dangKyService.addKhachHang(this.khachhang).subscribe(
       (response) => {
         alert('Thêm khách hàng thành công!');
-        this.router.navigate(['']);
+        
         this.resetForm();
       },
       (error) => {
@@ -89,43 +84,42 @@ export class DangkyComponent implements OnInit {
 
   validateForm(): boolean {
     this.errors = {};
-  
+
     if (!this.khachhang.ten.trim()) {
       this.errors.ten = 'Tên khách hàng không được để trống!';
     }
-  
-    // Validate số điện thoại
-    const phoneRegex = /^(\+?\d{1,3}[- ]?)?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/;
-    if (!this.khachhang.soDienThoai.trim()) {
-      this.errors.soDienThoai = 'Số điện thoại khách hàng không được để trống!';
-    } else if (!phoneRegex.test(this.khachhang.soDienThoai)) {
-      this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
-    }
-  
-    // Kiểm tra email không trống và đúng định dạng @gmail.com
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+      // Validate số điện thoại
+  const phoneRegex = /^(\+?\d{1,3}[- ]?)?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/;
+  if (!this.khachhang.soDienThoai.trim()) {
+    this.errors.soDienThoai = 'Số điện thoại khách hàng không được để trống!';
+  } else if (!phoneRegex.test(this.khachhang.soDienThoai)) {
+    this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
+  }
   if (!this.khachhang.email.trim()) {
     this.errors.email = 'Email không được để trống!';
-  } else if (!emailRegex.test(this.khachhang.email)) {
-    this.errors.email = 'Email phải có định dạng @gmail.com!';
+  }else{
+    this.dangKyService.getKhachHangByEmail(this.khachhang.email).subscribe(
+      (data) => {
+        // Kiểm tra dữ liệu trả về
+        if (data===null) {
+          this.errors.email = 'Email không tồn tại!';
+        } 
+      });
   }
-  
-    // Kiểm tra mật khẩu và xác nhận mật khẩu
     if (!this.khachhang.matKhau.trim()) {
-      this.errors.matKhau = 'Mật khẩu không được để trống!';
+      this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
     }
     if (!this.xacNhanMatKhau.trim()) {
       this.errors.xacNhanMatKhau = 'Xác nhận mật khẩu không được để trống!';
     }
-    if (this.xacNhanMatKhau !== this.khachhang.matKhau) {
+    if (this.xacNhanMatKhau!=this.khachhang.matKhau) {
       this.errors.xacNhanMatKhau = 'Xác nhận mật khẩu không đúng!';
     }
-  
 
-  console.log(this.errors)
+    
+    
     return Object.keys(this.errors).length === 0;
   }
-   
-  
+
   
 }

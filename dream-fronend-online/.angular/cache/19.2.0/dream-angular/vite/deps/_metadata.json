@@ -1,103 +1,97 @@
 {
-  "hash": "7d026ee6",
-  "configHash": "96ca2ca7",
-  "lockfileHash": "b663fa3f",
-  "browserHash": "e9dbca1f",
+  "hash": "48b4787e",
+  "configHash": "b761d8dc",
+  "lockfileHash": "6b0fef18",
+  "browserHash": "24a0f5c2",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "72400dca",
+      "fileHash": "40162a64",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "d1cc477b",
+      "fileHash": "38a577ae",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "9a5d6a38",
+      "fileHash": "db63cf72",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "84af5fd2",
+      "fileHash": "1b5c1b34",
       "needsInterop": false
     },
     "@angular/material/button": {
       "src": "../../../../../../node_modules/@angular/material/fesm2022/button.mjs",
       "file": "@angular_material_button.js",
-      "fileHash": "7de10dbd",
+      "fileHash": "ecd49955",
       "needsInterop": false
     },
     "@angular/material/icon": {
       "src": "../../../../../../node_modules/@angular/material/fesm2022/icon.mjs",
       "file": "@angular_material_icon.js",
-      "fileHash": "c43a51ef",
+      "fileHash": "a561d6f7",
       "needsInterop": false
     },
     "@angular/material/sidenav": {
       "src": "../../../../../../node_modules/@angular/material/fesm2022/sidenav.mjs",
       "file": "@angular_material_sidenav.js",
-      "fileHash": "2b20ba0e",
+      "fileHash": "c5e18d40",
       "needsInterop": false
     },
     "@angular/material/toolbar": {
       "src": "../../../../../../node_modules/@angular/material/fesm2022/toolbar.mjs",
       "file": "@angular_material_toolbar.js",
-      "fileHash": "a276dd13",
+      "fileHash": "1e703723",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "23a767ae",
+      "fileHash": "c8b06097",
       "needsInterop": false
     },
     "@angular/platform-browser/animations": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/animations.mjs",
       "file": "@angular_platform-browser_animations.js",
-      "fileHash": "d017081b",
+      "fileHash": "62b34ac4",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "697d8d91",
-      "needsInterop": false
-    },
-    "ngx-cookie-service": {
-      "src": "../../../../../../node_modules/ngx-cookie-service/fesm2022/ngx-cookie-service.mjs",
-      "file": "ngx-cookie-service.js",
-      "fileHash": "a4e5ca1b",
+      "fileHash": "2f0157bd",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "48f5669a",
+      "fileHash": "c5296a0e",
       "needsInterop": false
     },
     "rxjs/operators": {
       "src": "../../../../../../node_modules/rxjs/dist/esm5/operators/index.js",
       "file": "rxjs_operators.js",
-      "fileHash": "7bedbb8b",
+      "fileHash": "e994e9b3",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-NFRNZT5Y": {
-      "file": "chunk-NFRNZT5Y.js"
-    },
     "chunk-V3SNPZGE": {
       "file": "chunk-V3SNPZGE.js"
     },
     "chunk-FBYS5K4N": {
       "file": "chunk-FBYS5K4N.js"
+    },
+    "chunk-NFRNZT5Y": {
+      "file": "chunk-NFRNZT5Y.js"
     },
     "chunk-IZZEJKND": {
       "file": "chunk-IZZEJKND.js"
@@ -105,11 +99,11 @@
     "chunk-PV4LZQ3W": {
       "file": "chunk-PV4LZQ3W.js"
     },
-    "chunk-6Q4RANH6": {
-      "file": "chunk-6Q4RANH6.js"
-    },
     "chunk-FFZIAYYX": {
       "file": "chunk-FFZIAYYX.js"
+    },
+    "chunk-6Q4RANH6": {
+      "file": "chunk-6Q4RANH6.js"
     },
     "chunk-CXCX2JKZ": {
       "file": "chunk-CXCX2JKZ.js"

@@ -23,5 +23,5 @@ public interface ISanPhamChiTietService {
 
     ResponseEntity<byte[]> exportSanPhamChiTietToExcel(List<SanPhamChiTietRespone> sanPhamChiTiets);
 
-    Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable);
+//    Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable);
 }
