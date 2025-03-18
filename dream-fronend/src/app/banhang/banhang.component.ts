@@ -52,6 +52,7 @@ export class BanhangComponent implements OnInit {
     this.cart = [];
 
   }
+  
 
   // Tạo hóa đơn mới
   createInvoice() {

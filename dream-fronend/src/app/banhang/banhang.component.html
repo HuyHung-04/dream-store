@@ -7,13 +7,13 @@
         <button
           *ngFor="let invoice of invoices; trackBy: trackById"
           class="invoice-btn"
-          [class.active]="selectedInvoice === invoice"
+          [class.active]="selectedInvoice?.id === invoice.id"
           (click)="selectInvoice(invoice)">
           {{ invoice.maHoaDon}}
         </button>
       </div>
     </div>
-
+    <!-- [class.active]="selectedInvoice === invoice" -->
     <!-- giỏ hàng -->
     <div class="cart-container">
       <h6 class="sidebar-title"><i class="bi bi-cart3"></i> Giỏ hàng</h6>

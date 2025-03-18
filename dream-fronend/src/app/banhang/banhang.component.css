@@ -209,14 +209,10 @@ button {
   font-size: 12px;
   cursor: pointer;
 }
-.invoice-btn:hover {
-  background-color: #e2e6ea;
-}
 
 .invoice-btn.active {
-  background-color: #ff9900 !important;
-  color: black;
-  border-color: #ff9900;
+  background-color: #5189d6 !important;
+  color: white;
 }
 
 .modal {
