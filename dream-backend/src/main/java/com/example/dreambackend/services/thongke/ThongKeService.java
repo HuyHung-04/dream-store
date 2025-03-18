@@ -26,21 +26,21 @@ public class ThongKeService {
         LocalDate endDate = null;
 
         switch (type) {
-            case "Hôm nay":
+            case "hom-nay":
                 startDate = LocalDate.now();
                 endDate = LocalDate.now();
                 break;
-            case "Tháng này":
+            case "thang-nay":
                 YearMonth currentMonth = YearMonth.now();
                 startDate = currentMonth.atDay(1);  // Ngày đầu tháng
                 endDate = currentMonth.atEndOfMonth();  // Ngày cuối tháng
                 break;
-            case "Năm nay":
+            case "nam-nay":
                 int currentYear = LocalDate.now().getYear();
                 startDate = LocalDate.of(currentYear, 1, 1);
                 endDate = LocalDate.of(currentYear, 12, 31);
                 break;
-            case "Tất cả":
+            case "tat-ca":
                 // Không thiết lập startDate và endDate
                 break;
             default:
@@ -69,23 +69,23 @@ public class ThongKeService {
     }
     // Thống kê sản phẩm bán chạy nhất trong ngày hôm nay
     public List<TopSanPhamResponse> topSanPhamHomNay() {
-        return hoaDonChiTietRepository.getTopSanPhamHomNay(PageRequest.of(0, 5)).getContent();
+        return hoaDonChiTietRepository.getTopSanPhamHomNay(PageRequest.of(0, 10)).getContent();
     }
 
     // Thống kê sản phẩm bán chạy nhất trong tháng này
     public List<TopSanPhamResponse> topSanPhamThangNay() {
         LocalDate startDate = LocalDate.now().withDayOfMonth(1); // Ngày đầu tháng
         LocalDate endDate = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()); // Ngày cuối tháng
-        return hoaDonChiTietRepository.getTopSanPhamThangNay(PageRequest.of(0, 5), startDate, endDate).getContent();
+        return hoaDonChiTietRepository.getTopSanPhamThangNay(PageRequest.of(0, 10), startDate, endDate).getContent();
     }
 
     // Thống kê sản phẩm bán chạy nhất trong năm nay
     public List<TopSanPhamResponse> topSanPhamNamNay() {
-        return hoaDonChiTietRepository.getTopSanPhamNamNay(PageRequest.of(0, 5)).getContent();
+        return hoaDonChiTietRepository.getTopSanPhamNamNay(PageRequest.of(0, 10)).getContent();
     }
 
     // Thống kê sản phẩm bán chạy nhất tất cả thời gian
     public List<TopSanPhamResponse> topSanPhamTatCa() {
-        return hoaDonChiTietRepository.getTopSanPhamTatCa(PageRequest.of(0, 5)).getContent();
+        return hoaDonChiTietRepository.getTopSanPhamTatCa(PageRequest.of(0, 10)).getContent();
     }
 }

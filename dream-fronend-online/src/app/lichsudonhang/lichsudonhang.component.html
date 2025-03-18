@@ -1,0 +1,32 @@
+<div *ngIf="errorMessage; else dataTemplate">
+    <p class="error">{{ errorMessage }}</p>
+  </div>
+  
+  <ng-template #dataTemplate>
+    <div *ngIf="hoaDonChiTiet.length > 0; else noData" class="container">
+      <ul class="hoa-don-list">
+        <li *ngFor="let item of hoaDonChiTiet" class="hoa-don-item"  (click)="viewInvoiceDetail(item.maHoaDon)">
+         
+            <div class="anh">
+              <img [src]="'http://localhost:8080' + item.anhUrl" alt="{{ item.tenSanPham }}" class="product-image"/>
+            </div>
+            <div class="hoa-don-info">
+              <h3>{{ item.tenSanPham }}</h3>
+              <p><strong>Mã hóa đơn:</strong> {{ item.maHoaDon }}</p>
+              <p><strong>Mã sản phẩm:</strong> {{ item.maSanPham }}</p>
+              <p><strong>Giá:</strong> {{ item.donGia | currency }}</p>
+              <p><strong>Số lượng:</strong> {{ item.soLuong }}</p>
+              <p><strong>Màu sắc:</strong> {{ item.mauSac }}</p>
+              <p><strong>Size:</strong> {{ item.size }}</p>
+              <p><strong>đơn giá:</strong> {{item.donGia}}</p>
+            </div>
+       
+        </li>
+      </ul>
+    </div>
+  
+    <ng-template #noData>
+      <p>Không có dữ liệu hóa đơn.</p>
+    </ng-template>
+  </ng-template>
+  

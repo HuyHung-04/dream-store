@@ -59,7 +59,7 @@
         <select [(ngModel)]="newAddress.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="form-control">
           <option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
           <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}</option>
-        </select>        
+        </select>
         <select [(ngModel)]="newAddress.quanHuyen" (change)="onSelectQuanHuyen($event)" class="form-control">
           <option *ngFor="let quan of quanHuyenList" [value]="quan.DistrictID">{{ quan.DistrictName }}</option>
           <option value="" disabled selected>Chọn Quận/Huyện</option>
@@ -72,6 +72,7 @@
         <button class="btn-save" (click)="addDiaChi()">Lưu Địa Chỉ</button>
       </div>
     </div>
+
     <button class="close-btn" (click)="closeModal()">Đóng</button>
   </div>
 </div>
@@ -81,6 +82,7 @@
   <div class="edit-modal">
     <div class="edit-modal-header">
       <h2>Sửa Địa Chỉ</h2>
+
     </div>
 
     <div class="edit-modal-body">
@@ -101,14 +103,14 @@
 
       <!-- Phường/Xã -->
       <select [(ngModel)]="newAddress.phuongXa" class="edit-input">
-        <option  value="" disabled selected>Chọn Phường/Xã</option>
+        <option value="" disabled selected>Chọn Phường/Xã</option>
         <option *ngFor="let xa of phuongXaList" [value]="xa.WardCode">{{ xa.WardName }}</option>
       </select>
 
 
       <input [(ngModel)]="AddressEdit.diaChiCuThe" class="edit-input" placeholder="Địa chỉ cụ thể">
-      <button style="background-color: #294764;" class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
-      <button style="background-color: #5a6268;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
+      <button class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
+      <button class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
     </div>
   </div>
 </div>
@@ -163,11 +165,11 @@
 
   <!-- Hiển thị "Giảm tối đa" nếu có voucher được chọn -->
   <div class="max-sale" *ngIf="selectedVoucherMaxDiscount">
-    <label>Giảm tối đa: {{ selectedVoucherMaxDiscount | number }} VND</label>
+    <label>Giảm tối đa: {{ selectedVoucherMaxDiscount }} VND</label>
   </div>
 
   <div class="summary-item">
-    <label>Phí vận chuyển: {{ shippingFee | number }} VND</label>
+    <label>Phí vận chuyển: {{ shippingFee }} VND</label>
     <p></p>
   </div>
 
@@ -182,8 +184,21 @@
 
   <div></div>
   <div class="summary-item">
-    <label for="total">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
+    <label for="">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
+
   </div>
   <a href="" (click)="backSanpham(); $event.preventDefault()" class="back-to-cart"> <i class="bi bi-box-arrow-left"></i> Quay lại</a>
   <button class="btn-checkout" (click)="createHoaDon()">Đặt hàng</button>
+</div>
+
+
+
+<!-- Modal Chức Năng Sau Thanh Toán -->
+<div *ngIf="modalthongbao" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content">
+    <h3>Chọn hành động</h3>
+    <button (click)="viewInvoiceDetails()">Xem Chi Tiết Đơn Hàng</button>
+    <button (click)="viewInvoiceHistory()">Xem Lịch Sử Đơn Hàng</button>
+    <button (click)="goHome()">Quay Về Trang Chủ</button>
+  </div>
 </div>

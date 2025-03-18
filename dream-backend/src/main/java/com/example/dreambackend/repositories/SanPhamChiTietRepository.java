@@ -74,7 +74,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
 
 
-    @Query("""  
+    @Query("""
     SELECT new com.example.dreambackend.dtos.SanPhamChiTietDto(
         spct.id,
         spct.ma,
@@ -111,6 +111,6 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             + "LEFT JOIN spct.khuyenMai km "
             + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
     Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
-    // check trùng spct khi thêm cùng màu và size
+//     check trùng spct khi thêm cùng màu và size
     Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
 }

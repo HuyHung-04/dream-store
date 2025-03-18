@@ -2834,7 +2834,7 @@ var DefaultSelectionModel = class {
 };
 var NgSelectConfig = class _NgSelectConfig {
   constructor() {
-    this.fixedPlaceholder = true;
+    this.fixedPlaceholder = false;
     this.notFoundText = "No items found";
     this.typeToSearchText = "Type to search";
     this.addTagText = "Add item";
@@ -2900,7 +2900,7 @@ var NgSelectComponent = class _NgSelectComponent {
     this._console = _console;
     this.ariaLabelDropdown = "Options List";
     this.markFirst = true;
-    this.fixedPlaceholder = true;
+    this.fixedPlaceholder = false;
     this.preventToggleOnRightClick = false;
     this.dropdownPosition = "auto";
     this.loading = false;
@@ -3836,14 +3836,14 @@ var NgSelectComponent = class _NgSelectComponent {
         if (rf & 2) {
           ɵɵclassProp("ng-appearance-outline", ctx.appearance === "outline")("ng-has-value", ctx.hasValue);
           ɵɵadvance(2);
-          ɵɵconditional(ctx.selectedItems.length === 0 && !ctx.searchTerm || ctx.fixedPlaceholder === true ? 2 : -1);
+          ɵɵconditional(ctx.selectedItems.length === 0 && !ctx.searchTerm || ctx.fixedPlaceholder ? 2 : -1);
           ɵɵadvance();
           ɵɵconditional((!ctx.multiLabelTemplate || !ctx.multiple) && ctx.selectedItems.length > 0 ? 3 : -1);
           ɵɵadvance();
           ɵɵconditional(ctx.multiple && ctx.multiLabelTemplate && ctx.selectedValues.length > 0 ? 4 : -1);
           ɵɵadvance(2);
           ɵɵproperty("disabled", ctx.disabled)("readOnly", !ctx.searchable || ctx.itemsList.maxItemsSelected)("value", ctx.searchTerm ? ctx.searchTerm : "");
-          ɵɵattribute("aria-activedescendant", ctx.isOpen ? ctx.itemsList == null ? null : ctx.itemsList.markedItem == null ? null : ctx.itemsList.markedItem.htmlId : null)("aria-controls", ctx.isOpen ? ctx.dropdownId : null)("aria-expanded", ctx.isOpen)("aria-label", ctx.ariaLabel)("id", ctx.labelForId)("tabindex", ctx.tabIndex)("aria-placeholder", ctx.placeholderTemplate ? null : ctx.placeholder);
+          ɵɵattribute("aria-activedescendant", ctx.isOpen ? ctx.itemsList == null ? null : ctx.itemsList.markedItem == null ? null : ctx.itemsList.markedItem.htmlId : null)("aria-controls", ctx.isOpen ? ctx.dropdownId : null)("aria-expanded", ctx.isOpen)("aria-label", ctx.ariaLabel)("aria-placeholder", ctx.placeholderTemplate ? null : ctx.placeholder)("id", ctx.labelForId)("tabindex", ctx.tabIndex);
           ɵɵadvance(2);
           ɵɵconditional(ctx.loading ? 8 : -1);
           ɵɵadvance();
@@ -3878,7 +3878,7 @@ var NgSelectComponent = class _NgSelectComponent {
 	[class.ng-has-value]="hasValue"
 	class="ng-select-container">
 	<div class="ng-value-container">
-		@if ((selectedItems.length === 0 && !searchTerm) || fixedPlaceholder === true) {
+		@if ((selectedItems.length === 0 && !searchTerm) || fixedPlaceholder) {
 			<ng-template #defaultPlaceholderTemplate>
 				<div class="ng-placeholder">{{ placeholder }}</div>
 			</ng-template>
@@ -3918,9 +3918,9 @@ var NgSelectComponent = class _NgSelectComponent {
 				[attr.aria-controls]="isOpen ? dropdownId : null"
 				[attr.aria-expanded]="isOpen"
 				[attr.aria-label]="ariaLabel"
+				[attr.aria-placeholder]="placeholderTemplate ? null : placeholder"
 				[attr.id]="labelForId"
 				[attr.tabindex]="tabIndex"
-				[attr.aria-placeholder]="placeholderTemplate ? null : placeholder"
 				[disabled]="disabled"
 				[readOnly]="!searchable || itemsList.maxItemsSelected"
 				[value]="searchTerm ? searchTerm : ''"

@@ -1,42 +1,40 @@
 <div class="hoa-don">
-  <p style="color: #294764; padding-top: 10px; font-weight: bold; font-size: 18px;">Quản lý hoá đơn</p>
-  <!-- lọc hoá đơn offline -->
+  <h2 style="color: #294764; padding-top: 10px; font-weight: bold; font-size: 18px;">
+    Quản lý hóa đơn
+  </h2>
+
+  <!-- Phần tìm kiếm -->
   <div class="tim-kiem">
-    <p style="color: #294764; margin-top: -20px; font-weight: bold; font-size: 14px;">Tìm kiếm</p>
+    <p style="color: #294764; margin-top: -20px; font-weight: bold; font-size: 14px;">
+      Tìm kiếm
+    </p>
     <div class="input-row">
       <div class="input-field">
-        <label for="gia">Tên khách hàng</label>
-        <input type="text" class="input" id="" name="" placeholder="Nhập tên khách hàng...">
+        <label for="maHoaDon">Mã hóa đơn</label>
+        <input type="text" id="maHoaDon" placeholder="Nhập mã hóa đơn..." [(ngModel)]="searchRequest.maHoaDon">
       </div>
       <div class="input-field">
-        <label for="">Tên nhân viên</label>
-        <input type="text" class="input" id="" name="" placeholder="Nhập tên nhân viên...">
+        <label for="tenKhachHang">Tên khách hàng</label>
+        <input type="text" id="tenKhachHang" placeholder="Nhập tên khách hàng..." [(ngModel)]="searchRequest.tenKhachHang">
       </div>
       <div class="input-field">
-        <label for="trangThai">Phương thức thanh toán</label>
-        <select class="input" id="" name="trangThai">
-          <option value="" selected>Chọn phương thức</option>
-          <option value="0">Tiền mặt</option>
-          <option value="1">Chuyển khoản</option>
-        </select>
+        <label for="tenNhanVien">Tên nhân viên</label>
+        <input type="text" id="tenNhanVien" placeholder="Nhập tên nhân viên..." [(ngModel)]="searchRequest.tenNhanVien">
       </div>
       <div class="input-field">
-        <label for="trangThai">Trạng thái</label>
-        <select class="input" id="trangThai" name="trangThai">
-          <option value="" selected>Chọn trạng thái</option>
-          <option value="0">Đã thanh toán</option>
-          <option value="1">Đã huỷ</option>
-        </select>
+        <button (click)="search()">Tìm kiếm</button>
+        <button (click)="resetFilters()">Reset</button>
       </div>
     </div>
   </div>
-  <!-- bảng hoá đơn online -->
+
+  <!-- Bảng hiển thị hóa đơn -->
   <div class="table-don-off">
     <div class="table-wrapper">
-    <table>
-      <thead>
+      <table>
+        <thead>
         <tr>
-          <th>Mã hoá đơn</th>
+          <th>Mã hóa đơn</th>
           <th>Tên khách hàng</th>
           <th>Tên nhân viên</th>
           <th>Phương thức thanh toán</th>
@@ -45,53 +43,42 @@
           <th>Tổng tiền</th>
           <th>Ghi chú</th>
           <th>Trạng thái</th>
+          <th>Ngày tạo</th>
           <th>Xem chi tiết</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>HD001</td>
-          <td>Nguyễn Văn A</td>
-          <td>Nguyễn Văn B</td>
-          <td>Chuyển khoản</td>
-          <td>100,000</td>
-          <td>Giảm 10 %</td>
-          <td>90,000</td>
-          <td>Không</td>
-          <td>Đã thanh toán</td>
+        </thead>
+        <tbody>
+        <tr *ngFor="let invoice of hoaDons.content; trackBy: trackById">
+          <td>{{ invoice.maHoaDon }}</td>
+          <td>{{ invoice.tenKhachHang }}</td>
+          <td>{{ invoice.tenNhanVien }}</td>
+          <td>{{ invoice.tenPhuongThucThanhToan }}</td>
+          <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</td>
           <td>
-            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
+              <span *ngIf="invoice.tenVoucher; else noVoucher">
+                {{ invoice.tenVoucher }} (Giảm {{ invoice.giaTriGiam }}{{ invoice.hinhThucGiam ? ' %' : ' VNĐ' }})
+              </span>
+            <ng-template #noVoucher>Không</ng-template>
+          </td>
+          <td>{{ invoice.tongTienThanhToan | number:'1.0-0' }} VNĐ</td>
+          <td>{{ invoice.ghiChu }}</td>
+          <td>{{ invoice.trangThai }}</td>
+          <td>{{ invoice.ngayTao | date:'yyyy-MM-dd' }}</td>
+          <td>
+            <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(invoice)">
+              <i class="bi bi-eye-fill"></i>
+            </button>
           </td>
         </tr>
-        <tr>
-          <td>HD001</td>
-          <td>Nguyễn Văn A</td>
-          <td>Nguyễn Văn B</td>
-          <td>Chuyển khoản</td>
-          <td>100,000</td>
-          <td>Giảm 10 %</td>
-          <td>90,000</td>
-          <td>Không</td>
-          <td>Đã thanh toán</td>
-          <td>
-            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
-          </td>
-        </tr>
-        <tr>
-          <td>HD001</td>
-          <td>Nguyễn Văn A</td>
-          <td>Nguyễn Văn B</td>
-          <td>Chuyển khoản</td>
-          <td>100,000</td>
-          <td>Giảm 10 %</td>
-          <td>90,000</td>
-          <td>Không</td>
-          <td>Đã thanh toán</td>
-          <td>
-            <button class="xem-chi-tiet"><i class="bi bi-eye-fill"></i></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
+    <!-- Phân trang -->
+    <div class="pagination">
+      <button (click)="prevPage()">Prev</button>
+      <span>Trang {{ searchRequest.page }} / {{ hoaDons.totalPages}}</span>
+      <button (click)="nextPage()">Next</button>
+    </div>
+
   </div>
- </div>
+</div>

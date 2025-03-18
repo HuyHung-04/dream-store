@@ -47,6 +47,7 @@ export class HoadonComponent {
   selectedAddress: any = null; // Địa chỉ được chọn để hiển thị trong modal và giao diện chính
   activeTab = 'select';
   isModalOpen = false;
+  modalthongbao = false;
   isEditModalOpen = false;
   totalPrice: number = 0;
   selectedVoucher: Voucher | null = null;
@@ -71,6 +72,7 @@ export class HoadonComponent {
   totalPriceAfterDiscount: number = 0;
   selectedVoucherId: number = 0; // ID của voucher đã chọn
   fullAddress: string = '';
+  invoiceId: string ='';
   newAddress = {
     id: '',
     tenNguoiNhan: '',
@@ -275,7 +277,7 @@ export class HoadonComponent {
       (response: any) => {
         this.paymentMethods = response; // Gán dữ liệu lấy được vào mảng paymentMethods
         console.log("Danh sách phương thức thanh toán:", this.paymentMethods);
-        
+
         // Đặt giá trị mặc định là phương thức có id = 1 nếu tồn tại
         const defaultMethod = this.paymentMethods.find(method => method.id === 1);
         if (defaultMethod) {
@@ -290,7 +292,7 @@ export class HoadonComponent {
       }
     );
   }
-  
+
   // Gọi API để cập nhật thông tin địa chỉ
   updateDiaChi(): void {
     if (this.AddressEdit.id) {
@@ -467,7 +469,11 @@ export class HoadonComponent {
         (response) => {
           console.log('Hóa đơn đã được tạo thành công:', response);
           alert('Hóa đơn đã được tạo thành công!');
-          this.router.navigate(['/donhang']);
+          this.modalthongbao = true;
+          this.invoiceId = response.ma;  // Assuming the response contains the ID
+
+
+
         },
         (error) => {
           console.error('Lỗi khi tạo hóa đơn:', error);
@@ -478,5 +484,31 @@ export class HoadonComponent {
   }
   backSanpham(): void {
     window.history.back();
-  } 
+  }
+
+
+
+
+    // Đóng modal khi click bên ngoài
+    closeModalThongBao() {
+      this.modalthongbao = false;
+    }
+    viewInvoiceDetails(): void {
+      console.log('Xem chi tiết đơn hàng');
+      this.router.navigate(['/donhang', this.invoiceId]);
+      this.closeModalThongBao();  // Đóng modal khi thực hiện hành động
+    }
+
+  viewInvoiceHistory() {
+    console.log('Xem lịch sử đơn hàng');
+    this.router.navigate(['/lichsudonhang']);
+    this.closeModalThongBao();
+  }
+
+  goHome() {
+    console.log('Quay về trang chủ');
+    this.closeModalThongBao();
+    // Ví dụ quay về trang chủ
+    this.router.navigate(['/banhang']);
+  }
 }

@@ -1,5 +1,7 @@
 package com.example.dreambackend.services.hoadononline;
 
+import com.example.dreambackend.dtos.HoaDonChiTietDto;
+import com.example.dreambackend.dtos.HoaDonDto;
 import com.example.dreambackend.dtos.VoucherDto;
 import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.HoaDonChiTiet;
@@ -14,4 +16,6 @@ public interface IHoaDonOnlineService {
      Double calculateTotalPriceWithVoucher(Integer idKhachHang, Integer voucherId, Double shippingFee);
     List<VoucherDto> getVoucherIdAndTen(Integer idKhachHang);
     HoaDon createHoaDonAndAddProducts(Integer idKhachHang, Integer voucherId,Double tongTienTruocGiam, Integer paymentMethodId,Double TongTienSauGiam,String sdtNguoiNhan,String tenNguoiNhan,String diaChi,Double shippingFee);
+    List<HoaDonChiTietDto> getChiTietHoaDonByMa(String maHoaDon);
+    List<HoaDonDto> getHoaDonChiTietDto();
 }

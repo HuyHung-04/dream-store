@@ -44,7 +44,7 @@ public class NhanVienService implements INhanVienService {
         return nhanVienRepository.save(nhanVien);
     }
     // Đường dẫn thư mục lưu trữ ảnh
-    private static final String UPLOAD_DIR = "D:/dream-store/dream-backend/uploads/images/";
+    private static final String UPLOAD_DIR = "F:/DuAnTotNghiep/dream-store-main/dream-backend/uploads/images/";
     // Cập nhật hoặc thêm ảnh cho nhân viên
     @Transactional
     @Override

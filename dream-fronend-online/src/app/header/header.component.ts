@@ -5,7 +5,7 @@ import { BanhangService } from '../banhang/banhang.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'; 
 import { CookieService } from 'ngx-cookie-service';
-import { SanphamDetailService } from '../sanpham-detail/sanpham-detail.service';
+
 @Component({
   selector: 'app-header',
   standalone: true,
