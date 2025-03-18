@@ -1,5 +1,6 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.dtos.DataTableResults;
 import com.example.dreambackend.requests.HoaDonRequest;
 import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
@@ -43,11 +44,10 @@ public class HoaDonController {
     }
 
     @PostMapping("/all")
-    public ResponseEntity<List<HoaDonResponse>> getAllHoaDon(
+    public DataTableResults<HoaDonResponse> getAllHoaDon(
             @RequestBody HoaDonSearchRequest request
     ) {
-        List<HoaDonResponse> response = hoaDonService.getAllHoaDon(request);
-        return ResponseEntity.ok(response);
+        return hoaDonService.getAllHoaDon(request);
     }
 
     @GetMapping("/{id}")

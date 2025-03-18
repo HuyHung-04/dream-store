@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class HoaDonSearchRequest {
-    private Integer idHoaDon;
     private String maHoaDon;
     private String tenKhachHang;
     private String tenNhanVien;
