@@ -1308,7 +1308,7 @@ var require_cell = __commonJS({
       get tooltip() {
         return this.model.tooltip;
       }
-       set tooltip(value) {
+        set tooltip(value) {
         this.model.tooltip = value;
       } */
       get hyperlink() {

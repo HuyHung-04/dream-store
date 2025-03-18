@@ -3,7 +3,7 @@ import {
   CdkScrollableModule,
   ScrollDispatcher,
   ViewportRuler
-} from "./chunk-QQXNSZRC.js";
+} from "./chunk-JB4OLY2K.js";
 import {
   ESCAPE,
   FocusMonitor,
@@ -11,18 +11,18 @@ import {
   InteractivityChecker,
   MatCommonModule,
   hasModifierKey
-} from "./chunk-CDDPUPHL.js";
+} from "./chunk-N7TS57T4.js";
 import {
   Platform,
   coerceBooleanProperty,
   coerceNumberProperty
-} from "./chunk-CF3HO6HL.js";
+} from "./chunk-MUIMTT2N.js";
 import {
   Directionality
-} from "./chunk-WB7AGOPS.js";
+} from "./chunk-COUU26BQ.js";
 import {
   DOCUMENT
-} from "./chunk-KMQFGUY7.js";
+} from "./chunk-I6CZ7QSC.js";
 import {
   ANIMATION_MODULE_TYPE,
   ChangeDetectionStrategy,
@@ -72,7 +72,7 @@ import {
   ɵɵstyleProp,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-TVMJUZRJ.js";
+} from "./chunk-IXOAVQ55.js";
 import {
   Subject,
   debounceTime,
@@ -82,7 +82,7 @@ import {
   startWith,
   take,
   takeUntil
-} from "./chunk-ADIHE7QJ.js";
+} from "./chunk-DKRAZSUY.js";
 import "./chunk-5Q4GJRSR.js";
 
 // node_modules/@angular/material/fesm2022/sidenav.mjs
