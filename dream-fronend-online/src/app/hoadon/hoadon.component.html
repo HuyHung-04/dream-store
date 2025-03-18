@@ -57,9 +57,9 @@
         <input [(ngModel)]="newAddress.tenNguoiNhan" placeholder="Tên người nhận" class="form-control">
         <input [(ngModel)]="newAddress.sdtNguoiNhan" placeholder="Số điện thoại người nhận" class="form-control">
         <select [(ngModel)]="newAddress.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="form-control">
-          <option value="" disabled [selected]="!AddressEdit.tinhThanhPho">Chọn Tỉnh/Thành Phố</option>
+          <option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
           <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}</option>
-        </select>
+        </select>        
         <select [(ngModel)]="newAddress.quanHuyen" (change)="onSelectQuanHuyen($event)" class="form-control">
           <option *ngFor="let quan of quanHuyenList" [value]="quan.DistrictID">{{ quan.DistrictName }}</option>
           <option value="" disabled selected>Chọn Quận/Huyện</option>

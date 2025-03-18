@@ -76,9 +76,9 @@ export class HoadonComponent {
     tenNguoiNhan: '',
     sdtNguoiNhan: '',
     diaChiCuThe: '',
-    tinhThanhPho: null,
-    quanHuyen: null,
-    phuongXa: null,
+    tinhThanhPho: '',
+    quanHuyen: '',
+    phuongXa: '',
     idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
   };
   AddressEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
@@ -337,9 +337,9 @@ export class HoadonComponent {
           tenNguoiNhan: '',
           sdtNguoiNhan: '',
           diaChiCuThe: '',
-          tinhThanhPho: null,
-          quanHuyen: null,
-          phuongXa: null,
+          tinhThanhPho: '',
+          quanHuyen: '',
+          phuongXa: '',
           idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
         };
         // Quay lại tab chọn địa chỉ

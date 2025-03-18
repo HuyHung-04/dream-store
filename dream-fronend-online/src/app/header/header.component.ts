@@ -53,10 +53,9 @@ export class HeaderComponent implements OnInit {
 
   getTongTien(): number {
     return this.gioHang.reduce((total, item) => {
-      // console.log(`Sản phẩm: ${item.tenSanPham} - Đơn giá đã nhân số lượng: ${item.donGia}`);
-      return total + item.donGia; 
+      return total + item.donGia * item.soLuong; 
     }, 0);
-  }
+  }  
   
   cardModal(event: Event): void {
     event.preventDefault();
