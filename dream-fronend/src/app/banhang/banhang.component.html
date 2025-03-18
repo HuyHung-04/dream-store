@@ -5,11 +5,11 @@
       </button>
       <div class="invoice-list">
         <button
-          *ngFor="let invoice of invoices1"
+          *ngFor="let invoice of invoices; trackBy: trackById"
           class="invoice-btn"
           [class.active]="selectedInvoice === invoice"
           (click)="selectInvoice(invoice)">
-          {{ invoice.ma }}
+          {{ invoice.maHoaDon}}
         </button>
       </div>
     </div>
@@ -34,12 +34,31 @@
             <tr *ngFor="let item of cart">
               <td>{{ item.tenSanPham }}</td> <!-- Tên sản phẩm -->
               <td>
-                <input type="number" [(ngModel)]="item.quantity" min="1" class="item-quantity" (change)="validateQuantity(item)">
+                <input type="number" [(ngModel)]="item.soLuong" min="1" class="item-quantity" (change)="validateQuantity(item)">
               </td>
-              <td>{{ item.gia | number }}</td> <!-- Đơn giá -->
+              <td>
+                {{
+                  (
+                    item.hinhThucGiam === 1
+                      ? (item.gia - (item.gia * item.giaTriGiam / 100))
+                      : (item.gia - item.giaTriGiam)
+                  ) | number:'1.0-0'
+                }} VNĐ
+              </td>
               <td>{{item.tenMau}}</td>
               <td>{{item.tenSize}}</td>
-              <td>{{ item.quantity * item.gia | number }}</td> <!-- Tổng giá -->
+              <td>
+                {{
+                  (
+                    item.soLuong * (
+                      item.hinhThucGiam === 1
+                        ? (item.gia - (item.gia * item.giaTriGiam / 100))
+                        : (item.gia - item.giaTriGiam)
+                    )
+                  ) | number:'1.0-0'
+                }} VNĐ
+              </td>
+
               <td>
                 <button class="item-remove" (click)="removeFromCart(item)">
                   <i class="bi bi-trash"></i>
@@ -80,8 +99,8 @@
           <tr *ngIf="sp.soLuong > 0" (click)="viewProductDetails(sp)">
             <td>{{ sp.maSanPhamChiTiet }}</td>
             <td>{{ sp.tenSanPham }}</td>
-            <td>{{ sp.gia | currency }}</td>
-            <td>{{ sp.giaTriGiam ? (sp.giaTriGiam | currency) : '0' }}</td>
+            <td>{{ sp.gia | number:'1.0-0' }} VNĐ</td>
+            <td>{{ sp.giaTriGiam ? (sp.giaTriGiam | number) : '0' }}</td>
             <td [ngClass]="{'low-stock': sp.soLuong <= 5}">{{ sp.soLuong }}</td>
             <td>{{ sp.tenMau }}</td>
             <td>{{ sp.tenSize }}</td>
@@ -107,7 +126,7 @@
       <!-- Chọn khách hàng -->
      <div class="khach-hang">
        <div class="input-group">
-         <input type="text" class="custom-input" placeholder="Tên khách hàng..." [(ngModel)]="tenKhachHang" readonly>
+         <input type="text" class="custom-input" placeholder="Tên khách hàng..." [(ngModel)]="tenKhachHang">
 
          <!-- Nút chọn khách hàng -->
          <button class="btn btn-primary" (click)="moDanhSachKhachHang()">
@@ -123,7 +142,7 @@
        <!-- Chọn nhân viên -->
        <div class="input-group">
          <select class="custom-input" [(ngModel)]="selectedNhanVien">
-           <option *ngFor="let nv of danhSachNhanVien" [value]="nv.id">
+           <option *ngFor="let nv of danhSachNhanVien" [ngValue]="nv.id">
              {{ nv.ten }}
            </option>
          </select>
@@ -131,16 +150,28 @@
      </div>
 
     <!-- mã giảm giá -->
-    <div class="cart-total">
-      <p>Tạm tính: <span></span></p>
-      <input type="text" placeholder="Nhập mã giảm giá" [(ngModel)]="discountCode" class="discount-input">
-      <button (click)="applyDiscount()" class="discount-btn">Áp dụng</button>
-      <p>Giảm giá: {{ discountAmount | currency }}</p>
-      <span>Tổng cộng:</span>
-      <span>{{ getTotal() | currency }}</span>
-    </div>
+      <div class="cart-total">
+        <!-- Select box cho mã giảm giá -->
+        <select [(ngModel)]="selectedDiscount" class="discount-select">
+          <option [ngValue]="null">Chọn mã giảm giá</option>
+          <option *ngFor="let discount of discountCodes" [ngValue]="discount.id">
+            {{ discount.ten }}
+          </option>
+        </select>
 
-    <!-- thanh toán -->
+        <button (click)="applyDiscount()" class="discount-btn">Áp dụng</button>
+
+        <div class="invoice-info">
+          <h3>Thông tin hóa đơn</h3>
+          <p>Tạm tính: {{ selectedInvoice?.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</p>
+          <p>Giảm giá: {{ discountAmount | number:'1.0-0' }} VNĐ</p>
+          <p>Tổng cộng: {{ (selectedInvoice?.tongTienThanhToan) | number:'1.0-0' }} VNĐ</p>
+        </div>
+
+      </div>
+
+
+      <!-- thanh toán -->
     <div class="payment-container">
       <h2 class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán</h2>
       <select [(ngModel)]="selectedPaymentMethod" class="payment-method">
