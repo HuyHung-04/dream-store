@@ -578,6 +578,7 @@ label {
 .back-to-cart {
   color: #294764;
   text-decoration: none; /* Bỏ gạch chân */
+  font-weight: bold;
   font-size: 16px;
   transition: color 0.3s ease;
 }

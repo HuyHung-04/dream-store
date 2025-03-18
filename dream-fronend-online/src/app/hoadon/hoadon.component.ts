@@ -3,7 +3,7 @@ import { HoadonService } from '../hoadon/hoadon.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 interface Voucher {
   id: number;
   ten: string;
@@ -82,7 +82,7 @@ export class HoadonComponent {
     idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
   };
   AddressEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
-  constructor(private hoadonService: HoadonService, private router: Router) { }
+  constructor(private hoadonService: HoadonService, private router: Router, private route: ActivatedRoute) { }
 
   // Phương thức gọi API khi component được khởi tạo
   ngOnInit(): void {
@@ -270,12 +270,19 @@ export class HoadonComponent {
     }
   }
 
-  // Phương thức gọi API lấy danh sách phương thức thanh toán
   loadPaymentMethods(): void {
     this.hoadonService.getPaymentMethods().subscribe(
       (response: any) => {
         this.paymentMethods = response; // Gán dữ liệu lấy được vào mảng paymentMethods
-        console.log("phuong thuc", this.paymentMethods)
+        console.log("Danh sách phương thức thanh toán:", this.paymentMethods);
+        
+        // Đặt giá trị mặc định là phương thức có id = 1 nếu tồn tại
+        const defaultMethod = this.paymentMethods.find(method => method.id === 1);
+        if (defaultMethod) {
+          this.selectedPaymentMethod = defaultMethod.id;
+        } else {
+          this.selectedPaymentMethod = this.paymentMethods.length ? this.paymentMethods[0].id : null;
+        }
       },
       (error) => {
         this.errorMessage = 'Có lỗi xảy ra khi lấy danh sách phương thức thanh toán.'; // Hiển thị lỗi nếu có
@@ -283,6 +290,7 @@ export class HoadonComponent {
       }
     );
   }
+  
   // Gọi API để cập nhật thông tin địa chỉ
   updateDiaChi(): void {
     if (this.AddressEdit.id) {
@@ -468,4 +476,7 @@ export class HoadonComponent {
       );
     }
   }
+  backSanpham(): void {
+    window.history.back();
+  } 
 }

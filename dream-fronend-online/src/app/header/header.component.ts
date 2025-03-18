@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { BanhangService } from '../banhang/banhang.service'; 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'; 
+import { SanphamDetailService } from '../sanpham-detail/sanpham-detail.service';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -19,7 +20,7 @@ export class HeaderComponent implements OnInit {
   isSearching: boolean = false; // Trạng thái tìm kiếm
   searchResults: any[] = []; // Kết quả tìm kiếm
   gioHangIds: number[] = [];
-  constructor(private headerService: HeaderService,private banhangService: BanhangService, private router: Router) {}
+  constructor(private headerService: HeaderService,private banhangService: BanhangService, private router: Router, private sanPhamDetailService: SanphamDetailService) {}
 
   ngOnInit(): void {
     this.loadGioHang();
@@ -39,7 +40,7 @@ export class HeaderComponent implements OnInit {
 
   xoaSanPham(id: number) {
     this.headerService.deleteFromCart(id).subscribe(() => {
-      alert('Bạn chắc chán muốn xoá');
+      alert('Bạn chắc chắn muốn xoá');
       this.headerService.notifyGioHangUpdated(); // Cập nhật giỏ hàng sau khi xoá
     });
   }
@@ -62,6 +63,7 @@ export class HeaderComponent implements OnInit {
     event.stopPropagation();
     this.modalCard = !this.modalCard;
     this.headerService.closeModalThanhToan();
+    // this.sanPhamDetailService.toggleModal();
   }
 
   // openModalThanhToan() {

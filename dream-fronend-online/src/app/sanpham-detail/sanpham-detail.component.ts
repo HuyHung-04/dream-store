@@ -43,7 +43,7 @@ import { Router } from '@angular/router';
   private route = inject(ActivatedRoute);
   private sanphamService = inject(SanphamDetailService);
   // thao tác 2 component
-  constructor(private headerService: HeaderService,private router: Router) {}
+  constructor(private headerService: HeaderService,private router: Router, private sanPhamDetailService: SanphamDetailService) {}
 
   ngOnInit(): void {
     this.loadSanPhamChiTiet();
@@ -234,6 +234,7 @@ import { Router } from '@angular/router';
         console.log("Thêm vào giỏ hàng thành công:", response);
         this.headerService.notifyGioHangUpdated();
         this.soLuongMua = 1;
+        this.hienToast();
     }, error => {
         console.error("Lỗi khi thêm vào giỏ hàng:", error);
     });
@@ -260,10 +261,17 @@ import { Router } from '@angular/router';
 
   // // code modalThanhToan khi ấn mua ngay/////////////////////////////////
 
-  // openModalThanhToan() {
-  //   this.loadKhachHang(this.idKhachHang);
-  //   this.loadPayMent();
-  // }
+  // Hàm hiển thị Toast
+  hienToast() {
+    var toastElement = document.getElementById('toastGioHang');
+    if (toastElement) {
+      (toastElement as any).classList.add('show'); // Hiển thị Toast
+      setTimeout(() => {
+        (toastElement as any).classList.remove('show'); // Ẩn Toast sau 3 giây
+      }, 3000);
+    }
+  }
+
 
   loadKhachHang(idKhachHang: number) {
     this.sanphamService.getThongTinKhachHang(idKhachHang).subscribe(
@@ -318,6 +326,9 @@ import { Router } from '@angular/router';
   closeModalThanhToanHeader(){
     this.headerService.closeModalThanhToan();
   }
+  // mở modal giỏ hàng
+  // openModalGioHang(event: Event): void {
+  //   this.sanPhamDetailService.toggleModal(); 
+  // }
 
-  
 }

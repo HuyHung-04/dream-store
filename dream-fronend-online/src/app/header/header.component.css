@@ -168,7 +168,7 @@ body {
 
 /* Giá sản phẩm */
 .cart-item p:last-child {
-  padding-left: 100px;
+  padding-left: 70px;
   font-size: 16px;
   color: red;
 }

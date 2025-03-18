@@ -184,6 +184,6 @@
   <div class="summary-item">
     <label for="total">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
   </div>
-  <a href="" class="back-to-cart"> <--Quay lại</a>
+  <a href="" (click)="backSanpham(); $event.preventDefault()" class="back-to-cart"> <i class="bi bi-box-arrow-left"></i> Quay lại</a>
   <button class="btn-checkout" (click)="createHoaDon()">Đặt hàng</button>
 </div>
