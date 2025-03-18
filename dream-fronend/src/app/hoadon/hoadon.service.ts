@@ -47,6 +47,7 @@ export interface HoaDonSearchRequest {
 })
 export class HoaDonService {
   private readonly apiUrl = 'http://localhost:8889/api/hoa-don';
+  private readonly apiUrlHDCT = 'http://localhost:8889/api/hoa-don-chi-tiet';
 
   constructor(private http: HttpClient) { }
 
@@ -54,5 +55,7 @@ export class HoaDonService {
     return this.http.post<any>(`${this.apiUrl}/all`, request);
   }
 
-
+  getHDCTByHD(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrlHDCT}/${id}/all`);
+  }
 }
