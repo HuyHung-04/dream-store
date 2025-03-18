@@ -43,7 +43,7 @@ public class KhachHangController {
     public List<KhachHang> searchKhachHangByName(@RequestParam("ten") String ten) {
         return khachHangService.searchKhachHangByName(ten);
     }
-    @PutMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<KhachHang> getKhachHangDetail(@PathVariable Integer id) {
         KhachHang khachHang= khachHangService.getKhachHangById(id);
         return ResponseEntity.ok(khachHang);
@@ -71,5 +71,4 @@ public class KhachHangController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-
 }
