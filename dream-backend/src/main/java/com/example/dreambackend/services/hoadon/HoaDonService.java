@@ -1,5 +1,6 @@
 package com.example.dreambackend.services.hoadon;
 
+import com.example.dreambackend.dtos.DataTableResults;
 import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.HoaDonRequest;
@@ -76,8 +77,16 @@ public class HoaDonService implements IHoaDonService {
     @PersistenceContext
     private EntityManager em;
     @Override
-    public List<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request) {
-        return hoaDonRepository.search(request, em);
+    public DataTableResults<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request) {
+        List<HoaDonResponse> list = hoaDonRepository.search(request,em);
+        DataTableResults<HoaDonResponse> results = new DataTableResults<>();
+        results.setData(list);
+        if (!list.isEmpty()) {
+            results.setRecordsTotal(request.getTotalRecords());
+        } else {
+            results.setRecordsTotal(0);
+        }
+        return results;
     }
 
     @Override

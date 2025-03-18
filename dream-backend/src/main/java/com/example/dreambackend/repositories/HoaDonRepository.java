@@ -105,9 +105,9 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getListTrangThai() != null) {
             sql.append(" AND hd.trang_thai IN (:listTrangThai)");
         }
-        if (searchRequest.getIdHoaDon() != null) {
-            sql.append(" AND UPPER(hd.id) LIKE UPPER(:idHoaDon)");
-        }
+//        if (searchRequest.getIdHoaDon() != null) {
+//            sql.append(" AND UPPER(hd.id) LIKE UPPER(:idHoaDon)");
+//        }
 
         sql.append(" ORDER BY hd.ngay_tao DESC");
         jakarta.persistence.Query query = entityManager.createNativeQuery(sql.toString(), "HoaDonResponseMapping");
@@ -130,9 +130,9 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getListTrangThai() != null) {
             query.setParameter("listTrangThai", searchRequest.getListTrangThai());
         }
-        if (searchRequest.getIdHoaDon() != null) {
-            query.setParameter("idHoaDon", "%" + searchRequest.getIdHoaDon() + "%");
-        }
+//        if (searchRequest.getIdHoaDon() != null) {
+//            query.setParameter("idHoaDon", "%" + searchRequest.getIdHoaDon() + "%");
+//        }
         if (searchRequest.getPage() != null && searchRequest.getPageSize() != null) {
             query.setFirstResult((searchRequest.getPage() - 1) * searchRequest.getPageSize());
             query.setMaxResults(searchRequest.getPageSize());
