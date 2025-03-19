@@ -3,7 +3,8 @@ import { HoadonService } from '../hoadon/hoadon.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+
 interface Voucher {
   id: number;
   ten: string;
@@ -72,19 +73,19 @@ export class HoadonComponent {
   totalPriceAfterDiscount: number = 0;
   selectedVoucherId: number = 0; // ID của voucher đã chọn
   fullAddress: string = '';
-  invoiceId: string ='';
+  invoiceId: string =''; 
   newAddress = {
     id: '',
     tenNguoiNhan: '',
     sdtNguoiNhan: '',
     diaChiCuThe: '',
-    tinhThanhPho: '',
-    quanHuyen: '',
-    phuongXa: '',
+    tinhThanhPho: null,
+    quanHuyen: null,
+    phuongXa: null,
     idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
   };
   AddressEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
-  constructor(private hoadonService: HoadonService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private hoadonService: HoadonService, private router: Router) { }
 
   // Phương thức gọi API khi component được khởi tạo
   ngOnInit(): void {
@@ -272,19 +273,12 @@ export class HoadonComponent {
     }
   }
 
+  // Phương thức gọi API lấy danh sách phương thức thanh toán
   loadPaymentMethods(): void {
     this.hoadonService.getPaymentMethods().subscribe(
       (response: any) => {
         this.paymentMethods = response; // Gán dữ liệu lấy được vào mảng paymentMethods
-        console.log("Danh sách phương thức thanh toán:", this.paymentMethods);
-
-        // Đặt giá trị mặc định là phương thức có id = 1 nếu tồn tại
-        const defaultMethod = this.paymentMethods.find(method => method.id === 1);
-        if (defaultMethod) {
-          this.selectedPaymentMethod = defaultMethod.id;
-        } else {
-          this.selectedPaymentMethod = this.paymentMethods.length ? this.paymentMethods[0].id : null;
-        }
+        console.log("phuong thuc", this.paymentMethods)
       },
       (error) => {
         this.errorMessage = 'Có lỗi xảy ra khi lấy danh sách phương thức thanh toán.'; // Hiển thị lỗi nếu có
@@ -292,7 +286,6 @@ export class HoadonComponent {
       }
     );
   }
-
   // Gọi API để cập nhật thông tin địa chỉ
   updateDiaChi(): void {
     if (this.AddressEdit.id) {
@@ -339,9 +332,9 @@ export class HoadonComponent {
           tenNguoiNhan: '',
           sdtNguoiNhan: '',
           diaChiCuThe: '',
-          tinhThanhPho: '',
-          quanHuyen: '',
-          phuongXa: '',
+          tinhThanhPho: null,
+          quanHuyen: null,
+          phuongXa: null,
           idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
         };
         // Quay lại tab chọn địa chỉ
@@ -472,8 +465,8 @@ export class HoadonComponent {
           this.modalthongbao = true;
           this.invoiceId = response.ma;  // Assuming the response contains the ID
 
-
-
+  
+   
         },
         (error) => {
           console.error('Lỗi khi tạo hóa đơn:', error);
@@ -482,11 +475,10 @@ export class HoadonComponent {
       );
     }
   }
+
   backSanpham(): void {
     window.history.back();
   }
-
-
 
 
     // Đóng modal khi click bên ngoài

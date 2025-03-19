@@ -209,6 +209,8 @@ export interface SanPhamChiTiet {
   tenSize: string;
   idMauSac: number;
   tenMauSac: string;
+  tenKhuyenMai: string;
+  giaSauGiam: number;
 }
 
 // Interface cho ApiResponse của SanPhamChiTiet

@@ -33,13 +33,24 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         spct.size.id,
         spct.size.ten,
         spct.mauSac.id,
-        spct.mauSac.ten
-        ) from SanPhamChiTiet spct WHERE spct.sanPham.id = :idSanPham ORDER BY spct.id DESC
+        spct.mauSac.ten,
+        khuyenMai.ten, 
+        CASE
+            WHEN khuyenMai IS NOT NULL
+            THEN CAST(spct.gia - (spct.gia * khuyenMai.giaTriGiam / 100) AS double)
+            ELSE CAST(spct.gia AS double)
+        END
+        ) 
+    from SanPhamChiTiet spct 
+    LEFT JOIN spct.khuyenMai khuyenMai
+    WHERE spct.sanPham.id = :idSanPham 
+    ORDER BY spct.id DESC
     """)
     Page<SanPhamChiTietRespone> getSanPhamChiTietBySanPhamId(@Param("idSanPham") Integer idSanPham, Pageable pageable);
 
+
     @Query("""
-    SELECT new com.example.dreambackend.responses.SanPhamChiTietRespone(
+    select new com.example.dreambackend.responses.SanPhamChiTietRespone(
         spct.id,
         spct.ma,
         spct.gia,
@@ -52,10 +63,17 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         spct.size.id,
         spct.size.ten,
         spct.mauSac.id,
-        spct.mauSac.ten
-    )
-    FROM SanPhamChiTiet spct
-    WHERE spct.sanPham.id = :idSanPham
+        spct.mauSac.ten,
+        khuyenMai.ten, 
+        CASE
+            WHEN khuyenMai IS NOT NULL
+            THEN CAST(spct.gia - (spct.gia * khuyenMai.giaTriGiam / 100) AS double)
+            ELSE CAST(spct.gia AS double)
+        END
+        ) 
+    from SanPhamChiTiet spct 
+    LEFT JOIN spct.khuyenMai khuyenMai
+    WHERE spct.sanPham.id = :idSanPham 
       AND (:gia IS NULL OR spct.gia >= :gia)
       AND (:soLuong IS NULL OR spct.soLuong >= :soLuong)
       AND (:idMauSac IS NULL OR spct.mauSac.id = :idMauSac)

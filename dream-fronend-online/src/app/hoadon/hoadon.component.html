@@ -109,8 +109,8 @@
 
 
       <input [(ngModel)]="AddressEdit.diaChiCuThe" class="edit-input" placeholder="Địa chỉ cụ thể">
-      <button class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
-      <button class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
+      <button style="background-color: #294764;" class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
+      <button style="background-color: #6c757d;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
     </div>
   </div>
 </div>
@@ -144,7 +144,7 @@
 
 <!-- Hiển thị thông báo nếu giỏ hàng trống -->
 <ng-template #noItems>
-  <p>Giỏ hàng của bạn hiện tại trống.</p>
+  <!-- <p>Giỏ hàng của bạn hiện tại trống.</p> -->
 </ng-template>
 
 
@@ -190,7 +190,6 @@
   <a href="" (click)="backSanpham(); $event.preventDefault()" class="back-to-cart"> <i class="bi bi-box-arrow-left"></i> Quay lại</a>
   <button class="btn-checkout" (click)="createHoaDon()">Đặt hàng</button>
 </div>
-
 
 
 <!-- Modal Chức Năng Sau Thanh Toán -->
