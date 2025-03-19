@@ -132,7 +132,7 @@
 
         <div class="input-row">
           <div class="input-field">
-            <input type="text" class="input" [value]="selectedVoucher.trangThai ? 'Hoạt động' : 'Không hoạt động'"
+            <input type="text" class="input" [value]="selectedVoucher.trangThai ? 'Hoạt động' : 'Không hoạt động'" style="width:185px;"
               readonly />
             <label for="trangThai">Trạng thái</label>
           </div>
@@ -149,11 +149,11 @@
       <!-- Form hiển thị chi tiết voucher và cho phép sửa -->
       <form (ngSubmit)="updateVoucher()" #voucherForm="ngForm">
         <div class="input-row">
-          <div class="input-field">
+          <!-- <div class="input-field"> -->
             <!-- Trường ID là readonly -->
-            <input type="text" class="input" [(ngModel)]="voucherEdit.id" name="id" readonly />
+            <!-- <input type="text" class="input" [(ngModel)]="voucherEdit.id" name="id" readonly />
             <label for="id">Id</label>
-          </div>
+          </div> -->
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="voucherEdit.ma" name="ma" required readonly />
             <label for="ma">Mã voucher</label>
@@ -235,7 +235,7 @@
 
         <div class="input-row">
           <div class="input-field">
-            <select class="input" [(ngModel)]="voucherEdit.trangThai" name="trangThai" required
+            <select class="input" [(ngModel)]="voucherEdit.trangThai" name="trangThai" required style="width:185px;"
               (change)="clearError('trangThai')">
               <option [value]="1">Hoạt động</option>
               <option [value]="0">Không hoạt động</option>
@@ -344,7 +344,7 @@
         </div>
         <div class="input-row">
           <div class="input-field">
-            <select class="input" [(ngModel)]="voucher.trangThai" name="trangThai" required
+            <select class="input" [(ngModel)]="voucher.trangThai" name="trangThai" required style="width:185px;"
               (change)="clearError('trangThai')">
               <option [value]="1">Hoạt động</option>
               <option [value]="0">Không hoạt động</option>

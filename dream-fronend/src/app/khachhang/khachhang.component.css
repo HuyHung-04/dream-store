@@ -155,6 +155,7 @@
   border-bottom: 1px solid #294764;
 }
 
+
 /* Button styling */
 .btn-primary {
   background-color: #294764;
@@ -589,53 +590,4 @@
 }
 
 
-/* Tạo bố cục chung */
-.input-field {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-/* Style cho combobox */
-.input-field select {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  font-size: 14px;
-  width: 180px; /* Điều chỉnh độ rộng */
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-/* Hover effect */
-.input-field select:hover {
-  border-color: #007bff;
-}
-
-/* Khi chọn vào combobox */
-.input-field select:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* Style cho option */
-.input-field select option {
-  padding: 5px;
-  font-size: 14px;
-  background-color: #fff;
-}
-
-/* Màu riêng cho trạng thái */
-.input-field select option[value="1"] {
-  color: green; /* Hoạt động */
-  font-weight: bold;
-}
-
-.input-field select option[value="0"] {
-  color: red; /* Không hoạt động */
-  font-weight: bold;
-}
 

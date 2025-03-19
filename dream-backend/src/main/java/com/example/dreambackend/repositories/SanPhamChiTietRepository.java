@@ -33,13 +33,24 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         spct.size.id,
         spct.size.ten,
         spct.mauSac.id,
-        spct.mauSac.ten
-        ) from SanPhamChiTiet spct WHERE spct.sanPham.id = :idSanPham ORDER BY spct.id DESC
+        spct.mauSac.ten,
+        khuyenMai.ten, 
+        CASE
+            WHEN khuyenMai IS NOT NULL
+            THEN CAST(spct.gia - (spct.gia * khuyenMai.giaTriGiam / 100) AS double)
+            ELSE CAST(spct.gia AS double)
+        END
+        ) 
+    from SanPhamChiTiet spct 
+    LEFT JOIN spct.khuyenMai khuyenMai
+    WHERE spct.sanPham.id = :idSanPham 
+    ORDER BY spct.id DESC
     """)
     Page<SanPhamChiTietRespone> getSanPhamChiTietBySanPhamId(@Param("idSanPham") Integer idSanPham, Pageable pageable);
 
+
     @Query("""
-    SELECT new com.example.dreambackend.responses.SanPhamChiTietRespone(
+    select new com.example.dreambackend.responses.SanPhamChiTietRespone(
         spct.id,
         spct.ma,
         spct.gia,
@@ -52,10 +63,17 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         spct.size.id,
         spct.size.ten,
         spct.mauSac.id,
-        spct.mauSac.ten
-    )
-    FROM SanPhamChiTiet spct
-    WHERE spct.sanPham.id = :idSanPham
+        spct.mauSac.ten,
+        khuyenMai.ten, 
+        CASE
+            WHEN khuyenMai IS NOT NULL
+            THEN CAST(spct.gia - (spct.gia * khuyenMai.giaTriGiam / 100) AS double)
+            ELSE CAST(spct.gia AS double)
+        END
+        ) 
+    from SanPhamChiTiet spct 
+    LEFT JOIN spct.khuyenMai khuyenMai
+    WHERE spct.sanPham.id = :idSanPham 
       AND (:gia IS NULL OR spct.gia >= :gia)
       AND (:soLuong IS NULL OR spct.soLuong >= :soLuong)
       AND (:idMauSac IS NULL OR spct.mauSac.id = :idMauSac)
@@ -101,16 +119,16 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
     List<SanPhamChiTiet> findBySanPhamId(Integer sanPhamId);
     boolean existsByMa(String ma);
-//    @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
-//            + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
-//            + "m.ten, s.ten, km.giaTriGiam) "
-//            + "FROM SanPhamChiTiet spct "
-//            + "JOIN spct.sanPham sp "
-//            + "JOIN spct.mauSac m "
-//            + "JOIN spct.size s "
-//            + "LEFT JOIN spct.khuyenMai km "
-//            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
-//    Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
-    // check trùng spct khi thêm cùng màu và size
+    @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
+            + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
+            + "m.ten, s.ten, km.giaTriGiam) "
+            + "FROM SanPhamChiTiet spct "
+            + "JOIN spct.sanPham sp "
+            + "JOIN spct.mauSac m "
+            + "JOIN spct.size s "
+            + "LEFT JOIN spct.khuyenMai km "
+            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
+    Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
+//     check trùng spct khi thêm cùng màu và size
     Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
 }

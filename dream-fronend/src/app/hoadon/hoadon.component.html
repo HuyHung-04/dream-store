@@ -5,9 +5,7 @@
 
   <!-- Phần tìm kiếm -->
   <div class="tim-kiem">
-    <p style="color: #294764; margin-top: -20px; font-weight: bold; font-size: 14px;">
-      Tìm kiếm
-    </p>
+    <p style="color: #294764; margin-top: -20px; font-weight: bold; font-size: 14px;">Tìm kiếm</p>
     <div class="input-row">
       <div class="input-field">
         <label for="maHoaDon">Mã hóa đơn</label>
@@ -76,9 +74,30 @@
     <!-- Phân trang -->
     <div class="pagination">
       <button (click)="prevPage()">Prev</button>
-      <span>Trang {{ searchRequest.page }} / {{ hoaDons.totalPages}}</span>
+      <span>Trang {{ searchRequest.page }} / {{ hoaDons.totalElements % 10 }}</span>
       <button (click)="nextPage()">Next</button>
     </div>
+  </div>
 
+  <!-- Popup modal hiển thị chi tiết hóa đơn -->
+  <div class="modal" *ngIf="showDetailPopup">
+    <div class="modal-content">
+      <span class="close" (click)="closePopup()">&times;</span>
+      <h3>Chi tiết hóa đơn</h3>
+      <div *ngIf="selectedInvoiceDetail; else loading">
+        <p><strong>Mã hóa đơn:</strong> {{ selectedInvoiceDetail.maHoaDon }}</p>
+        <p><strong>Tên khách hàng:</strong> {{ selectedInvoiceDetail.tenKhachHang }}</p>
+        <p><strong>Tên nhân viên:</strong> {{ selectedInvoiceDetail.tenNhanVien }}</p>
+        <p><strong>Voucher:</strong> {{ selectedInvoiceDetail.tenVoucher }} (Giảm {{ selectedInvoiceDetail.giaTriGiam }}{{ selectedInvoiceDetail.hinhThucGiam ? ' %' : ' VNĐ' }})</p>
+        <p><strong>Tiền trước voucher:</strong> {{ selectedInvoiceDetail.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</p>
+        <p><strong>Tổng tiền:</strong> {{ selectedInvoiceDetail.tongTienThanhToan | number:'1.0-0' }} VNĐ</p>
+        <p><strong>Ghi chú:</strong> {{ selectedInvoiceDetail.ghiChu }}</p>
+        <p><strong>Ngày tạo:</strong> {{ selectedInvoiceDetail.ngayTao | date:'yyyy-MM-dd' }}</p>
+        <!-- Bạn có thể hiển thị các trường khác theo yêu cầu -->
+      </div>
+      <ng-template #loading>
+        <p>Đang tải dữ liệu...</p>
+      </ng-template>
+    </div>
   </div>
 </div>

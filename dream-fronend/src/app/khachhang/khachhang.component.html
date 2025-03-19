@@ -8,13 +8,13 @@
     <p>Tìm Kiếm:</p>
     <input type="text" (input)="filterKhachHangs()" class="input search-input"
       placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
-      <div class="input-field">
+      <!-- <div class="input-field">
         <label for="trangThai">Trạng thái</label>
         <select class="input" id="trangThai" name="trangThai">
           <option value="1">Hoạt động</option>
           <option value="0">Không hoạt động</option>
         </select>
-      </div>
+      </div> -->
   </div>
   
 </div>
@@ -158,9 +158,7 @@
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khachHangEdit.ma" name="ma" required readonly />
             <label for="ma">Mã khách hàng</label>
-            
           </div>
-          
         </div>
 
         <div class="input-row">
@@ -267,8 +265,6 @@
             </div>
           </div>
 
-          
-
         </div>
         <div class="input-row">
           <div class="input-field">
@@ -312,7 +308,7 @@
         </div>
         <div class="input-row">
           <div class="input-field">
-            <select class="input" [(ngModel)]="khachhang.trangThai" name="trangThai" required
+            <select class="input" [(ngModel)]="khachhang.trangThai" name="trangThai" required style="width:185px;"
               (change)="clearError('trangThai')">
               <option [value]="1">Hoạt động</option>
               <option [value]="0">Không hoạt động</option>

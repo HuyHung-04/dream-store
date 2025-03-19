@@ -18,7 +18,7 @@ export class HoaDonComponent implements OnInit {
     tenNhanVien: '',
     ngayTaoFrom: null,
     ngayTaoTo: null,
-    listTrangThai: null,
+    listTrangThai: null, // Nếu null => không lọc theo trạng thái
     pageSize: 10,
     page: 1
   };
@@ -37,12 +37,17 @@ export class HoaDonComponent implements OnInit {
     pageSize: 10
   };
 
+  // Các biến cho popup hiển thị chi tiết hóa đơn
+  selectedInvoiceDetail: HoaDonResponse | null = null;
+  showDetailPopup: boolean = false;
+
   constructor(private hoaDonService: HoaDonService) {}
 
   ngOnInit(): void {
     this.loadHoaDons();
   }
 
+  // Load danh sách hóa đơn từ backend
   loadHoaDons(): void {
     this.hoaDonService.getHoaDons(this.searchRequest).subscribe(
       (response: any) => {
@@ -56,21 +61,7 @@ export class HoaDonComponent implements OnInit {
             currentPage: this.searchRequest.page,
             pageSize: this.searchRequest.pageSize
           };
-        }
-        else if (response && response.content) {
-          // Nếu API trả về định dạng cũ với "content"
-          this.hoaDons = response;
-        }
-        else if (Array.isArray(response)) {
-          this.hoaDons = {
-            totalPages: Math.ceil(response.length / this.searchRequest.pageSize),
-            content: response,
-            totalElements: response.length,
-            currentPage: this.searchRequest.page,
-            pageSize: this.searchRequest.pageSize
-          };
-        }
-        else {
+        } else {
           console.error("Dữ liệu API không đúng định dạng:", response);
         }
       },
@@ -80,12 +71,13 @@ export class HoaDonComponent implements OnInit {
     );
   }
 
-  // Hàm trackBy cho *ngFor
+
+  // Hàm trackBy cho *ngFor (giúp tối ưu hiển thị danh sách)
   trackById(index: number, invoice: HoaDonResponse): number {
     return invoice.id;
   }
 
-  // Hàm tìm kiếm hóa đơn
+  // Hàm tìm kiếm hóa đơn: reset trang hiện tại về 1 và load lại dữ liệu
   search(): void {
     this.searchRequest.page = 1;
     this.loadHoaDons();
@@ -106,7 +98,7 @@ export class HoaDonComponent implements OnInit {
     this.loadHoaDons();
   }
 
-  // Hàm chuyển trang về trang trước
+  // Chuyển trang: Prev
   prevPage(): void {
     if (this.searchRequest.page > 1) {
       this.searchRequest.page--;
@@ -114,7 +106,7 @@ export class HoaDonComponent implements OnInit {
     }
   }
 
-  // Hàm chuyển trang về trang tiếp theo
+  // Chuyển trang: Next
   nextPage(): void {
     if (this.searchRequest.page < (this.hoaDons.totalPages || 1)) {
       this.searchRequest.page++;
@@ -122,9 +114,16 @@ export class HoaDonComponent implements OnInit {
     }
   }
 
-  // Hàm chọn hóa đơn để xem chi tiết
+  // Hàm chọn hóa đơn để hiển thị chi tiết (popup)
   selectHoaDonChiTiet(invoice: HoaDonResponse): void {
+    this.selectedInvoiceDetail = invoice;
+    this.showDetailPopup = true;
     console.log("Hóa đơn được chọn:", invoice);
-    // Triển khai logic hiển thị chi tiết (ví dụ mở modal) nếu cần
+  }
+
+  // Hàm đóng popup chi tiết hóa đơn
+  closePopup(): void {
+    this.showDetailPopup = false;
+    this.selectedInvoiceDetail = null;
   }
 }

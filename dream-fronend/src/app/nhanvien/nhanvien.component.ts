@@ -338,7 +338,7 @@ export class NhanvienComponent implements OnInit {
     if (this.nhanVienEdit.id) {
       // Nếu vai trò là Admin, giữ nguyên
       if (this.nhanVienEdit.vaiTro.ten !== 'Admin') {
-        this.nhanVienEdit.vaiTro = { id: 2, ten: 'Nhân viên' };
+        this.nhanVienEdit.vaiTro = { id: 6, ten: 'Nhân viên' };
       }
       this.nhanVienService.updateNhanVien(this.nhanVienEdit).subscribe(
         (response) => {
@@ -364,11 +364,11 @@ showDetail(nhanVienId: number) {
   this.selectedNhanVien = this.nhanViens.find(nhanVien => nhanVien.id === nhanVienId);
   this.showModalDetail = true; // Hiển thị modal chi tiết
 }
-  // 🟢 Lấy danh sách nhân viên
+  //  Lấy danh sách nhân viên
   loadData(): void {
     this.loadPage(0);
   }
-  // 🟢 Lấy danh sách vai trò
+  //  Lấy danh sách vai trò
   getVaiTros() {
     this.nhanVienService.getVaiTros().subscribe(
       (data) => {

@@ -476,7 +476,9 @@ export class HoadonComponent {
     }
   }
 
-
+  backSanpham(): void {
+    window.history.back();
+  }
 
 
     // Đóng modal khi click bên ngoài

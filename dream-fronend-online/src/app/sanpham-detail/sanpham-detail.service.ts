@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,12 @@ export class SanphamDetailService {
   private apiSize = 'http://localhost:8080/api/size/hien-thi';
   private apiMauSac = 'http://localhost:8080/api/mau-sac/hien-thi';
   private apiDiaChi = 'http://localhost:8080/api/dia-chi-khach-hang';
+  // private modalState = new BehaviorSubject<boolean>(false);
+  // modalState$ = this.modalState.asObservable();
+
+  // toggleModal() {
+  //   this.modalState.next(!this.modalState.value);
+  // }
  
 
   constructor(private http: HttpClient) {}

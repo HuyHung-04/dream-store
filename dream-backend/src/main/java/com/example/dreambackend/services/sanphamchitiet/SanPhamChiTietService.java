@@ -175,8 +175,8 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
         }
     }
 
-//    @Override
-//    public Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable) {
-//        return sanPhamChiTietRepository.getSanPhamForBanHang(pageable);
-//    }
+    @Override
+    public Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable) {
+        return sanPhamChiTietRepository.getSanPhamForBanHang(pageable);
+    }
 }

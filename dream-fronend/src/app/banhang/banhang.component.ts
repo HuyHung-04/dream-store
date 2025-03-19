@@ -27,7 +27,7 @@ export class BanhangComponent implements OnInit {
   selectedNhanVien: any;
   sanPhams: any[] = [];
   page: number = 0;
-  size: number = 3;
+  size: number = 4;
   totalPages: number = 0;
   cart: any[] = [];
   categories: string[] = ['Nike Mercurial', 'Nike Phantom', 'Nike Tiempo'];
@@ -52,6 +52,7 @@ export class BanhangComponent implements OnInit {
     this.cart = [];
 
   }
+  
 
   // Tạo hóa đơn mới
   createInvoice() {
@@ -368,9 +369,9 @@ export class BanhangComponent implements OnInit {
       }
       console.log("Voucher từ API:", voucher);
       if (voucher.hinhThucGiam) {
-        this.discountAmount = total * (voucher.giaTriGiam / 100);
-      } else {
         this.discountAmount = voucher.giaTriGiam;
+      } else {
+        this.discountAmount = total * (voucher.giaTriGiam / 100);
       }
       this.updateInvoiceTotal();
       this.refreshInvoice();
@@ -393,11 +394,16 @@ export class BanhangComponent implements OnInit {
     }
     console.log(this.selectedInvoice);
 
-    // Sử dụng selectedPaymentMethod (đã được load từ DB) cho idPhuongThucThanhToan
+    // Cập nhật hóa đơn với trạng thái thanh toán và reset các trường liên quan
     const updatedInvoice = {
       ...this.selectedInvoice,
       trangThai: 7,
-      idPhuongThucThanhToan: this.selectedPaymentMethod
+      idPhuongThucThanhToan: this.selectedPaymentMethod,
+      tongTienTruocVoucher: 0,
+      tongTienThanhToan: 0,
+      idVoucher: '',
+      tenNguoiNhan: '',
+      sdtNguoiNhan: ''
     };
 
     this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
@@ -406,7 +412,10 @@ export class BanhangComponent implements OnInit {
         this.cart = [];
         this.discountCode = '';
         this.discountAmount = 0;
-        // Nếu cần, cập nhật lại selectedInvoice từ response
+        this.selectedKhachHang = null;
+        this.tenKhachHang = '';
+        this.soDienThoai = '';
+        this.selectedDiscount = null;
         this.selectedInvoice = response;
         this.loadInvoices();
       },
@@ -416,7 +425,6 @@ export class BanhangComponent implements OnInit {
       }
     );
   }
-
 
 
   trackById(index: number, item: any) {
@@ -489,17 +497,24 @@ export class BanhangComponent implements OnInit {
   }
 
   loadInvoices(): void {
-    const request = {};
+    const request = {}; // Nếu có yêu cầu tìm kiếm, bạn có thể truyền vào đây
     this.banhangService.getDanhSachHD(request).subscribe(
       (response: any) => {
-        // Nếu response.content không tồn tại, giả sử response là mảng các hóa đơn
-        const invoicesArray = response.content || response;
-        this.invoices = invoicesArray.filter((invoice: any) => invoice.trangThai === 5);
+        if (response && response.data) {
+          // Lấy mảng hóa đơn từ key "data"
+          const invoicesArray = response.data;
+          // Nếu muốn lọc chỉ các hóa đơn có trạng thái 5
+          this.invoices = invoicesArray.filter((invoice: any) => invoice.trangThai === 5);
+          console.log("Hóa đơn có trạng thái 5:", this.invoices);
+        } else {
+          console.error("Dữ liệu API không đúng định dạng:", response);
+        }
       },
       error => {
         console.error("Lỗi khi lấy danh sách hóa đơn:", error);
       }
     );
   }
+
 
 }

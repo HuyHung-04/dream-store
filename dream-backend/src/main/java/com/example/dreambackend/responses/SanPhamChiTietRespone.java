@@ -35,4 +35,9 @@ public class SanPhamChiTietRespone {
     private Integer idMauSac;
 
     private String tenMauSac;
+
+    private String tenKhuyenMai;
+
+    private Double giaSauGiam;
+
 }

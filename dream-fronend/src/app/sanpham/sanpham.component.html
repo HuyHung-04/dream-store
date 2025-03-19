@@ -410,6 +410,8 @@
                 <th>Ngày sửa</th>
                 <th>Size</th>
                 <th>Màu sắc</th>
+                <th>Tên khuyến mãi</th>
+                <th>Giá sau giảm</th>
                 <th>Trạng thái</th>
                 <th colspan="2">Hành động</th>
               </tr>
@@ -424,6 +426,8 @@
                 <td>{{ sanPham.ngaySua }}</td>
                 <td>{{ sanPham.tenSize }}</td>
                 <td>{{ sanPham.tenMauSac }}</td>
+                <td>{{ sanPham.tenKhuyenMai || "Không có" }}</td>
+                <td>{{ sanPham.giaSauGiam }}</td>
                 <td>{{ sanPham.trangThai === 1 ? "Hoạt động" : "Không hoạt động" }}</td>
                 <td>
                   <a href="javascript:void(0);"  (click)="editSanPhamChiTiet(sanPham)" class="button btn-danger">Sửa</a>

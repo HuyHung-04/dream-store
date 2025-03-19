@@ -7,13 +7,13 @@
         <button
           *ngFor="let invoice of invoices; trackBy: trackById"
           class="invoice-btn"
-          [class.active]="selectedInvoice === invoice"
+          [class.active]="selectedInvoice?.id === invoice.id"
           (click)="selectInvoice(invoice)">
           {{ invoice.maHoaDon}}
         </button>
       </div>
     </div>
-
+    <!-- [class.active]="selectedInvoice === invoice" -->
     <!-- giỏ hàng -->
     <div class="cart-container">
       <h6 class="sidebar-title"><i class="bi bi-cart3"></i> Giỏ hàng</h6>
@@ -122,7 +122,7 @@
   </div>
 
     <!-- khách hàng -->
-    <div class="right-container border rounded-3">
+    <div class="right-container">
       <!-- Chọn khách hàng -->
      <div class="khach-hang">
        <div class="input-group">
@@ -179,9 +179,11 @@
           {{ method.ten}}
         </option>
       </select>
-      <button class="checkout-btn" (click)="checkout()">
-        <i class="bi bi-wallet2"></i> Xác nhận thanh toán
-      </button>
+      <div style="padding-top: 22px;">
+        <button class="checkout-btn" (click)="checkout()">
+          <i class="bi bi-wallet2"></i> Xác nhận thanh toán
+        </button>
+      </div>
     </div>
   </div>
 

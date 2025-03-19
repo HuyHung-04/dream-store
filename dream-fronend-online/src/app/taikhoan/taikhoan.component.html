@@ -1,0 +1,87 @@
+<div class="container">
+    <aside class="sidebar">
+        <a href=""><img src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs" alt="Logo"></a>
+        <h2>Quản Lý Tài Khoản</h2>
+        <ul>
+            <li (click)="openhoso()">Hồ sơ</li>
+            <li (click)="opendoimatkhau()">Đổi mật khẩu</li>
+            <li>Đơn hàng</li>
+            <li>Đăng xuất</li>
+        </ul>
+    </aside>
+    <main class="content">
+        <div *ngIf="hoso">
+            <h2>Hồ sơ của tôi</h2>
+            <form>
+              <div class="input-field">
+                <label for="ten">Tên khách hàng</label>
+                <input type="text" class="input" [(ngModel)]="khachHangEdit.ten" name="ten" required [readonly]="!isEditing" (input)="clearErrorEdit('ten')"/>
+                <div class="tooltip-error" *ngIf="errors.ten">
+                    {{ errors.ten}}
+                  </div>
+              </div>
+              <div class="input-field">
+                <label for="gioiTinh">Giới tính</label>
+                <select class="input" [(ngModel)]="khachHangEdit.gioiTinh" name="gioiTinh" required [disabled]="!isEditing" (change)="clearErrorEdit('gioiTinh')">
+                  <option [value]="true">Nam</option>
+                  <option [value]="false">Nữ</option>
+                </select>
+              </div>
+              <div class="input-field">
+                <label for="email">Email</label>
+                <input type="email" class="input" [(ngModel)]="khachHangEdit.email" name="email" required [readonly]="!isEditing" (input)="clearErrorEdit('soDienThoai')"/>
+                <div class="tooltip-error" *ngIf="errors.email">
+                    {{ errors.email}}
+                  </div>
+              </div>
+              <div class="input-field">
+                <label for="soDienThoai">Số điện thoại</label>
+                <input type="text" class="input" [(ngModel)]="khachHangEdit.soDienThoai" name="soDienThoai" required [readonly]="!isEditing" (input)="clearErrorEdit('soDienThoai')"/>
+                <div class="tooltip-error" *ngIf="errors.soDienThoai">
+                    {{ errors.soDienThoai}}
+                  </div>
+              </div>
+              <div class="button-group">
+                <button type="button" class="change-button" (click)="toggleEdit()">
+                  {{ isEditing ? 'Lưu' : 'Thay đổi' }}
+                </button>
+                <button type="button" class="delete-button">Xóa tài khoản</button>
+              </div>
+            </form>
+          </div>
+          
+
+          <div *ngIf="doimatkhau1">
+            <h2>Đổi mật khẩu</h2>
+            <div class="input-field">
+              <label for="matKhau">Mật khẩu hiện tại:</label>
+              <input type="password" class="input"  name="matKhau" [(ngModel)]="matKhauHienTai" required  (input)="clearErrorEdit('matKhau')"/>
+              <div class="tooltip-error" *ngIf="errors.matKhau">
+                  {{ errors.matKhau}}
+                </div>
+            </div>
+            <button type="button" (click)="xacNhanMatKhau()" class="delete-button">Xác nhận</button>
+
+            <div *ngIf="doimatkhau2">
+              <h2>Đổi mật khẩu</h2>
+              <div class="input-group">
+                <label for="matKhau">Mật khẩu</label>
+                <input type="password" class="input" [(ngModel)]="khachHangEdit.matKhau" name="matKhau" required #matKhau="ngModel"
+                  (input)="clearErrorEdit('matKhau')" />
+                <div class="tooltip-error" *ngIf="errors.matKhau">
+                  {{ errors.matKhau}}
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="matKhau">Xác nhận mật khẩu</label>
+                <input type="password" class="input" [(ngModel)]="xacNhanMatKhau" name="xacNhanMatKhau" required 
+                   />
+                <div class="tooltip-error" *ngIf="errors.xacNhanMatKhau">
+                  {{ errors.xacNhanMatKhau}}
+                </div>
+              </div>
+              <button type="button" (click)="updateKhachHang()" class="delete-button">Xác nhận</button>
+            </div>
+          </div>
+    </main>
+</div>

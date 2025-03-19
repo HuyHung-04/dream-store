@@ -57,7 +57,7 @@
         <input [(ngModel)]="newAddress.tenNguoiNhan" placeholder="Tên người nhận" class="form-control">
         <input [(ngModel)]="newAddress.sdtNguoiNhan" placeholder="Số điện thoại người nhận" class="form-control">
         <select [(ngModel)]="newAddress.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="form-control">
-          <option value="" disabled [selected]="!AddressEdit.tinhThanhPho">Chọn Tỉnh/Thành Phố</option>
+          <option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
           <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}</option>
         </select>
         <select [(ngModel)]="newAddress.quanHuyen" (change)="onSelectQuanHuyen($event)" class="form-control">
@@ -109,8 +109,8 @@
 
 
       <input [(ngModel)]="AddressEdit.diaChiCuThe" class="edit-input" placeholder="Địa chỉ cụ thể">
-      <button class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
-      <button class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
+      <button style="background-color: #294764;" class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
+      <button style="background-color: #6c757d;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
     </div>
   </div>
 </div>
@@ -125,7 +125,7 @@
     <div class="item-details">
       <div class="item-header">
         <h3 class="item-title">{{ item.tenSanPham }}</h3>
-        <p class="item-price">{{ item.donGia | currency }}</p>
+        <p class="item-price">{{ item.donGia }} VND</p>
       </div>
 
       <div class="item-info">
@@ -136,7 +136,7 @@
       <div *ngIf="item.khuyenMai" class="discount-info">
         <p><strong>Giảm giá:</strong> {{ item.giaTriGiam }} ({{ item.hinhThucGiam ? 'Giảm trực tiếp' : 'Giảm phần trăm'
           }})</p>
-        <p><strong>Giá sau giảm:</strong> {{ item.donGiaSauGiam | currency }}</p>
+        <p><strong>Giá sau giảm:</strong> {{ item.donGiaSauGiam }} VND</p>
       </div>
     </div>
   </div>
@@ -144,7 +144,7 @@
 
 <!-- Hiển thị thông báo nếu giỏ hàng trống -->
 <ng-template #noItems>
-  <p>Giỏ hàng của bạn hiện tại trống.</p>
+  <!-- <p>Giỏ hàng của bạn hiện tại trống.</p> -->
 </ng-template>
 
 
@@ -154,31 +154,28 @@
     <label for="">Tạm tính: {{ totalPrice }} VND</label>
   </div>
 
-  <div class="summary-item">
-    <label for="voucher">Voucher:</label>
+  <div class="form-group">
+    <label class="input-label" for="voucher">Chọn voucher:</label>
     <select id="voucher" [(ngModel)]="selectedVoucher" (change)="updateTotalPrice()" class="selectoption">
-      <option value="">Chọn voucher</option>
       <option *ngFor="let voucher of vouchers" [ngValue]="voucher">
-        {{ voucher.ten}} VND
+        {{ voucher.ten }} VND
       </option>
     </select>
   </div>
 
-  <!-- 💰 Hiển thị "Giảm tối đa" nếu có voucher được chọn -->
+  <!-- Hiển thị "Giảm tối đa" nếu có voucher được chọn -->
   <div class="max-sale" *ngIf="selectedVoucherMaxDiscount">
-    <label>Giảm tối đa: {{ selectedVoucherMaxDiscount | number }} VND</label>
+    <label>Giảm tối đa: {{ selectedVoucherMaxDiscount }} VND</label>
   </div>
 
   <div class="summary-item">
-    <label>Phí vận chuyển: {{ shippingFee | number }} VND</label>
+    <label>Phí vận chuyển: {{ shippingFee }} VND</label>
     <p></p>
   </div>
 
-   <!-- Hiển thị phương thức thanh toán -->
-   <div class="payment">
-    <label >Phương thức thanh toán:</label>
+  <div class="form-group">
+    <label class="input-label" for="payment-method">Chọn phương thức thanh toán:</label>
     <select id="payment-method" [(ngModel)]="selectedPaymentMethod" class="selectoption">
-      <option value="" disabled>Chọn phương thức thanh toán</option>
       <option *ngFor="let method of paymentMethods" [value]="method.id">
         {{ method.ten }}
       </option>
@@ -187,14 +184,12 @@
 
   <div></div>
   <div class="summary-item">
-    <label for="total">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
+    <label for="">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
 
   </div>
-
-  <button class="btn-checkout" (click)="createHoaDon()">Thanh toán</button>
-  
+  <a href="" (click)="backSanpham(); $event.preventDefault()" class="back-to-cart"> <i class="bi bi-box-arrow-left"></i> Quay lại</a>
+  <button class="btn-checkout" (click)="createHoaDon()">Đặt hàng</button>
 </div>
-
 
 
 <!-- Modal Chức Năng Sau Thanh Toán -->
