@@ -56,11 +56,11 @@ export class HoadonComponent {
   availableServices: any[] = [];
   // Các thông tin đơn hàng
   serviceId: number = 53321;    // ID gói dịch vụ
-  insuranceValue: number = 500000;  // Giá trị bảo hiểm
+  insuranceValue: number = 50000;  // Giá trị bảo hiểm
   coupon: string | null = null; // Mã giảm giá (có thể là null)
   fromDistrictId: number = 1542;  // Quận xuất phát
   toDistrictId: number = 1444;    // Quận đích đến
-  toWardCode: string = "20314";   // Mã phường xã đích đến
+  toWardCode: string = "";   // Mã phường xã đích đến
   height: number = 15;         // Chiều cao gói hàng (cm)
   length: number = 15;         // Chiều dài gói hàng (cm)
   weight: number = 1000;       // Khối lượng gói hàng (gram)
