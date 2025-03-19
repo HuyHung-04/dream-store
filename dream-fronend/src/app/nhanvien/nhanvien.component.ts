@@ -126,7 +126,7 @@ export class NhanvienComponent implements OnInit {
     if (!this.validateForm()) {
       return; // Prevent submission if form is not valid
     }
-    this.nhanVien.vaiTro = { id: 2 };
+    this.nhanVien.vaiTro = { id: 6 };
     // Gửi dữ liệu nhân viên mà không có ảnh
     const nhanVienData = { ...this.nhanVien }; // Tạo bản sao dữ liệu nhân viên
     // Gọi API để thêm nhân viên

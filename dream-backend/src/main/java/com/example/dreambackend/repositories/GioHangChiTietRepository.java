@@ -22,15 +22,10 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "s.ten, spct.mauSac.ten, spct.size.ten, " +
             "g.soLuong, " +
             "CASE " +
-            "   WHEN km.id IS NOT NULL THEN " +
-            "       CASE " +
-            "           WHEN km.hinhThucGiam = TRUE THEN CAST((spct.gia - km.giaTriGiam) AS double) " +
-            "           ELSE CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
-            "       END " +
+            "   WHEN km.id IS NOT NULL THEN CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
             "   ELSE CAST(spct.gia AS double) " +
             "END, " +
-            "CASE WHEN km.hinhThucGiam IS NOT NULL AND km.hinhThucGiam = TRUE THEN TRUE ELSE FALSE END, " + // Ép kiểu Boolean
-            "km.giaTriGiam, " +
+            "km.giaTriGiam, " +  // Chỉ giữ lại giá trị giảm %
             "g.trangThai, k.id, spct.id) " +
             "FROM GioHangChiTiet g " +
             "JOIN g.khachHang k " +
@@ -40,24 +35,16 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "WHERE k.id = :idKhachHang AND g.trangThai IN (0, 1)")
     List<GioHangChiTietResponse> findGioHangChiTietByKhachHangId(@Param("idKhachHang") Integer idKhachHang);
 
-
-
-
     @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
             "g.id, " +
             "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham = spct.sanPham AND a.trangThai = 1 ORDER BY a.ngayTao ASC LIMIT 1), " +
             "s.ten, spct.mauSac.ten, spct.size.ten, " +
             "g.soLuong, " +
             "CASE " +
-            "   WHEN km.id IS NOT NULL THEN " +
-            "       CASE " +
-            "           WHEN km.hinhThucGiam = TRUE THEN CAST( (spct.gia - km.giaTriGiam) AS double) " +
-            "           ELSE CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
-            "       END " +
+            "   WHEN km.id IS NOT NULL THEN CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
             "   ELSE CAST(spct.gia AS double) " +
             "END, " +
-            "CASE WHEN km.hinhThucGiam IS NOT NULL AND km.hinhThucGiam = TRUE THEN TRUE ELSE FALSE END, " + // Ép kiểu Boolean
-            "km.giaTriGiam, " +
+            "km.giaTriGiam, " +  // Chỉ giữ lại giá trị giảm theo %
             "g.trangThai, k.id, spct.id) " +
             "FROM GioHangChiTiet g " +
             "JOIN g.khachHang k " +
@@ -66,7 +53,6 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "LEFT JOIN spct.khuyenMai km ON km.trangThai = 1 " +
             "WHERE k.id = :idKhachHang AND g.trangThai IN (0, 2)")
     List<GioHangChiTietResponse> findGioHangChiTietByStatus(@Param("idKhachHang") Integer idKhachHang);
-
 
     @Transactional
     @Modifying

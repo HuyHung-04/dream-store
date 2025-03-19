@@ -73,7 +73,6 @@ loadBieuDoNgayTrongThang(): void {
         this.destroyChart();
         return;
       }
-
       const labels = data.map((item) => `Ngày ${item.ngay}`);
       const values = data.map((item) => item.tongDoanhThu);
 
@@ -117,7 +116,6 @@ loadBieuDoThang(): void {
         this.destroyChart();
         return;
       }
-
       const labels: string[] = [];
       const values: number[] = new Array(12).fill(0); // Mặc định 12 tháng có giá trị 0
 
@@ -261,33 +259,39 @@ renderChart(labels: string[], data: number[], label: string): void {
       }
     );
   }
-   // Vẽ biểu đồ tròn cho top sản phẩm bán chạy
-   renderPieChart(): void {
-    const topProducts = this.topSanPhamData.slice(0, 5); // Lấy 3 sản phẩm đầu tiên
-    //const otherProducts = this.topSanPhamData.slice(3);
-     // Các sản phẩm còn lại
-
+  renderPieChart(): void {
+    if (typeof document === 'undefined') {
+      console.warn('Không thể vẽ biểu đồ vì document không tồn tại.');
+      return;
+    }
+  
+    const topProducts = this.topSanPhamData.slice(0, 5); // Lấy 5 sản phẩm đầu tiên
+    const otherProducts = this.topSanPhamData.slice(5);  // Tất cả sản phẩm còn lại
+  
     const labels = topProducts.map(product => product.tenSanPham);
     const data = topProducts.map(product => product.tongSoLuong);
-
-    // Thêm phần "Các sản phẩm khác"
-    // if (otherProducts.length > 0) {
-    //   labels.push('Các sản phẩm khác');
-    //   data.push(otherProducts.reduce((sum, product) => sum + product.tongSoLuong, 0));
-    // }
-
-    // Vẽ biểu đồ tròn
-    const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
-    if (!ctx) {
+  
+    // Kiểm tra nếu có sản phẩm còn lại thì mới thêm vào biểu đồ
+    if (otherProducts.length > 0) {
+      labels.push('Các sản phẩm khác');
+      data.push(otherProducts.reduce((sum, product) => sum + product.tongSoLuong, 0));
+    }
+    
+  
+    // Kiểm tra canvas tồn tại
+    const canvas = document.getElementById('pieChart') as HTMLCanvasElement;
+    if (!canvas) {
       console.warn('Không tìm thấy phần tử canvas cho biểu đồ tròn.');
       return;
     }
-
+  
+    // Xóa biểu đồ cũ trước khi vẽ mới
     if (this.pieChart) {
-      this.pieChart.destroy(); // Xóa biểu đồ cũ trước khi vẽ mới
+      this.pieChart.destroy();
     }
-
-    this.pieChart = new Chart(ctx, {
+  
+    // Vẽ biểu đồ tròn
+    this.pieChart = new Chart(canvas.getContext('2d')!, {
       type: 'pie',
       data: {
         labels: labels,
@@ -295,8 +299,8 @@ renderChart(labels: string[], data: number[], label: string): void {
           {
             label: 'Top sản phẩm bán chạy',
             data: data,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#B0B0B0','#4BC0C0'],
-            borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#B0B0B0','#4BC0C0'],
+            backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A8', '#FFD733', '#33FFF5'],
+            borderColor: ['#C70039', '#28A745', '#1F3C88', '#C71585', '#E6B800', '#00CED1'],
             borderWidth: 1,
           },
         ],
@@ -320,5 +324,4 @@ renderChart(labels: string[], data: number[], label: string): void {
       },
     });
   }
-
 }

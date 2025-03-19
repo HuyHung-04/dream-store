@@ -22,6 +22,5 @@ public class SanPhamChiTietOnlineDto {
     private String tenSize;
     private Integer soLuongSanPham;
     private Integer soLuongGioHang;
-    private Boolean hinhThucGiam;
-    private BigDecimal giaTriGiam;
+    private Double giaTriGiam;
 }

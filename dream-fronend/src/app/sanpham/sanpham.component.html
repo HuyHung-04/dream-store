@@ -247,12 +247,12 @@
   </div>
   <div class="pagination">
     <button (click)="changeSanPhamPage(currentSanPhamPage - 1)" 
-            [disabled]="currentSanPhamPage === 0"><<</button>
+            [disabled]="currentSanPhamPage === 0"><i class="bi bi-chevron-double-left"></i></button>
     
     <span>{{ currentSanPhamPage + 1 }} / {{ totalSanPhamPages }}</span>
     
     <button (click)="changeSanPhamPage(currentSanPhamPage + 1)" 
-            [disabled]="currentSanPhamPage + 1 >= totalSanPhamPages">>></button>
+            [disabled]="currentSanPhamPage + 1 >= totalSanPhamPages"><i class="bi bi-chevron-double-right"></i></button>
   </div>  
 </div>
 
@@ -345,6 +345,7 @@
                     name="sizes"
                     [items]="sizes"
                     bindLabel="ten"
+                    bindValue="id"
                     [compareWith]="compareFn"
                     [multiple]="true"
                     [(ngModel)]="sanPhamChiTietRequest.sizes"
@@ -364,6 +365,7 @@
                     name="mauSacs"
                     [items]="mauSacs"
                     bindLabel="ten"
+                    bindValue="id"
                     [compareWith]="compareFn"
                     [multiple]="true"
                     [(ngModel)]="sanPhamChiTietRequest.mauSacs"
@@ -436,11 +438,11 @@
             </tbody>
           </table> 
           <div class="pagination">
-            <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0"><<</button>
+            <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0"><i class="bi bi-chevron-double-left"></i></button>
             
             <span class="current-page">{{ currentPage + 1 }} / {{ totalPages }}</span>
             
-            <button (click)="changePage(currentPage + 1)" [disabled]="currentPage >= totalPages - 1">>></button>
+            <button (click)="changePage(currentPage + 1)" [disabled]="currentPage >= totalPages - 1"><i class="bi bi-chevron-double-right"></i></button>
           </div>                   
         </div>
       </div>

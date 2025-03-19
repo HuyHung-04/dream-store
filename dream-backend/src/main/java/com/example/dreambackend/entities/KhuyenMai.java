@@ -25,9 +25,6 @@ public class KhuyenMai {
     @Column(name = "ten", nullable = false, length = 100)
     private String ten;
 
-    @Column(name = "hinh_thuc_giam", nullable = false)
-    private Boolean hinhThucGiam;
-
     @Column(name = "gia_tri_giam", nullable = false)
     private Double giaTriGiam;
 

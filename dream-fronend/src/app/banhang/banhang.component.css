@@ -117,7 +117,6 @@ button {
   font-size: 12px;
 }
 
-
 /*css thanh input*/
 .custom-input {
   border: none;
@@ -127,6 +126,7 @@ button {
   padding: 5px;
   font-size: 14px;
   background-color: transparent; /* Làm nền trong suốt */
+  color: #294764;
 }
 
 
@@ -176,7 +176,6 @@ button {
 .item-remove:hover {
   background-color: #cc0000;
 }
-
 
 /*css nút tạo hoá đơn và hoá đơn*/
 .invoice-container {
