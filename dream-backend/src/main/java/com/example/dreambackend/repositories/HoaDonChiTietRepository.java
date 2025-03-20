@@ -71,31 +71,40 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
         StringBuilder sb = new StringBuilder();
         sb.append("""
                 SELECT
-                    hdct.id,
-                    hdct.id_hoa_don as idHoaDon,
-                    spct.id as idSanPhamChiTiet,
-                    spct.ma as maSanPhamChiTiet,
-                    hdct.ma as maHoaDonChiTiet,
-                    ms.ten as tenMau,
-                    sz.ten as tenSize,
-                	sp.ten as tenSanPham,
-                    hd.ma as maHoaDon,
-                    hdct.ngay_tao as ngayTao,
-                    hdct.ngay_sua as ngaySua,
-                    hdct.don_gia as gia,
-                    hdct.so_luong as soLuong,
-                    hdct.trang_thai as trangThai,
-                    km.hinh_thuc_giam as hinhThucGiam,
-                    km.gia_tri_giam as giaTriGiam,
-                    COUNT(1) OVER () AS totalRecords
+                	hdct.id,
+                	hdct.id_hoa_don AS idHoaDon,
+                	spct.id AS idSanPhamChiTiet,
+                	spct.ma AS maSanPhamChiTiet,
+                	hdct.ma AS maHoaDonChiTiet,
+                	kh.ten AS tenKhachHang,
+                	ms.ten AS tenMau,
+                	sz.ten AS tenSize,
+                	sp.ten AS tenSanPham,
+                	hd.ma AS maHoaDon,
+                	hdct.ngay_tao AS ngayTao,
+                	hdct.ngay_sua AS ngaySua,
+                	hdct.don_gia AS gia,
+                	hdct.so_luong AS soLuong,
+                	hdct.trang_thai AS trangThai,
+                	km.hinh_thuc_giam AS hinhThucGiam,
+                	km.gia_tri_giam AS giaTriGiam,
+                	vc.ten AS tenVoucher,
+                	vc.hinh_thuc_giam AS hinhThucGiam,
+                	vc.gia_tri_giam AS giaTriGiam,
+                	nv.ten AS tenNhanVien,
+                	COUNT(1) OVER () AS totalRecords
                 FROM hoa_don_chi_tiet hdct
-                LEFT JOIN hoa_don hd ON hd.id = hdct.id_hoa_don
-                LEFT JOIN san_pham_chi_tiet spct ON spct.id = hdct.id_san_pham_chi_tiet
-                LEFT JOIN san_pham sp ON spct.id_san_pham = sp.id
-                LEFT JOIN mau_sac ms ON ms.id = spct.id_mau_sac
-                LEFT JOIN size  sz ON sz.id = spct.id_size
-                LEFT JOIN khuyen_mai km ON km.id = spct.id_khuyen_mai
-                WHERE 1 = 1
+                	LEFT JOIN hoa_don hd ON hd.id = hdct.id_hoa_don
+                	LEFT JOIN san_pham_chi_tiet spct ON spct.id = hdct.id_san_pham_chi_tiet
+                	LEFT JOIN san_pham sp ON spct.id_san_pham = sp.id
+                	LEFT JOIN khach_hang kh ON kh.id = hd.id_khach_hang
+                	LEFT JOIN mau_sac ms ON ms.id = spct.id_mau_sac
+                	LEFT JOIN SIZE sz ON sz.id = spct.id_size
+                	LEFT JOIN khuyen_mai km ON km.id = spct.id_khuyen_mai
+                	LEFT JOIN voucher vc ON vc.id = hd.id_voucher
+                	LEFT JOIN nhan_vien nv ON nv.id = hd.id_nhan_vien
+                WHERE
+                	1 = 1
                 """);
         if (hoaDonChiTietSearchRequest.getIdHoaDon() != null) {
             sb.append(" AND hdct.id_hoa_don = :idHoaDon");
@@ -104,7 +113,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             sb.append(" AND hd.ma = :maHoaDon");
         }
         if (hoaDonChiTietSearchRequest.getTenSanPham() != null && !hoaDonChiTietSearchRequest.getTenSanPham().isEmpty()) {
-            sb.append(" AND UPPER(sp.ten) LIKE UPPeR(:tenSanPham)");
+            sb.append(" AND UPPER(sp.ten) LIKE UPPER(:tenSanPham)");
         }
         if (hoaDonChiTietSearchRequest.getDonGia() != null) {
             sb.append(" AND hdct.don_gia = :donGia");
@@ -114,6 +123,18 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
         }
         if (hoaDonChiTietSearchRequest.getNgayTaoDen() != null) {
             sb.append(" AND CAST(hdct.ngay_tao AS DATE) <= :ngayTaoDen");
+        }
+        if (hoaDonChiTietSearchRequest.getNgaySuaTu() != null) {
+            sb.append(" AND CAST(hdct.ngay_sua AS DATE) >= :ngaySuaTu");
+        }
+        if (hoaDonChiTietSearchRequest.getNgaySuaDen() != null) {
+            sb.append(" AND CAST(hdct.ngay_sua AS DATE) <= :ngaySuaDen");
+        }
+        if (hoaDonChiTietSearchRequest.getTenKhachHang() != null && !hoaDonChiTietSearchRequest.getTenKhachHang().isEmpty()) {
+            sb.append(" AND UPPER(kh.ten) LIKE UPPER(:tenKhachHang)");
+        }
+        if (hoaDonChiTietSearchRequest.getTenNhanVien() != null && !hoaDonChiTietSearchRequest.getTenNhanVien().isEmpty()) {
+            sb.append(" AND UPPER(nv.ten) LIKE UPPER(:tenNhanVien)");
         }
 
         sb.append(" ORDER BY hdct.ngay_tao DESC, hdct.ngay_sua DESC");
@@ -141,6 +162,18 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
         }
         if (hoaDonChiTietSearchRequest.getNgayTaoDen() != null) {
             query.setParameter("ngayTaoDen", dateFormat.format(hoaDonChiTietSearchRequest.getNgayTaoDen()));
+        }
+        if (hoaDonChiTietSearchRequest.getNgaySuaTu() != null) {
+           query.setParameter("ngaySuaTu", dateFormat.format(hoaDonChiTietSearchRequest.getNgaySuaTu()));
+        }
+        if (hoaDonChiTietSearchRequest.getNgaySuaDen() != null) {
+            query.setParameter("ngaySuaDen", dateFormat.format(hoaDonChiTietSearchRequest.getNgaySuaDen()));
+        }
+        if (hoaDonChiTietSearchRequest.getTenKhachHang() != null && !hoaDonChiTietSearchRequest.getTenKhachHang().isEmpty()) {
+           query.setParameter("tenKhachHang", hoaDonChiTietSearchRequest.getTenKhachHang());
+        }
+        if (hoaDonChiTietSearchRequest.getTenNhanVien() != null && !hoaDonChiTietSearchRequest.getTenNhanVien().isEmpty()) {
+            query.setParameter("tenNhanVien", hoaDonChiTietSearchRequest.getTenNhanVien());
         }
         List<HoaDonChiTietResponse> list = query.getResultList();
         if (list.isEmpty()) {

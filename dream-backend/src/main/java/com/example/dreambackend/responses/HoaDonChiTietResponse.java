@@ -34,8 +34,11 @@ import java.time.LocalDate;
                         @ColumnResult(name = "ngayTao", type= LocalDate.class),
                         @ColumnResult(name = "ngaySua", type= LocalDate.class),
                         @ColumnResult(name = "trangThai", type = Integer.class),
-                        @ColumnResult(name = "hinhThucGiam", type = Integer.class),
+                        @ColumnResult(name = "hinhThucGiam", type = Boolean.class),
                         @ColumnResult(name = "giaTriGiam", type = Double.class),
+                        @ColumnResult(name = "tenNhanVien", type=String.class),
+                        @ColumnResult(name = "tenKhachHang", type=String.class),
+                        @ColumnResult(name = "tenVoucher", type=String.class),
                         @ColumnResult(name = "totalRecords", type = Integer.class)
                 }
         )
@@ -50,6 +53,9 @@ public class HoaDonChiTietResponse {
     private String ma;
     private String maHoaDon;
     private String tenMau;
+    private String tenNhanVien;
+    private String tenKhachHang;
+    private String tenVoucher;
     private String tenSize;
     private String maHoaDonChiTiet;
     private String tenSanPham;
@@ -60,7 +66,7 @@ public class HoaDonChiTietResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate ngaySua;
     private Integer trangThai;
-    private Integer hinhThucGiam;
+    private Boolean hinhThucGiam;
     private Double giaTriGiam;
     private Integer totalRecords;
 }
