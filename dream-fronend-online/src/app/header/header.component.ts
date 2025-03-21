@@ -141,6 +141,13 @@ export class HeaderComponent implements OnInit {
   // Gọi phương thức tìm kiếm khi người dùng nhấn nút tìm kiếm hoặc Enter
   searchSanPham(page: number = 0): void {
     if (this.searchQuery.trim()) {
+      this.banhangService.setIsSearching(true);
+      
+    }else{
+      this.banhangService.setIsSearching(false);
+
+    }
+    
       this.isSearching = true;
       this.banhangService.timKiemSanPham(this.searchQuery, page, 10).subscribe(
         (data) => {
@@ -157,13 +164,12 @@ export class HeaderComponent implements OnInit {
           this.isSearching = false;
         }
       );
-    } else {
-      // Hiển thị thông báo bằng alert khi không có từ khóa tìm kiếm
-      alert('Vui lòng nhập từ khóa để tìm kiếm.');
-    }
+   
   }
   xoacookie(){
-    this.cookieService.delete('khachhang');
+    if (window.confirm('Bạn có muốn đăng xuất không?')) {
+      this.cookieService.delete('khachhang');
+    }
   }
   hoso(){
     this.router.navigate(['taikhoan']);
@@ -218,7 +224,7 @@ export class HeaderComponent implements OnInit {
     }, 200); // Thêm thời gian delay để người dùng có thể click vào kết quả
   }
   onSearchChange(): void {
-    if (this.searchQuery.trim()) {
+    
 
       this.banhangService.timKiemSanPham(this.searchQuery, 0, 10).subscribe(
         (data) => {
@@ -235,10 +241,7 @@ export class HeaderComponent implements OnInit {
 
         }
       );
-    } else {
-      // Hiển thị thông báo bằng alert khi không có từ khóa tìm kiếm
-      alert('Vui lòng nhập từ khóa để tìm kiếm.');
-    }
+    
   }
   
 }

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgClass } from '@angular/common';
 import { BanhangService } from './banhang.service';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-banhang',
@@ -17,6 +18,11 @@ import { BanhangService } from './banhang.service';
 })
 export class BanhangComponent implements OnInit {
   searchText: string = '';
+  tenSanPham: string = '';
+  mauSac: string = '';
+  sizeSearch: string = ''; 
+  danhSachSize: string[] = [];
+  danhSachMau: string[] = [];
   selectedCategory: string = '';
   invoices: any[] = [];
   discountCode: string = '';
@@ -30,7 +36,6 @@ export class BanhangComponent implements OnInit {
   size: number = 4;
   totalPages: number = 0;
   cart: any[] = [];
-  categories: string[] = ['Nike Mercurial', 'Nike Phantom', 'Nike Tiempo'];
   soDienThoai: string = '';
   tenKhachHang: string = '';
   selectedInvoice: any = null;
@@ -50,9 +55,9 @@ export class BanhangComponent implements OnInit {
     this.loadPaymentMethods();
     this.loadInvoices();
     this.cart = [];
-
+    this.loadDanhSachMau();
+    this.loadDanhSachSize();
   }
-  
 
   // Tạo hóa đơn mới
   createInvoice() {
@@ -220,11 +225,32 @@ export class BanhangComponent implements OnInit {
   // Lấy danh sách sản phẩm để bán
   loadSanPhamToBanHang(): void {
     this.banhangService.getSanPham(this.page, this.size).subscribe(response => {
-      this.sanPhams = response.content;
+      this.sanPhams = response.content.map((sp: any) => ({
+      ...sp,
+      anhUrl: sp.anhUrl ? `http://localhost:8080${sp.anhUrl}` : 'assets/images/no-image.png'
+    }));
       this.totalPages = response.totalPages;
     });
   }
-
+  loadDanhSachMau(): void {
+    this.banhangService.getDanhSachMau().subscribe(response => {
+      this.danhSachMau = response.map((mau: any) => mau.ten); // Giả sử API trả về danh sách chứa tên màu
+    });
+  }
+  
+  loadDanhSachSize(): void {
+    this.banhangService.getDanhSachSize().subscribe(response => {
+      this.danhSachSize = response.map((size: any) => size.ten); // Giả sử API trả về danh sách chứa tên size
+    });
+  }
+  // loadSanPhamToBanHang(): void {
+  //   this.banhangService.getSanPham(this.page, this.size).subscribe(response => {
+  //     console.log(response.content); // Kiểm tra dữ liệu trả về từ API
+  //     this.sanPhams = response.content;
+  //     this.totalPages = response.totalPages;
+  //   });
+  // }
+  
   nextPage(): void {
     if (this.page < this.totalPages - 1) {
       this.page++;
@@ -369,9 +395,9 @@ export class BanhangComponent implements OnInit {
       }
       console.log("Voucher từ API:", voucher);
       if (voucher.hinhThucGiam) {
-        this.discountAmount = voucher.giaTriGiam;
-      } else {
         this.discountAmount = total * (voucher.giaTriGiam / 100);
+      } else {
+        this.discountAmount = voucher.giaTriGiam;
       }
       this.updateInvoiceTotal();
       this.refreshInvoice();
@@ -418,12 +444,32 @@ export class BanhangComponent implements OnInit {
         this.selectedDiscount = null;
         this.selectedInvoice = response;
         this.loadInvoices();
+        // Hỏi người dùng có muốn xuất hóa đơn PDF không
+        if (confirm("Bạn có muốn xuất hóa đơn PDF không?")) {
+          this.exportPDF(response.id);
+        }
       },
       error => {
         console.error('Lỗi khi cập nhật trạng thái hóa đơn:', error);
         alert('Thanh toán thất bại!');
       }
     );
+  }
+  exportPDF(hoaDonId: number) {
+    this.banhangService.exportHoaDonPDF(hoaDonId).subscribe(
+      (data: Blob) => this.downloadFile(data, `hoa-don-${hoaDonId}.pdf`),
+      error => console.error('Lỗi khi tải file PDF:', error)
+    );
+  }
+  downloadFile(data: Blob, filename: string) {
+    const blob = new Blob([data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
 
@@ -515,6 +561,39 @@ export class BanhangComponent implements OnInit {
       }
     );
   }
-
-
+  //tìm kiếm sản phẩm
+  filterSanPham(): void {
+    let params = new HttpParams().set('page', this.page.toString()).set('sizePage', '4');
+  
+    if (this.tenSanPham) {
+      params = params.set('tenSanPham', this.tenSanPham);
+    }
+    if (this.mauSac) {
+      params = params.set('mauSac', this.mauSac);
+    }
+    if (this.sizeSearch) {
+      params = params.set('size', this.sizeSearch);
+    }
+    // console.log("Request gửi lên API:", params.toString());
+  
+    this.banhangService.locSanPham(params).subscribe(response => {
+      // console.log("Dữ liệu trả về từ API:", response);
+  
+      if (response && response.content) {
+        this.sanPhams = response.content.map((sp: any) => ({
+          ...sp,
+          anhUrl: sp.anhUrl ? `http://localhost:8080${sp.anhUrl}` : 'assets/images/no-image.png'
+        }));
+        this.totalPages = response.totalPages;
+      } else {
+        this.sanPhams = [];
+        this.totalPages = 0;
+      }
+    }, error => {
+      // console.error("Lỗi API lọc sản phẩm:", error);
+    });
+  }
+  
+  
+  
 }

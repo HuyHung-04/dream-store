@@ -637,3 +637,22 @@
   margin-left: 20px; /* Lệch nhẹ sang phải */
 }
 
+
+.filter-container {
+  position: fixed;
+  top: 60px; /* Dịch xuống dưới */
+  right: 20px; /* Đưa sang phải */
+  padding: 10px;
+}
+
+.filter-container label {
+  margin-right: 5px;
+  color: #294764; /* Đổi màu chữ */
+  font-weight: bold;
+}
+
+.filter-container select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}

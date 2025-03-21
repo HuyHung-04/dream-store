@@ -71,5 +71,17 @@ public class KhachHangController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+    @GetMapping("/loc-trang-thai")
+    public ResponseEntity<Page<KhachHang>> findByTrangThai(@RequestParam int trangThai,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "8") int size){
+        if(trangThai==3){
+            Page<KhachHang> pagedKhachHangs = khachHangService.getAllKhachHangPaged(page, size);
+            return ResponseEntity.ok(pagedKhachHangs);
+        }else{
+            Page<KhachHang> pagedKhachHangs = khachHangService.getAllKhachHangByTrangThai(trangThai,page, size);
+            return ResponseEntity.ok(pagedKhachHangs);
+        }
 
+    }
 }

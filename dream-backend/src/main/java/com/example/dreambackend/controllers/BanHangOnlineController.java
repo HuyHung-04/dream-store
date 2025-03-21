@@ -52,9 +52,13 @@ public class BanHangOnlineController {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
         // Gọi service để tìm kiếm sản phẩm với tên và trạng thái là 1 (đang bán)
-        Page<SanPhamDto> sanPhamDtos = sanPhamOnlineService.searchSanPhamByNameAndTrangThai(name,  pageable);
-
-        return ResponseEntity.ok(sanPhamDtos);
+        if(name.isBlank()){
+            Page<SanPhamDto> sanPhamDtos = sanPhamOnlineService.getSanPhamOnline(pageable);
+            return ResponseEntity.ok(sanPhamDtos);
+        }else{
+            Page<SanPhamDto> sanPhamDtos = sanPhamOnlineService.searchSanPhamByNameAndTrangThai(name,  pageable);
+            return ResponseEntity.ok(sanPhamDtos);
+        }
     }
 
 }

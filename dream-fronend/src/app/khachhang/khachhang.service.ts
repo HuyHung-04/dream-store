@@ -27,5 +27,10 @@ export class KhachHangService {
   searchKhachHangByName(name: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/khach-hang/search?ten=${name}`);
   }
- 
+  getKhachHangByTrangThai(trangThai:number,page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/khach-hang/loc-trang-thai?trangThai=${trangThai}&page=${page}&size=${size}`);
+  }
+  getKhachHangByEmail(email: String): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/khach-hang/detail?email=${email}`);
+  }
 }

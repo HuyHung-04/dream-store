@@ -1,5 +1,6 @@
 package com.example.dreambackend.requests;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HoaDonRequest {
     private Integer idKhachHang;
     private Integer idNhanVien;

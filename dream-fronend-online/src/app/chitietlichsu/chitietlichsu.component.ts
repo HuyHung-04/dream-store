@@ -28,9 +28,6 @@ export class ChitietlichsuComponent {
     
   }
 
-  
-
- 
   // Method to fetch invoice details
   getHoaDonDetails(): void {
     if (this.maHoaDon) {

@@ -7,7 +7,10 @@ import com.example.dreambackend.repositories.HoaDonChiTietRepository;
 import com.example.dreambackend.repositories.HoaDonRepository;
 import com.example.dreambackend.repositories.SanPhamChiTietRepository;
 import com.example.dreambackend.requests.HoaDonChiTietRequest;
+import com.example.dreambackend.requests.HoaDonChiTietSearchRequest;
 import com.example.dreambackend.responses.HoaDonChiTietResponse;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +30,13 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
     private HoaDonRepository hoaDonRepository;
     @Autowired
     private SanPhamChiTietRepository spctRepository;
+    @Autowired
+    private EntityManager em;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public HoaDonChiTietResponse addSanPhamToHoaDon(Integer hoaDonId, Integer sanPhamChiTietId, Integer soLuong) {
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonId)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
@@ -119,6 +125,11 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
         return list.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public List<HoaDonChiTietResponse> search(HoaDonChiTietSearchRequest searchRequest) {
+        return hdctRepository.search(searchRequest, em);
+    }
+
     private LocalDate parseDate(String dateString) {
         return (dateString != null && !dateString.isEmpty()) ? LocalDate.parse(dateString, DATE_FORMATTER) : LocalDate.now();
     }
@@ -147,7 +158,7 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
                 .idSanPhamChiTiet(hdct.getSanPhamChiTiet().getId())
                 .ma(hdct.getMa())
                 .soLuong(hdct.getSoLuong())
-                .donGia(hdct.getDonGia())
+                .gia(hdct.getDonGia())
                 .ngayTao(hdct.getNgayTao())
                 .ngaySua(hdct.getNgaySua())
                 .trangThai(hdct.getTrangThai())

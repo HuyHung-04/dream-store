@@ -76,7 +76,13 @@ public class KhachHangService implements IKhachHangService{
 
         return  khachHangRepository.save(newKhachHang);
     }
+    @Override
+    public Page<KhachHang> getAllKhachHangByTrangThai(int trangThai, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
+        return khachHangRepository.findByTrangThai(trangThai, pageable);
+
+    }
 
 
 

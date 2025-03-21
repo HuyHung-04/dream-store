@@ -16,6 +16,16 @@
     background-color: #2c3e50;
     color: white;
     padding: 20px;
+    display: flex;
+    flex-direction: column; /* Sắp xếp theo chiều dọc */
+    align-items: center; 
+}
+
+.sidebar img {
+    width: 150px;  /* Điều chỉnh kích thước ảnh */
+    height: 150px; /* Đảm bảo ảnh vuông để tròn đều */
+    border-radius: 50%; /* Biến ảnh thành hình tròn */
+    object-fit: cover; /* Giữ ảnh không bị méo */
 }
 
 .sidebar h2 {
@@ -83,7 +93,7 @@ label {
 }
 
 button {
-    background: #2980b9;
+    background: #294764;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -95,7 +105,7 @@ button {
 }
 
 button:hover {
-    background: #1c6ea4;
+    background: #083756;
 }
 
 .button-group {
@@ -106,12 +116,12 @@ button:hover {
 }
 
 .change-button {
-    background: #e67e22;
+    background: #294764;
     margin-right: auto;
 }
 
 .change-button:hover {
-    background: #d35400;
+    background: #294764;
 }
 
 .save-delete-group {
@@ -120,16 +130,16 @@ button:hover {
     gap: 10px;
 }
 
-.save-button {
+/* .save-button {
     background: #27ae60;
     margin-right: 10px;
-}
+} */
 
-.save-button:hover {
+/* .save-button:hover {
     background: #219150;
-}
+} */
 
-.delete-button {
+/* .delete-button {
     background: #c0392b;
     color: white;
     padding: 10px 15px;
@@ -141,7 +151,7 @@ button:hover {
 
 .delete-button:hover {
     background: #a93226;
-}
+} */
 
 .address-form {
     max-width: 400px;

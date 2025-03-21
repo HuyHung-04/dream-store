@@ -65,7 +65,7 @@ public class HoaDonOnlineController {
     @PostMapping("/create")
     public ResponseEntity<HoaDon> createHoaDon(
             @RequestParam Integer idKhachHang,
-            @RequestParam Integer voucherId,
+            @RequestParam(required = false) Integer voucherId,
             @RequestParam Double tongTienTruocGiam,
             @RequestParam Integer paymentMethodId,
             @RequestParam Double TongTienSauGiam,

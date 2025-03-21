@@ -1,9 +1,15 @@
 <p class="title">Danh sách khách hàng</p>
-<div class="input-cbb">
-  
-<div class="header-container">
+<div class="input-field">
+  <label for="trangThai">Trạng Thái:</label>
+  <select id="trangThai" [(ngModel)]="selectedTrangThai" (change)="loadData()" class="input">
+    <option [value]="3">Tất cả khách hàng</option>
+    <option [value]="1">Hoạt động</option>
+    <option [value]="0">Ngừng hoạt động</option>
+  </select>
+</div>
+
+<div class="header-container" style="margin-top: -100px;">
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Khách Hàng</button>
-  
   <div class="search-container">
     <p>Tìm Kiếm:</p>
     <input type="text" (input)="filterKhachHangs()" class="input search-input"
@@ -216,8 +222,8 @@
           <div class="input-field">
             <select class="input" [(ngModel)]="khachHangEdit.trangThai"  [value]="khachHangEdit.trangThai" name="trangThai" required
               (change)="clearErrorEdit('trangThai')">
-              <option [value]="0">Không hoạt động</option>
               <option [value]="1">Hoạt động</option>
+              <option [value]="0">Không hoạt động</option>
             </select>
             <label for="trangThai">Trạng thái</label>
             <div class="tooltip-error" *ngIf="errors.trangThai">
@@ -248,14 +254,7 @@
       <p class="titleadd">Thêm khách hàng</p> <br> <br>
       <form (ngSubmit)="addKhachHang()" #khachHangForm="ngForm">
         <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="khachhang.ma" name="ma" autocomplete="off" required
-              autocomplete="off" #ma="ngModel" (input)="clearError('ma')" />
-            <label for="ma">Mã khách hàng</label>
-            <div class="tooltip-error" *ngIf="errors.ma">
-              {{ errors.ma}}
-            </div>
-          </div>
+          
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khachhang.ten" name="ten" required #ten="ngModel"
               (input)="clearError('ten')" />

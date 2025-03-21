@@ -13,4 +13,6 @@ public class VoucherDto {
     private Integer id;
     private String ten;
     private BigDecimal giamToiDa;
+    private boolean hinhThucGiam;
+    private BigDecimal giaTriGiam;
 }

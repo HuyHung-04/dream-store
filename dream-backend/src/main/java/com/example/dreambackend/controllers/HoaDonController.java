@@ -1,10 +1,14 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.dtos.DataTableResults;
 import com.example.dreambackend.requests.HoaDonRequest;
 import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
 import com.example.dreambackend.services.hoadon.IHoaDonService;
+import com.example.dreambackend.services.pdf.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,8 @@ public class HoaDonController {
 
     @Autowired
     private IHoaDonService hoaDonService;
+    @Autowired
+    private PdfService pdfService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createHoaDon(@RequestBody HoaDonRequest request) {
@@ -43,11 +49,32 @@ public class HoaDonController {
     }
 
     @PostMapping("/all")
-    public ResponseEntity<List<HoaDonResponse>> getAllHoaDon(
+    public DataTableResults<HoaDonResponse> getAllHoaDon(
             @RequestBody HoaDonSearchRequest request
     ) {
-        List<HoaDonResponse> response = hoaDonService.getAllHoaDon(request);
+        return hoaDonService.getAllHoaDon(request);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HoaDonResponse> getHoaDon(@PathVariable Integer id) {
+        HoaDonResponse response = hoaDonService.findById(id);
         return ResponseEntity.ok(response);
     }
-}
 
+    // API xuất hóa đơn PDF
+    @GetMapping("/{id}/export-pdf")
+    public ResponseEntity<byte[]> exportHoaDonPdf(@PathVariable Integer id) {
+        try {
+            byte[] pdfBytes = pdfService.generateInvoicePdf(id);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=hoadon_" + id + ".pdf");
+            headers.add("Content-Type", "application/pdf");
+
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(("Lỗi khi xuất PDF: " + e.getMessage()).getBytes());
+        }
+    }
+}

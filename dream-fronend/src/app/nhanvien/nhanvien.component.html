@@ -1,6 +1,13 @@
 <p class="title">Danh sách nhân viên</p>
-
-<div class="header-container">
+<div class="input-field">
+  <label for="">Trạng thái</label>
+  <select id="trangThai" [(ngModel)]="trangThaiFilter" (change)="loadPage(0)" class="input">
+    <option [value]="2">Tất cả nhân viên</option>
+    <option [value]="1">Hoạt động</option>
+    <option [value]="0">Không hoạt động</option>
+  </select>
+</div>
+<div class="header-container" style="margin-top: -100px;">
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Nhân Viên</button>
   <div class="search-container">
     <p>Tìm Kiếm:</p>

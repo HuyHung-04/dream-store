@@ -17,4 +17,6 @@ public interface INhanVienService {
     NhanVien addImageForNhanVien(Integer nhanVienId, MultipartFile file) throws IOException;
     // Phương thức đăng nhập (trả về boolean)
     ResponseEntity<?> login(String email, String password);
+    Page<NhanVien> getNhanVienByTrangThai(Integer trangThai, int page, int size);
+    Page<NhanVien> getAllNhanVien(int page, int size);
 }

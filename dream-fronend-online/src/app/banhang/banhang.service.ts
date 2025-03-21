@@ -9,8 +9,10 @@ import { BehaviorSubject } from 'rxjs';
 export class BanhangService {
   private apiUrl = 'http://localhost:8080/api/ban-hang-online'; // Địa chỉ API backend
   private searchQuery = new BehaviorSubject<string>('');
+  private isSearching = new BehaviorSubject<boolean>(false);
   private searchResults = new BehaviorSubject<any[]>([]);
 
+  isSearching$ = this.isSearching.asObservable();
   searchQuery$ = this.searchQuery.asObservable();
   searchResults$ = this.searchResults.asObservable();
   constructor(private http: HttpClient) {}
@@ -19,6 +21,10 @@ export class BanhangService {
     return this.http.get<any>(`${this.apiUrl}/hien-thi?page=${page}&size=${size}`);
   }
   
+  setIsSearching(a: boolean) {
+    this.isSearching.next(a);
+  }
+
   setSearchQuery(query: string) {
     this.searchQuery.next(query);
   }

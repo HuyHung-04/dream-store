@@ -110,8 +110,8 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     // Phương thức tính tổng tiền sau khi áp dụng voucher
+    @Override
     public Double calculateTotalPriceWithVoucher(Integer idKhachHang, Integer voucherId, Double shippingFee) {
         // Lấy chi tiết giỏ hàng của khách hàng
         List<GioHangChiTietResponse> gioHangChiTietResponses = gioHangChiTietRepository.findGioHangChiTietByStatus(idKhachHang);
@@ -119,34 +119,36 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         // Tính tổng tiền giỏ hàng
         Double totalPrice = 0.0;
         for (GioHangChiTietResponse item : gioHangChiTietResponses) {
-            totalPrice += item.getDonGia() * item.getSoLuong(); // Giả sử bạn tính tổng với `donGiaSauGiam`
+            totalPrice += item.getDonGia() * item.getSoLuong();
         }
 
-        // Lấy voucher từ database
-        Voucher voucher = voucherRepository.findById(voucherId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voucher không tồn tại"));
+        Double discountAmount = 0.0;
 
-        // Tính giảm giá theo hình thức của voucher
-        Double discountAmount;
-        if (voucher.isHinhThucGiam()) {
-            // Giảm theo tỷ lệ phần trăm
-            discountAmount = totalPrice * voucher.getGiaTriGiam().doubleValue() / 100;
-        } else {
-            // Giảm theo giá trị cố định
-            discountAmount = voucher.getGiaTriGiam().doubleValue();
+        // Nếu có voucherId thì mới xử lý giảm giá
+        if (voucherId != null) {
+            Voucher voucher = voucherRepository.findById(voucherId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voucher không tồn tại"));
+
+            if (voucher.isHinhThucGiam()) {
+                // Giảm theo số tiền cố định
+                discountAmount = voucher.getGiaTriGiam().doubleValue();
+            } else {
+                // Giảm theo phần trăm
+                discountAmount = totalPrice * voucher.getGiaTriGiam().doubleValue() / 100;
+            }
+
+            // Giảm tối đa
+            if (voucher.getGiamToiDa() != null && discountAmount > voucher.getGiamToiDa().doubleValue()) {
+                discountAmount = voucher.getGiamToiDa().doubleValue();
+            }
         }
 
-        // Đảm bảo giảm giá không vượt quá mức tối đa của voucher
-        if (voucher.getGiamToiDa() != null && discountAmount > voucher.getGiamToiDa().doubleValue()) {
-            discountAmount = voucher.getGiamToiDa().doubleValue();
-        }
-
-
-        // Tính tổng tiền sau giảm giá
+        // Tổng tiền sau giảm = tổng - giảm + ship
         Double totalPriceAfterDiscount = (totalPrice - discountAmount) + shippingFee;
 
         return totalPriceAfterDiscount;
     }
+
 
     @Override
     public HoaDon createHoaDonAndAddProducts(Integer idKhachHang, Integer voucherId, Double tongTienTruocGiam, Integer paymentMethodId, Double TongTienSauGiam, String sdtNguoiNhan, String tenNguoiNhan, String diaChi, Double shippingFee) {
@@ -154,7 +156,13 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         KhachHang khachHang = khachHangRepository.findById(idKhachHang).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Khách hàng không tồn tại"));
         // Lấy phương thức thanh toán từ repository
         PhuongThucThanhToan phuongThucThanhToan = phuongThucThanhToanRepository.findById(paymentMethodId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Phương thức thanh toán không tồn tại"));
-        Voucher voucher = voucherRepository.findById(voucherId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Phương thức thanh toán không tồn tại"));
+        Voucher voucher = null;
+
+        if (voucherId != null) {
+            voucher = voucherRepository.findById(voucherId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voucher không tồn tại"));
+        }
+
 
         // Bước 1: Tạo Hóa Đơn (HoaDon)
         HoaDon hoaDon = new HoaDon();
@@ -188,20 +196,28 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                         if (voucher.isHinhThucGiam()) {
                             // Giảm theo tỷ lệ phần trăm
                             donGiaSauGiam = item.getDonGia() * (1 - voucher.getGiaTriGiam().doubleValue() / 100);
-                        } else {
-                            // Giảm theo giá trị cố định
-                            donGiaSauGiam = item.getDonGia() - voucher.getGiaTriGiam().doubleValue();
                         }
                     }
                 }
 
                 HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+                hoaDonChiTiet.setMa("HDCT" + System.currentTimeMillis());
                 hoaDonChiTiet.setHoaDon(hoaDon1);
                 hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
                 hoaDonChiTiet.setSoLuong(item.getSoLuong());
                 hoaDonChiTiet.setDonGia(donGiaSauGiam); // Giá ban đầu trước khi giảm giá
                 hoaDonChiTietRepository.save(hoaDonChiTiet);
 
+//                // ✅ Trừ số lượng tồn kho của sản phẩm chi tiết
+//                int soLuongHienTai = sanPhamChiTiet.getSoLuong();
+//                int soLuongMua = item.getSoLuong();
+//
+//                if (soLuongHienTai < soLuongMua) {
+//                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Số lượng sản phẩm không đủ trong kho");
+//                }
+//
+//                sanPhamChiTiet.setSoLuong(soLuongHienTai - soLuongMua);
+//                sanPhamChiTietRepository.save(sanPhamChiTiet);
             }
         }
 

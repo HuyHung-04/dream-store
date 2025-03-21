@@ -764,3 +764,25 @@
   }
 
 }
+/* Ô nhập tìm kiếm */
+.search-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  /* Kích thước chữ trong ô nhập */
+  width: 250px;
+  /* Đặt độ rộng cố định cho ô nhập */
+  outline: none;
+  position: relative;
+  top: 93px;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    /* Đổi hướng Flexbox thành cột dọc trên màn hình nhỏ */
+    align-items: stretch;
+    /* Đảm bảo các phần tử giãn đều chiều ngang */
+  }
+}

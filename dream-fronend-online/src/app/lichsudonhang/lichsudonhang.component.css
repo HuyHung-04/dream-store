@@ -9,11 +9,8 @@
   .hoa-don-item {
     display: flex; /* Sử dụng Flexbox để căn chỉnh các phần tử theo hàng ngang */
     align-items: center; /* Căn giữa các phần tử theo chiều dọc */
-    
     padding: 15px;
-  
     border-radius:8px 8px; /* Bo tròn các góc */
-   
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ cho item */
     transition: all 0.3s ease; /* Hiệu ứng khi hover */
   }
@@ -26,8 +23,8 @@
   
   /* Cấu hình cho ảnh sản phẩm */
   .product-image {
-    width: 80px; /* Kích thước ảnh nhỏ lại */
-    height: 80px; /* Cố định chiều cao cho ảnh */
+    width: 250px; /* Kích thước ảnh nhỏ lại */
+    height: 250px; /* Cố định chiều cao cho ảnh */
     object-fit: cover; /* Cắt ảnh để giữ tỷ lệ mà không bị kéo dài */
     margin-right: 20px; /* Khoảng cách giữa ảnh và thông tin */
     border-radius: 5px; /* Bo tròn góc ảnh */
@@ -39,24 +36,25 @@
     flex-direction: column; /* Sắp xếp thông tin theo chiều dọc */
     justify-content: space-between; /* Phân bố không gian đều cho các thông tin */
     width: 100%; /* Chiếm toàn bộ không gian còn lại bên phải ảnh */
+    padding-left: 100px;
   }
   
   .hoa-don-info h3 {
     margin: 0;
     font-size: 18px;
     font-weight: bold;
-    color: #333; /* Màu chữ cho tên sản phẩm */
+    color: #294764; /* Màu chữ cho tên sản phẩm */
     line-height: 1.4;
   }
   
   .hoa-don-info p {
     margin: 5px 0;
     font-size: 14px;
-    color: #555; /* Màu chữ cho các thông tin */
+    color: #294764; /* Màu chữ cho các thông tin */
   }
   
   .hoa-don-info p strong {
-    color: #000; /* Làm nổi bật các nhãn (Mã hóa đơn, Giá, v.v.) */
+    color: #294764; /* Làm nổi bật các nhãn (Mã hóa đơn, Giá, v.v.) */
   }
   
   /* Cấu hình cho thông báo lỗi */
@@ -77,5 +75,11 @@
   }
   
   .container{
-    width: 800px;
+    width: 900px;
+  }
+
+  .container h2{
+    text-align: center;
+    color: #294764;
+    font-weight: bold;
   }

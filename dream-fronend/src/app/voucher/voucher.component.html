@@ -1,363 +1,397 @@
 <p class="title">Danh sách voucher</p>
-
-<div class="header-container">
-  <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Voucher</button>
-  <div class="search-container">
-    <p>Tìm Kiếm:</p>
-    <input type="text" (input)="filterVouchers()" class="input search-input"
-      placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
-  </div>
+<div class="input-field">
+  <select [(ngModel)]="selectedTrangThai" (change)="loadData()" class="input">
+    <option [value]="3">Tất cả voucher</option>
+    <option [value]="1">Hoạt động</option>
+    <option [value]="0">Không hoạt động</option>
+  </select>
 </div>
-
-<div class="table-container">
-  <div class="table-scrollable">
-    <table class="product-table">
-      <thead>
-        <tr>
-          <th>STT</th>
-          <th>Mã Voucher</th>
-          <th>Tên Voucher</th>
-          <th>Hình thức giảm</th>
-          <th>Giá trị giảm</th>
-          <th>Đơn tối thiểu</th>
-          <th>Giảm tối đa</th>
-          <th>Trạng thái</th>
-          <th>Ngày tạo</th>
-          <th>Ngày sửa</th>
-          <th>Ngày bắt đầu</th>
-          <th>Ngày kết thúc</th>
-          <th colspan="2" style="text-align: center;">Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let voucher of filteredVouchers,">
-          <td>{{voucher.id}}</td>
-          <td>{{ voucher.ma }}</td>
-          <td>{{ voucher.ten }}</td>
-          <td>{{ voucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %' }}</td>
-          <td>{{ voucher.giaTriGiam }} {{ voucher.hinhThucGiam ? 'VND' : '%' }} </td>
-          <td>{{ voucher.donToiThieu}}</td>
-          <td>{{ voucher.giamToiDa }}</td>
-          <td>{{ voucher.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
-          <td>{{ voucher.ngayTao }}</td>
-          <td>{{ voucher.ngaySua }}</td>
-          <td>{{ voucher.ngayBatDau }}</td>
-          <td>{{ voucher.ngayKetThuc }}</td>
-          <td>
-            <button (click)="showDetail(voucher.id)" class="button btn-primary">Chi tiết</button>
-            <button (click)="editVoucher(voucher.id)" class="button btn-primary">Sửa</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="pagination-actions ">
-
-    <!-- Pagination -->
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        <!-- Nút Trang trước -->
-        <li class="page-item" [class.disabled]="currentPage === 0">
-          <button class="page-link" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
-            &laquo;
-          </button>
-        </li>
-        <li class="page-item" *ngFor="let page of visiblePages" [class.active]="currentPage === page">
-          <button class="page-link" (click)="goToPage(page)">{{ page + 1 }}</button>
-        </li>
-        <!-- Nút Trang sau -->
-        <li class="page-item" [class.disabled]="currentPage >= totalPages - 1">
-          <button class="page-link" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
-            &raquo;
-          </button>
-        </li>
-      </ul>
-    </nav>
-  </div>
-
-
-
-
-  <!-- Modal hiển thị chi tiết voucher -->
-  <div class="modal-overlay" *ngIf="showModalDetail" (click)="closeModalDetail()">
-    <div class="modal-box" (click)="$event.stopPropagation()">
-      <button class="close-btn" (click)="closeModalDetail()">×</button>
-      <p class="titleadd">Chi tiết Voucher</p> <br> <br>
-
-      <!-- Form hiển thị chi tiết voucher -->
-      <form *ngIf="selectedVoucher">
-        <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="selectedVoucher.ma" name="ma" readonly />
-            <label for="ma">Mã voucher</label>
-          </div>
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="selectedVoucher.ten" name="ten" readonly />
-            <label for="ten">Tên voucher</label>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [value]="selectedVoucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %'" readonly />
-            <label for="hinhThucGiam">Hình thức giảm</label>
-          </div>
-          <div class="input-field">
-            <input type="number" class="input" [(ngModel)]="selectedVoucher.giaTriGiam" name="giaTriGiam" readonly />
-            <label for="giaTriGiam">Giá trị giảm</label>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="selectedVoucher.donToiThieu" name="donToiThieu" readonly />
-            <label for="ma">Đơn tối thiểu</label>
-          </div>
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="selectedVoucher.giamToiDa" name="giamToiDa" readonly />
-            <label for="ten">Giảm tối đa</label>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="selectedVoucher.ngayBatDau" name="ngayBatDau" readonly />
-            <label for="ngayBatDau">Ngày bắt đầu</label>
-          </div>
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="selectedVoucher.ngayKetThuc" name="ngayKetThuc" readonly />
-            <label for="ngayKetThuc">Ngày kết thúc</label>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [value]="selectedVoucher.trangThai ? 'Hoạt động' : 'Không hoạt động'" style="width:185px;"
-              readonly />
-            <label for="trangThai">Trạng thái</label>
-          </div>
-        </div>
-      </form>
+<div class="header-container" style="margin-top: -100px;">
+    <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Voucher</button>
+    <div class="search-container">
+      <p>Tìm Kiếm:</p>
+      <input type="text" (input)="filterVouchers()" class="input search-input"
+        placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
     </div>
   </div>
-  <!-- Modal hiển thị chi tiết voucher khi sửa -->
-  <div class="modal-overlay" *ngIf="showModalEdit" (click)="closeModalEdit()">
-    <div class="modal-box" (click)="$event.stopPropagation()">
-      <button class="close-btn" (click)="closeModalEdit()">×</button>
-      <p class="titleadd">Sửa Voucher</p> <br> <br>
-
-      <!-- Form hiển thị chi tiết voucher và cho phép sửa -->
-      <form (ngSubmit)="updateVoucher()" #voucherForm="ngForm">
-        <div class="input-row">
-          <!-- <div class="input-field"> -->
-            <!-- Trường ID là readonly -->
-            <!-- <input type="text" class="input" [(ngModel)]="voucherEdit.id" name="id" readonly />
-            <label for="id">Id</label>
-          </div> -->
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucherEdit.ma" name="ma" required readonly />
-            <label for="ma">Mã voucher</label>
-            <div class="tooltip-error" *ngIf="errors.ma">
-            {{errors.ma}}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucherEdit.ten" name="ten" required
-              (input)="clearError('ten')" />
-            <label for="ten">Tên voucher</label>
-            <div class="tooltip-error" *ngIf="errors.ten">
-              {{ errors.ten}}
-            </div>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <select class="input" [(ngModel)]="voucherEdit.hinhThucGiam" name="hinhThucGiam" required
-              (change)="clearError('hinhThucGiam')">
-              <option [ngValue]="true">Giảm giá</option>
-              <option [ngValue]="false">Giảm %</option>
-            </select>
-            <label for="hinhThucGiam">Hình thức giảm</label>
-            <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-              {{ errors.hinhThucGiam}}
-            </div>
-          </div>
-          <div class="input-field">
-            <div style="display: flex; align-items: center;">
-              <input type="text" class="input" [(ngModel)]="voucherEdit.giaTriGiam" name="giaTriGiam" required
-                (input)="clearError('giaTriGiam')" />
-              <span *ngIf="voucherEdit.hinhThucGiam === true" class="unit">VND</span>
-              <span *ngIf="voucherEdit.hinhThucGiam === false" class="unit">%</span>
-            </div>
-            <label for="giaTriGiam">Giá trị giảm</label>
-            <div class="tooltip-error" *ngIf="errors.giaTriGiam">
-              {{ errors.giaTriGiam }}
-            </div>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucherEdit.donToiThieu" name="donToiThieu" required />
-            <label for="donToiThieu">Đơn tối thiểu</label>
-            <div class="tooltip-error" *ngIf="errors.donToiThieu">
-             {{errors.donToiThieu}}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required />
-            <label for="giamToiDa">Giảm tối đa</label>
-            <div class="tooltip-error" *ngIf="errors.giamToiDa">
-              {{ errors.giamToiDa}}
-            </div>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="voucherEdit.ngayBatDau" name="ngayBatDau" required
-              (input)="clearError('ngayBatDau')" />
-            <label for="ngayBatDau">Ngày bắt đầu</label>
-            <div class="tooltip-error" *ngIf="errors.ngayBatDau">
-              {{ errors.ngayBatDau}}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="voucherEdit.ngayKetThuc" name="ngayKetThuc" required
-              (input)="clearError('ngayKetThuc')" />
-            <label for="ngayKetThuc">Ngày kết thúc</label>
-            <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
-              {{ errors.ngayKetThuc}}
-            </div>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <select class="input" [(ngModel)]="voucherEdit.trangThai" name="trangThai" required style="width:185px;"
-              (change)="clearError('trangThai')">
-              <option [value]="1">Hoạt động</option>
-              <option [value]="0">Không hoạt động</option>
-            </select>
-            <label for="trangThai">Trạng thái</label>
-            <div class="tooltip-error" *ngIf="errors.trangThai">
-              {{ errors.trangThai}}
-            </div>
-          </div>
-        </div>
-
-        <div class="button-container">
-          <button type="submit" class="button btn-primary">Lưu thay đổi</button>
-        </div>
-      </form>
+  
+  <div class="table-container">
+    <div class="table-scrollable">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã Voucher</th>
+            <th>Tên Voucher</th>
+            <th>Số lượng</th>
+            <th>Hình thức giảm</th>
+            <th>Giá trị giảm</th>
+            <th>Đơn tối thiểu</th>
+            <th>Giảm tối đa</th>
+            <th>Trạng thái</th>
+            <th>Ngày tạo</th>
+            <th>Ngày sửa</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th colspan="2" style="text-align: center;">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let voucher of filteredVouchers,">
+            <td>{{voucher.id}}</td>
+            <td>{{ voucher.ma }}</td>
+            <td>{{ voucher.ten }}</td>
+            <td>{{ voucher.soLuong }}</td>
+            <td>{{ voucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %' }}</td>
+            <td>{{ voucher.giaTriGiam }} {{ voucher.hinhThucGiam ? 'VND' : '%' }} </td>
+            <td>{{ voucher.donToiThieu}}</td>
+            <td>{{ voucher.giamToiDa }}</td>
+            <td>{{ voucher.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
+            <td>{{ voucher.ngayTao }}</td>
+            <td>{{ voucher.ngaySua }}</td>
+            <td>{{ voucher.ngayBatDau }}</td>
+            <td>{{ voucher.ngayKetThuc }}</td>
+            <td>
+              <button (click)="showDetail(voucher.id)" class="button btn-primary">Chi tiết</button>
+              <button (click)="editVoucher(voucher.id)" class="button btn-primary">Sửa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-
-  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-    <div class="modal-box" (click)="$event.stopPropagation()">
-      <button class="close-btn" (click)="closeModal()">×</button>
-      <p class="titleadd">Thêm Voucher</p> <br> <br>
-      <form (ngSubmit)="addVoucher()" #voucherForm="ngForm">
-        <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucher.ma" name="ma" autocomplete="off" required
-              autocomplete="off" #ma="ngModel" (input)="clearError('ma')" />
-            <label for="ma">Mã voucher</label>
-            <div class="tooltip-error" *ngIf="errors.ma">
-              {{ errors.ma}}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucher.ten" name="ten" required #ten="ngModel"
-              (input)="clearError('ten')" />
-            <label for="ten">Tên voucher</label>
-            <div class="tooltip-error" *ngIf="errors.ten">
-              {{ errors.ten}}
-            </div>
-          </div>
-        </div>
-        <div class="input-row">
-
-          <div class="input-field">
-            <select class="input" [(ngModel)]="voucher.hinhThucGiam" name="hinhThucGiam" required
-              (change)="clearError('hinhThucGiam')">
-              <option value="" disabled selected>Hình thức giảm</option>
-              <option [ngValue]="true">Giảm giá</option>
-              <option [ngValue]="false">Giảm %</option>
-            </select>
-            <label for="hinhThucGiam">Hình thức giảm</label>
-            <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-              {{ errors.hinhThucGiam}}
-            </div>
-          </div>
-          <div class="input-field">
-            <div style="display: flex; align-items: center;">
-              <input type="text" class="input" [(ngModel)]="voucher.giaTriGiam" name="giaTriGiam" required
-                (input)="clearError('giaTriGiam')" />
-              <span *ngIf="voucher.hinhThucGiam === true" class="unit">VND</span>
-              <span *ngIf="voucher.hinhThucGiam === false" class="unit">%</span>
-            </div>
-            <label for="giaTriGiam">Giá trị giảm</label>
-            <div class="tooltip-error" *ngIf="errors.giaTriGiam">
-              {{ errors.giaTriGiam }}
-            </div>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucher.donToiThieu" name="donToiThieu" autocomplete="off" required
-              autocomplete="off" #ma="ngModel" (input)="clearError('donToiThieu')" />
-            <label for="donToiThie">Đơn tối thiểu</label>
-            <div class="tooltip-error" *ngIf="errors.donToiThieu">
-              {{ errors.donToiThieu}}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="voucher.giamToiDa" name="giamToiDa" required #ten="ngModel"
-              (input)="clearError('giamToiDa')" />
-            <label for="ten">Giảm tối đa</label>
-            <div class="tooltip-error" *ngIf="errors.giamToiDa">
-              {{ errors.giamToiDa}}
-            </div>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="voucher.ngayBatDau" name="ngayBatDau" required
-              (input)="clearError('ngayBatDau')" />
-            <label for="ngayBatDau">Ngày bắt đầu</label>
-            <div class="tooltip-error" *ngIf="errors.ngayBatDau">
-              {{ errors.ngayBatDau }}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="voucher.ngayKetThuc" name="ngayKetThuc" required
-              (input)="clearError('ngayKetThuc')" />
-            <label for="ngayKetThuc">Ngày kết thúc</label>
-            <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
-              {{ errors.ngayKetThuc }}
-            </div>
-          </div>
-        </div>
-        <div class="input-row">
-          <div class="input-field">
-            <select class="input" [(ngModel)]="voucher.trangThai" name="trangThai" required style="width:185px;"
-              (change)="clearError('trangThai')">
-              <option [value]="1">Hoạt động</option>
-              <option [value]="0">Không hoạt động</option>
-            </select>
-            <label for="trangThai">Trạng thái</label>
-            <div class="tooltip-error" *ngIf="errors.trangThai">
-              {{ errors.trangThai}}
-            </div>
-          </div>
-        </div>
-        <div class="button-container">
-          <button type="submit" class="button btn-primary">Thêm Voucher</button>
-        </div>
-      </form>
+    <div class="pagination-actions ">
+  
+      <!-- Pagination -->
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <!-- Nút Trang trước -->
+          <li class="page-item" [class.disabled]="currentPage === 0">
+            <button class="page-link" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+              &laquo;
+            </button>
+          </li>
+          <li class="page-item" *ngFor="let page of visiblePages" [class.active]="currentPage === page">
+            <button class="page-link" (click)="goToPage(page)">{{ page + 1 }}</button>
+          </li>
+          <!-- Nút Trang sau -->
+          <li class="page-item" [class.disabled]="currentPage >= totalPages - 1">
+            <button class="page-link" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+              &raquo;
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
+  
+  
+  
+  
+    <!-- Modal hiển thị chi tiết voucher -->
+    <div class="modal-overlay" *ngIf="showModalDetail" (click)="closeModalDetail()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeModalDetail()">×</button>
+        <p class="titleadd">Chi tiết Voucher</p> <br> <br>
+  
+        <!-- Form hiển thị chi tiết voucher -->
+        <form *ngIf="selectedVoucher">
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="selectedVoucher.ma" name="ma" readonly />
+              <label for="ma">Mã voucher</label>
+            </div>
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="selectedVoucher.ten" name="ten" readonly />
+              <label for="ten">Tên voucher</label>
+            </div>
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <input type="number" class="input" [(ngModel)]="selectedVoucher.soLuong" name="soLuong" readonly />
+              <label for="soLuong">Số lượng</label>
+            </div>
+            <div class="input-field">
+              <input type="text" class="input" [value]="selectedVoucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %'" readonly />
+              <label for="hinhThucGiam">Hình thức giảm</label>
+            </div>
+            
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <input type="number" class="input" [(ngModel)]="selectedVoucher.giaTriGiam" name="giaTriGiam" readonly />
+              <label for="giaTriGiam">Giá trị giảm</label>
+            </div>
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="selectedVoucher.donToiThieu" name="donToiThieu" readonly />
+              <label for="ma">Đơn tối thiểu</label>
+            </div>
+            
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="selectedVoucher.giamToiDa" name="giamToiDa" readonly />
+              <label for="ten">Giảm tối đa</label>
+            </div>
+            <div class="input-field">
+              <input type="date" class="input" [(ngModel)]="selectedVoucher.ngayBatDau" name="ngayBatDau" readonly />
+              <label for="ngayBatDau">Ngày bắt đầu</label>
+            </div>
+            
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [value]="selectedVoucher.trangThai ? 'Hoạt động' : 'Không hoạt động'" style="width:185px;"
+                readonly />
+              <label for="trangThai">Trạng thái</label>
+            </div>
+            <div class="input-field">
+              <input type="date" class="input" [(ngModel)]="selectedVoucher.ngayKetThuc" name="ngayKetThuc" readonly />
+              <label for="ngayKetThuc">Ngày kết thúc</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Modal hiển thị chi tiết voucher khi sửa -->
+    <div class="modal-overlay" *ngIf="showModalEdit" (click)="closeModalEdit()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeModalEdit()">×</button>
+        <p class="titleadd">Sửa Voucher</p> <br> <br>
+  
+        <!-- Form hiển thị chi tiết voucher và cho phép sửa -->
+        <form (ngSubmit)="updateVoucher()" #voucherForm="ngForm">
+          <div class="input-row">
+            <!-- <div class="input-field"> -->
+              <!-- Trường ID là readonly -->
+              <!-- <input type="text" class="input" [(ngModel)]="voucherEdit.id" name="id" readonly />
+              <label for="id">Id</label>
+            </div> -->
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucherEdit.ma" name="ma" required readonly />
+              <label for="ma">Mã voucher</label>
+              <div class="tooltip-error" *ngIf="errors.ma">
+              {{errors.ma}}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucherEdit.ten" name="ten" required
+                (input)="clearError('ten')" />
+              <label for="ten">Tên voucher</label>
+              <div class="tooltip-error" *ngIf="errors.ten">
+                {{ errors.ten}}
+              </div>
+            </div>
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucherEdit.soLuong" name="soLuong" required />
+              <label for="soLuong">Số lượng</label>
+              <div class="tooltip-error" *ngIf="errors.soLuong">
+               {{errors.soLuong}}
+              </div>
+            </div>
+            <div class="input-field">
+              <select class="input" [(ngModel)]="voucherEdit.hinhThucGiam" name="hinhThucGiam" required (change)="onHinhThucGiamChange2()"
+                (change)="clearError('hinhThucGiam')">
+                <option [ngValue]="true">Giảm giá</option>
+                <option [ngValue]="false">Giảm %</option>
+              </select>
+              <label for="hinhThucGiam">Hình thức giảm</label>
+              <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
+                {{ errors.hinhThucGiam}}
+              </div>
+            </div>
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <div style="display: flex; align-items: center;">
+                <input type="text" class="input" [(ngModel)]="voucherEdit.giaTriGiam" name="giaTriGiam" required 
+                  (input)="clearError('giaTriGiam')" />
+                <span *ngIf="voucherEdit.hinhThucGiam === true"   class="unit">VND</span>
+                <span *ngIf="voucherEdit.hinhThucGiam === false" class="unit">%</span>
+              </div>
+              <label for="giaTriGiam">Giá trị giảm</label>
+              <div class="tooltip-error" *ngIf="errors.giaTriGiam">
+                {{ errors.giaTriGiam }}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucherEdit.donToiThieu" name="donToiThieu" required />
+              <label for="donToiThieu">Đơn tối thiểu</label>
+              <div class="tooltip-error" *ngIf="errors.donToiThieu">
+               {{errors.donToiThieu}}
+              </div>
+            </div>
+            
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required [disabled]="isGiamToiDaDisabled"/>
+              <label for="giamToiDa">Giảm tối đa</label>
+              <div class="tooltip-error" *ngIf="errors.giamToiDa">
+                {{ errors.giamToiDa}}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="date" class="input" [(ngModel)]="voucherEdit.ngayBatDau" name="ngayBatDau" required
+                (input)="clearError('ngayBatDau')" />
+              <label for="ngayBatDau">Ngày bắt đầu</label>
+              <div class="tooltip-error" *ngIf="errors.ngayBatDau">
+                {{ errors.ngayBatDau}}
+              </div>
+            </div>
+            
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <select class="input" [(ngModel)]="voucherEdit.trangThai" name="trangThai" required style="width:185px;"
+                (change)="clearError('trangThai')">
+                <option [value]="1">Hoạt động</option>
+                <option [value]="0">Không hoạt động</option>
+              </select>
+              <label for="trangThai">Trạng thái</label>
+              <div class="tooltip-error" *ngIf="errors.trangThai">
+                {{ errors.trangThai}}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="date" class="input" [(ngModel)]="voucherEdit.ngayKetThuc" name="ngayKetThuc" required
+                (input)="clearError('ngayKetThuc')" />
+              <label for="ngayKetThuc">Ngày kết thúc</label>
+              <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
+                {{ errors.ngayKetThuc}}
+              </div>
+            </div>
+          </div>
+  
+          <div class="button-container">
+            <button type="submit" class="button btn-primary">Lưu thay đổi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeModal()">×</button>
+        <p class="titleadd">Thêm Voucher</p> <br> <br>
+        <form (ngSubmit)="addVoucher()" #voucherForm="ngForm">
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucher.ma" name="ma" autocomplete="off" required
+                autocomplete="off" #ma="ngModel" (input)="clearError('ma')" />
+              <label for="ma">Mã voucher</label>
+              <div class="tooltip-error" *ngIf="errors.ma">
+                {{ errors.ma}}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucher.ten" name="ten" required #ten="ngModel"
+                (input)="clearError('ten')" />
+              <label for="ten">Tên voucher</label>
+              <div class="tooltip-error" *ngIf="errors.ten">
+                {{ errors.ten}}
+              </div>
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucher.soLuong" name="soLuong" autocomplete="off" required
+                autocomplete="off" #ma="ngModel" (input)="clearError('soLuong')" />
+              <label for="soLuong">Số lượng</label>
+              <div class="tooltip-error" *ngIf="errors.soLuong">
+                {{ errors.soLuong}}
+              </div>
+            </div>
+            <div class="input-field">
+              <select class="input" [(ngModel)]="voucher.hinhThucGiam" name="hinhThucGiam" required
+                (change)="clearError('hinhThucGiam')" (change)="onHinhThucGiamChange()">
+                <option value="" disabled selected>Hình thức giảm</option>
+                <option [ngValue]="true">Giảm giá</option>
+                <option [ngValue]="false">Giảm %</option>
+              </select>
+              <label for="hinhThucGiam">Hình thức giảm</label>
+              <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
+                {{ errors.hinhThucGiam}}
+              </div>
+            </div>
+            
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <div style="display: flex; align-items: center;">
+                <input type="text" class="input" [(ngModel)]="voucher.giaTriGiam" name="giaTriGiam" required
+                  (input)="clearError('giaTriGiam')" />
+                <span *ngIf="voucher.hinhThucGiam === true" class="unit">VND</span>
+                <span *ngIf="voucher.hinhThucGiam === false" class="unit">%</span>
+              </div>
+              <label for="giaTriGiam">Giá trị giảm</label>
+              <div class="tooltip-error" *ngIf="errors.giaTriGiam">
+                {{ errors.giaTriGiam }}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucher.donToiThieu" name="donToiThieu" autocomplete="off" required
+                autocomplete="off" #ma="ngModel" (input)="clearError('donToiThieu')" />
+              <label for="donToiThie">Đơn tối thiểu</label>
+              <div class="tooltip-error" *ngIf="errors.donToiThieu">
+                {{ errors.donToiThieu}}
+              </div>
+            </div>
+          </div>
+  
+          <div class="input-row">
+            <div class="input-field">
+              <input type="text" class="input" [(ngModel)]="voucher.giamToiDa" name="giamToiDa" required #ten="ngModel"
+                (input)="clearError('giamToiDa')" [disabled]="isGiamToiDaDisabled"/>
+              <label for="ten">Giảm tối đa</label>
+              <div class="tooltip-error" *ngIf="errors.giamToiDa">
+                {{ errors.giamToiDa}}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="date" class="input" [(ngModel)]="voucher.ngayBatDau" name="ngayBatDau" required
+                (input)="clearError('ngayBatDau')" />
+              <label for="ngayBatDau">Ngày bắt đầu</label>
+              <div class="tooltip-error" *ngIf="errors.ngayBatDau">
+                {{ errors.ngayBatDau }}
+              </div>
+            </div>
+            
+          </div>
+          <div class="input-row">
+            <div class="input-field">
+              <select class="input" [(ngModel)]="voucher.trangThai" name="trangThai" required style="width:185px;"
+                (change)="clearError('trangThai')">
+                <option [value]="1">Hoạt động</option>
+                <option [value]="0">Không hoạt động</option>
+              </select>
+              <label for="trangThai">Trạng thái</label>
+              <div class="tooltip-error" *ngIf="errors.trangThai">
+                {{ errors.trangThai}}
+              </div>
+            </div>
+            <div class="input-field">
+              <input type="date" class="input" [(ngModel)]="voucher.ngayKetThuc" name="ngayKetThuc" required
+                (input)="clearError('ngayKetThuc')" />
+              <label for="ngayKetThuc">Ngày kết thúc</label>
+              <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
+                {{ errors.ngayKetThuc }}
+              </div>
+            </div>
+          </div>
+          <div class="button-container">
+            <button type="submit" class="button btn-primary">Thêm Voucher</button>
+          </div>
+        </form>
+      </div>
+  
   </div>

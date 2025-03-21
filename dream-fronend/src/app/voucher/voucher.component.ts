@@ -14,10 +14,12 @@ export class VoucherComponent implements OnInit {
   showModal: boolean = false;
   showModalDetail: boolean = false;
   showModalSearch: boolean = false;
+  isGiamToiDaDisabled: boolean = false;
   maxVisiblePages = 3;
   totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 10;
+  selectedTrangThai: number = 3;
   showModalEdit = false;
   selectedVoucher: any = null;
   voucherEdit: any = {};
@@ -29,6 +31,7 @@ export class VoucherComponent implements OnInit {
     id: '',
     ma: '',
     ten: '',
+    soLuong: '',
     hinhThucGiam: null,
     giaTriGiam: null,
     donToiThieu: null,
@@ -64,12 +67,29 @@ export class VoucherComponent implements OnInit {
       this.showModalEdit = true; // Hiển thị modal chỉnh sửa
     });
   }
-
+  onHinhThucGiamChange2(){
+    console.log(this.voucherEdit.hinhThucGiam);
+    if (this.voucherEdit.hinhThucGiam===true ) { // 0 là "Giảm theo tiền"
+      this.voucherEdit.giamToiDa = 0;
+      this.isGiamToiDaDisabled = true;
+    }
+  }
+  onHinhThucGiamChange(): void {
+    if (this.voucher.hinhThucGiam===true ) { // 0 là "Giảm theo tiền"
+      this.voucher.giamToiDa = 0;
+      this.isGiamToiDaDisabled = true;
+    } else {
+      this.voucher.giamToiDa = '';
+      this.isGiamToiDaDisabled = false;
+    }
+  }
+  
 
   addVoucher() {
     if (!this.validateForm()) {
       return; // Stop execution if form is invalid
     }
+    
     this.voucherService.addVoucher(this.voucher).subscribe(
       (response) => {
         alert('Thêm voucher thành công!');
@@ -84,6 +104,7 @@ export class VoucherComponent implements OnInit {
       }
     );
   }
+  
 
   clearError(field: string): void {
     if (this.errors[field]) {
@@ -316,9 +337,24 @@ export class VoucherComponent implements OnInit {
     this.selectedVoucher = this.vouchers.find(voucher => voucher.id === voucherId);
     this.showModalDetail = true;
   }
+  loadVoucherByTrangThai(trangThai: number, page: number): void {
+    this.voucherService.getVoucherMaiByTrangThai(trangThai, page, 8).subscribe((response) => {
+      this.vouchers = response.content;
+      this.totalPages = response.totalPages;
+      this.currentPage = page;
+      this.updateVisiblePages();
+      this.filterVouchers();
+    });
+  }
   
   loadData(): void {
-    this.loadPage(0)
+    console.log(this.selectedTrangThai);
+    console.log(this.filterVouchers());
+    if (this.selectedTrangThai !== 3) {
+      this.loadVoucherByTrangThai(this.selectedTrangThai, 0);
+    } else {
+      this.loadPage(0);
+    }
   }
 
   getVoucherDetail(id: number): void {
@@ -345,7 +381,12 @@ export class VoucherComponent implements OnInit {
   }
   goToPage(page: number): void {
     if (page >= 0 && page < this.totalPages) {
-      this.loadPage(page); // Load the selected page
+      if (this.selectedTrangThai !== 3) {
+        this.loadVoucherByTrangThai(this.selectedTrangThai, page);
+      } else {
+        this.loadPage(page);
+      }
+      
     } else {
       console.warn('Invalid page number:', page);
     }
@@ -359,11 +400,10 @@ export class VoucherComponent implements OnInit {
       this.filteredVouchers = [...this.vouchers]; // Hiển thị tất cả nếu không tìm kiếm
     }
   }
-  goToPreviousPage(): void {
-    if (this.currentPage > 0) {
-      this.loadPage(this.currentPage - 1);
-    }
-  }
+
+  
+  
+  
   updateVisiblePages(): void {
     const startPage = Math.floor(this.currentPage / this.maxVisiblePages) * this.maxVisiblePages;
     const endPage = Math.min(startPage + this.maxVisiblePages, this.totalPages);
@@ -371,9 +411,25 @@ export class VoucherComponent implements OnInit {
     this.visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
   }
 
+  goToPreviousPage(): void {
+    if (this.currentPage > 0) {
+      if (this.selectedTrangThai !== 3) {
+        this.loadVoucherByTrangThai(this.selectedTrangThai, this.currentPage - 1);
+      } else {
+        this.loadPage(this.currentPage - 1);
+      }
+    
+    }
+  }
+
   goToNextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
-      this.loadPage(this.currentPage + 1);
+      if (this.selectedTrangThai !== 3) {
+        this.loadVoucherByTrangThai(this.selectedTrangThai, this.currentPage + 1);
+      } else {
+        this.loadPage(this.currentPage + 1);
+      }
+      
     }
   }
 

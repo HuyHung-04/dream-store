@@ -1,6 +1,12 @@
 <p class="title">Danh sách khuyến mãi</p>
-
-<div class="header-container">
+<div class="input-field">
+  <select [(ngModel)]="selectedTrangThai" (change)="loadData()" class="input">
+    <option [value]="3">Tất cả khuyến mãi</option>
+    <option [value]="1">Hoạt động</option>
+    <option [value]="0">Không hoạt động</option>
+  </select>
+</div>
+<div class="header-container" style="margin-top: -100px;">
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm khuyến mãi</button>
   <div class="search-container">
     <p>Tìm Kiếm:</p>
@@ -17,7 +23,6 @@
           <th>STT</th>
           <th>Mã khuyến mãi</th>
           <th>Tên khuyến mãi</th>
-          <th>Hình thức giảm</th>
           <th>Giá trị giảm</th>
           <th>Trạng thái</th>
           <th>Ngày tạo</th>
@@ -32,7 +37,6 @@
           <td>{{khuyenmai.id}}</td>
           <td>{{ khuyenmai.ma }}</td>
           <td>{{ khuyenmai.ten }}</td>
-          <td>{{ khuyenmai.hinhThucGiam ? 'Giảm tiền' : 'Giảm %' }}</td>
           <td>{{ khuyenmai.giaTriGiam }} {{ khuyenmai.hinhThucGiam ? 'VND' : '%' }} </td>
           <td>{{ khuyenmai.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
           <td>{{ khuyenmai.ngayTao }}</td>
@@ -93,24 +97,12 @@
 
         <div class="input-row">
           <div class="input-field">
-            <input type="text" class="input" [value]="selectedKhuyenMai.hinhThucGiam ? 'Giảm tiền' : 'Giảm %'"
-              readonly />
-            <label for="hinhThucGiam">Hình thức giảm</label>
-          </div>
-          <div class="input-field">
             <input type="number" class="input" [(ngModel)]="selectedKhuyenMai.giaTriGiam" name="giaTriGiam" readonly />
             <label for="giaTriGiam">Giá trị giảm</label>
           </div>
-        </div>
-
-        <div class="input-row">
           <div class="input-field">
             <input type="date" class="input" [(ngModel)]="selectedKhuyenMai.ngayBatDau" name="ngayBatDau" readonly />
             <label for="ngayBatDau">Ngày bắt đầu</label>
-          </div>
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="selectedKhuyenMai.ngayKetThuc" name="ngayKetThuc" readonly />
-            <label for="ngayKetThuc">Ngày kết thúc</label>
           </div>
         </div>
 
@@ -120,6 +112,14 @@
               readonly />
             <label for="trangThai">Trạng thái</label>
           </div>
+          <div class="input-field">
+            <input type="date" class="input" [(ngModel)]="selectedKhuyenMai.ngayKetThuc" name="ngayKetThuc" readonly />
+            <label for="ngayKetThuc">Ngày kết thúc</label>
+          </div>
+        </div>
+
+        <div class="input-row">
+          
         </div>
       </form>
     </div>
@@ -156,46 +156,23 @@
         </div>
 
         <div class="input-row">
-          <div class="input-field">
-            <select class="input" [(ngModel)]="khuyenmaiEdit.hinhThucGiam" name="hinhThucGiam" required
-              (change)="clearError('hinhThucGiam')">
-              <option [ngValue]="true">Giảm giá</option>
-              <option [ngValue]="false">Giảm %</option>
-            </select>
-            <label for="hinhThucGiam">Hình thức giảm</label>
-            <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-              {{ errors.hinhThucGiam}}
-            </div>
-          </div>
+          
           <div class="input-field">
             <div style="display: flex; align-items: center;">
               <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.giaTriGiam" name="giaTriGiam" required
                 (input)="clearError('giaTriGiam')" />
-              <span *ngIf="khuyenmaiEdit.hinhThucGiam === true" class="unit">VND</span>
-              <span *ngIf="khuyenmaiEdit.hinhThucGiam === false" class="unit">%</span>
             </div>
             <label for="giaTriGiam">Giá trị giảm</label>
             <div class="tooltip-error" *ngIf="errors.giaTriGiam">
               {{ errors.giaTriGiam }}
             </div>
           </div>
-        </div>
-
-        <div class="input-row">
           <div class="input-field">
             <input type="date" class="input" [(ngModel)]="khuyenmaiEdit.ngayBatDau" name="ngayBatDau" required
               (input)="clearError('ngayBatDau')" />
             <label for="ngayBatDau">Ngày bắt đầu</label>
             <div class="tooltip-error" *ngIf="errors.ngayBatDau">
               {{ errors.ngayBatDau}}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="khuyenmaiEdit.ngayKetThuc" name="ngayKetThuc" required
-              (input)="clearError('ngayKetThuc')" />
-            <label for="ngayKetThuc">Ngày kết thúc</label>
-            <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
-              {{ errors.ngayKetThuc}}
             </div>
           </div>
         </div>
@@ -212,7 +189,18 @@
               {{ errors.trangThai}}
             </div>
           </div>
+          <div class="input-field">
+            <input type="date" class="input" [(ngModel)]="khuyenmaiEdit.ngayKetThuc" name="ngayKetThuc" required
+              (input)="clearError('ngayKetThuc')" />
+            <label for="ngayKetThuc">Ngày kết thúc</label>
+            <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
+              {{ errors.ngayKetThuc}}
+            </div>
+          </div>
+          
         </div>
+        
+        
 
         <div class="button-container">
           <button type="submit" class="button btn-primary">Lưu thay đổi</button>
@@ -245,48 +233,22 @@
           </div>
         </div>
         <div class="input-row">
-
-          <div class="input-field">
-            <select class="input" [(ngModel)]="khuyenmai.hinhThucGiam" name="hinhThucGiam" required
-              (change)="clearError('hinhThucGiam')">
-              <option value="" disabled selected>Hình thức giảm</option>
-              <option [ngValue]="true">Giảm giá</option>
-              <option [ngValue]="false">Giảm %</option>
-            </select>
-            <label for="hinhThucGiam">Hình thức giảm</label>
-            <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-              {{ errors.hinhThucGiam}}
-            </div>
-          </div>
           <div class="input-field">
             <div style="display: flex; align-items: center;">
               <input type="text" class="input" [(ngModel)]="khuyenmai.giaTriGiam" name="giaTriGiam" required
                 (input)="clearError('giaTriGiam')" />
-              <span *ngIf="khuyenmai.hinhThucGiam === true" class="unit">VND</span>
-              <span *ngIf="khuyenmai.hinhThucGiam === false" class="unit">%</span>
             </div>
             <label for="giaTriGiam">Giá trị giảm</label>
             <div class="tooltip-error" *ngIf="errors.giaTriGiam">
               {{ errors.giaTriGiam }}
             </div>
           </div>
-        </div>
-        <div class="input-row">
           <div class="input-field">
-
             <input type="date" class="input" [(ngModel)]="khuyenmai.ngayBatDau" name="ngayBatDau" required
               (input)="clearError('ngayBatDau')" />
             <label for="ngayBatDau">Ngày bắt đầu</label>
             <div class="tooltip-error" *ngIf="errors.ngayBatDau">
               {{ errors.ngayBatDau }}
-            </div>
-          </div>
-          <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="khuyenmai.ngayKetThuc" name="ngayKetThuc" required
-              (input)="clearError('ngayKetThuc')" />
-            <label for="ngayKetThuc">Ngày kết thúc</label>
-            <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
-              {{ errors.ngayKetThuc }}
             </div>
           </div>
         </div>
@@ -302,7 +264,16 @@
               {{ errors.trangThai}}
             </div>
           </div>
+          <div class="input-field">
+            <input type="date" class="input" [(ngModel)]="khuyenmai.ngayKetThuc" name="ngayKetThuc" required
+              (input)="clearError('ngayKetThuc')" />
+            <label for="ngayKetThuc">Ngày kết thúc</label>
+            <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
+              {{ errors.ngayKetThuc }}
+            </div>
+          </div>
         </div>
+        
         <div class="button-container">
           <button type="submit" class="button btn-primary">Thêm khuyến mãi</button>
         </div>

@@ -16,6 +16,7 @@ export class KhuyenmaiComponent implements OnInit {
   showModalDetail: boolean = false;
   showModalSearch: boolean = false;
   maxVisiblePages = 3;
+  selectedTrangThai: number = 3;
   totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 10;
@@ -33,7 +34,6 @@ export class KhuyenmaiComponent implements OnInit {
     id: '',
     ma: '',
     ten: '',
-    hinhThucGiam: null,
     giaTriGiam: null,
     ngayBatDau: '',
     ngayTao: '',
@@ -52,7 +52,6 @@ export class KhuyenmaiComponent implements OnInit {
     this.khuyenmai = {
       ma: '',
       ten: '',
-      hinhThucGiam: null,
       giaTriGiam: null,
       ngayBatDau: '',
       ngayKetThuc: '',
@@ -309,8 +308,23 @@ export class KhuyenmaiComponent implements OnInit {
     this.showModalDetail = true;
   }
   
+  loadKhuyenMaiByTrangThai(trangThai: number, page: number): void {
+    this.khuyenmaiService.getKhhuyenMaiByTrangThai(trangThai, page, 8).subscribe((response) => {
+      this.khuyenmais = response.content;
+      this.totalPages = response.totalPages;
+      this.currentPage = page;
+      this.updateVisiblePages();
+      this.filterKhuyenMais();
+    });
+  }
   loadData(): void {
-    this.loadPage(0)
+    console.log(this.selectedTrangThai);
+    console.log(this.filterKhuyenMais());
+    if (this.selectedTrangThai !== 3) {
+      this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, 0);
+    } else {
+      this.loadPage(0);
+    }
   }
 
   getKhuyenMaiDetail(id: number): void {
@@ -349,14 +363,25 @@ export class KhuyenmaiComponent implements OnInit {
 
   goToPage(page: number): void {
     if (page >= 0 && page < this.totalPages) {
-      this.loadPage(page); // Load the selected page
+      if (this.selectedTrangThai !== 3) {
+        this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, page);
+      } else {
+        this.loadPage(page);
+      }
+      
     } else {
+      console.warn('Invalid page number:', page);
     }
   }
-
+  
   goToPreviousPage(): void {
     if (this.currentPage > 0) {
-      this.loadPage(this.currentPage - 1);
+      if (this.selectedTrangThai !== 3) {
+        this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, this.currentPage - 1);
+      } else {
+        this.loadPage(this.currentPage - 1);
+      }
+    
     }
   }
   updateVisiblePages(): void {
@@ -368,7 +393,12 @@ export class KhuyenmaiComponent implements OnInit {
 
   goToNextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
-      this.loadPage(this.currentPage + 1);
+      if (this.selectedTrangThai !== 3) {
+        this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, this.currentPage + 1);
+      } else {
+        this.loadPage(this.currentPage + 1);
+      }
+      
     }
   }
 

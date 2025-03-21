@@ -18,7 +18,10 @@ import { Component, OnInit } from '@angular/core';
    erroredits: any = {};
    khachHangEdit: any = {};
    errors: any = {};
+   error: any = {};
    matKhauHienTai: string = '';
+   matKhauXacNhan:string = '';
+   hienTaiMatKhau:string = '';
    isEditing: boolean = false; // Kiểm soát trạng thái chỉnh sửa
    selectedKhachHang: any = {
      id: '',
@@ -57,10 +60,14 @@ import { Component, OnInit } from '@angular/core';
    }
    
    updateProfile() {
+    if (!this.validateEditForm()) {
+      return;
+    }
      this.taiKhoanService.updateKhachHang(this.khachHangEdit).subscribe(
        (response) => {
          alert('Cập nhật thành công!');
          this.selectedKhachHang = { ...this.khachHangEdit }; // Cập nhật dữ liệu hiển thị
+         this.cookieService.set('khachhang', JSON.stringify(this.selectedKhachHang));
        },
        (error) => {
          alert('Cập nhật thất bại!');
@@ -93,20 +100,34 @@ import { Component, OnInit } from '@angular/core';
    }
      return Object.keys(this.errors).length === 0;
    }
+   validateEditFormMK(){
+    this.error = {};
+    if (!this.matKhauHienTai.trim()) {
+      this.error.matKhauHienTai = 'Mật khẩu không được để trống!';
+    }
+    if (!this.matKhauXacNhan.trim()) {
+      this.error.matKhauXacNhan = 'Xác nhận mật khẩu không được để trống!';
+    }
+    if (this.matKhauXacNhan==this.matKhauHienTai) {
+      this.error.matKhauXacNhan = 'Xác nhận mật khẩu phải giống mật khẩu!';
+    }
+    return Object.keys(this.error).length === 0;
+   }
    updateKhachHang() {
-     if (!this.validateEditForm()) {
+     if (!this.validateEditFormMK()) {
        return;
      }
      if (this.khachHangEdit!=null) {
        
        console.log(this.khachHangEdit);
+       this.khachHangEdit.matKhau=this.matKhauHienTai;
        this.taiKhoanService.updateKhachHang(this.khachHangEdit).subscribe(
          (response) => {
  
  
-           alert('Cập nhật khách hàng thành công!');
-           
-           
+           alert('Cập nhật mật khẩu thành công!');
+           this.selectedKhachHang = { ...this.khachHangEdit };
+           this.cookieService.set('khachhang', JSON.stringify(this.selectedKhachHang));
            
  
          },
@@ -115,15 +136,15 @@ import { Component, OnInit } from '@angular/core';
            alert('Có lỗi xảy ra khi cập nhật khách hàng.');
          }
        );
-     } else {
-       alert('ID khách hàng không hợp lệ!');
-     }
+     } 
    }
  
    xacNhanMatKhau(){
-     if(this.selectedKhachHang.matKhau===this.matKhauHienTai){
+    console.log(this.selectedKhachHang.matKhau);
+     if(this.selectedKhachHang.matKhau===this.hienTaiMatKhau){
          this.doimatkhau2=true;
      }else{
+      alert('Mật khẩu không chính xác!');
        this.doimatkhau2=false;
      }
    }

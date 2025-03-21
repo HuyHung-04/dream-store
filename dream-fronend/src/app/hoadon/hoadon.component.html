@@ -71,7 +71,7 @@
         <tr>
           <th>Mã hóa đơn</th>
           <th>Tên khách hàng</th>
-          <th>Số đện thoại khách hàng</th>
+          <th>Số điện thoại khách hàng</th>
           <th>Tên nhân viên</th>
           <th>Phương thức thanh toán</th>
           <th>Tiền trước voucher</th>
@@ -85,19 +85,19 @@
         <tr *ngFor="let invoice of hoaDons.content; trackBy: trackById">
           <td>{{ invoice.maHoaDon }}</td>
           <td>{{ invoice.tenKhachHang }}</td>
+          <td>{{ invoice.sdtNguoiNhan }}</td>
           <td>{{ invoice.tenNhanVien }}</td>
           <td>{{ invoice.tenPhuongThucThanhToan }}</td>
           <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</td>
-          <td>
+          <!-- <td>
               <span *ngIf="invoice.tenVoucher; else noVoucher">
                 {{ invoice.tenVoucher }} (Giảm {{ invoice.giaTriGiam }}{{ invoice.hinhThucGiam ? ' %' : ' VNĐ' }})
               </span>
             <ng-template #noVoucher>Không</ng-template>
-          </td>
+          </td> -->
           <td>{{ invoice.tongTienThanhToan | number:'1.0-0' }} VNĐ</td>
-          <td>{{ invoice.ghiChu }}</td>
-          <td>{{ invoice.trangThai }}</td>
           <td>{{ invoice.ngayTao | date:'yyyy-MM-dd' }}</td>
+          <td>{{ invoice.trangThai }}</td>
           <td>
             <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(invoice)">
               <i class="bi bi-eye-fill"></i>
@@ -109,11 +109,14 @@
     </div>
     <!-- Phân trang -->
     <div class="pagination">
-      <button (click)="prevPage()"><i class="bi bi-chevron-double-left"></i></button>
-      <span>{{ searchRequest.page }} / {{ hoaDons.totalElements % 10 }}</span>
-      <button (click)="nextPage()"><i class="bi bi-chevron-double-right"></i></button>
-    </div>
-  </div>
+      <button (click)="prevPage()" [disabled]="searchRequest.page <= 1">
+        <i class="bi bi-chevron-double-left"></i>
+      </button>
+      <span>{{ searchRequest.page }} / {{ hoaDons.totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="searchRequest.page >= hoaDons.totalPages">
+        <i class="bi bi-chevron-double-right"></i>
+      </button>
+    </div>    
 
   <!-- Popup modal hiển thị chi tiết hóa đơn -->
   <div class="modal" *ngIf="showDetailPopup">

@@ -76,10 +76,9 @@ button:hover {
   font-size: 12px;
 }
 
-
 /*css text bên phải*/
 .right-container {
-  margin-top: -670px; /* Dịch phần khách hàng lên */
+  margin-top: -677px; /* Dịch phần khách hàng lên */
   width: 30%;
   float: right;
   margin-right: 20px;
@@ -135,7 +134,7 @@ button {
   margin-top: -70px;
 }
 .cart-container {
-  padding-top: 50px;
+  padding-top: 10px;
   border-radius: 8px;
   margin-top: 20px;
   width: 65%;
@@ -240,6 +239,18 @@ button {
   font-size: 18px;
   width: 100%;
   height: 70px;
+}
+/* lọc và tìm tiếm chuyển hàng ngang */
+.product-filters {
+  display: flex;
+  width: 910px;
+  margin-top: -30px;
+}
+.product-image {
+  width: 37px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 

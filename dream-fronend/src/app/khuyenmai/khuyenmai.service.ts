@@ -51,5 +51,7 @@ export class KhuyenmaiService {
       responseType: 'text', // Expect a plain text response
     });
   }
-  
+  getKhhuyenMaiByTrangThai(trangThai:number,page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/khuyenmai/loc-trang-thai?trangThai=${trangThai}&page=${page}&size=${size}`);
+  }
 }

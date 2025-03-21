@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -148,5 +149,14 @@ public class NhanVienService implements INhanVienService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Email không tồn tại: "); // Trả về lỗi với mã HTTP 404 (Not Found)
         }
+    }
+    @Override
+    public Page<NhanVien> getNhanVienByTrangThai(Integer trangThai, int page, int size) {
+        return nhanVienRepository.findByTrangThai(trangThai, PageRequest.of(page, size));
+    }
+    @Override
+    public Page<NhanVien> getAllNhanVien(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return nhanVienRepository.findAll(pageable);
     }
 }

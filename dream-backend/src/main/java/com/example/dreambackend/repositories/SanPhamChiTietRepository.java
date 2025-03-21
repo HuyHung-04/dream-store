@@ -110,7 +110,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     JOIN spct.size sz
     WHERE spct.trangThai = 1
     AND (:tenSanPham IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :tenSanPham, '%')))
-    """)
+    ORDER BY spct.id DESC """)
     List<SanPhamChiTietDto> findAvailableProducts(@Param("tenSanPham") String tenSanPham, @Param("khuyenMaiId") Integer khuyenMaiId);
     List<SanPhamChiTiet> findAllByKhuyenMaiId(Integer khuyenMaiId);
 
@@ -121,14 +121,37 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     boolean existsByMa(String ma);
     @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
             + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
-            + "m.ten, s.ten, km.giaTriGiam) "
+            + "m.ten, s.ten, km.giaTriGiam, "
+            + "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham.id = sp.id ORDER BY a.id ASC LIMIT 1)) "
             + "FROM SanPhamChiTiet spct "
             + "JOIN spct.sanPham sp "
             + "JOIN spct.mauSac m "
             + "JOIN spct.size s "
             + "LEFT JOIN spct.khuyenMai km "
-            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1")
+            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1"
+            + "ORDER BY spct.id DESC")
     Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
-//     check trùng spct khi thêm cùng màu và size
+
+    @Query("SELECT new com.example.dreambackend.responses.GetSanPhamToBanHangRespone( "
+            + "spct.id, spct.ma, sp.ten, spct.gia, spct.soLuong, "
+            + "m.ten, s.ten, km.giaTriGiam, "
+            + "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham.id = sp.id ORDER BY a.id ASC LIMIT 1)) "
+            + "FROM SanPhamChiTiet spct "
+            + "JOIN spct.sanPham sp "
+            + "JOIN spct.mauSac m "
+            + "JOIN spct.size s "
+            + "LEFT JOIN spct.khuyenMai km "
+            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1 "
+            + "AND (:tenSanPham IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :tenSanPham, '%'))) "
+            + "AND (:mauSac IS NULL OR LOWER(m.ten) = LOWER(:mauSac)) "
+            + "AND (:size IS NULL OR LOWER(s.ten) = LOWER(:size))"
+            + "ORDER BY spct.id DESC")
+    Page<GetSanPhamToBanHangRespone> searchSanPhamForBanHang(
+            @Param("tenSanPham") String tenSanPham,
+            @Param("mauSac") String mauSac,
+            @Param("size") String size,
+            Pageable pageable);
+
+    //     check trùng spct khi thêm cùng màu và size
     Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
 }

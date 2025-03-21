@@ -18,9 +18,5 @@ public class HoaDonDto {
     private String mauSac;
     private Double donGia;
     private String size;
-
     private String anhUrl;
-
-
-
 }

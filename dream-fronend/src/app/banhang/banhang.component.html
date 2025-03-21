@@ -72,22 +72,36 @@
 
     <!-- lọc -->
     <div class="product-filters">
+      <!-- Ô nhập tìm kiếm sản phẩm -->
       <div class="input-group">
-        <input type="text" placeholder="Tìm sản phẩm..." [(ngModel)]="searchText" class="custom-input" style="width: 285px;">
+        <input type="text" placeholder="Nhập tên sản phẩm..." [(ngModel)]="tenSanPham" (ngModelChange)="filterSanPham()" class="custom-input" style="width: 185px;">
       </div>
-      <!-- <select [(ngModel)]="selectedCategory">
-        <option value="">Tất cả danh mục</option>
-        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-      </select> -->
-    </div>
+    
+      <!-- Dropdown chọn size -->
+      <div class="input-group" style="padding-left: 150px;">
+        <select class="custom-input" style="width: 185px;" [(ngModel)]="sizeSearch" (ngModelChange)="filterSanPham()">
+          <option value="">Tất cả size</option>
+          <option *ngFor="let size of danhSachSize" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+    
+      <!-- Dropdown chọn màu sắc -->
+      <div class="input-group">
+        <select class="custom-input" style="width: 185px;" [(ngModel)]="mauSac" (ngModelChange)="filterSanPham()">
+          <option value="">Tất cả màu</option>
+          <option *ngFor="let mau of danhSachMau" [value]="mau">{{ mau }}</option>
+        </select>
+      </div>
+    </div>    
 
     <!-- bảng sản phẩm -->
-    <div class="table-product">
+    <div class="table-product pt-4">
       <table class="product-table">
         <thead>
           <tr>
             <th>Mã sản phẩm</th>
             <th>Tên sản phẩm</th>
+            <th>Ảnh</th>
             <th>Giá</th>
             <th>Khuyến mãi(%)</th>
             <th>Số lượng</th>
@@ -101,7 +115,10 @@
           <tr *ngIf="sp.soLuong > 0" (click)="viewProductDetails(sp)">
             <td>{{ sp.maSanPhamChiTiet }}</td>
             <td>{{ sp.tenSanPham }}</td>
-            <td>{{ sp.gia | number:'1.0-0' }} VNĐ</td>
+            <td>
+              <img *ngIf="sp.anhUrl" [src]="sp.anhUrl" alt="Ảnh sản phẩm" class="product-image">
+            </td>
+            <td>{{ sp.gia | number:'1.0-0' }} VND</td>
             <td>{{ sp.giaTriGiam ? (sp.giaTriGiam | number) : '0' }}</td>
             <td [ngClass]="{'low-stock': sp.soLuong <= 5}">{{ sp.soLuong }}</td>
             <td>{{ sp.tenMau }}</td>
