@@ -13,5 +13,5 @@ public interface IHoaDonService {
     HoaDonResponse createHoaDon(HoaDonRequest request);
     HoaDonResponse findById(Integer id);
     DataTableResults<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request);
-    void cancelHoaDon(Integer id);
+    void cancelHoaDon(Integer id, String ghiChu);
 }

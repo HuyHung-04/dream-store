@@ -76,7 +76,7 @@
       <div class="input-group">
         <input type="text" placeholder="Nhập tên sản phẩm..." [(ngModel)]="tenSanPham" (ngModelChange)="filterSanPham()" class="custom-input" style="width: 185px;">
       </div>
-    
+
       <!-- Dropdown chọn size -->
       <div class="input-group" style="padding-left: 150px;">
         <select class="custom-input" style="width: 185px;" [(ngModel)]="sizeSearch" (ngModelChange)="filterSanPham()">
@@ -84,7 +84,7 @@
           <option *ngFor="let size of danhSachSize" [value]="size">{{ size }}</option>
         </select>
       </div>
-    
+
       <!-- Dropdown chọn màu sắc -->
       <div class="input-group">
         <select class="custom-input" style="width: 185px;" [(ngModel)]="mauSac" (ngModelChange)="filterSanPham()">
@@ -92,7 +92,7 @@
           <option *ngFor="let mau of danhSachMau" [value]="mau">{{ mau }}</option>
         </select>
       </div>
-    </div>    
+    </div>
 
     <!-- bảng sản phẩm -->
     <div class="table-product pt-4">
@@ -203,6 +203,11 @@
       <div style="padding-top: 22px;">
         <button class="checkout-btn" (click)="checkout()">
           <i class="bi bi-wallet2"></i> Xác nhận thanh toán
+        </button>
+      </div>
+      <div *ngIf="selectedInvoice">
+        <button class="cancel-btn" (click)="cancelInvoice(selectedInvoice)">
+          Hủy hóa đơn
         </button>
       </div>
     </div>
