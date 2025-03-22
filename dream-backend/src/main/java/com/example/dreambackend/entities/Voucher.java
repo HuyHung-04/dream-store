@@ -26,6 +26,9 @@ public class Voucher {
     @Column(name = "ten", nullable = false, length = 100)
     private String ten;
 
+    @Column(name = "so_luong", nullable = false)
+    private Integer soLuong;
+
     @Column(name = "hinh_thuc_giam", nullable = false)
     private boolean hinhThucGiam;
 

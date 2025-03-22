@@ -548,7 +548,7 @@ export class HoadonComponent {
 
     // Nếu là giảm trực tiếp
     if (v.hinhThucGiam) {
-      return `Giảm trực tiếp: ${v.giaTriGiam.toLocaleString()} VND`;
+      return `Giá trị giảm: ${v.giaTriGiam.toLocaleString()} VND`;
     }
 
     // Nếu là giảm phần trăm

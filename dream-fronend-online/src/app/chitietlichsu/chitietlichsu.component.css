@@ -209,3 +209,135 @@ background-color: #f5f5f5; /* Màu nền khi hover */
 border-radius: 8px; /* Bo góc cho các mục chi tiết */
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
 }
+
+.button-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button.btn-danger {
+  background-color: #294764;
+  color: white;
+  border-radius: 30px;
+  border: none;
+}
+
+button.btn-primary {
+  background-color: #294764;
+  color: white;
+  border: none;
+  border-radius: 30px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.cancelHoaDon {
+  background-color: #f8d7da; /* Màu nền nhẹ nhàng (màu đỏ nhạt) */
+  border: 1px solid #f5c6cb; /* Viền màu đỏ nhạt */
+  border-radius: 5px; /* Bo góc */
+  padding: 15px; /* Khoảng cách giữa nội dung và viền */
+  margin-top: 20px; /* Khoảng cách với các phần khác */
+  text-align: left; /* Căn giữa nội dung */
+  font-size: 20px; /* Kích thước chữ */
+}
+
+.cancelHoaDon p {
+  font-weight: bold; /* Làm đậm văn bản "Đơn hàng đã bị hủy" */
+  color: red; /* Màu chữ đỏ đậm để nổi bật */
+}
+
+.cancelHoaDon small {
+  display: block;
+  margin-top: 10px; /* Khoảng cách với phần nội dung chính */
+  font-style: italic; /* Làm nghiêng ngày hoàn thành */
+  color: #6c757d; /* Màu xám nhạt cho ngày hoàn thành */
+}
+
+.modal-overlay-huy {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Nền tối mờ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Đảm bảo nằm trên tất cả */
+}
+
+.modal-huy {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-huy h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.modal-huy textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  gap: 10px;
+}
+
+.modal-buttons .btn {
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-buttons .btn-secondary {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.modal-buttons .btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+/* Hiệu ứng fade */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

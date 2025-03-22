@@ -11,8 +11,9 @@ export class ChitietlichsuService {
 
   constructor(private http: HttpClient) { }
 
-  // Method to get invoice details by 'maHoaDon'
+  
   getHoaDonByMa(ma: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/find-by-ma/${ma}`);
   }
+
 }

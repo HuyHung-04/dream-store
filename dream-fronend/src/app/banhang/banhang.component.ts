@@ -80,7 +80,7 @@ export class BanhangComponent implements OnInit {
       ngayNhanDuKien: '',
       ngayTao: new Date().toISOString(),
       ngaySua: new Date().toISOString(),
-      trangThai: 5,
+      trangThai: 6,
       ghiChu: ''
     };
 
