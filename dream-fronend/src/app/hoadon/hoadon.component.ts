@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HoaDonService, HoaDonSearchRequest, HoaDonResponse } from './hoadon.service';
+import {
+  HoaDonService,
+  HoaDonSearchRequest,
+  HoaDonResponse,
+  HoaDonChiTietResponse,
+  HoaDonChiTietSearchRequest
+} from './hoadon.service';
 
 @Component({
   selector: 'app-hoadon',
@@ -18,8 +24,11 @@ export class HoaDonComponent implements OnInit {
     tenNhanVien: '',
     ngayTaoFrom: null,
     ngayTaoTo: null,
-    listTrangThai: null, // Nếu null => không lọc theo trạng thái
-    pageSize: 6,
+    ngaySuaFrom: null,
+    ngaySuaTo:null,
+    sdtNguoiNhan:'',
+    listTrangThai: null,
+    pageSize: 10,
     page: 1
   };
 
@@ -38,8 +47,8 @@ export class HoaDonComponent implements OnInit {
     totalPages: 1
   };
 
-  // Các biến cho popup hiển thị chi tiết hóa đơn
-  selectedInvoiceDetail: HoaDonResponse | null = null;
+  selectedInvoiceDetail: HoaDonChiTietResponse[] | null = null;
+
   showDetailPopup: boolean = false;
 
   constructor(private hoaDonService: HoaDonService) {}
@@ -92,6 +101,9 @@ export class HoaDonComponent implements OnInit {
       tenNhanVien: '',
       ngayTaoFrom: null,
       ngayTaoTo: null,
+      ngaySuaFrom: null,
+      ngaySuaTo: null,
+      sdtNguoiNhan: '',
       listTrangThai: null,
       pageSize: 6,
       page: 1
@@ -120,16 +132,58 @@ nextPage(): void {
   }
 }
 
-  // Hàm chọn hóa đơn để hiển thị chi tiết (popup)
   selectHoaDonChiTiet(invoice: HoaDonResponse): void {
-    this.selectedInvoiceDetail = invoice;
-    this.showDetailPopup = true;
-    console.log("Hóa đơn được chọn:", invoice);
+    const request: HoaDonChiTietSearchRequest = { idHoaDon: invoice.id };
+    this.hoaDonService.getHDCT(request).subscribe(
+      (response: HoaDonChiTietResponse[]) => {
+        this.selectedInvoiceDetail = response;
+        this.showDetailPopup = true;
+        console.log("Chi tiết hóa đơn:", response);
+      },
+      (error) => {
+        console.error("Lỗi khi lấy chi tiết hóa đơn:", error);
+      }
+    );
   }
 
-  // Hàm đóng popup chi tiết hóa đơn
+
+
   closePopup(): void {
     this.showDetailPopup = false;
     this.selectedInvoiceDetail = null;
   }
+
+
+  getTrangThaiText(trangThai: number): string {
+    const trangThaiMap: { [key: number]: string } = {
+      1: 'Chờ xác nhận',
+      2: 'Đã xác nhận',
+      3: 'Đang giao hàng',
+      4: 'Đã giao hàng',
+      5: 'Đã huỷ',
+      6: 'Chưa thanh toán',
+      7: 'Đã thanh toán'
+    };
+    return trangThaiMap[trangThai] || 'Không xác định';
+  }
+
+  xacNhanHoaDon(hoaDonId: number) {
+    const updatedInvoice = {
+      ...this.hoaDons.content.find(inv => inv.id === hoaDonId),
+      trangThai: 2, // Đã xác nhận
+      ngaySua: new Date().toISOString()
+    };
+
+    this.hoaDonService.updateHoaDon(hoaDonId, updatedInvoice).subscribe(
+      response => {
+        alert('Hóa đơn đã được xác nhận!');
+        this.loadHoaDons(); // Tải lại danh sách hóa đơn sau khi cập nhật
+      },
+      error => {
+        console.error('Lỗi khi xác nhận hóa đơn:', error);
+        alert('Xác nhận thất bại!');
+      }
+    );
+  }
+
 }

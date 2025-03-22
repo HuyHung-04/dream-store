@@ -20,7 +20,7 @@ export class BanhangComponent implements OnInit {
   searchText: string = '';
   tenSanPham: string = '';
   mauSac: string = '';
-  sizeSearch: string = ''; 
+  sizeSearch: string = '';
   danhSachSize: string[] = [];
   danhSachMau: string[] = [];
   selectedCategory: string = '';
@@ -68,8 +68,8 @@ export class BanhangComponent implements OnInit {
     const request = {
       idKhachHang: this.selectedKhachHang.id,
       idNhanVien: this.selectedNhanVien,
-      idVoucher: this.selectedDiscount ? this.selectedDiscount.id : 1,
-      idPhuongThucThanhToan: 1,
+      idVoucher: this.selectedDiscount ? this.selectedDiscount.id : null,
+      idPhuongThucThanhToan: this.selectedPaymentMethod ? this.selectedPaymentMethod : null,
       tenNguoiNhan: this.tenKhachHang,
       sdtNguoiNhan: this.soDienThoai,
       diaChiNhanHang: '',
@@ -80,7 +80,7 @@ export class BanhangComponent implements OnInit {
       ngayNhanDuKien: '',
       ngayTao: new Date().toISOString(),
       ngaySua: new Date().toISOString(),
-      trangThai: 5,
+      trangThai: 6,
       ghiChu: ''
     };
 
@@ -237,7 +237,7 @@ export class BanhangComponent implements OnInit {
       this.danhSachMau = response.map((mau: any) => mau.ten); // Giả sử API trả về danh sách chứa tên màu
     });
   }
-  
+
   loadDanhSachSize(): void {
     this.banhangService.getDanhSachSize().subscribe(response => {
       this.danhSachSize = response.map((size: any) => size.ten); // Giả sử API trả về danh sách chứa tên size
@@ -250,7 +250,7 @@ export class BanhangComponent implements OnInit {
   //     this.totalPages = response.totalPages;
   //   });
   // }
-  
+
   nextPage(): void {
     if (this.page < this.totalPages - 1) {
       this.page++;
@@ -425,11 +425,7 @@ export class BanhangComponent implements OnInit {
       ...this.selectedInvoice,
       trangThai: 7,
       idPhuongThucThanhToan: this.selectedPaymentMethod,
-      tongTienTruocVoucher: 0,
-      tongTienThanhToan: 0,
-      idVoucher: '',
-      tenNguoiNhan: '',
-      sdtNguoiNhan: ''
+      ngaySua: new Date().toISOString()
     };
 
     this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
@@ -502,7 +498,6 @@ export class BanhangComponent implements OnInit {
     if (updatedInvoice && updatedInvoice.id) {
       this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
         response => {
-          // Cập nhật lại selectedInvoice nếu cần (ví dụ, response có dữ liệu mới)
           this.selectedInvoice = response;
           console.log('Cập nhật hóa đơn thành công:', response);
         },
@@ -543,15 +538,14 @@ export class BanhangComponent implements OnInit {
   }
 
   loadInvoices(): void {
-    const request = {}; // Nếu có yêu cầu tìm kiếm, bạn có thể truyền vào đây
+    const request = {};
     this.banhangService.getDanhSachHD(request).subscribe(
       (response: any) => {
         if (response && response.data) {
           // Lấy mảng hóa đơn từ key "data"
           const invoicesArray = response.data;
-          // Nếu muốn lọc chỉ các hóa đơn có trạng thái 5
-          this.invoices = invoicesArray.filter((invoice: any) => invoice.trangThai === 5);
-          console.log("Hóa đơn có trạng thái 5:", this.invoices);
+          this.invoices = invoicesArray.filter((invoice: any) => invoice.trangThai === 6);
+          console.log("Hóa đơn có trạng thái 6:", this.invoices);
         } else {
           console.error("Dữ liệu API không đúng định dạng:", response);
         }
@@ -564,7 +558,7 @@ export class BanhangComponent implements OnInit {
   //tìm kiếm sản phẩm
   filterSanPham(): void {
     let params = new HttpParams().set('page', this.page.toString()).set('sizePage', '4');
-  
+
     if (this.tenSanPham) {
       params = params.set('tenSanPham', this.tenSanPham);
     }
@@ -575,10 +569,10 @@ export class BanhangComponent implements OnInit {
       params = params.set('size', this.sizeSearch);
     }
     // console.log("Request gửi lên API:", params.toString());
-  
+
     this.banhangService.locSanPham(params).subscribe(response => {
       // console.log("Dữ liệu trả về từ API:", response);
-  
+
       if (response && response.content) {
         this.sanPhams = response.content.map((sp: any) => ({
           ...sp,
@@ -593,7 +587,22 @@ export class BanhangComponent implements OnInit {
       // console.error("Lỗi API lọc sản phẩm:", error);
     });
   }
-  
-  
-  
+  cancelInvoice(invoice: any) {
+    if (confirm(`Bạn có chắc chắn muốn hủy hóa đơn ${invoice.maHoaDon}?`)) {
+      this.banhangService.cancelHoaDon(invoice.id).subscribe(
+        (response) => {
+          console.log('Hủy hóa đơn thành công:', response);
+          this.loadInvoices();
+          this.selectedInvoice = null;
+          this.cart = [];
+          alert('Hủy hóa đơn thành công!');
+        },
+        (error) => {
+          console.error('Lỗi khi hủy hóa đơn:', error);
+          alert('Hủy hóa đơn thất bại!');
+        }
+      );
+    }
+  }
+
 }

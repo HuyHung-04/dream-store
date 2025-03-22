@@ -87,11 +87,10 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
                 	hdct.don_gia AS gia,
                 	hdct.so_luong AS soLuong,
                 	hdct.trang_thai AS trangThai,
-                	km.hinh_thuc_giam AS hinhThucGiam,
-                	km.gia_tri_giam AS giaTriGiam,
                 	vc.ten AS tenVoucher,
                 	vc.hinh_thuc_giam AS hinhThucGiam,
                 	vc.gia_tri_giam AS giaTriGiam,
+                	km.gia_tri_giam AS giaTriGiamKM,
                 	nv.ten AS tenNhanVien,
                 	COUNT(1) OVER () AS totalRecords
                 FROM hoa_don_chi_tiet hdct

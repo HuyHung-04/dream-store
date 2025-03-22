@@ -11,8 +11,7 @@ export class BanhangService {
   private apiUrl = 'http://localhost:8080/api/san-pham-chi-tiet/ban-hang';
   private apiUrlHD = 'http://localhost:8080/api/hoa-don';
   private apiUrlKH = 'http://localhost:8080/api/khach-hang';
-  private apiUrlTaoHoaDon = 'http://localhost:8080/api/hoa-don';
-  private apiUrlNhanVien = 'http://localhost:8080/api';
+  private apiUrlNV = 'http://localhost:8080/api';
   private apiUrlHDCT = 'http://localhost:8080/api/hoa-don-chi-tiet';
   private apiUrlPTTT = 'http://localhost:8080/api/phuong-thuc-thanh-toan';
   private apiVoucher = 'http://localhost:8080/api/voucher';
@@ -55,8 +54,12 @@ export class BanhangService {
     return this.http.get<any>(`${this.apiVoucher}/${id}`);
   }
 
+  cancelHoaDon(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrlHD}/${id}/cancel`, { trangThai: 0 });
+  }
+
   updateHoaDon(invoiceId: number, request: any): Observable<any> {
-    const url = `${this.apiUrlTaoHoaDon}/${invoiceId}/update`;
+    const url = `${this.apiUrlHD}/${invoiceId}/update`;
     return this.http.put<any>(url, request);
   }
 
@@ -71,14 +74,14 @@ export class BanhangService {
   }
 
   createHoaDon(request: any): Observable<any> {
-    return this.http.post(this.apiUrlTaoHoaDon + '/create', request);
+    return this.http.post(this.apiUrlHD + '/create', request);
   }
 
   getDanhSachNhanVien(): Observable<any> {
     const page = 0;
     const size = 1000;
 
-    return this.http.get<any>(`${this.apiUrlNhanVien}/nhan-vien/hien-thi?page=${page}&size=${size}`).pipe(
+    return this.http.get<any>(`${this.apiUrlNV}/nhan-vien/hien-thi?page=${page}&size=${size}`).pipe(
       map(response => {
         response.content.forEach((nhanVien: any) => {
           if (nhanVien.anh) {
@@ -91,7 +94,7 @@ export class BanhangService {
   }
 
   getHoaDonById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrlTaoHoaDon}/${id}`);
+    return this.http.get<any>(`${this.apiUrlHD}/${id}`);
   }
 
   getPhuongThucById(idPhuongThucThanhToan: number) {
@@ -107,7 +110,7 @@ export class BanhangService {
       console.error("Lỗi: idNhanVien không hợp lệ!", idNhanVien);
       return;
     }
-    return this.http.get<any>(`${this.apiUrlNhanVien}/nhan-vien/${idNhanVien}`);
+    return this.http.get<any>(`${this.apiUrlNV}/nhan-vien/${idNhanVien}`);
   }
 
   getKhachHangById(idKhachHang: number) {
@@ -117,14 +120,14 @@ export class BanhangService {
   getDanhSachMau(): Observable<any> {
     return this.http.get<any>('http://localhost:8080/api/mau-sac/hien-thi');
   }
-  
+
   getDanhSachSize(): Observable<any> {
     return this.http.get<any>('http://localhost:8080/api/size/hien-thi');
   }
 
   locSanPham(params: HttpParams): Observable<any> {
     return this.http.get<any>('http://localhost:8080/api/san-pham-chi-tiet/loc-ban-hang', { params });
-  }  
+  }
   exportHoaDonPDF(hoaDonId: number): Observable<Blob> {
     const apiUrl = `${this.apiUrlHD}/${hoaDonId}/export-pdf`;
     return this.http.get(apiUrl, { responseType: 'blob' }); // Trả về file PDF dạng Blob

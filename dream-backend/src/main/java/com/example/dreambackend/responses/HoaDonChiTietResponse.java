@@ -36,6 +36,7 @@ import java.time.LocalDate;
                         @ColumnResult(name = "trangThai", type = Integer.class),
                         @ColumnResult(name = "hinhThucGiam", type = Boolean.class),
                         @ColumnResult(name = "giaTriGiam", type = Double.class),
+                        @ColumnResult(name = "giaTriGiamKM", type = Double.class),
                         @ColumnResult(name = "tenNhanVien", type=String.class),
                         @ColumnResult(name = "tenKhachHang", type=String.class),
                         @ColumnResult(name = "tenVoucher", type=String.class),
@@ -68,5 +69,6 @@ public class HoaDonChiTietResponse {
     private Integer trangThai;
     private Boolean hinhThucGiam;
     private Double giaTriGiam;
+    private Double giaTriGiamKM;
     private Integer totalRecords;
 }

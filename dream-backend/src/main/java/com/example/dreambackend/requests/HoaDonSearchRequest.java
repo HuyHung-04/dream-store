@@ -12,7 +12,10 @@ public class HoaDonSearchRequest {
     private String tenNhanVien;
     private LocalDate ngayTaoFrom;
     private LocalDate ngayTaoTo;
-    private List<Integer> listTrangThai;
+    private LocalDate ngaySuaFrom;
+    private LocalDate ngaySuaTo;
+    private String soDienThoai;
+    private Integer listTrangThai;
     private Integer totalRecords;
     private Integer page;
     private Integer pageSize;

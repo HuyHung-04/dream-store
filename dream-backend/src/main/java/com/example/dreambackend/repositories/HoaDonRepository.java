@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,14 +114,23 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getNgayTaoTo() != null) {
             sql.append(" AND CAST(hd.ngay_tao AS DATE) <= :ngayTaoTo");
         }
+        if (searchRequest.getNgaySuaFrom() != null) {
+            sql.append(" AND CAST(hd.ngay_sua AS DATE) >= :ngaySuaFrom");
+        }
+        if (searchRequest.getNgaySuaTo() != null) {
+            sql.append(" AND CAST(hd.ngay_sua AS DATE) <= :ngaySuaTo");
+        }
+        if(searchRequest.getSoDienThoai() != null && !searchRequest.getSoDienThoai().isEmpty()) {
+            sql.append(" AND hd.sdt_nguoi_nhan = :soDienThoai");
+        }
         if (searchRequest.getListTrangThai() != null) {
-            sql.append(" AND hd.trang_thai IN (:listTrangThai)");
+            sql.append(" AND hd.trang_thai = :listTrangThai");
         }
 //        if (searchRequest.getIdHoaDon() != null) {
 //            sql.append(" AND UPPER(hd.id) LIKE UPPER(:idHoaDon)");
 //        }
 
-        sql.append(" ORDER BY hd.ngay_tao DESC");
+        sql.append(" ORDER BY hd.ngay_tao DESC, hd.ngay_sua DESC");
         jakarta.persistence.Query query = entityManager.createNativeQuery(sql.toString(), "HoaDonResponseMapping");
 
         if (searchRequest.getMaHoaDon() != null && !searchRequest.getMaHoaDon().isEmpty()) {
@@ -131,14 +142,28 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getTenNhanVien() != null && !searchRequest.getTenNhanVien().isEmpty()) {
             query.setParameter("tenNhanVien", "%" + searchRequest.getTenNhanVien() + "%");
         }
-        if (searchRequest.getNgayTaoFrom() != null) {
-            query.setParameter("ngayTaoFrom", sdf.format(searchRequest.getNgayTaoFrom()));
-        }
-        if (searchRequest.getNgayTaoTo() != null) {
-            query.setParameter("ngayTaoTo", sdf.format(searchRequest.getNgayTaoTo()));
-        }
         if (searchRequest.getListTrangThai() != null) {
             query.setParameter("listTrangThai", searchRequest.getListTrangThai());
+        }
+        if (searchRequest.getNgayTaoFrom() != null) {
+            Date dateFrom = Date.from(searchRequest.getNgayTaoFrom().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            query.setParameter("ngayTaoFrom", sdf.format(dateFrom));
+        }
+        if (searchRequest.getNgayTaoTo() != null) {
+            Date dateTo = Date.from(searchRequest.getNgayTaoTo().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            query.setParameter("ngayTaoTo", sdf.format(dateTo));
+        }
+        if (searchRequest.getNgaySuaFrom() != null) {
+            Date dateFrom = Date.from(searchRequest.getNgaySuaFrom().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            query.setParameter("ngaySuaFrom", sdf.format(dateFrom));
+        }
+        if (searchRequest.getNgaySuaTo() != null) {
+            Date dateTo = Date.from(searchRequest.getNgaySuaTo().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            query.setParameter("ngaySuaTo", sdf.format(dateTo));
+        }
+
+        if(searchRequest.getSoDienThoai() != null && !searchRequest.getSoDienThoai().isEmpty()) {
+            query.setParameter("soDienThoai", searchRequest.getSoDienThoai());
         }
 //        if (searchRequest.getIdHoaDon() != null) {
 //            query.setParameter("idHoaDon", "%" + searchRequest.getIdHoaDon() + "%");
