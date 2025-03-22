@@ -26,8 +26,6 @@ public class GioHangChiTietResponse {
 
         private Double donGia;
 
-        private Boolean hinhThucGiam; // True: Giảm tiền, False: Giảm %
-
         private Double giaTriGiam;
 
         private Integer trangThai;
@@ -35,9 +33,6 @@ public class GioHangChiTietResponse {
         private Integer idKhachHang;
 
         private Integer idSanPhamChiTiet;
-
-
-
 }
 
 

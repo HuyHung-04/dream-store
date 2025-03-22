@@ -2,7 +2,7 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   AngularAppEngine,
   InlineCriticalCssProcessor
-} from "./chunk-3X7TF3SX.js";
+} from "./chunk-CGIXEG5J.js";
 import {
   SERVER_CONTEXT,
   renderApplication,

@@ -96,6 +96,12 @@ public class KhuyenMaiService implements IKhuyenMaiService{
             sanPhamChiTietRepository.saveAll(affectedProducts);
         }
     }
+    @Override
+    public Page<KhuyenMai> getAllKhuyenMaiByTrangThai(int trangThai, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return khuyenMaiRepository.findKhuyenMaiByTrangThai(trangThai, pageable);
+    }
 
     private void checkAndUpdateStatus(KhuyenMai khuyenMai) {
         if (khuyenMai.getNgayKetThuc() != null && khuyenMai.getNgayKetThuc().isBefore(LocalDate.now())) {

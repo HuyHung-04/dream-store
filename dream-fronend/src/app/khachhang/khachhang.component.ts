@@ -25,6 +25,7 @@ export class KhachhangComponent implements OnInit {
   filteredKhachHangs: any[] = [];
   errors: any = {};
   erroredits: any = {};
+  selectedTrangThai: number = 3;
   khachhang: any = {
     id: '',
     ma: '',
@@ -48,12 +49,13 @@ export class KhachhangComponent implements OnInit {
     this.khachhang = {
     ma: '',
     ten: '',
-    gioiTinh: null,
+    gioiTinh: true,
+    email:'',
     soDienThoai: '',
     matKhau: '',
     ngayTao: '',
     ngaySua: '',
-    trangThai: null,
+    trangThai: 1,
     };
 
   }
@@ -101,15 +103,7 @@ export class KhachhangComponent implements OnInit {
   validateForm(): boolean {
     this.errors = {};
 
-    if (!this.khachhang.ma.trim()) {
-      this.errors.ma = 'Mã khách hàng không được để trống!';
-    }
-    // else {
-    //   const isDuplicate = this.khachhangs.some(khachhang => khachhang.ma == this.khachhang.ma);
-    //   if (isDuplicate) {
-    //     this.errors.ma = 'Mã khách hàng đã tồn tại!';
-    //   }
-    // }
+    
 
     if (!this.khachhang.ten.trim()) {
       this.errors.ten = 'Tên khách hàng không được để trống!';
@@ -121,6 +115,22 @@ export class KhachhangComponent implements OnInit {
   } else if (!phoneRegex.test(this.khachhang.soDienThoai)) {
     this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
   }
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  if (!this.khachhang.email.trim()) {
+    this.errors.email = 'Email không được để trống!';
+  } else if (!emailRegex.test(this.khachhang.email)) {
+    this.errors.email = 'Email phải có định dạng @gmail.com!';
+  }else {
+    const isDuplicate = this.khachhangs.some(khachhang => khachhang.email == this.khachhang.email);
+    if (isDuplicate) {
+      this.errors.email = 'Email đã tồn tại!';
+    }
+  }
+
+
+
+
     if (!this.khachhang.matKhau.trim()) {
       this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
     }
@@ -131,6 +141,15 @@ export class KhachhangComponent implements OnInit {
     }
 
     return Object.keys(this.errors).length === 0;
+  }
+  filterKhachHangs() {
+    if (this.searchText.trim()) {
+      this.filteredKhachHangs = this.khachhangs.filter((khachhang) =>
+        khachhang.ten.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    } else {
+      this.filteredKhachHangs = [...this.khachhangs]; // Hiển thị tất cả nếu không tìm kiếm
+    }
   }
 
   searchAndShowSearch(): void {
@@ -159,15 +178,7 @@ export class KhachhangComponent implements OnInit {
 
     this.errors = {};
 
-    if (!this.khachHangEdit.ma.trim()) {
-      this.errors.ma = 'Mã khách hàng không được để trống!';
-    }
-    // else {
-    //   const isDuplicate = this.khachhangs.some(khachhang => khachhang.ma == this.khachhang.ma);
-    //   if (isDuplicate) {
-    //     this.errors.ma = 'Mã khách hàng đã tồn tại!';
-    //   }
-    // }
+    
 
     if (!this.khachHangEdit.ten.trim()) {
       this.errors.ten = 'Tên khách hàng không được để trống!';
@@ -178,6 +189,18 @@ export class KhachhangComponent implements OnInit {
     this.errors.soDienThoai = 'Số điện thoại khách hàng không được để trống!';
   } else if (!phoneRegex.test(this.khachHangEdit.soDienThoai)) {
     this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
+  }else {
+    const isDuplicate = this.khachhangs.some(khachhang => khachhang.email == this.khachhang.email);
+    if (isDuplicate) {
+      this.errors.email = 'Email đã tồn tại!';
+    }
+  }
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  if (!this.khachhang.email.trim()) {
+    this.errors.email = 'Email không được để trống!';
+  } else if (!emailRegex.test(this.khachhang.email)) {
+    this.errors.email = 'Email phải có định dạng @gmail.com!';
   }
     if (!this.khachHangEdit.matKhau.trim()) {
       this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
@@ -217,10 +240,34 @@ export class KhachhangComponent implements OnInit {
   }
 
   
-  
-  loadData(): void {
-    this.loadPage(0)
+  loadKhachHangByTrangThai(trangThai: number, page: number): void {
+    this.khachHangService.getKhachHangByTrangThai(trangThai, page, 8).subscribe((response) => {
+      this.khachhangs = response.content;
+      this.totalPages = response.totalPages;
+      this.currentPage = page;
+      this.updateVisiblePages();
+      this.filterKhachHangs();
+    });
   }
+  loadPage(page: number): void {
+    this.khachHangService.getKhachHang(page, 8).subscribe((response) => {
+      this.khachhangs = response.content; // Dữ liệu của trang hiện tại
+      this.totalPages = response.totalPages; // Tổng số trang
+      this.currentPage = page; // Cập nhật trang hiện tại
+      this.updateVisiblePages();
+      this.filterKhachHangs();
+    });
+  }
+  loadData(): void {
+    console.log(this.selectedTrangThai);
+    console.log(this.filterKhachHangs());
+    if (this.selectedTrangThai !== 3) {
+      this.loadKhachHangByTrangThai(this.selectedTrangThai, 0);
+    } else {
+      this.loadPage(0);
+    }
+  }
+  
 
   getKhachHangDetail(id: number): void {
     this.khachHangService.getKhachHangDetail(id).subscribe(
@@ -235,46 +282,46 @@ export class KhachhangComponent implements OnInit {
     );
   }
 
-  loadPage(page: number): void {
-    this.khachHangService.getKhachHang(page, 8).subscribe((response) => {
-      this.khachhangs = response.content; // Dữ liệu của trang hiện tại
-      this.totalPages = response.totalPages; // Tổng số trang
-      this.currentPage = page; // Cập nhật trang hiện tại
-      this.updateVisiblePages();
-      this.filterKhachHangs();
-    });
-  }
+  
   goToPage(page: number): void {
     if (page >= 0 && page < this.totalPages) {
-      this.loadPage(page); // Load the selected page
+      if (this.selectedTrangThai !== 3) {
+        this.loadKhachHangByTrangThai(this.selectedTrangThai, page);
+      } else {
+        this.loadPage(page);
+      }
+      
     } else {
       console.warn('Invalid page number:', page);
     }
   }
-  filterKhachHangs() {
-    if (this.searchText.trim()) {
-      this.filteredKhachHangs = this.khachhangs.filter((khachhang) =>
-        khachhang.ten.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    } else {
-      this.filteredKhachHangs = [...this.khachhangs]; // Hiển thị tất cả nếu không tìm kiếm
-    }
-  }
-  goToPreviousPage(): void {
-    if (this.currentPage > 0) {
-      this.loadPage(this.currentPage - 1);
-    }
-  }
+  
+  
   updateVisiblePages(): void {
     const startPage = Math.floor(this.currentPage / this.maxVisiblePages) * this.maxVisiblePages;
     const endPage = Math.min(startPage + this.maxVisiblePages, this.totalPages);
 
     this.visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
   }
+  goToPreviousPage(): void {
+    if (this.currentPage > 0) {
+      if (this.selectedTrangThai !== 3) {
+        this.loadKhachHangByTrangThai(this.selectedTrangThai, this.currentPage - 1);
+      } else {
+        this.loadPage(this.currentPage - 1);
+      }
+    
+    }
+  }
 
   goToNextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
-      this.loadPage(this.currentPage + 1);
+      if (this.selectedTrangThai !== 3) {
+        this.loadKhachHangByTrangThai(this.selectedTrangThai, this.currentPage + 1);
+      } else {
+        this.loadPage(this.currentPage + 1);
+      }
+      
     }
   }
 

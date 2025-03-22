@@ -83,5 +83,16 @@ public class KhuyenMaiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-
+    @GetMapping("/loc-trang-thai")
+    public ResponseEntity<Page<KhuyenMai>> findByTrangThai(@RequestParam int trangThai,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "8") int size){
+        if(trangThai==3){
+            Page<KhuyenMai> pagedKhuyenMais = khuyenMaiService.getAllKhuyenMaiPaged(page, size);
+            return ResponseEntity.ok(pagedKhuyenMais);
+        }else {
+            Page<KhuyenMai> pagedKhuyenMais = khuyenMaiService.getAllKhuyenMaiByTrangThai(trangThai,page, size);
+            return ResponseEntity.ok(pagedKhuyenMais);
+        }
+    }
 }

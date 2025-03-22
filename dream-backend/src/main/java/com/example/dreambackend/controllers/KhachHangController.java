@@ -43,7 +43,7 @@ public class KhachHangController {
     public List<KhachHang> searchKhachHangByName(@RequestParam("ten") String ten) {
         return khachHangService.searchKhachHangByName(ten);
     }
-    @GetMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<KhachHang> getKhachHangDetail(@PathVariable Integer id) {
         KhachHang khachHang= khachHangService.getKhachHangById(id);
         return ResponseEntity.ok(khachHang);
@@ -70,5 +70,18 @@ public class KhachHangController {
         return khachHangService.getKhachHangBySoDienThoai(soDienThoai)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+    @GetMapping("/loc-trang-thai")
+    public ResponseEntity<Page<KhachHang>> findByTrangThai(@RequestParam int trangThai,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "8") int size){
+        if(trangThai==3){
+            Page<KhachHang> pagedKhachHangs = khachHangService.getAllKhachHangPaged(page, size);
+            return ResponseEntity.ok(pagedKhachHangs);
+        }else{
+            Page<KhachHang> pagedKhachHangs = khachHangService.getAllKhachHangByTrangThai(trangThai,page, size);
+            return ResponseEntity.ok(pagedKhachHangs);
+        }
+
     }
 }

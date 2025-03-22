@@ -3,7 +3,9 @@ package com.example.dreambackend.services.khachhang;
 import com.example.dreambackend.dtos.KhachHangDto;
 import com.example.dreambackend.entities.KhachHang;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 public interface IKhachHangService {
@@ -16,4 +18,5 @@ public interface IKhachHangService {
     KhachHang updateOtpKhachHang(String email);
     KhachHang deleteOtpKhachHang(String email);
     KhachHang compareOtp(String email,String otp);
+    Page<KhachHang> getAllKhachHangByTrangThai(int trangThai, int page, int size);
 }

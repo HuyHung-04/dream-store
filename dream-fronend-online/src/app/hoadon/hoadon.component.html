@@ -1,5 +1,5 @@
 <!-- Hiển thị địa chỉ đã chọn -->
-<div *ngIf="diaChiList.length > 0; else noAddresses" class="address-list">
+<div *ngIf="diaChiList.length > 0; else noAddressesOrWarning" class="address-list">
   <div class="address-item-select" (click)="openModal()">
     <div class="address-container">
       <p class="map"><i class="bi bi-geo-alt-fill"> Địa chỉ người nhận</i></p>
@@ -16,8 +16,23 @@
 </div>
 
 <!-- Nếu chưa có địa chỉ -->
-<ng-template #noAddresses>
-  <p class="no-address">Chưa có địa chỉ nào được thêm.</p>
+<ng-template #noAddressesOrWarning>
+  <div class="no-address-warning">
+    <div *ngIf="thongBaoTrong">
+      <div class="address-list">
+        <div class="address-item-select">
+          <div class="address-container">
+            <p  class="map"><i class="bi bi-geo-alt-fill"> Địa chỉ người nhận</i></p>
+           <p style="color: red;"><i class="bi bi-exclamation-octagon-fill"></i> Địa chỉ trống! Vui lòng thêm địa chỉ để đặt hàng</p> 
+           <span> Nhấn vào đây để thêm địa chỉ 👉 <button class="addDiaChi" (click)="openAddAddress()"><i class="bi bi-file-earmark-plus"></i> Thêm</button></span>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    <p *ngIf="!thongBaoTrong">
+    </p>
+  </div>
 </ng-template>
 
 <!-- Modal -->
@@ -25,9 +40,8 @@
   <div class="modal-content">
     <div class="modal-header">
       <button [class.active]="activeTab === 'select'" (click)="activeTab='select'">Chọn Địa Chỉ</button>
-      <button [class.active]="activeTab === 'add'" (click)="activeTab='add'">Thêm Địa Chỉ Mới</button>
+      <button [class.active]="activeTab === 'add'" (click)="activeTab='add';resetForm()">Thêm Địa Chỉ Mới</button>
     </div>
-
     <div class="modal-body">
       <!-- Tab Chọn Địa Chỉ -->
       <div *ngIf="activeTab === 'select'">
@@ -39,8 +53,8 @@
                 <p class="customer-name">Tên người nhận: {{ diaChi.tenNguoiNhan}}</p>
                 <p class="customer-phone">(+84 | {{diaChi.sdtNguoiNhan}})</p>
               </div>
-              <p>Địa chỉ: {{ diaChi.diaChiCuThe }}, {{ diaChi.phuongXa }}, {{ diaChi.quanHuyen }}, {{
-                diaChi.tinhThanhPho }}</p>
+              <p>Địa chỉ: {{ diaChi.phuongXa }}, {{ diaChi.quanHuyen }}, {{
+                diaChi.tinhThanhPho }}, {{ diaChi.diaChiCuThe }}</p>
               <div class="btn-container">
                 <button class="btn-edit" (click)="editDiaChi(diaChi.id); $event.stopPropagation()"><i
                     class="bi bi-pencil-square"></i> Sửa</button>
@@ -57,21 +71,22 @@
         <input [(ngModel)]="newAddress.tenNguoiNhan" placeholder="Tên người nhận" class="form-control">
         <input [(ngModel)]="newAddress.sdtNguoiNhan" placeholder="Số điện thoại người nhận" class="form-control">
         <select [(ngModel)]="newAddress.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="form-control">
-          <option value="" disabled [selected]="!AddressEdit.tinhThanhPho">Chọn Tỉnh/Thành Phố</option>
-          <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}</option>
+          <option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
+          <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.ProvinceName">{{ tinh.ProvinceName }}</option>
         </select>
         <select [(ngModel)]="newAddress.quanHuyen" (change)="onSelectQuanHuyen($event)" class="form-control">
-          <option *ngFor="let quan of quanHuyenList" [value]="quan.DistrictID">{{ quan.DistrictName }}</option>
+          <option *ngFor="let quan of quanHuyenList" [value]="quan.DistrictName">{{ quan.DistrictName }}</option>
           <option value="" disabled selected>Chọn Quận/Huyện</option>
         </select>
         <select [(ngModel)]="newAddress.phuongXa" class="form-control">
           <option value="" disabled selected>Chọn Phường/Xã</option> <!-- Placeholder -->
-          <option *ngFor="let xa of phuongXaList" [value]="xa.WardCode">{{ xa.WardName }}</option>
+          <option *ngFor="let xa of phuongXaList" [value]="xa.WardName">{{ xa.WardName }}</option>
         </select>
         <input [(ngModel)]="newAddress.diaChiCuThe" class="form-control" placeholder="Địa chỉ cụ thể">
         <button class="btn-save" (click)="addDiaChi()">Lưu Địa Chỉ</button>
       </div>
     </div>
+
     <button class="close-btn" (click)="closeModal()">Đóng</button>
   </div>
 </div>
@@ -81,6 +96,7 @@
   <div class="edit-modal">
     <div class="edit-modal-header">
       <h2>Sửa Địa Chỉ</h2>
+
     </div>
 
     <div class="edit-modal-body">
@@ -88,27 +104,27 @@
       <input [(ngModel)]="AddressEdit.sdtNguoiNhan" placeholder="Số điện thoại người nhận" class="edit-input">
 
       <!-- Tỉnh/Thành phố -->
-      <select [(ngModel)]="newAddress.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="edit-input">
+      <select [(ngModel)]="AddressEdit.tinhThanhPho" (change)="onSelectTinhThanh($event)" class="edit-input">
         <option value="" disabled selected>Chọn Tỉnh/Thành Phố</option>
-        <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}</option>
+        <option *ngFor="let tinh of tinhThanhPhoList" [value]="tinh.ProvinceName">{{ tinh.ProvinceName }}</option>
       </select>
 
       <!-- Quận/Huyện -->
-      <select [(ngModel)]="newAddress.quanHuyen" (change)="onSelectQuanHuyen($event)" class="edit-input">
+      <select [(ngModel)]="AddressEdit.quanHuyen" (change)="onSelectQuanHuyen($event)" class="edit-input">
         <option value="" disabled selected>Chọn Quận/Huyện</option>
-        <option *ngFor="let quan of quanHuyenList" [value]="quan.DistrictID">{{ quan.DistrictName }}</option>
+        <option  *ngFor="let quan of quanHuyenList" [value]="quan.DistrictName">{{ quan.DistrictName }}</option>
       </select>
 
       <!-- Phường/Xã -->
-      <select [(ngModel)]="newAddress.phuongXa" class="edit-input">
-        <option  value="" disabled selected>Chọn Phường/Xã</option>
-        <option *ngFor="let xa of phuongXaList" [value]="xa.WardCode">{{ xa.WardName }}</option>
+      <select [(ngModel)]="AddressEdit.phuongXa" class="edit-input">
+        <option value="" disabled selected>Chọn Phường/Xã</option>
+        <option *ngFor="let xa of phuongXaList" [value]="xa.WardName">{{ xa.WardName }}</option>
       </select>
 
 
       <input [(ngModel)]="AddressEdit.diaChiCuThe" class="edit-input" placeholder="Địa chỉ cụ thể">
       <button style="background-color: #294764;" class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
-      <button style="background-color: #5a6268;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
+      <button style="background-color: #6c757d;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
     </div>
   </div>
 </div>
@@ -142,7 +158,7 @@
 
 <!-- Hiển thị thông báo nếu giỏ hàng trống -->
 <ng-template #noItems>
-  <p>Giỏ hàng của bạn hiện tại trống.</p>
+  <!-- <p>Giỏ hàng của bạn hiện tại trống.</p> -->
 </ng-template>
 
 
@@ -161,20 +177,20 @@
     </select>
   </div>
 
-  <!-- Hiển thị "Giảm tối đa" nếu có voucher được chọn -->
-  <div class="max-sale" *ngIf="selectedVoucherMaxDiscount">
-    <label>Giảm tối đa: {{ selectedVoucherMaxDiscount | number }} VND</label>
-  </div>
+<!-- giá trị giảm và giảm tối đa -->
+<div class="max-sale" *ngIf="selectedVoucher">
+  <label>{{ getVoucherDisplayText() }}</label>
+</div>
 
   <div class="summary-item">
-    <label>Phí vận chuyển: {{ shippingFee | number }} VND</label>
+    <label>Phí vận chuyển: {{ shippingFee }} VND</label>
     <p></p>
   </div>
 
   <div class="form-group">
     <label class="input-label" for="payment-method">Chọn phương thức thanh toán:</label>
-    <select id="payment-method" [(ngModel)]="selectedPaymentMethod" class="selectoption">
-      <option *ngFor="let method of paymentMethods" [value]="method.id">
+    <select id="payment-method" [(ngModel)]="selectedPhuongThucThanhToan" class="selectoption">
+      <option *ngFor="let method of phuongThucThanhToan" [value]="method.id">
         {{ method.ten }}
       </option>
     </select>
@@ -182,8 +198,20 @@
 
   <div></div>
   <div class="summary-item">
-    <label for="total">Tổng tiền thanh toán: {{ totalPriceAfterDiscount }} VND</label>
+    <label for="">Tổng tiền thanh toán: {{ tongTienSauVoucher }} VND</label>
+
   </div>
-  <a href="" class="back-to-cart"> <--Quay lại</a>
+  <a href="" (click)="backSanpham(); $event.preventDefault()" class="back-to-cart"> <i class="bi bi-box-arrow-left"></i> Quay lại</a>
   <button class="btn-checkout" (click)="createHoaDon()">Đặt hàng</button>
+</div>
+
+
+<!-- Modal Chức Năng Sau Thanh Toán -->
+<div *ngIf="modalthongbao" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content">
+    <h3>Chọn hành động</h3>
+    <button (click)="viewInvoiceDetails()">Xem Chi Tiết Đơn Hàng</button>
+    <button (click)="viewInvoiceHistory()">Xem Lịch Sử Đơn Hàng</button>
+    <button (click)="goHome()">Quay Về Trang Chủ</button>
+  </div>
 </div>

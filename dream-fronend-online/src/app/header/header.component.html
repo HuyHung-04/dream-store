@@ -4,7 +4,7 @@
     </div>
     <nav class="nav-icons">
       <div class="search-modal">
-        <input type="text" [(ngModel)]="searchQuery" placeholder="Nhập tên sản phẩm..." (keyup.enter)="searchSanPham(0)">
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Nhập tên sản phẩm..." (keyup.enter)="searchSanPham(0)" (input)="searchSanPham(0)">
         <button (click)="searchSanPham(0)">
             <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
         </button>
@@ -13,7 +13,16 @@
         <i class="bi bi-cart4"></i>
         <span *ngIf="gioHang.length > 0" class="cart-count">{{ gioHang.length }}</span>
       </a>
-      <a href="#"><i class="bi bi-person-circle"></i></a>
+      <div class="profile-icon-container">
+        <a  class="profile-icon">
+            <i (click)="dangnhap()" class="bi bi-person-circle"></i>
+            <span class="user-name">{{ khachhang.ten }}</span>
+        </a>
+        <div *ngIf="luachon" class="profile-dropdown">
+            <a  class="profile-option" (click)="hoso()">Hồ sơ</a>
+            <a href="dang-xuat" class="profile-option" (click)="xoacookie()">Đăng xuất</a>
+        </div>
+      </div>
     </nav>
   </div>
 
@@ -43,7 +52,7 @@
             </div>
           </div>
           <!-- Giá sản phẩm -->
-          <p>{{ item.donGia | number }} VND</p>
+          <p class="price">{{ item.donGia | number }} VND</p>
         </div>
       </div>
       <div class="cart-footer">

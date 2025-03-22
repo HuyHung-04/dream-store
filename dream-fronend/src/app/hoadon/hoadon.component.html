@@ -1,31 +1,68 @@
 <div class="hoa-don">
-  <h2 style="color: #294764; padding-top: 10px; font-weight: bold; font-size: 18px;">
+  <h2 style="color: #294764; font-weight: bold; font-size: 18px;">
     Quản lý hóa đơn
   </h2>
-
   <!-- Phần tìm kiếm -->
   <div class="tim-kiem">
-    <p style="color: #294764; margin-top: -20px; font-weight: bold; font-size: 14px;">Tìm kiếm</p>
+    <p style="color: #294764;font-weight: bold; font-size: 14px;">Tìm kiếm</p>
+    <div class="input-row">
+      <div class="bor">
+        <div class="input-field">
+          <label class="label-date">Ngày tạo</label>
+          <div class="form-date" style="width: 250px;">
+            <input type="date" class="input" id="fromDate">
+            <input type="date" class="input" id="toDate">
+          </div>
+        </div>
+      </div>
+        <div class="input-field">
+          <label class="label-date">Ngày sửa</label>
+          <div class="form-date" style="width: 250px;">
+            <input type="date" class="input" id="fromDate">
+            <input type="date" class="input" id="toDate">
+          </div>
+        </div>
+      <div class="input-field">
+        <label for="maHoaDon">Số điện thoại khách hàng</label>
+        <input type="text" id="maHoaDon" class="input" placeholder="Nhập số điện thoại..." style="width: 250px;">
+      </div>
+      <div class="input-field">
+        <label for="trangThai">Trạng thái</label>
+        <select class="input" id="trangThai" name="trangThai" style="width: 250px;">
+          <option value="" disabled selected>Tất cả trạng thái</option>
+          <option value="1">Chờ xác nhận</option>
+          <option value="2">Đã xác nhận</option>
+          <option value="3">Đang giao hàng</option>
+          <option value="4">Đã giao hàng</option>
+          <option value="5">Đã huỷ</option>
+          <option value="6">Chưa thanh toán</option>
+          <option value="7">Đã thanh toán</option>
+        </select>
+      </div>
+    </div>
     <div class="input-row">
       <div class="input-field">
         <label for="maHoaDon">Mã hóa đơn</label>
-        <input type="text" id="maHoaDon" placeholder="Nhập mã hóa đơn..." [(ngModel)]="searchRequest.maHoaDon">
+        <input style="width: 250px;" type="text" id="maHoaDon" class="input" placeholder="Nhập mã hóa đơn..." [(ngModel)]="searchRequest.maHoaDon">
       </div>
       <div class="input-field">
         <label for="tenKhachHang">Tên khách hàng</label>
-        <input type="text" id="tenKhachHang" placeholder="Nhập tên khách hàng..." [(ngModel)]="searchRequest.tenKhachHang">
+        <input style="width: 250px;" type="text" id="tenKhachHang" class="input" placeholder="Nhập tên khách hàng..." [(ngModel)]="searchRequest.tenKhachHang">
       </div>
       <div class="input-field">
         <label for="tenNhanVien">Tên nhân viên</label>
-        <input type="text" id="tenNhanVien" placeholder="Nhập tên nhân viên..." [(ngModel)]="searchRequest.tenNhanVien">
+        <input style="width: 250px;" type="text" id="tenNhanVien" class="input" placeholder="Nhập tên nhân viên..." [(ngModel)]="searchRequest.tenNhanVien">
       </div>
       <div class="input-field">
-        <button (click)="search()">Tìm kiếm</button>
-        <button (click)="resetFilters()">Reset</button>
+        <label for="">Loại hoá đơn</label>
+        <select class="input" id="" name="" style="width: 250px;">
+          <option value="" disabled selected>Tất cả hoá đơn</option>
+          <option value="1">Hoá đơn offline</option>
+          <option value="0">Hoá đơn online</option>
+        </select>
       </div>
-    </div>
+    </div>    
   </div>
-
   <!-- Bảng hiển thị hóa đơn -->
   <div class="table-don-off">
     <div class="table-wrapper">
@@ -34,14 +71,13 @@
         <tr>
           <th>Mã hóa đơn</th>
           <th>Tên khách hàng</th>
+          <th>Số điện thoại khách hàng</th>
           <th>Tên nhân viên</th>
           <th>Phương thức thanh toán</th>
           <th>Tiền trước voucher</th>
-          <th>Voucher</th>
-          <th>Tổng tiền</th>
-          <th>Ghi chú</th>
-          <th>Trạng thái</th>
+          <th>Tổng tiền thanh toán</th>
           <th>Ngày tạo</th>
+          <th>Trạng thái</th>
           <th>Xem chi tiết</th>
         </tr>
         </thead>
@@ -49,19 +85,19 @@
         <tr *ngFor="let invoice of hoaDons.content; trackBy: trackById">
           <td>{{ invoice.maHoaDon }}</td>
           <td>{{ invoice.tenKhachHang }}</td>
+          <td>{{ invoice.sdtNguoiNhan }}</td>
           <td>{{ invoice.tenNhanVien }}</td>
           <td>{{ invoice.tenPhuongThucThanhToan }}</td>
           <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</td>
-          <td>
+          <!-- <td>
               <span *ngIf="invoice.tenVoucher; else noVoucher">
                 {{ invoice.tenVoucher }} (Giảm {{ invoice.giaTriGiam }}{{ invoice.hinhThucGiam ? ' %' : ' VNĐ' }})
               </span>
             <ng-template #noVoucher>Không</ng-template>
-          </td>
+          </td> -->
           <td>{{ invoice.tongTienThanhToan | number:'1.0-0' }} VNĐ</td>
-          <td>{{ invoice.ghiChu }}</td>
-          <td>{{ invoice.trangThai }}</td>
           <td>{{ invoice.ngayTao | date:'yyyy-MM-dd' }}</td>
+          <td>{{ invoice.trangThai }}</td>
           <td>
             <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(invoice)">
               <i class="bi bi-eye-fill"></i>
@@ -73,11 +109,14 @@
     </div>
     <!-- Phân trang -->
     <div class="pagination">
-      <button (click)="prevPage()">Prev</button>
-      <span>Trang {{ searchRequest.page }} / {{ hoaDons.totalElements % 10 }}</span>
-      <button (click)="nextPage()">Next</button>
-    </div>
-  </div>
+      <button (click)="prevPage()" [disabled]="searchRequest.page <= 1">
+        <i class="bi bi-chevron-double-left"></i>
+      </button>
+      <span>{{ searchRequest.page }} / {{ hoaDons.totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="searchRequest.page >= hoaDons.totalPages">
+        <i class="bi bi-chevron-double-right"></i>
+      </button>
+    </div>    
 
   <!-- Popup modal hiển thị chi tiết hóa đơn -->
   <div class="modal" *ngIf="showDetailPopup">

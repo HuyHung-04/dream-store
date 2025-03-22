@@ -327,5 +327,12 @@ select option {
   padding: 3px 7px;
   border-radius: 50%;
 }
+#toastGioHang {
+  width: 200px;
+  position: absolute;
+  top: 65px;  /* Đẩy xuống dưới icon */
+  right: 0px; /* Căn chỉnh theo chiều ngang */
+  z-index: 1050;
+}
 
 

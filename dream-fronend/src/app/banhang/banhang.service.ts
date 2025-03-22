@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {map} from 'rxjs/operators';
 
@@ -8,14 +8,14 @@ import {map} from 'rxjs/operators';
 })
 export class BanhangService {
 
-  private apiUrl = 'http://localhost:8889/api/san-pham-chi-tiet/ban-hang';
-  private apiUrlHD = 'http://localhost:8889/api/hoa-don';
-  private apiUrlKH = 'http://localhost:8889/api/khach-hang';
-  private apiUrlTaoHoaDon = 'http://localhost:8889/api/hoa-don';
-  private apiUrlNhanVien = 'http://localhost:8889/api';
-  private apiUrlHDCT = 'http://localhost:8889/api/hoa-don-chi-tiet';
-  private apiUrlPTTT = 'http://localhost:8889/api/phuong-thuc-thanh-toan';
-  private apiVoucher = 'http://localhost:8889/api/voucher';
+  private apiUrl = 'http://localhost:8080/api/san-pham-chi-tiet/ban-hang';
+  private apiUrlHD = 'http://localhost:8080/api/hoa-don';
+  private apiUrlKH = 'http://localhost:8080/api/khach-hang';
+  private apiUrlTaoHoaDon = 'http://localhost:8080/api/hoa-don';
+  private apiUrlNhanVien = 'http://localhost:8080/api';
+  private apiUrlHDCT = 'http://localhost:8080/api/hoa-don-chi-tiet';
+  private apiUrlPTTT = 'http://localhost:8080/api/phuong-thuc-thanh-toan';
+  private apiVoucher = 'http://localhost:8080/api/voucher';
 
   constructor(private http: HttpClient) { }
 
@@ -112,5 +112,21 @@ export class BanhangService {
 
   getKhachHangById(idKhachHang: number) {
     return this.http.get<any>(`${this.apiUrlKH}/${idKhachHang}`);
+  }
+
+  getDanhSachMau(): Observable<any> {
+    return this.http.get<any>('http://localhost:8080/api/mau-sac/hien-thi');
+  }
+  
+  getDanhSachSize(): Observable<any> {
+    return this.http.get<any>('http://localhost:8080/api/size/hien-thi');
+  }
+
+  locSanPham(params: HttpParams): Observable<any> {
+    return this.http.get<any>('http://localhost:8080/api/san-pham-chi-tiet/loc-ban-hang', { params });
+  }  
+  exportHoaDonPDF(hoaDonId: number): Observable<Blob> {
+    const apiUrl = `${this.apiUrlHD}/${hoaDonId}/export-pdf`;
+    return this.http.get(apiUrl, { responseType: 'blob' }); // Trả về file PDF dạng Blob
   }
 }

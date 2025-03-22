@@ -1,0 +1,8 @@
+{
+    "/services": {
+      "target": "https://services.giaohangtietkiem.vn",
+      "secure": false,
+      "changeOrigin": true
+    }
+  }
+  

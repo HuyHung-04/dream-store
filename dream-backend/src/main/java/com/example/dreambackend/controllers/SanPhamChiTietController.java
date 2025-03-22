@@ -118,12 +118,21 @@ public class SanPhamChiTietController {
     @GetMapping("/ban-hang")
     public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getSanPhamBanHang(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size) {
-
+            @RequestParam(defaultValue = "4") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<GetSanPhamToBanHangRespone> danhSachSanPham = sanPhamChiTietService.laySanPhamChoBanHang(pageable);
-
         return ResponseEntity.ok(danhSachSanPham);
     }
 
+    @GetMapping("/loc-ban-hang")
+    public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getSanPhamBanHang(
+            @RequestParam(required = false) String tenSanPham,
+            @RequestParam(required = false) String mauSac,
+            @RequestParam(required = false) String size,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int sizePage) {
+
+        Page<GetSanPhamToBanHangRespone> sanPhams = sanPhamChiTietService.locSanPham(tenSanPham, mauSac, size, page, sizePage);
+        return ResponseEntity.ok(sanPhams);
+    }
 }

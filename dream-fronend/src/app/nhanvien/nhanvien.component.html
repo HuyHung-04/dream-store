@@ -1,6 +1,13 @@
 <p class="title">Danh sách nhân viên</p>
-
-<div class="header-container">
+<div class="input-field">
+  <label for="">Trạng thái</label>
+  <select id="trangThai" [(ngModel)]="trangThaiFilter" (change)="loadPage(0)" class="input">
+    <option [value]="2">Tất cả nhân viên</option>
+    <option [value]="1">Hoạt động</option>
+    <option [value]="0">Không hoạt động</option>
+  </select>
+</div>
+<div class="header-container" style="margin-top: -100px;">
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Nhân Viên</button>
   <div class="search-container">
     <p>Tìm Kiếm:</p>
@@ -171,11 +178,11 @@
     <!-- Form hiển thị chi tiết nhân viên và cho phép sửa -->
     <form (ngSubmit)="updateNhanVien()" #nhanVienForm="ngForm">
       <div class="input-row">
-        <div class="input-field">
+        <!-- <div class="input-field"> -->
           <!-- Trường ID là readonly -->
-          <input type="text" class="input" [(ngModel)]="nhanVienEdit.id" name="id" readonly />
+          <!-- <input type="text" class="input" [(ngModel)]="nhanVienEdit.id" name="id" readonly />
           <label for="id">ID</label>
-        </div>
+        </div> -->
         <div class="input-field">
           <input type="text" class="input" [(ngModel)]="nhanVienEdit.ma" name="ma" required readonly />
           <label for="ma">Mã nhân viên</label>
@@ -369,7 +376,7 @@
           </div>
         </div>
         <div class="input-field">
-          <input type="password" class="input" [(ngModel)]="nhanVien.matKhau" name="matKhau" required
+          <input type="password" class="input" [(ngModel)]="nhanVien.matKhau" name="matKhau" required 
             (input)="clearError('matKhau')" />
           <label for="matKhau">Mật khẩu</label>
           <div class="tooltip-error" *ngIf="errors.matKhau">
@@ -379,7 +386,7 @@
       </div>
       <div class="input-row">
         <div class="input-field">
-          <select class="input" [(ngModel)]="nhanVien.trangThai" name="trangThai" required
+          <select class="input" [(ngModel)]="nhanVien.trangThai" name="trangThai" required style="width:180px;"
             (change)="clearError('trangThai')">
             <option [value]="1">Hoạt động</option>
             <option [value]="0">Không hoạt động</option>
@@ -392,7 +399,7 @@
       </div>
       <div class="input-row">
         <div class="input-field">
-          <input type="file" class="input" (change)="onFileSelected($event)" />
+          <input type="file" class="input" (change)="onFileSelected($event)" style="width:180px;" />
           <label for="file">Chọn ảnh nhân viên</label>
           <div *ngIf="selectedFile">
             <img [src]="imagePreview" alt="Ảnh nhân viên" class="image-preview" />

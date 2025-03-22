@@ -7,7 +7,7 @@
 }
 
 .product-filters{
-  padding-top: 300px;
+  padding-top: 230px;
 }
 
 .product-table th {
@@ -76,10 +76,9 @@ button:hover {
   font-size: 12px;
 }
 
-
 /*css text bên phải*/
 .right-container {
-  margin-top: -700px; /* Dịch phần khách hàng lên */
+  margin-top: -677px; /* Dịch phần khách hàng lên */
   width: 30%;
   float: right;
   margin-right: 20px;
@@ -89,7 +88,6 @@ button:hover {
   width: 100%;
   height: 250px;
   padding: 15px; /* Thêm khoảng cách giữa nội dung và border */
-  border-radius: 5px; /* Bo góc nhẹ cho đẹp */
   box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
 }
 
@@ -118,16 +116,16 @@ button {
   font-size: 12px;
 }
 
-
 /*css thanh input*/
 .custom-input {
   border: none;
-  border-bottom: 2px solid #294764; /* Định dạng gạch ngang */
+  border-bottom: 0.5px solid #294764; /* Định dạng gạch ngang */
   outline: none; /* Loại bỏ viền khi focus */
   width: 70%; /* Độ rộng tối đa */
   padding: 5px;
   font-size: 14px;
   background-color: transparent; /* Làm nền trong suốt */
+  color: #294764;
 }
 
 
@@ -136,7 +134,7 @@ button {
   margin-top: -70px;
 }
 .cart-container {
-  padding-top: 50px;
+  padding-top: 10px;
   border-radius: 8px;
   margin-top: 20px;
   width: 65%;
@@ -178,7 +176,6 @@ button {
   background-color: #cc0000;
 }
 
-
 /*css nút tạo hoá đơn và hoá đơn*/
 .invoice-container {
   display: flex;
@@ -210,14 +207,10 @@ button {
   font-size: 12px;
   cursor: pointer;
 }
-.invoice-btn:hover {
-  background-color: #e2e6ea;
-}
 
 .invoice-btn.active {
-  background-color: #ff9900 !important;
-  color: black;
-  border-color: #ff9900;
+  background-color: #5189d6 !important;
+  color: white;
 }
 
 .modal {
@@ -242,7 +235,23 @@ button {
   text-align: center;
 }
 
-
+.checkout-btn{
+  font-size: 18px;
+  width: 100%;
+  height: 70px;
+}
+/* lọc và tìm tiếm chuyển hàng ngang */
+.product-filters {
+  display: flex;
+  width: 910px;
+  margin-top: -30px;
+}
+.product-image {
+  width: 37px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 5px;
+}
 
 
 

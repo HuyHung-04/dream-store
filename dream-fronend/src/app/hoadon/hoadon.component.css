@@ -1,5 +1,5 @@
 /* Định dạng bảng hoá đơn online */
-.table-don-on {
+/* .table-don-on {
   margin-top: -80px;
   width: 100%;
   overflow-x: auto;
@@ -19,14 +19,13 @@
   padding: 10px;
   border: 1px solid #ccc;
   text-align: center; /* Căn giữa nội dung */
-  vertical-align: middle; /* Căn giữa theo chiều dọc */
-}
+  /* vertical-align: middle; /* Căn giữa theo chiều dọc */
+/* }
 .table-don-on tbody tr:nth-child(even) {
   background-color: #f5f5f5;
-}
-
+}  */
 /* Css nút xác nhận*/
-.btn-xac-nhan{
+/* .btn-xac-nhan{
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
@@ -37,12 +36,12 @@
 .btn-xac-nhan {
   padding-right: 20px;
   background-color: #294764; /* Màu xanh đậm */
-}
+/* }
  .disabled-btn { /* chuyển màu nếu trạng thái là đã giao hàng */
-  background-color: #a59b9b !important; /* Màu xám */
-  color: #294764;
+  /* background-color: #a59b9b !important; Màu xám */
+  /* color: #294764;
   cursor: not-allowed;
-}
+}   */
 
 /* css nút xem chi tiết */
 .xem-chi-tiet {
@@ -57,7 +56,6 @@
 
 /* Css hoá bảng hoá đơn offline */
 .table-don-off {
-  margin-top: -80px;
   width: 100%;
   overflow-x: auto;
 }
@@ -103,6 +101,71 @@
   border: none;
   border-bottom: 1px solid #294764;
   outline: none;
-  margin-bottom: 80px; /* Giảm khoảng cách dưới */
+  margin-bottom: 30px; /* Giảm khoảng cách dưới */
   color: #294764;
 }
+/* phân trang */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #294764;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #1f3654;
+}
+
+.pagination button:disabled {
+  background-color: #8a9bb3;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 16px;
+  color: #294764;
+}
+/* button tìm kiếm */
+.button-search {
+  display: flex;
+  padding-top: 10px;
+}
+
+.button-search button {
+  background-color: #294764;
+  color: white;
+  border: none;
+  padding: 7px 10px;
+  font-size: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 70px; /* Chiều rộng tối đa */
+  transition: background-color 0.3s ease;
+}
+
+.button-search button:hover {
+  background-color: #1f3654;
+}
+.form-date {
+  padding-top: -40px;
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  width: fit-content;
+}
+.label-date {
+  margin-bottom: -4px; /* Giảm khoảng cách giữa label và input */
+}
+

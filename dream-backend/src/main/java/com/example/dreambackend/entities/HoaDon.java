@@ -1,12 +1,13 @@
 package com.example.dreambackend.entities;
 
-import com.example.dreambackend.responses.HoaDonResponse;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "hoa_don")
 public class HoaDon {
     @Id

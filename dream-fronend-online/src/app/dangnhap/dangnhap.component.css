@@ -4,6 +4,15 @@
     box-sizing: border-box;
 }
 
+.back-ground{
+    background: url('https://theme.hstatic.net/200000499507/1000925471/14/slideshow_1.jpg?v=241') no-repeat center center;
+    background-size: cover;
+    min-height: 110vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Body Styling */
 body {
     font-family: Arial, sans-serif;

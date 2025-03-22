@@ -102,4 +102,21 @@ public class NhanVienController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+    // Lấy nhân viên theo trạng thái
+    @GetMapping("/trang-thai/{trangThai}")
+    public ResponseEntity<Page<NhanVien>> getNhanVienByTrangThai(
+            @PathVariable Integer trangThai,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+
+        Page<NhanVien> pagedNhanVien;
+        if (trangThai == 2) {
+            pagedNhanVien = nhanVienService.getAllNhanVien(page, size);
+        } else {
+            pagedNhanVien = nhanVienService.getNhanVienByTrangThai(trangThai, page, size);
+        }
+
+        return ResponseEntity.ok(pagedNhanVien);
+    }
+
 }

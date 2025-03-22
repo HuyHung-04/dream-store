@@ -54,7 +54,6 @@ public class GioHangChiTietController {
         if (gioHangIds.isEmpty()) {
             return ResponseEntity.noContent().build(); // Trả về 204 nếu không có sản phẩm nào trong giỏ
         }
-
         return ResponseEntity.ok(gioHangIds);
     }
 

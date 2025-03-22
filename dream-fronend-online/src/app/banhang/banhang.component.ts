@@ -13,12 +13,14 @@ import { RouterModule } from '@angular/router';
   styleUrl: './banhang.component.css'
 })
 export class BanhangComponent{
+  @ViewChild('searchResultsContainer') searchResultsContainer!: ElementRef;
   sanPhamOnlines: any[] = [];
   totalPages: number = 0;
   currentPage: number = 0;
   size: number = 20;
  // Khai báo biến lưu trữ kết quả tìm kiếm
  searchResults: any[] = [];
+ isSearching: boolean = false;
   constructor(private banHangService : BanhangService) {}
 
   ngOnInit(): void {
@@ -29,6 +31,22 @@ export class BanhangComponent{
     this.searchResults = results;
     this.sanPhamOnlines = [...this.searchResults];  // Đảm bảo đây là một mảng
   });
+  this.banHangService.isSearching$.subscribe((a) => {
+    console.log('isSearching:', a);
+    this.isSearching = a;
+
+    // Gọi scrollToResults() khi isSearching thay đổi
+    if (this.isSearching) {
+      setTimeout(() => {
+        this.scrollToResults();
+      }, 100); // Trễ một chút để đảm bảo UI đã render
+    }
+  });
+  }
+  scrollToResults() {
+    if (this.searchResultsContainer) {
+      this.searchResultsContainer.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   loadData(): void {

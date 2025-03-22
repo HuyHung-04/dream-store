@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
@@ -164,13 +165,13 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             query.setParameter("ngayTaoDen", dateFormat.format(hoaDonChiTietSearchRequest.getNgayTaoDen()));
         }
         if (hoaDonChiTietSearchRequest.getNgaySuaTu() != null) {
-           query.setParameter("ngaySuaTu", dateFormat.format(hoaDonChiTietSearchRequest.getNgaySuaTu()));
+            query.setParameter("ngaySuaTu", dateFormat.format(hoaDonChiTietSearchRequest.getNgaySuaTu()));
         }
         if (hoaDonChiTietSearchRequest.getNgaySuaDen() != null) {
             query.setParameter("ngaySuaDen", dateFormat.format(hoaDonChiTietSearchRequest.getNgaySuaDen()));
         }
         if (hoaDonChiTietSearchRequest.getTenKhachHang() != null && !hoaDonChiTietSearchRequest.getTenKhachHang().isEmpty()) {
-           query.setParameter("tenKhachHang", hoaDonChiTietSearchRequest.getTenKhachHang());
+            query.setParameter("tenKhachHang", hoaDonChiTietSearchRequest.getTenKhachHang());
         }
         if (hoaDonChiTietSearchRequest.getTenNhanVien() != null && !hoaDonChiTietSearchRequest.getTenNhanVien().isEmpty()) {
             query.setParameter("tenNhanVien", hoaDonChiTietSearchRequest.getTenNhanVien());
@@ -186,4 +187,67 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
 
     Optional<HoaDonChiTiet> findBySanPhamChiTietId(Integer idSanPhamChiTiet);
 
+    @Query(value = """
+        SELECT 
+            spct.ma AS maSanPham,
+            sp.ten AS tenSanPham,
+            hct.don_gia AS donGia,
+            hct.so_luong AS soLuong,
+            ms.ten AS mauSac,
+            sz.ten AS size,
+            (
+                SELECT TOP 1 a.anh_url 
+                FROM anh a 
+                WHERE a.id_san_pham = sp.id AND a.trang_thai = 1
+            ) AS anhUrl
+        FROM hoa_don_chi_tiet hct
+        JOIN san_pham_chi_tiet spct ON hct.id_san_pham_chi_tiet = spct.id
+        JOIN san_pham sp ON spct.id_san_pham = sp.id
+        JOIN mau_sac ms ON spct.id_mau_sac = ms.id
+        JOIN size sz ON spct.id_size = sz.id
+        JOIN hoa_don hd ON hct.id_hoa_don = hd.id
+        WHERE hd.ma = :maHoaDon
+    """, nativeQuery = true)
+    List<Object[]> findChiTietByMaHoaDon(@Param("maHoaDon") String maHoaDon);
+
+
+    @Query(value = """
+    SELECT 
+        hd.id AS idHoaDon,
+        hd.ma AS maHoaDon,
+        hd.tong_tien_thanh_toan AS tongTienThanhToan,
+        hct.id AS idHoaDonChiTiet,
+        spct.ma AS maSanPham,
+        sp.ten AS tenSanPham,
+        hct.so_luong AS soLuong,
+        ms.ten AS mauSac,
+        hct.don_gia AS donGia,
+        sz.ten AS size,
+        (
+            SELECT TOP 1 a.anh_url
+            FROM anh a
+            WHERE a.id_san_pham = sp.id AND a.trang_thai = 1
+        ) AS anhUrl
+    FROM hoa_don hd
+    JOIN hoa_don_chi_tiet hct ON hd.id = hct.id_hoa_don
+    JOIN san_pham_chi_tiet spct ON hct.id_san_pham_chi_tiet = spct.id
+    JOIN san_pham sp ON spct.id_san_pham = sp.id
+    JOIN mau_sac ms ON spct.id_mau_sac = ms.id
+    JOIN size sz ON spct.id_size = sz.id
+    ORDER BY hd.id DESC  -- Sắp xếp hóa đơn theo id giảm dần
+""", nativeQuery = true)
+    List<Object[]> getHoaDonChiTiet();
+
+    @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
+            "JOIN FETCH hdct.hoaDon hd " +
+            "JOIN FETCH hdct.sanPhamChiTiet spct " +
+            "JOIN FETCH spct.sanPham sp " +
+            "JOIN FETCH spct.size " +         // Size thuộc spct
+            "JOIN FETCH spct.mauSac " +       // Màu sắc thuộc spct
+            "JOIN FETCH sp.chatLieu " +       // Chất liệu thuộc sp
+            "JOIN FETCH sp.thuongHieu " +     // Thương hiệu thuộc sp
+            "JOIN FETCH sp.coAo " +           // Cổ áo thuộc sp
+            "JOIN FETCH sp.xuatXu " +         // Xuất xứ thuộc sp
+            "WHERE hd.id = :idHoaDon")
+    List<HoaDonChiTiet> getHoaDonChiTietByHoaDonId(@Param("idHoaDon") Integer idHoaDon);
 }

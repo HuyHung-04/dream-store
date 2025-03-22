@@ -10,8 +10,16 @@ export class NhanVienService {
   constructor(private http: HttpClient) {}
   // 🟢 Nhân viên API
   // Lấy danh sách nhân viên có phân trang
-  getNhanVien(page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/nhan-vien/hien-thi?page=${page}&size=${size}`).pipe(
+  getNhanVien(page: number, size: number, trangThai?: number): Observable<any> {
+    let url = `${this.apiUrl}/nhan-vien/hien-thi?page=${page}&size=${size}`;
+  
+    if (trangThai !== undefined && trangThai !== null && trangThai !== 2) { 
+      url = `${this.apiUrl}/nhan-vien/trang-thai/${trangThai}?page=${page}&size=${size}`;
+    }    
+  
+    console.log("Fetching data from:", url); // Debug URL
+  
+    return this.http.get<any>(url).pipe(
       map(response => {
         response.content.forEach((nhanVien: any) => {
           if (nhanVien.anh) {

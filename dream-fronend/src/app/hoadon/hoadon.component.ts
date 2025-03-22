@@ -19,7 +19,7 @@ export class HoaDonComponent implements OnInit {
     ngayTaoFrom: null,
     ngayTaoTo: null,
     listTrangThai: null, // Nếu null => không lọc theo trạng thái
-    pageSize: 10,
+    pageSize: 6,
     page: 1
   };
 
@@ -29,12 +29,13 @@ export class HoaDonComponent implements OnInit {
     totalElements: number;
     currentPage: number;
     pageSize: number;
-    totalPages?: number;
+    totalPages: number;
   } = {
     content: [],
     totalElements: 0,
     currentPage: 1,
-    pageSize: 10
+    pageSize: 6,
+    totalPages: 1
   };
 
   // Các biến cho popup hiển thị chi tiết hóa đơn
@@ -92,27 +93,32 @@ export class HoaDonComponent implements OnInit {
       ngayTaoFrom: null,
       ngayTaoTo: null,
       listTrangThai: null,
-      pageSize: 10,
+      pageSize: 6,
       page: 1
     };
     this.loadHoaDons();
   }
 
-  // Chuyển trang: Prev
-  prevPage(): void {
-    if (this.searchRequest.page > 1) {
-      this.searchRequest.page--;
-      this.loadHoaDons();
-    }
-  }
+ // Tính tổng số trang dựa trên `totalElements` và `pageSize`
+calculateTotalPages(): void {
+  this.hoaDons.totalPages = Math.ceil(this.hoaDons.totalElements / this.hoaDons.pageSize);
+}
 
-  // Chuyển trang: Next
-  nextPage(): void {
-    if (this.searchRequest.page < (this.hoaDons.totalPages || 1)) {
-      this.searchRequest.page++;
-      this.loadHoaDons();
-    }
+// Chuyển trang: Prev
+prevPage(): void {
+  if (this.searchRequest.page > 1) {
+    this.searchRequest.page--;
+    this.loadHoaDons();
   }
+}
+
+// Chuyển trang: Next
+nextPage(): void {
+  if (this.searchRequest.page < this.hoaDons.totalPages) {
+    this.searchRequest.page++;
+    this.loadHoaDons();
+  }
+}
 
   // Hàm chọn hóa đơn để hiển thị chi tiết (popup)
   selectHoaDonChiTiet(invoice: HoaDonResponse): void {

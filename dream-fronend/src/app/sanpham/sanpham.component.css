@@ -13,12 +13,11 @@
   color: #294764;
   font-weight: bold;
   margin: 0;
-  padding-left: 15px;
 }
 
 .search-input {
   border: none; /* Bỏ viền */
-  border-bottom: 1px solid #294764; /* Chỉ có gạch dưới */
+  border-bottom: 0.5px solid #294764; /* Chỉ có gạch dưới */
   border-radius: 0; /* Không bo góc */
   padding: 5px 0; /* Căn chỉnh padding */
   font-size: 14px;
@@ -31,14 +30,12 @@
 }
 
 .title {
-  padding-left: 15px;
   font-size: 18px;
   font-weight: bold;
   color: #294764;
 }
 
 .title1 {
-  margin-left: -3px;
   font-size: 18px;
   font-weight: bold;
   color: #294764;
@@ -46,10 +43,6 @@
 }
 .button-row {
   margin-left: -3px; /* Đồng nhất khoảng cách với bảng */
-}
-
-.table-container {
-  margin-left: 20px; /* Điều chỉnh bảng sát nút Thêm sản phẩm */
 }
 
 /* Tạo màu nền xen kẽ giống bảng sản phẩm chi tiết */
@@ -66,7 +59,6 @@
 }
 .table-container {
   margin-top: 7px; /* Đẩy cả bảng và nút lên trên */
-  margin-left: 20px;
   width: 97%;
   padding: 0px;
   box-sizing: border-box;
@@ -180,7 +172,6 @@
 .bordered-container {
   height: 130px;
   width: 97%;
-  margin-left: 17px;
   /* border: 1px solid rgba(41, 71, 100, 0.5); Giảm độ dày và làm mờ màu viền */
   padding: 20px; /* Khoảng cách giữa viền và nội dung */
   border-radius: 8px; /* Bo tròn góc */

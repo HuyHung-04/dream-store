@@ -19,6 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -179,4 +180,10 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
     public Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable) {
         return sanPhamChiTietRepository.getSanPhamForBanHang(pageable);
     }
+
+    public Page<GetSanPhamToBanHangRespone> locSanPham(String tenSanPham, String mauSac, String size, int page, int sizePage) {
+        Pageable pageable = PageRequest.of(page, sizePage);
+        return sanPhamChiTietRepository.searchSanPhamForBanHang(tenSanPham, mauSac, size, pageable);
+    }
+
 }

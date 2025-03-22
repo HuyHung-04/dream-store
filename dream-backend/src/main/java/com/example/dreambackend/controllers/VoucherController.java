@@ -59,5 +59,16 @@ public class VoucherController {
         }
 
     }
-
+    @GetMapping("/loc-trang-thai")
+    public ResponseEntity<Page<Voucher>> findByTrangThai(@RequestParam int trangThai,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "8") int size){
+        if(trangThai==3){
+            Page<Voucher> pagedVouchers = voucherService.getAllVoucherPaged(page, size);
+            return ResponseEntity.ok(pagedVouchers);
+        }else{
+            Page<Voucher> pagedVouchers = voucherService.getAllVoucherByTrangThai(trangThai,page, size);
+            return ResponseEntity.ok(pagedVouchers);
+        }
+    }
 }

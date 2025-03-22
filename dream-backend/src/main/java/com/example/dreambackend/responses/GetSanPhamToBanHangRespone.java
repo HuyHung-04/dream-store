@@ -24,4 +24,6 @@ public class GetSanPhamToBanHangRespone {
     private String tenSize; // size
 
     private Double giaTriGiam; // bảng khuyến mại
+
+    private String anhUrl;
 }
