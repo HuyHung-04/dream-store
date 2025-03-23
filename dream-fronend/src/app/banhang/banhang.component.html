@@ -5,7 +5,7 @@
       </button>
       <div class="invoice-list">
         <button
-          *ngFor="let invoice of invoices; trackBy: trackById"
+          *ngFor="let invoice of invoices.slice(0,5); trackBy: trackById"
           class="invoice-btn"
           [class.active]="selectedInvoice?.id === invoice.id"
           (click)="selectInvoice(invoice)">
@@ -159,7 +159,7 @@
 
        <!-- Chọn nhân viên -->
        <div class="input-group">
-        <label style="color: #294764; font-weight: bold;" for="">Nhân viên</label>
+        <label style="color: #294764; font-weight: bold;">Nhân viên</label>
           <select class="custom-input" [(ngModel)]="selectedNhanVien" style="width: 285px;">
             <option *ngFor="let nv of danhSachNhanVien" [ngValue]="nv.id">
               {{ nv.ten }}
@@ -193,7 +193,7 @@
     <div class="payment-container">
       <h2 class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán</h2>
       <div class="input-group">
-        <label style="color: #294764; font-weight: bold;" for="">Hình thức thanh toán</label>
+        <label style="color: #294764; font-weight: bold;">Hình thức thanh toán</label>
         <select [(ngModel)]="selectedPaymentMethod" class="custom-input" style="width: 285px;">
           <option *ngFor="let method of paymentMethods" [value]="method.id">
             {{ method.ten}}

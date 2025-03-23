@@ -8,13 +8,13 @@ import {map} from 'rxjs/operators';
 })
 export class BanhangService {
 
-  private apiUrl = 'http://localhost:8080/api/san-pham-chi-tiet/ban-hang';
-  private apiUrlHD = 'http://localhost:8080/api/hoa-don';
-  private apiUrlKH = 'http://localhost:8080/api/khach-hang';
-  private apiUrlNV = 'http://localhost:8080/api';
-  private apiUrlHDCT = 'http://localhost:8080/api/hoa-don-chi-tiet';
-  private apiUrlPTTT = 'http://localhost:8080/api/phuong-thuc-thanh-toan';
-  private apiVoucher = 'http://localhost:8080/api/voucher';
+  private apiUrl = 'http://localhost:8889/api/san-pham-chi-tiet/ban-hang';
+  private apiUrlHD = 'http://localhost:8889/api/hoa-don';
+  private apiUrlKH = 'http://localhost:8889/api/khach-hang';
+  private apiUrlNV = 'http://localhost:8889/api';
+  private apiUrlHDCT = 'http://localhost:8889/api/hoa-don-chi-tiet';
+  private apiUrlPTTT = 'http://localhost:8889/api/phuong-thuc-thanh-toan';
+  private apiVoucher = 'http://localhost:8889/api/voucher';
 
   constructor(private http: HttpClient) { }
 
@@ -118,15 +118,15 @@ export class BanhangService {
   }
 
   getDanhSachMau(): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/api/mau-sac/hien-thi');
+    return this.http.get<any>('http://localhost:8889/api/mau-sac/hien-thi');
   }
 
   getDanhSachSize(): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/api/size/hien-thi');
+    return this.http.get<any>('http://localhost:8889/api/size/hien-thi');
   }
 
   locSanPham(params: HttpParams): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/api/san-pham-chi-tiet/loc-ban-hang', { params });
+    return this.http.get<any>('http://localhost:8889/api/san-pham-chi-tiet/loc-ban-hang', { params });
   }
   exportHoaDonPDF(hoaDonId: number): Observable<Blob> {
     const apiUrl = `${this.apiUrlHD}/${hoaDonId}/export-pdf`;

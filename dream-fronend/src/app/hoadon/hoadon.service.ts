@@ -72,8 +72,8 @@ export interface HoaDonSearchRequest {
   providedIn: 'root'
 })
 export class HoaDonService {
-  private readonly apiUrl = 'http://localhost:8080/api/hoa-don';
-  private readonly apiUrlHDCT = 'http://localhost:8080/api/hoa-don-chi-tiet';
+  private readonly apiUrl = 'http://localhost:8889/api/hoa-don';
+  private readonly apiUrlHDCT = 'http://localhost:8889/api/hoa-don-chi-tiet';
 
   constructor(private http: HttpClient) {
   }
