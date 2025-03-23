@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class HoaDonService implements IHoaDonService {
@@ -38,9 +39,23 @@ public class HoaDonService implements IHoaDonService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public HoaDonResponse updateHoaDon(Integer id, HoaDonRequest request) {
         HoaDon hoaDon = hoaDonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
+
+        // Cập nhật thông tin chung của hóa đơn
+        updateHoaDonInfo(hoaDon, request);
+
+        // Cập nhật voucher (nếu có)
+        if (request.getIdVoucher() != null) {
+            updateVoucherForHoaDon(hoaDon, request.getIdVoucher());
+        }
+
+        return convertToDTO(hoaDonRepository.save(hoaDon));
+    }
+
+    private void updateHoaDonInfo(HoaDon hoaDon, HoaDonRequest request) {
         hoaDon.setTenNguoiNhan(request.getTenNguoiNhan());
         hoaDon.setSdtNguoiNhan(request.getSdtNguoiNhan());
         hoaDon.setDiaChiNhanHang(request.getDiaChiNhanHang());
@@ -49,13 +64,15 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setTongTienTruocVoucher(request.getTongTienTruocVoucher());
         hoaDon.setTrangThai(request.getTrangThai());
         hoaDon.setNgaySua(LocalDate.now());
+    }
 
-        if (request.getIdVoucher() != null) {
-            Voucher newVoucher = voucherRepository.findById(request.getIdVoucher())
-                    .orElseThrow(() -> new RuntimeException("Voucher không tồn tại"));
+    private void updateVoucherForHoaDon(HoaDon hoaDon, Integer idVoucher) {
+        Voucher newVoucher = voucherRepository.findById(idVoucher)
+                .orElseThrow(() -> new RuntimeException("Voucher không tồn tại"));
 
-            Voucher oldVoucher = hoaDon.getVoucher();
+        Voucher oldVoucher = hoaDon.getVoucher();
 
+        if (!Objects.equals(oldVoucher, newVoucher)) {
             if (oldVoucher != null) {
                 oldVoucher.setSoLuong(oldVoucher.getSoLuong() + 1);
                 voucherRepository.save(oldVoucher);
@@ -64,14 +81,14 @@ public class HoaDonService implements IHoaDonService {
             if (newVoucher.getSoLuong() <= 0) {
                 throw new RuntimeException("Voucher đã hết số lượng");
             }
+
             newVoucher.setSoLuong(newVoucher.getSoLuong() - 1);
             voucherRepository.save(newVoucher);
 
             hoaDon.setVoucher(newVoucher);
         }
-
-        return convertToDTO(hoaDonRepository.save(hoaDon));
     }
+
 
     @Override
     public HoaDonResponse createHoaDon(HoaDonRequest request) {
