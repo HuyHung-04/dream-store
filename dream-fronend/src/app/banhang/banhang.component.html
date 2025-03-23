@@ -196,10 +196,10 @@
 
       <!-- thanh toán -->
     <div class="payment-container">
-      <h2 class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán</h2>
+      <h2 style="color: #294764; font-weight: bold;" class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán</h2>
       <div class="input-group">
         <label style="color: #294764; font-weight: bold;" for="">Phương thức thanh toán</label>
-        <select [(ngModel)]="selectedPaymentMethod" class="custom-input" style="width: 285px;">
+        <select [(ngModel)]="selectedPaymentMethod" class="custom-input" style="width: 285px;"  (change)="kiemTraMoModal()">
           <option *ngFor="let method of paymentMethods" [value]="method.id">
             {{ method.ten}}
           </option>
@@ -229,4 +229,18 @@
         <button class="btn btn-danger" (click)="hienThiDanhSachKhachHang = false">Đóng</button>
       </div>
     </div>
+<!-- Overlay làm tối màn hình -->
+  <div *ngIf="quetQr" class="modal-overlay">
+    <!-- Modal -->
+    <div class="modalQr">
+      <div class="modal-contentQr"> 
+        <button class="btn btn-danger" (click)="closeQuetQr()">X</button>
+        <div>
+          <h3>Mã QR chuyển khoản:</h3>
+          <img [src]="qrUrl" alt="QR code chuyển khoản" />
+        </div>
+      </div>
+    </div>
+  </div>
+
 

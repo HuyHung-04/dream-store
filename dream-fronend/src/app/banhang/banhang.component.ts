@@ -44,7 +44,13 @@ export class BanhangComponent implements OnInit {
   selectedDiscount: any = null;
   paymentMethods: any[] = [];
   selectedPaymentMethod: string = '';
+  quetQr: boolean = false;
 
+  bankId = 'vietinbank'; // mã ngân hàng viết thường
+  accountNo = '0379083813';
+  template = 'compact';
+  addInfo = 'thanh toan hoa don';
+  accountName = 'HOANG HUY HUNG';
 
   constructor(private banhangService: BanhangService, private cdr: ChangeDetectorRef) { }
 
@@ -287,6 +293,8 @@ export class BanhangComponent implements OnInit {
       alert("Sản phẩm đã hết hàng!");
       return;
     }
+
+    
 
     let existingItem = this.cart.find(item => item.id === product.id);
     if (existingItem) {
@@ -611,6 +619,30 @@ export class BanhangComponent implements OnInit {
         }
       );
     }
+  }
+
+  get qrUrl(): string {
+    const amount = this.selectedInvoice?.tongTienThanhToan || 0;
+    const encodedInfo = encodeURIComponent(this.addInfo);
+    const encodedName = encodeURIComponent(this.accountName);
+    return `https://img.vietqr.io/image/${this.bankId}-${this.accountNo}-${this.template}.png?amount=${amount}&addInfo=${encodedInfo}&accountName=${encodedName}`;
+  }
+
+  kiemTraMoModal() {
+    console.log(this.selectedPaymentMethod)
+    if (Number(this.selectedPaymentMethod) === 3) {
+      this.openQuetQr();
+    } else {
+      this.closeQuetQr();
+    }
+  }
+  
+  openQuetQr(){
+    this.quetQr = true;
+  }
+
+  closeQuetQr(){
+    this.quetQr = false;
   }
 
 }
