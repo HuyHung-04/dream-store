@@ -118,15 +118,15 @@ export class BanhangService {
   }
 
   getDanhSachMau(): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/api/mau-sac/hien-thi');
+    return this.http.get<any>('http://localhost:8889/api/mau-sac/hien-thi');
   }
 
   getDanhSachSize(): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/api/size/hien-thi');
+    return this.http.get<any>('http://localhost:8889/api/size/hien-thi');
   }
 
   locSanPham(params: HttpParams): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/api/san-pham-chi-tiet/loc-ban-hang', { params });
+    return this.http.get<any>('http://localhost:8889/api/san-pham-chi-tiet/loc-ban-hang', { params });
   }
   exportHoaDonPDF(hoaDonId: number): Observable<Blob> {
     const apiUrl = `${this.apiUrlHD}/${hoaDonId}/export-pdf`;

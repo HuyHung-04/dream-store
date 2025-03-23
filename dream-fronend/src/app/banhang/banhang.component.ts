@@ -302,7 +302,6 @@ export class BanhangComponent implements OnInit {
 
     this.cart = [...this.cart]; // Cập nhật lại danh sách giỏ hàng
 
-    // Gọi API thêm sản phẩm vào hóa đơn
     this.banhangService.addSanPhamToHoaDon(hoaDonId, product.id, 1).subscribe(
       response => {
         console.log('Thêm sản phẩm vào hóa đơn:', response);
@@ -388,11 +387,13 @@ export class BanhangComponent implements OnInit {
   // Lấy thông tin voucher chi tiết và cập nhật giảm giá
   updateVoucher() {
     const total = this.getTotal();
+
     this.banhangService.getDetailVoucher(this.selectedDiscount).subscribe((voucher: any) => {
       if (!voucher) {
         alert("Không tìm thấy thông tin voucher!");
         return;
       }
+
       console.log("Voucher từ API:", voucher);
       if (voucher.hinhThucGiam) {
         this.discountAmount = voucher.giaTriGiam;
@@ -491,13 +492,17 @@ export class BanhangComponent implements OnInit {
     const totalAfterVoucher = preVoucher - this.discountAmount;
     const updatedInvoice = {
       ...this.selectedInvoice,
+      idVoucher: this.selectedDiscount,
+      idPhuongThucThanhToan: this.selectedPaymentMethod,
       tongTienTruocVoucher: preVoucher,
       tongTienThanhToan: totalAfterVoucher
     };
+    console.log(updatedInvoice);
 
     if (updatedInvoice && updatedInvoice.id) {
       this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
         response => {
+          debugger
           this.selectedInvoice = response;
           console.log('Cập nhật hóa đơn thành công:', response);
         },
