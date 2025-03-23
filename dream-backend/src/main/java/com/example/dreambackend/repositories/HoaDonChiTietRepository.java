@@ -87,11 +87,10 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
                 	hdct.don_gia AS gia,
                 	hdct.so_luong AS soLuong,
                 	hdct.trang_thai AS trangThai,
-                	km.hinh_thuc_giam AS hinhThucGiam,
-                	km.gia_tri_giam AS giaTriGiam,
                 	vc.ten AS tenVoucher,
                 	vc.hinh_thuc_giam AS hinhThucGiam,
                 	vc.gia_tri_giam AS giaTriGiam,
+                	km.gia_tri_giam AS giaTriGiamKM,
                 	nv.ten AS tenNhanVien,
                 	COUNT(1) OVER () AS totalRecords
                 FROM hoa_don_chi_tiet hdct
@@ -210,7 +209,6 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     """, nativeQuery = true)
     List<Object[]> findChiTietByMaHoaDon(@Param("maHoaDon") String maHoaDon);
 
-
     @Query(value = """
     SELECT 
         hd.id AS idHoaDon,
@@ -234,9 +232,11 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     JOIN san_pham sp ON spct.id_san_pham = sp.id
     JOIN mau_sac ms ON spct.id_mau_sac = ms.id
     JOIN size sz ON spct.id_size = sz.id
-    ORDER BY hd.id DESC  -- Sắp xếp hóa đơn theo id giảm dần
+    WHERE hd.trang_thai IN (1, 2, 3, 4, 5)
+    ORDER BY hd.id DESC
 """, nativeQuery = true)
     List<Object[]> getHoaDonChiTiet();
+
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
             "JOIN FETCH hdct.hoaDon hd " +

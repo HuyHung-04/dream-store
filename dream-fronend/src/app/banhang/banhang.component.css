@@ -240,6 +240,13 @@ button {
   width: 100%;
   height: 70px;
 }
+.cancel-btn {
+  margin-top: 10px;
+  display: block;
+  visibility: visible;
+  font-size: 14px;
+}
+
 /* lọc và tìm tiếm chuyển hàng ngang */
 .product-filters {
   display: flex;

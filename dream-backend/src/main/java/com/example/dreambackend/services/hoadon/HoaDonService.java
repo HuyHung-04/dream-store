@@ -51,9 +51,23 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setNgaySua(LocalDate.now());
 
         if (request.getIdVoucher() != null) {
-            Voucher voucher = voucherRepository.findById(request.getIdVoucher())
+            Voucher newVoucher = voucherRepository.findById(request.getIdVoucher())
                     .orElseThrow(() -> new RuntimeException("Voucher không tồn tại"));
-            hoaDon.setVoucher(voucher);
+
+            Voucher oldVoucher = hoaDon.getVoucher();
+
+            if (oldVoucher != null) {
+                oldVoucher.setSoLuong(oldVoucher.getSoLuong() + 1);
+                voucherRepository.save(oldVoucher);
+            }
+
+            if (newVoucher.getSoLuong() <= 0) {
+                throw new RuntimeException("Voucher đã hết số lượng");
+            }
+            newVoucher.setSoLuong(newVoucher.getSoLuong() - 1);
+            voucherRepository.save(newVoucher);
+
+            hoaDon.setVoucher(newVoucher);
         }
 
         return convertToDTO(hoaDonRepository.save(hoaDon));
@@ -91,27 +105,31 @@ public class HoaDonService implements IHoaDonService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void cancelHoaDon(Integer id) {
+    public void cancelHoaDon(Integer id,String ghiChu) {
         HoaDon hoaDon = hoaDonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hoá đơn không tồn tại"));
 
-        if (hoaDon.getTrangThai() != 1) {
-            throw new RuntimeException("Không thể huỷ hoá đơn trong trang thái chờ");
-        }
+        if (hoaDon.getTrangThai() ==1 || hoaDon.getTrangThai() == 6) {
+            hoaDon.setTrangThai(8);
+            if (hoaDon.getTrangThai() == 1) {
+                hoaDon.setGhiChu(ghiChu);
+            }
+            hoaDonRepository.save(hoaDon);
 
-        hoaDon.setTrangThai(4);
-        hoaDonRepository.save(hoaDon);
+            List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByHoaDonId(id);
+            for (HoaDonChiTiet hdct : list) {
+                SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
+                spct.setSoLuong(spct.getSoLuong() + hdct.getSoLuong());
+                sanPhamChiTietRepository.save(spct);
+            }
 
-        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByHoaDonId(id);
-        List<SanPhamChiTiet> listSPCT = new ArrayList<>();
-        for (HoaDonChiTiet hdct : list) {
-            listSPCT.add(hdct.getSanPhamChiTiet());
-        }
-        for (SanPhamChiTiet sanPhamChiTiet : listSPCT) {
-            SanPhamChiTiet spct = sanPhamChiTietRepository.findById(sanPhamChiTiet.getId())
-                    .orElseThrow(() -> new RuntimeException("Sản phầm chi tiết không tồn tại"));
-            sanPhamChiTiet.setSoLuong(sanPhamChiTiet.getSoLuong() + spct.getSoLuong());
-            sanPhamChiTietRepository.save(sanPhamChiTiet);
+            if (hoaDon.getVoucher() != null) {
+                Voucher voucher = hoaDon.getVoucher();
+                voucher.setSoLuong(voucher.getSoLuong() + 1);
+                voucherRepository.save(voucher);
+            }
+        } else{
+            throw new RuntimeException("Không thể huỷ hoá đơn");
         }
     }
 

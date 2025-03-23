@@ -1,48 +1,3 @@
-/* Định dạng bảng hoá đơn online */
-/* .table-don-on {
-  margin-top: -80px;
-  width: 100%;
-  overflow-x: auto;
-}
-.table-don-on table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.table-don-on thead tr {
-  background-color: #294764;
-  color: white;
-  text-align: left;
-  
-}
-.table-don-on th, .table-don-on td {
-  font-size: 12px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center; /* Căn giữa nội dung */
-  /* vertical-align: middle; /* Căn giữa theo chiều dọc */
-/* }
-.table-don-on tbody tr:nth-child(even) {
-  background-color: #f5f5f5;
-}  */
-/* Css nút xác nhận*/
-/* .btn-xac-nhan{
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  color: white;
-}
-.btn-xac-nhan {
-  padding-right: 20px;
-  background-color: #294764; /* Màu xanh đậm */
-/* }
- .disabled-btn { /* chuyển màu nếu trạng thái là đã giao hàng */
-  /* background-color: #a59b9b !important; Màu xám */
-  /* color: #294764;
-  cursor: not-allowed;
-}   */
-
 /* css nút xem chi tiết */
 .xem-chi-tiet {
   background-color: #294764; /* Màu xanh đậm */
@@ -137,27 +92,6 @@
   font-size: 16px;
   color: #294764;
 }
-/* button tìm kiếm */
-.button-search {
-  display: flex;
-  padding-top: 10px;
-}
-
-.button-search button {
-  background-color: #294764;
-  color: white;
-  border: none;
-  padding: 7px 10px;
-  font-size: 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 70px; /* Chiều rộng tối đa */
-  transition: background-color 0.3s ease;
-}
-
-.button-search button:hover {
-  background-color: #1f3654;
-}
 .form-date {
   padding-top: -40px;
   display: flex;
@@ -178,62 +112,53 @@
   border-radius: 5px;
   font-size: 12px;
 }
-.btn-doi-trang-thai:hover {
-  background-color: #1b4fb8;
-}
-
 .modal {
   position: fixed;
   z-index: 1000;
-  left: 0;
-  top: 0;
+  left: 58%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .modal-content {
-  background-color: #ffffff;
-  border-radius: 10px;
-  width: 1000px;
+  border-radius: 0; 
+  width: 900px;
+  max-height: 100vh;
+  overflow-y: auto;
   position: relative;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  background-color: white;
+  border: none; /* Loại bỏ viền */
+  box-shadow: none; /* Loại bỏ hiệu ứng đổ bóng */
+  outline: none; /* Loại bỏ đường viền khi focus */
+}
+
+.invoice-container {
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .modal-body {
-  padding: 10px 0;
-  text-align: center;
+  padding: 20px;
 }
-
-.close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-
 
 .invoice-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .invoice-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
 }
+
 
 .invoice-header h3{
   color: #294764;
@@ -241,7 +166,6 @@
 }
 
 .invoice-code {
-  padding-top: 5px;
   font-weight: bold;
   color: #294764;
 }
@@ -267,149 +191,26 @@
   color: #294764;
 }
 
-/* .text-success {
-  color: green;
-  font-weight: bold;
-}
-
-.text-warning {
-  color: orange;
-  font-weight: bold;
-}
-
-.text-danger {
-  color: red;
-  font-weight: bold;
-} */
-
-@media (max-width: 600px) {
-  .invoice-container {
-    padding: 10px;
-  }
-
-  .invoice-code {
-    font-size: 1em;
-  }
-
-  .section h3 {
-    font-size: 1em;
-  }
-}
-
-.order-status-container {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.status-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.back-btn {
-  background: none;
-  border: none;
-  color: #007BFF;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.order-info {
-  display: flex;
-  gap: 15px;
-}
-
-.order-info span {
-  font-weight: bold;
-}
-
-.order-info .completed {
-  color: #28a745;
-}
-
-.status-tracker {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.status-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  position: relative;
-}
-.status-icon {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #ccc;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  margin-bottom: 5px;
-  background-color: #fff;
-  transition: all 0.3s;
-}
-
-.status-step p {
-  margin: 0;
-  color: #294764;
-  font-weight: bold;
-}
-
-.status-step small {
-  color: #888;
-}
-
-.status-line {
-  height: 3px;
-  background-color: black;
-  flex: 1;
-  margin: 0 10px;
-  transition: all 0.3s;
-}
-
-/* Trạng thái đã hoàn thành */
-.status-step.active .status-icon {
-  border-color: #28a745;
-  background-color: #28a745;
-  color: #fff;
-}
-
-.status-step.active p {
-  color: #28a745;
-}
-
-.status-line.active {
-  background-color: #28a745;
-}
-
 /* Chi tiết hóa đơn - Hiển thị ảnh và thông tin cùng hàng */
 .invoice-details-item {
-display: flex; /* Sử dụng Flexbox để chia layout thành 2 cột */
-justify-content: space-between; /* Đặt khoảng cách giữa ảnh và thông tin */
-align-items: center; /* Căn chỉnh theo chiều dọc */
-margin-bottom: 20px; /* Thêm khoảng cách giữa các mục */
+  display: flex; /* Sử dụng Flexbox để chia layout thành 2 cột */
+  justify-content: space-between; /* Đặt khoảng cách giữa ảnh và thông tin */
+  align-items: center; /* Căn chỉnh theo chiều dọc */
+  margin-bottom: 20px; /* Thêm khoảng cách giữa các mục */
 }
 
 /* Định dạng cho ảnh */
 .invoice-details-item img {
-width: 150px; /* Giảm kích thước ảnh */
-height: 150px; /* Giảm chiều cao ảnh */
-object-fit: cover; /* Đảm bảo ảnh không bị méo */
-margin-right: 20px; /* Khoảng cách giữa ảnh và thông tin */
+  width: 170px; /* Giảm kích thước ảnh */
+  height: 170px; /* Giảm chiều cao ảnh */
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+  margin-right: 20px; /* Khoảng cách giữa ảnh và thông tin */
 }
 
 /* Thông tin sản phẩm - Nằm bên phải ảnh */
 .invoice-details-info {
-flex: 1; /* Chiếm hết không gian còn lại */
+  flex: 1; /* Chiếm hết không gian còn lại */
+  padding-left: 150px;
 }
 
 /* Định dạng tiêu đề sản phẩm */
@@ -482,3 +283,130 @@ button:hover {
   font-style: italic; /* Làm nghiêng ngày hoàn thành */
   color: #6c757d; /* Màu xám nhạt cho ngày hoàn thành */
 }
+
+
+.cancelHoaDon {
+  background-color: #f8d7da; /* Màu nền nhẹ nhàng (màu đỏ nhạt) */
+  border: 1px solid #f5c6cb; /* Viền màu đỏ nhạt */
+  border-radius: 5px; /* Bo góc */
+  padding: 15px; /* Khoảng cách giữa nội dung và viền */
+  margin-top: 20px; /* Khoảng cách với các phần khác */
+  text-align: left; /* Căn giữa nội dung */
+  font-size: 20px; /* Kích thước chữ */
+}
+
+.cancelHoaDon p {
+  font-weight: bold; /* Làm đậm văn bản "Đơn hàng đã bị hủy" */
+  color: red; /* Màu chữ đỏ đậm để nổi bật */
+}
+
+.cancelHoaDon small {
+  display: block;
+  margin-top: 10px; /* Khoảng cách với phần nội dung chính */
+  font-style: italic; /* Làm nghiêng ngày hoàn thành */
+  color: #6c757d; /* Màu xám nhạt cho ngày hoàn thành */
+}
+
+.cancelHoaDon {
+  background-color: #f8d7da; /* Màu nền nhẹ nhàng (màu đỏ nhạt) */
+  border: 1px solid #f5c6cb; /* Viền màu đỏ nhạt */
+  border-radius: 5px; /* Bo góc */
+  padding: 15px; /* Khoảng cách giữa nội dung và viền */
+  margin-top: 20px; /* Khoảng cách với các phần khác */
+  text-align: left; /* Căn giữa nội dung */
+  font-size: 20px; /* Kích thước chữ */
+}
+
+.cancelHoaDon p {
+  font-weight: bold; /* Làm đậm văn bản "Đơn hàng đã bị hủy" */
+  color: red; /* Màu chữ đỏ đậm để nổi bật */
+}
+
+.cancelHoaDon small {
+  display: block;
+  margin-top: 10px; /* Khoảng cách với phần nội dung chính */
+  font-style: italic; /* Làm nghiêng ngày hoàn thành */
+  color: #6c757d; /* Màu xám nhạt cho ngày hoàn thành */
+}
+
+.modal-overlay-huy {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Nền tối mờ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Đảm bảo nằm trên tất cả */
+}
+
+.modal-huy {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-huy h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.modal-huy textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  gap: 10px;
+}
+
+.modal-buttons .btn {
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-buttons .btn-secondary {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.modal-buttons .btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+/* Hiệu ứng fade */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HoaDonService, HoaDonSearchRequest, HoaDonResponse } from './hoadon.service';
+import {
+  HoaDonService,
+  HoaDonSearchRequest,
+  HoaDonResponse,
+  HoaDonChiTietResponse,
+  HoaDonChiTietSearchRequest
+} from './hoadon.service';
 
 @Component({
   selector: 'app-hoadon',
@@ -18,7 +24,10 @@ export class HoaDonComponent implements OnInit {
     tenNhanVien: '',
     ngayTaoFrom: null,
     ngayTaoTo: null,
-    listTrangThai: null, // Nếu null => không lọc theo trạng thái
+    ngaySuaFrom: null,
+    ngaySuaTo:null,
+    sdtNguoiNhan:'',
+    listTrangThai: null,
     pageSize: 6,
     page: 1
   };
@@ -37,18 +46,18 @@ export class HoaDonComponent implements OnInit {
     pageSize: 6,
     totalPages: 1
   };
-
+  // selectedInvoiceDetail: HoaDonChiTietResponse[] | null = null;
   // Các biến cho popup hiển thị chi tiết hóa đơn
   selectedInvoiceDetail: HoaDonResponse | null = null;
   showDetailPopup: boolean = false;
   chiTietHoaDonData: any[] = [];
-  hoaDonData: any = null; // ✅ sửa lại kiểu dữ liệu
-
+  hoaDonData: any = null; // sửa lại kiểu dữ liệu
+  showCancelModal = false; // Trạng thái hiển thị modal
+  ghiChu: string = '';     // Lưu lý do hủy
   constructor(private hoaDonService: HoaDonService) {}
 
   ngOnInit(): void {
     this.loadHoaDons();
- 
   }
 
   // Load danh sách hóa đơn từ backend
@@ -95,6 +104,9 @@ export class HoaDonComponent implements OnInit {
       tenNhanVien: '',
       ngayTaoFrom: null,
       ngayTaoTo: null,
+      ngaySuaFrom: null,
+      ngaySuaTo: null,
+      sdtNguoiNhan: '',
       listTrangThai: null,
       pageSize: 6,
       page: 1
@@ -130,11 +142,11 @@ selectHoaDonChiTiet(invoice: HoaDonResponse): void {
   this.hoaDonService.getChiTietHoaDon(maHoaDon).subscribe({
     next: (res) => {
       this.chiTietHoaDonData = res;
-      console.log("📦 Chi tiết sản phẩm:", res);
-      
+      console.log("Chi tiết sản phẩm:", res);
+
     },
     error: (err) => {
-      console.error("❌ Lỗi khi lấy chi tiết hóa đơn:", err);
+      console.error("Lỗi khi lấy chi tiết hóa đơn:", err);
     }
   });
 
@@ -143,13 +155,13 @@ selectHoaDonChiTiet(invoice: HoaDonResponse): void {
     next: (res) => {
       this.hoaDonData = res;
       this.showDetailPopup = true;
-      console.log("ℹ️ Hóa đơn chi tiết:", res);
+      console.log("ℹHóa đơn chi tiết:", res);
     },
     error: (err) => {
-      console.error("❌ Lỗi khi lấy hóa đơn theo mã:", err);
+      console.error("Lỗi khi lấy hóa đơn theo mã:", err);
     }
   });
-  
+
 }
 
   // Hàm đóng popup chi tiết hóa đơn
@@ -166,9 +178,11 @@ getTrangThaiText(trangThai: number): string {
     case 1: return 'Chờ xác nhận';
     case 2: return 'Đã xác nhận';
     case 3: return 'Đang giao hàng';
-    case 4: return 'Giao hàng hoàn tất';
+    case 4: return 'Giao hàng thành công';
     case 5: return 'Hủy đơn';
-    case 6: return 'Chờ thanh toán';
+    case 6: return 'Chưa thanh toán';
+    case 7: return 'Đã thanh toán'
+    case 8: return 'Huỷ đơn'
     default: return 'Không xác định';
   }
 }
@@ -195,8 +209,70 @@ doiTrangThai(invoice: HoaDonResponse): void {
   }
 }
 
-// Phương thức xử lý nút "Quay Về Trang Chủ"
-goHome(): void {
-this.showDetailPopup=false
+// Phương thức hủy hóa đơn
+cancelHoaDon(maHoaDon: string): void {
+  if (this.hoaDonData.trangThai === 2) {
+    alert('Đơn hàng đã xác nhận, không thể hủy đơn.');
+    return;
+  }
+
+  if (this.hoaDonData.trangThai === 3) {
+    alert('Đơn hàng đang giao, không thể hủy đơn.');
+    return;
+  }
+
+  if (this.hoaDonData.trangThai === 4) {
+    alert('Đơn hàng đã giao, không thể hủy đơn.');
+    return;
+  }
+
+  if (!this.ghiChu.trim()) {
+    alert('Vui lòng nhập lý do hủy hóa đơn.');
+    return;
+  }
+
+  const xacNhanHuy = window.confirm("Bạn có chắc chắn muốn hủy hóa đơn này?");
+  if (!xacNhanHuy) return;
+
+  this.hoaDonService.huyHoaDon(maHoaDon, this.ghiChu).subscribe(
+    (response) => {
+      console.log('Hóa đơn đã bị hủy:', response);
+      this.hoaDonData.trangThai = 5; // cập nhật UI nếu cần
+      this.showCancelModal = false;
+
+      // 👉 Cập nhật trạng thái trong danh sách bảng bên ngoài
+      const invoiceInList = this.hoaDons.content.find(item => item.maHoaDon === maHoaDon);
+      if (invoiceInList) {
+        invoiceInList.trangThai = 5;
+      }
+    },
+    (error) => {
+      console.error('Lỗi khi hủy hóa đơn:', error);
+    }
+  );
 }
+
+
+openCancelModal(): void {
+  this.showCancelModal = true;
+}
+
+closeCancelModal(): void {
+  this.showCancelModal = false;
+  this.ghiChu = '';
+}
+// Phương thức xử lý nút "Quay Về Trang Chủ"
+  goHome(): void {
+    this.showDetailPopup=false
+  }
+
+  getTenPhuongThucThanhToan(id: number): string {
+    switch (id) {
+      case 1: return 'Thanh toán khi nhận hàng';
+      case 2: return 'Tiền mặt';
+      case 3: return 'Chuyển khoản';
+      default: return 'Không xác định';
+    }
+  }
+  
 }

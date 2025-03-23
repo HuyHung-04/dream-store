@@ -55,6 +55,15 @@ public class HoaDonController {
         return hoaDonService.getAllHoaDon(request);
     }
 
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<Void> deleteHoaDon(
+            @PathVariable Integer id,
+            @RequestParam(required = false) String ghiChu
+    ) {
+        hoaDonService.cancelHoaDon(id,ghiChu);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<HoaDonResponse> getHoaDon(@PathVariable Integer id) {
         HoaDonResponse response = hoaDonService.findById(id);

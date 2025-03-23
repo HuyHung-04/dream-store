@@ -4,32 +4,38 @@
   </h2>
   <!-- Phần tìm kiếm -->
   <div class="tim-kiem">
-    <p style="color: #294764;font-weight: bold; font-size: 14px;">Tìm kiếm</p>
+    <p style="color: #294764; font-weight: bold; font-size: 14px;">Tìm kiếm</p>
     <div class="input-row">
       <div class="bor">
         <div class="input-field">
           <label class="label-date">Ngày tạo</label>
           <div class="form-date" style="width: 250px;">
-            <input type="date" class="input" id="fromDate">
-            <input type="date" class="input" id="toDate">
+            <input type="date" class="input" id="createdFromDate" [(ngModel)]="searchRequest.ngayTaoFrom"
+                   (change)="search()">
+            <input type="date" class="input" id="createdToDate" [(ngModel)]="searchRequest.ngayTaoTo"
+                   (change)="search()">
           </div>
         </div>
       </div>
-        <div class="input-field">
-          <label class="label-date">Ngày sửa</label>
-          <div class="form-date" style="width: 250px;">
-            <input type="date" class="input" id="fromDate">
-            <input type="date" class="input" id="toDate">
-          </div>
-        </div>
       <div class="input-field">
-        <label for="maHoaDon">Số điện thoại khách hàng</label>
-        <input type="text" id="maHoaDon" class="input" placeholder="Nhập số điện thoại..." style="width: 250px;">
+        <label class="label-date">Ngày sửa</label>
+        <div class="form-date" style="width: 250px;">
+          <input type="date" class="input" id="modifiedFromDate" [(ngModel)]="searchRequest.ngaySuaFrom"
+                 (change)="search()">
+          <input type="date" class="input" id="modifiedToDate" [(ngModel)]="searchRequest.ngaySuaTo"
+                 (change)="search()">
+        </div>
+      </div>
+      <div class="input-field">
+        <label for="customerPhone">Số điện thoại khách hàng</label>
+        <input type="text" id="customerPhone" class="input" placeholder="Nhập số điện thoại..." style="width: 250px;"
+               [(ngModel)]="searchRequest.sdtNguoiNhan" (input)="search()">
       </div>
       <div class="input-field">
         <label for="trangThai">Trạng thái</label>
-        <select class="input" id="trangThai" name="trangThai" style="width: 250px;">
-          <option value="" disabled selected>Tất cả trạng thái</option>
+        <select class="input" id="trangThai" name="trangThai" style="width: 250px;"
+                [(ngModel)]="searchRequest.listTrangThai" (change)="search()">
+          <option value="">Tất cả trạng thái</option>
           <option value="1">Chờ xác nhận</option>
           <option value="2">Đã xác nhận</option>
           <option value="3">Đang giao hàng</option>
@@ -42,26 +48,30 @@
     </div>
     <div class="input-row">
       <div class="input-field">
-        <label for="maHoaDon">Mã hóa đơn</label>
-        <input style="width: 250px;" type="text" id="maHoaDon" class="input" placeholder="Nhập mã hóa đơn..." [(ngModel)]="searchRequest.maHoaDon">
+        <label for="invoiceCode">Mã hóa đơn</label>
+        <input style="width: 250px;" type="text" id="invoiceCode" class="input" placeholder="Nhập mã hóa đơn..."
+               [(ngModel)]="searchRequest.maHoaDon" (input)="search()">
       </div>
       <div class="input-field">
         <label for="tenKhachHang">Tên khách hàng</label>
-        <input style="width: 250px;" type="text" id="tenKhachHang" class="input" placeholder="Nhập tên khách hàng..." [(ngModel)]="searchRequest.tenKhachHang">
+        <input style="width: 250px;" type="text" id="tenKhachHang" class="input" placeholder="Nhập tên khách hàng..."
+               [(ngModel)]="searchRequest.tenKhachHang" (input)="search()">
       </div>
       <div class="input-field">
         <label for="tenNhanVien">Tên nhân viên</label>
-        <input style="width: 250px;" type="text" id="tenNhanVien" class="input" placeholder="Nhập tên nhân viên..." [(ngModel)]="searchRequest.tenNhanVien">
+        <input style="width: 250px;" type="text" id="tenNhanVien" class="input" placeholder="Nhập tên nhân viên..."
+               [(ngModel)]="searchRequest.tenNhanVien" (input)="search()">
       </div>
-      <div class="input-field">
-        <label for="">Loại hoá đơn</label>
-        <select class="input" id="" name="" style="width: 250px;">
-          <option value="" disabled selected>Tất cả hoá đơn</option>
-          <option value="1">Hoá đơn offline</option>
-          <option value="0">Hoá đơn online</option>
-        </select>
-      </div>
-    </div>    
+      <!--      <div class="input-field">-->
+      <!--        <label for="invoiceType">Loại hóa đơn</label>-->
+      <!--        <select class="input" id="invoiceType" name="invoiceType" style="width: 250px;"-->
+      <!--                [(ngModel)]="searchRequest.loaiHoaDon" (change)="search()">-->
+      <!--          <option value="">Tất cả hóa đơn</option>-->
+      <!--          <option value="1">Hóa đơn offline</option>-->
+      <!--          <option value="0">Hóa đơn online</option>-->
+      <!--        </select>-->
+      <!--      </div>-->
+    </div>
   </div>
   <!-- Bảng hiển thị hóa đơn -->
   <div class="table-don-off">
@@ -87,7 +97,7 @@
           <td>{{ invoice.tenKhachHang }}</td>
           <td>{{ invoice.sdtNguoiNhan }}</td>
           <td>{{ invoice.tenNhanVien }}</td>
-          <td>{{ invoice.tenPhuongThucThanhToan }}</td>
+          <td>{{ getTenPhuongThucThanhToan(invoice.idPhuongThucThanhToan) }}</td>
           <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</td>
           <!-- <td>
               <span *ngIf="invoice.tenVoucher; else noVoucher">
@@ -106,13 +116,13 @@
             >
               {{ getTrangThaiText(invoice.trangThai) }}
             </button>
-          
+
             <!-- Nếu không đổi được, chỉ hiển thị text -->
             <span *ngIf="!isTrangThaiCoTheChuyen(invoice.trangThai)">
               {{ getTrangThaiText(invoice.trangThai) }}
             </span>
           </td>
-          
+
           <td>
             <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(invoice)">
               <i class="bi bi-eye-fill"></i>
@@ -131,30 +141,8 @@
       <button (click)="nextPage()" [disabled]="searchRequest.page >= hoaDons.totalPages">
         <i class="bi bi-chevron-double-right"></i>
       </button>
-    </div>    
-
-  <!-- Popup modal hiển thị chi tiết hóa đơn -->
-  <div class="modal" *ngIf="showDetailPopup">
-    <div class="modal-content">
-      <span class="close" (click)="closePopup()">&times;</span>
-      <h3>Chi tiết hóa đơn</h3>
-      <div *ngIf="selectedInvoiceDetail; else loading">
-        <p><strong>Mã hóa đơn:</strong> {{ selectedInvoiceDetail.maHoaDon }}</p>
-        <p><strong>Tên khách hàng:</strong> {{ selectedInvoiceDetail.tenKhachHang }}</p>
-        <p><strong>Tên nhân viên:</strong> {{ selectedInvoiceDetail.tenNhanVien }}</p>
-        <p><strong>Voucher:</strong> {{ selectedInvoiceDetail.tenVoucher }} (Giảm {{ selectedInvoiceDetail.giaTriGiam }}{{ selectedInvoiceDetail.hinhThucGiam ? ' %' : ' VNĐ' }})</p>
-        <p><strong>Tiền trước voucher:</strong> {{ selectedInvoiceDetail.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</p>
-        <p><strong>Tổng tiền:</strong> {{ selectedInvoiceDetail.tongTienThanhToan | number:'1.0-0' }} VNĐ</p>
-        <p><strong>Ghi chú:</strong> {{ selectedInvoiceDetail.ghiChu }}</p>
-        <p><strong>Ngày tạo:</strong> {{ selectedInvoiceDetail.ngayTao | date:'yyyy-MM-dd' }}</p>
-        <!-- Bạn có thể hiển thị các trường khác theo yêu cầu -->
-      </div>
-      <ng-template #loading>
-        <p>Đang tải dữ liệu...</p>
-      </ng-template>
     </div>
   </div>
-</div>
 
 <!-- Modal chi tiết (trống) -->
 <div class="modal" *ngIf="showDetailPopup">
@@ -167,19 +155,26 @@
           <h3>Chi tiết Hóa Đơn</h3>
           <p class="invoice-code"><strong>Mã hóa đơn:</strong> {{ hoaDonData.ma }}</p>
         </div>
-      
-      
+
+         <!-- Nếu trạng thái hóa đơn là 5 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->
+         <div *ngIf="hoaDonData.trangThai == 5">
+          <div class="cancelHoaDon">
+            <p><i class="bi bi-x-circle"></i> Đơn hàng đã bị hủy</p>
+            <small>{{ hoaDonData.ngayHoanThanh || '---' }}</small>
+          </div>
+        </div>
+
         <!-- Địa chỉ nhận hàng -->
         <section class="section">
-          <h3>Địa chỉ nhận hàng</h3>
-          <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
+          <h3>Thông tin khách hàng</h3>
+          <p><strong>Tên khách hàng:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
           <p><strong>Số điện thoại:</strong> {{ hoaDonData.sdtNguoiNhan }}</p>
           <p><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
         </section>
-      
+
         <!-- Chi tiết hóa đơn -->
         <section class="section">
-      
+
           <div *ngFor="let item of chiTietHoaDonData" class="invoice-details-item">
             <img [src]="'http://localhost:8080' + item.anhUrls" alt="{{ item.tenSanPham }}" />
             <div class="invoice-details-info">
@@ -191,7 +186,7 @@
             </div>
           </div>
         </section>
-      
+
         <!-- Chi tiết thanh toán -->
         <section class="section">
           <h3>Chi tiết thanh toán</h3>
@@ -199,34 +194,52 @@
           <!-- Điều kiện hiển thị voucher và giá trị giảm -->
           <div *ngIf="hoaDonData.voucher">
             <p><strong>Tên voucher:</strong> {{ hoaDonData.voucher?.ten }}</p>
-      
+
             <!-- Hiển thị giá trị giảm nếu voucher giảm phần trăm -->
             <p *ngIf="hoaDonData.voucher?.hinhThucGiam === false"><strong>Giảm giá:</strong> {{ hoaDonData.voucher?.giaTriGiam
               + '%' }}</p>
-      
+
             <!-- Hiển thị giá trị giảm nếu voucher giảm tiền -->
             <p *ngIf="hoaDonData.voucher?.hinhThucGiam === true"><strong>Giảm giá:</strong> {{ hoaDonData.voucher?.giaTriGiam
-              + ' VNĐ' }}</p>
-      
+              + ' VND' }}</p>
+
             <!-- Ẩn "Giảm tối đa" nếu giảm tiền -->
             <p *ngIf="hoaDonData.voucher?.hinhThucGiam === false"><strong>Giảm tối đa:</strong> {{
               hoaDonData.voucher?.giamToiDa }} VNĐ</p>
           </div>
-      
+
+            <!-- Chỉ hiển thị nếu trạng thái = 5 -->
+            <p *ngIf="hoaDonData?.trangThai === 5 && hoaDonData?.ghiChu">
+              <strong>Lý do hủy:</strong> {{ hoaDonData.ghiChu }}
+            </p>
+
           <!-- Nếu không có voucher thì không hiển thị thông tin voucher -->
           <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
           <p><strong>Tên phương thức:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
           <p><strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ</p>
           <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
         </section>
-      
+
         <!-- Nút Hủy và Nút Quay Về Trang Chủ -->
-        <div class="button-container">
+        <button *ngIf="!([5,6,7].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn btn-danger">
+          Hủy Hóa Đơn
+        </button>
+        
+
+          <!-- Modal nhập lý do hủy -->
+          <div class="modal-overlay-huy" *ngIf="showCancelModal">
+            <div class="modal-huy">
+              <h4>Nhập lý do hủy hóa đơn</h4>
+              <textarea [(ngModel)]="ghiChu" rows="4" placeholder="Nhập lý do..."></textarea>
+              <div class="modal-buttons">
+                <button class="btn btn-secondary" (click)="closeCancelModal()">Hủy</button>
+                <button class="btn btn-danger" (click)="cancelHoaDon(hoaDonData.ma)">Xác nhận hủy</button>
+              </div>
+            </div>
+          </div>
           <button (click)="goHome()" class="btn btn-primary">Đóng</button>
         </div>
-      
       </div>
-      
     </div>
   </div>
 </div>
