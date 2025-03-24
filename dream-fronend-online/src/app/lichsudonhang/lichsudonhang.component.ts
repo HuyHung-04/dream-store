@@ -49,4 +49,9 @@ export class LichsudonhangComponent {
   viewInvoiceDetail(maHoaDon: string): void {
     this.router.navigate(['/chitietlichsu', maHoaDon]); // Navigate to chitietlichsu with the maHoaDon as a route parameter
   }
+
+  goHome(): void {
+    console.log('Quay về trang chủ...');
+    window.location.href = '/banhang';  // Giả sử trang chủ là '/home'
+  }
 }

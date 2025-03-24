@@ -276,32 +276,30 @@ z-index: 1000; /* Đảm bảo nằm trên tất cả */
 }
 
 .modal-huy {
-background-color: #fff;
-padding: 24px;
-border-radius: 8px;
-width: 90%;
-max-width: 420px;
-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-animation: fadeIn 0.3s ease-in-out;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 420px;
 }
 
 .modal-huy h4 {
-margin-top: 0;
-margin-bottom: 12px;
-font-size: 20px;
-font-weight: 600;
+  color: #294764;
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .modal-huy textarea {
-width: 100%;
-padding: 10px;
-border-radius: 6px;
-border: 1px solid #ccc;
-resize: vertical;
-min-height: 80px;
-font-family: inherit;
-font-size: 14px;
-margin-top: 8px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #294764;
+  resize: vertical;
+  min-height: 80px;
+  font-size: 14px;
+  margin-top: 8px;
 }
 
 .modal-buttons {

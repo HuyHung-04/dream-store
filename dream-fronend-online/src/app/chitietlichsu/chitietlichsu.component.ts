@@ -122,4 +122,5 @@ export class ChitietlichsuComponent {
     this.showCancelModal = false;
     this.ghiChu = '';
   }
+
 }

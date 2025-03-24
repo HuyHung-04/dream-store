@@ -5,6 +5,7 @@ import { BanhangService } from '../banhang/banhang.service';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'; 
 import { CookieService } from 'ngx-cookie-service';
+import { HoadonService } from '../hoadon/hoadon.service';
 
 @Component({
   selector: 'app-header',
@@ -52,8 +53,10 @@ export class HeaderComponent implements OnInit {
     ngaySua: '',
     trangThai: 1,
   };
+  newOrderCount: number = 0;
 
-  constructor(private headerService: HeaderService,private banhangService: BanhangService, private router: Router,private cookieService: CookieService) {}
+  constructor(private headerService: HeaderService,private banhangService: BanhangService,
+     private router: Router,private cookieService: CookieService, private hoaDonService: HoadonService) {}
 
   ngOnInit(): void {
     const khachhangCookie = this.cookieService.get('khachhang'); // Retrieve customer data from the cookie
@@ -67,7 +70,11 @@ export class HeaderComponent implements OnInit {
 
     this.headerService.gioHangUpdated$.subscribe(() => {
       this.loadGioHang(); // Cập nhật giỏ hàng ngay lập tức
-  });
+     });
+     // thông báo lịch sử đơn hàng
+     this.hoaDonService.newOrderCount$.subscribe((count) => {
+      this.newOrderCount += count; // Cập nhật số đơn hàng mới
+    });
   }
 
   loadGioHang(): void {
@@ -242,6 +249,14 @@ export class HeaderComponent implements OnInit {
         }
       );
     
+  }
+
+  viewInvoiceHistory(event: Event) {
+    event.preventDefault();
+    console.log('Xem lịch sử đơn hàng');
+    this.router.navigate(['/lichsudonhang']);
+
+    this.newOrderCount = 0; // Xóa số thông báo khi người dùng xem đơn hàng
   }
   
 }

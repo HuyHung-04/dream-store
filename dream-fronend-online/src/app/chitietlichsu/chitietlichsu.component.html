@@ -1,6 +1,7 @@
 <div *ngIf="hoaDonData; else noData" class="invoice-container">
   <!-- Mã hóa đơn (Căn phải) -->
   <div class="invoice-header">
+    
     <h3>Chi tiết Hóa Đơn</h3>
     <p class="invoice-code"><strong>Mã hóa đơn:</strong> {{ hoaDonData.ma }}</p>
   </div>
@@ -135,5 +136,5 @@
 
 <!-- Nếu chưa có dữ liệu -->
 <ng-template #noData>
-  <p>Chưa có dữ liệu hóa đơn để hiển thị.</p>
+  <!-- <p>Chưa có dữ liệu hóa đơn để hiển thị.</p> -->
 </ng-template>
