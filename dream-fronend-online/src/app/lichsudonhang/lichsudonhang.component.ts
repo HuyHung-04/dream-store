@@ -2,6 +2,7 @@ import { Component,OnInit  } from '@angular/core';
 import { LichsudonhangService } from './lichsudonhang.service'; 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-lichsudonhang',
   imports: [CommonModule],
@@ -11,12 +12,16 @@ import { Router } from '@angular/router';
 export class LichsudonhangComponent {
   hoaDonChiTiet: any[] = [];  // Array to store fetched data
   errorMessage: string = '';  // To store error message if any
-
-  constructor(private lichsudonhangService: LichsudonhangService, private router: Router) { }
+  idKhachHang: number = 0;
+  constructor(private lichsudonhangService: LichsudonhangService, private router: Router, private cookieService: CookieService) { }
 
   ngOnInit(): void {
+    const khachhangStr = this.cookieService.get('khachhang');
+    if (khachhangStr) {
+      const khachhang = JSON.parse(khachhangStr);
+      this.idKhachHang = khachhang.id;
     // Call the service method when the component is initialized
-    this.lichsudonhangService.getHoaDonChiTiet().subscribe({
+    this.lichsudonhangService.getHoaDonChiTiet(this.idKhachHang).subscribe({
       next: (data) => {
         this.hoaDonChiTiet = this.processHoaDonData(data);
       
@@ -28,17 +33,18 @@ export class LichsudonhangComponent {
       }
     });
   }
+  }
 
   processHoaDonData(data: any[]): any[] {
-    const groupedData: { [key: string]: any } = {};  // Object to store grouped invoices by idHoaDon
+    const groupedData: { [key: string]: any } = {}; 
 
-    // Group data by idHoaDon and sum quantities for duplicate entries
+
     data.forEach(item => {
       const id = item.idHoaDon;
       if (groupedData[id]) {
-        groupedData[id].soLuong += item.soLuong;  // Sum quantity
+        groupedData[id].soLuong += item.soLuong;  
       } else {
-        groupedData[id] = { ...item };  // Copy item to groupedData if not already there
+        groupedData[id] = { ...item }; 
       }
     });
 

@@ -32,7 +32,6 @@ public interface SanPhamChiTietOnlineRepository extends JpaRepository<SanPhamChi
             "AND (km.trangThai = 1 OR km IS NULL) " +
             "ORDER BY a.id ASC")
     List<SanPhamChiTietOnlineDto> getSanPhamChiTiet(@Param("idSanPham") Integer idSanPham);
-
 }
 
 

@@ -94,14 +94,10 @@ public class HoaDonOnlineController {
         }
     }
 
-    @GetMapping("/hoa-don-chi-tiet")
-    public ResponseEntity<List<HoaDonDto>> getHoaDonChiTiet() {
-        try {
-            List<HoaDonDto> hoaDonDtos = hoaDonOnlineService.getHoaDonChiTietDto();
-            return ResponseEntity.ok(hoaDonDtos);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
-        }
+    // Lấy danh sách hóa đơn theo id khách hàng
+    @GetMapping("/hoa-don/{idKhachHang}")
+    public List<HoaDonDto> getHoaDonByKhachHang(@PathVariable Integer idKhachHang) {
+        return hoaDonOnlineService.getHoaDonChiTietDto(idKhachHang);
     }
 
 

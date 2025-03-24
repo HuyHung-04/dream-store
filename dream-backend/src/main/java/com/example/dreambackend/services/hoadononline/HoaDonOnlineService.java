@@ -256,9 +256,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return chiTietDtos;
     }
 
-
-    public List<HoaDonDto> getHoaDonChiTietDto() {
-        List<Object[]> result = hoaDonChiTietRepository.getHoaDonChiTiet();
+    @Override
+    public List<HoaDonDto> getHoaDonChiTietDto(Integer idKhachHang) {
+        List<Object[]> result = hoaDonChiTietRepository.getHoaDonByKhachHang(idKhachHang);
         List<HoaDonDto> hoaDonDtos = new ArrayList<>();
 
 
