@@ -51,6 +51,10 @@ public class HoaDonService implements IHoaDonService {
         if (request.getIdVoucher() != null) {
             updateVoucherForHoaDon(hoaDon, request.getIdVoucher());
         }
+        if (request.getIdPhuongThucThanhToan() != null) {
+            PhuongThucThanhToan phuongThucThanhToan = ptttRepository.findById(request.getIdPhuongThucThanhToan()).orElse(null);
+            hoaDon.setPhuongThucThanhToan(phuongThucThanhToan);
+        }
 
         return convertToDTO(hoaDonRepository.save(hoaDon));
     }
