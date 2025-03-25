@@ -169,7 +169,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         // Bước 1: Tạo Hóa Đơn (HoaDon)
         HoaDon hoaDon = new HoaDon();
         hoaDon.setKhachHang(khachHang);
-        hoaDon.setMa("HD" + System.currentTimeMillis()); // Sinh mã hóa đơn (có thể thay đổi theo logic của bạn)
+        hoaDon.setMa("HD" + (System.currentTimeMillis() % 10000000)); // Sinh mã hóa đơn (có thể thay đổi theo logic của bạn)
         hoaDon.setNgayTao(LocalDate.now());
         hoaDon.setNgaySua(LocalDate.now());
         hoaDon.setVoucher(voucher);

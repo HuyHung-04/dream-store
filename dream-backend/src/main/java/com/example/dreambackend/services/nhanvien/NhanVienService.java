@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class NhanVienService implements INhanVienService {
@@ -40,6 +41,7 @@ public class NhanVienService implements INhanVienService {
                 .orElseThrow(() -> new IllegalArgumentException("Vai trò Nhân viên không tồn tại!"));
         // Gán vai trò cho nhân viên
         nhanVien.setVaiTro(vaiTro);
+        nhanVien.setMa(taoMaNhanVien());
         // Gán ngày tạo hiện tại
         nhanVien.setNgayTao(LocalDate.now());
         return nhanVienRepository.save(nhanVien);
@@ -77,6 +79,17 @@ public class NhanVienService implements INhanVienService {
         }
 
         return nhanVienRepository.save(existingNhanVien);
+    }
+
+    private String taoMaNhanVien() {
+        Random random = new Random();
+        String maNhanVien;
+        do {
+            int soNgauNhien = 1 + random.nextInt(9999); // Sinh số từ 1 đến 9999
+            String maSo = String.format("%04d", soNgauNhien); // Định dạng thành 4 chữ số
+            maNhanVien = "NV" + maSo;
+        } while (nhanVienRepository.existsByMa(maNhanVien)); // Kiểm tra xem mã đã tồn tại chưa
+        return maNhanVien;
     }
 
     // Hàm lấy phần mở rộng của file

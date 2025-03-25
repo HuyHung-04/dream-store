@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
     @Query("""
     select new com.example.dreambackend.responses.SanPhamRespone(
-            sp.id,
+            CAST(sp.id AS Integer),
             sp.ma,
             sp.ten,
             sp.ngayTao,
@@ -26,35 +26,57 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
             sp.coAo.id,
             sp.coAo.ten,
             sp.xuatXu.id,
-            sp.xuatXu.ten
-        ) from SanPham sp ORDER BY sp.id DESC
-        """)
+            sp.xuatXu.ten,
+            COALESCE(CAST(MAX(spct.gia) AS Double), 0.0),
+            COALESCE(CAST(SUM(spct.soLuong) AS Integer), 0)
+        ) 
+    from SanPham sp 
+    left join SanPhamChiTiet spct on sp.id = spct.sanPham.id
+    group by sp.id, sp.ma, sp.ten, sp.ngayTao, sp.ngaySua, sp.trangThai,
+             sp.chatLieu.id, sp.chatLieu.ten,
+             sp.thuongHieu.id, sp.thuongHieu.ten,
+             sp.coAo.id, sp.coAo.ten,
+             sp.xuatXu.id, sp.xuatXu.ten
+    ORDER BY sp.id DESC
+""")
     Page<SanPhamRespone> getAllSanPhamRepone(Pageable pageable);
 
+
+
+
     @Query("""
-    select new com.example.dreambackend.responses.SanPhamRespone(
-            sp.id,
-            sp.ma,
-            sp.ten,
-            sp.ngayTao,
-            sp.ngaySua,
-            sp.trangThai,
-            sp.chatLieu.id,
-            sp.chatLieu.ten,
-            sp.thuongHieu.id,
-            sp.thuongHieu.ten,
-            sp.coAo.id,
-            sp.coAo.ten,
-            sp.xuatXu.id,
-            sp.xuatXu.ten
-        ) from SanPham sp 
-        where (:thuongHieuId is null or sp.thuongHieu.id = :thuongHieuId)
+        select new com.example.dreambackend.responses.SanPhamRespone(
+        CAST(sp.id AS Integer),
+        sp.ma,
+        sp.ten,
+        sp.ngayTao,
+        sp.ngaySua,
+        sp.trangThai,
+        sp.chatLieu.id,
+        sp.chatLieu.ten,
+        sp.thuongHieu.id,
+        sp.thuongHieu.ten,
+        sp.coAo.id,
+        sp.coAo.ten,
+        sp.xuatXu.id,
+        sp.xuatXu.ten,
+        COALESCE(CAST(MAX(spct.gia) AS Double), 0.0),
+        COALESCE(CAST(SUM(spct.soLuong) AS Integer), 0)
+    )\s
+    from SanPham sp\s
+    left join SanPhamChiTiet spct on sp.id = spct.sanPham.id
+    where (:thuongHieuId is null or sp.thuongHieu.id = :thuongHieuId)
         and (:xuatXuId is null or sp.xuatXu.id = :xuatXuId)
         and (:chatLieuId is null or sp.chatLieu.id = :chatLieuId)
         and (:coAoId is null or sp.coAo.id = :coAoId)
         and (:trangThai is null or sp.trangThai = :trangThai)
         and (:ten IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :ten, '%')))
-        ORDER BY sp.id DESC
+    group by sp.id, sp.ma, sp.ten, sp.ngayTao, sp.ngaySua, sp.trangThai,
+             sp.chatLieu.id, sp.chatLieu.ten,
+             sp.thuongHieu.id, sp.thuongHieu.ten,
+             sp.coAo.id, sp.coAo.ten,
+             sp.xuatXu.id, sp.xuatXu.ten
+    ORDER BY sp.id DESC
     """)
     Page<SanPhamRespone> searchSanPham(
             @Param("thuongHieuId") Integer thuongHieuId,

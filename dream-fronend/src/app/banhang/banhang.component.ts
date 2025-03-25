@@ -427,7 +427,7 @@ export class BanhangComponent implements OnInit {
       alert('Giỏ hàng đang trống!');
       return;
     }
-    console.log(this.selectedInvoice);
+    console.log('Phương thức thanh toán đã chọn:', this.selectedPaymentMethod);
 
     // Cập nhật hóa đơn với trạng thái thanh toán và reset các trường liên quan
     const updatedInvoice = {
@@ -436,6 +436,8 @@ export class BanhangComponent implements OnInit {
       idPhuongThucThanhToan: this.selectedPaymentMethod,
       ngaySua: new Date().toISOString()
     };
+
+    console.log('Dữ liệu gửi lên API:', updatedInvoice); // Log dữ liệu gửi API
 
     this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
       response => {
@@ -551,7 +553,12 @@ export class BanhangComponent implements OnInit {
         console.error('Lỗi khi lấy dữ liệu phương thức thanh toán:', error);
       }
     );
-  }  
+  }
+  
+  logSelectedMethod() {
+    console.log('Phương thức thanh toán đã chọn:', this.selectedPaymentMethod);
+  }
+  
 
   loadInvoices(): void {
     const request = {};

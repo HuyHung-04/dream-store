@@ -3,6 +3,7 @@ package com.example.dreambackend.responses;
 import lombok.*;
 
 import java.time.LocalDate;
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,5 +36,9 @@ public class SanPhamRespone {
     private Integer idXuatXu;
 
     private String tenXuatXu;
+
+    private Double giaCaoNhat;
+
+    private Integer tongSoLuong;
 }
 

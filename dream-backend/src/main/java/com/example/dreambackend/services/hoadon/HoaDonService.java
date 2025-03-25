@@ -215,7 +215,7 @@ public class HoaDonService implements IHoaDonService {
     private String generateMaHoaDon() {
         String ma;
         do {
-            int randomNum = (int) (Math.random() * 9000) + 1000; // Tạo số ngẫu nhiên từ 1000 - 9999
+            int randomNum = (int) (Math.random() * 90000000) + 10000000; // Tạo số ngẫu nhiên từ 1000 - 9999
             ma = "HD" + randomNum;
         } while (hoaDonRepository.findByMa(ma).isPresent()); // Kiểm tra trùng mã trong DB
         return ma;

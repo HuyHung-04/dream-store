@@ -310,7 +310,7 @@
     <form (ngSubmit)="addNhanVien()" #nhanVienForm="ngForm">
       <div class="input-row">
         <div class="input-field">
-          <input type="text" class="input" [(ngModel)]="nhanVien.ma" name="ma" autocomplete="off" required
+          <input type="text" class="input" [(ngModel)]="nhanVien.ma" name="ma" autocomplete="off" required readonly
             (input)="clearError('ma')" />
           <label for="ma">Mã nhân viên</label>
           <div class="tooltip-error" *ngIf="errors.ma">

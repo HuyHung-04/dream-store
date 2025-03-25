@@ -168,6 +168,8 @@ export interface SanPham {
   tenCoAo: string;
   idXuatXu: number;
   tenXuatXu: string;
+  giaCaoNhat: number;
+  tongSoLuong: number;
 }
 
 
