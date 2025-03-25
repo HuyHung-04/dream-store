@@ -388,21 +388,37 @@ export class BanhangComponent implements OnInit {
   updateVoucher() {
     const total = this.getTotal();
 
-    this.banhangService.getDetailVoucher(this.selectedDiscount).subscribe((voucher: any) => {
-      if (!voucher) {
-        alert("Không tìm thấy thông tin voucher!");
-        return;
-      }
+    this.banhangService.getDetailVoucher(this.selectedDiscount).subscribe(
+      (voucher: any) => {
+        if (!voucher) {
+          alert("Không tìm thấy thông tin voucher!");
+          return;
+        }
 
-      console.log("Voucher từ API:", voucher);
-      if (voucher.hinhThucGiam) {
-        this.discountAmount = total * (voucher.giaTriGiam / 100);
-      } else {
-        this.discountAmount = voucher.giaTriGiam;
+        console.log("Voucher từ API:", voucher);
+
+        // Tính giá trị giảm giá ban đầu
+        let discountAmount: number;
+        if (voucher.hinhThucGiam) {
+          discountAmount = total * (voucher.giaTriGiam / 100); // Giảm theo phần trăm
+        } else {
+          discountAmount = voucher.giaTriGiam; // Giảm số tiền cố định
+        }
+
+        // Kiểm tra giá trị tối đa
+        if (voucher.giaTriToiDa && discountAmount > voucher.giaTriToiDa) {
+          discountAmount = voucher.giaTriToiDa;
+        }
+
+        // Gán giá trị cuối cùng
+        this.discountAmount = discountAmount;
+        this.updateInvoiceTotal();
+        this.refreshInvoice();
+      },
+      (error) => {
+        console.error('Lỗi khi lấy thông tin voucher:', error);
       }
-      this.updateInvoiceTotal();
-      this.refreshInvoice();
-    });
+    );
   }
 
   // Áp dụng mã giảm giá đã chọn
@@ -576,7 +592,6 @@ export class BanhangComponent implements OnInit {
     // console.log("Request gửi lên API:", params.toString());
 
     this.banhangService.locSanPham(params).subscribe(response => {
-      // console.log("Dữ liệu trả về từ API:", response);
 
       if (response && response.content) {
         this.sanPhams = response.content.map((sp: any) => ({
@@ -605,6 +620,7 @@ export class BanhangComponent implements OnInit {
           this.selectedKhachHang = null;
           this.tenKhachHang = '';
           this.soDienThoai = '';
+          this.loadSanPhamToBanHang();
           this.selectedDiscount = null;
           alert('Hủy hóa đơn thành công!');
         },
