@@ -37,5 +37,7 @@ export class SanphamDetailService {
     return this.http.get<any>(`${this.apiDiaChi}/hien-thi/${idKhachHang}`);
   }
 
- 
+  getGioHangChiTietById(id: number): Observable<any> {
+    return this.http.get<any>(`http://localhost:8080/api/gio-hang/${id}`);
+  }
 }

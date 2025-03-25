@@ -169,7 +169,9 @@
           <h3>Thông tin khách hàng</h3>
           <p><strong>Tên khách hàng:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
           <p><strong>Số điện thoại:</strong> {{ hoaDonData.sdtNguoiNhan }}</p>
-          <p><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
+          <!-- Chỉ hiển thị nếu địa chỉ khách hàng có dữ liệu -->
+          <p *ngIf="hoaDonData.diaChiNhanHang"><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
+
         </section>
 
         <!-- Chi tiết hóa đơn -->
@@ -215,8 +217,10 @@
 
           <!-- Nếu không có voucher thì không hiển thị thông tin voucher -->
           <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
-          <p><strong>Tên phương thức:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
-          <p><strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ</p>
+          <p><strong>Phương thức thanh toán:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
+          <p *ngIf="hoaDonData.phiVanChuyen && hoaDonData.phiVanChuyen > 0">
+            <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ
+          </p>          
           <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
         </section>
 

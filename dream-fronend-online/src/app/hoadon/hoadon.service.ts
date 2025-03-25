@@ -160,7 +160,6 @@ export class HoadonService {
   }
 
 
-
   // Phương thức gọi API để tạo hóa đơn và chi tiết hóa đơn
   createHoaDon(
     idKhachHang: number,

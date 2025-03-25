@@ -62,6 +62,7 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setPhiVanChuyen(request.getPhiVanChuyen());
         hoaDon.setTongTienThanhToan(request.getTongTienThanhToan());
         hoaDon.setTongTienTruocVoucher(request.getTongTienTruocVoucher());
+        hoaDon.setPhuongThucThanhToan(ptttRepository.findById(request.getIdPhuongThucThanhToan()).orElse(null));
         hoaDon.setTrangThai(request.getTrangThai());
         hoaDon.setNgaySua(LocalDate.now());
     }

@@ -396,21 +396,41 @@ export class BanhangComponent implements OnInit {
   updateVoucher() {
     const total = this.getTotal();
 
-    this.banhangService.getDetailVoucher(this.selectedDiscount).subscribe((voucher: any) => {
-      if (!voucher) {
-        alert("Không tìm thấy thông tin voucher!");
-        return;
-      }
+    this.banhangService.getDetailVoucher(this.selectedDiscount).subscribe(
+      (voucher: any) => {
+        if (!voucher) {
+          alert("Không tìm thấy thông tin voucher!");
+          return;
+        }
+        console.log("Voucher từ API:", voucher);
+        
 
-      console.log("Voucher từ API:", voucher);
-      if (voucher.hinhThucGiam) {
-        this.discountAmount = voucher.giaTriGiam;
-      } else {
-        this.discountAmount = total * (voucher.giaTriGiam / 100);
+        // Tính giá trị giảm giá ban đầu
+        let discountAmount: number;
+        if (voucher.hinhThucGiam) {
+          discountAmount = voucher.giaTriGiam; // Giảm số tiền cố định// Giảm theo phần trăm
+        } else {
+          discountAmount = total * (voucher.giaTriGiam / 100);
+          
+        }
+        // console.log("Voucher từ API:", voucher);
+        // console.log("Giá trị giảm trước khi giới hạn:", discountAmount);
+        // console.log("Giá trị giảm tối đa:", voucher.giaTriToiDa);
+        
+        // Kiểm tra giá trị tối đa
+        if (voucher.giamToiDa && discountAmount > Number(voucher.giamToiDa)) {
+          discountAmount = Number(voucher.giamToiDa);
+        }
+               
+        // Gán giá trị cuối cùng
+        this.discountAmount = discountAmount;
+        this.updateInvoiceTotal();
+        this.refreshInvoice();
+      },
+      (error) => {
+        console.error('Lỗi khi lấy thông tin voucher:', error);
       }
-      this.updateInvoiceTotal();
-      this.refreshInvoice();
-    });
+    );
   }
 
   // Áp dụng mã giảm giá đã chọn
