@@ -58,7 +58,7 @@ public class HoaDonController {
     @PostMapping("/{id}/cancel")
     public ResponseEntity<Void> deleteHoaDon(
             @PathVariable Integer id,
-            @RequestParam String ghiChu
+            @RequestParam(required = false) String ghiChu
     ) {
         hoaDonService.cancelHoaDon(id,ghiChu);
         return ResponseEntity.noContent().build();

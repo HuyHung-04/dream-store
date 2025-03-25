@@ -600,6 +600,12 @@ export class BanhangComponent implements OnInit {
           this.loadInvoices();
           this.selectedInvoice = null;
           this.cart = [];
+          this.discountCode = '';
+          this.discountAmount = 0;
+          this.selectedKhachHang = null;
+          this.tenKhachHang = '';
+          this.soDienThoai = '';
+          this.selectedDiscount = null;
           alert('Hủy hóa đơn thành công!');
         },
         (error) => {
