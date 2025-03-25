@@ -124,7 +124,7 @@
 
       <input [(ngModel)]="AddressEdit.diaChiCuThe" class="edit-input" placeholder="Địa chỉ cụ thể">
       <button style="background-color: #294764;" class="btn-save-edit" (click)="updateDiaChi()">Lưu Địa Chỉ</button>
-      <button style="background-color: #6c757d;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
+      <button style="background-color: #6c757d; margin-top: -15px;" class="btn-save-edit" (click)="closeEditModal()">Đóng</button>
     </div>
   </div>
 </div>
@@ -207,8 +207,8 @@
 
 
 <!-- Modal Chức Năng Sau Thanh Toán -->
-<div *ngIf="modalthongbao" class="modal-overlay" (click)="closeModal()">
-  <div class="modal-content">
+<div *ngIf="modalthongbao" class="modal-overlayls" (click)="closeModal()">
+  <div class="modal-contentls">
     <h3>Chọn hành động</h3>
     <button (click)="viewInvoiceDetails()">Xem Chi Tiết Đơn Hàng</button>
     <button (click)="viewInvoiceHistory()">Xem Lịch Sử Đơn Hàng</button>

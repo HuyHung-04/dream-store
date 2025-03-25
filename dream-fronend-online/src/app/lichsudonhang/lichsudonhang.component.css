@@ -83,3 +83,17 @@
     color: #294764;
     font-weight: bold;
   }
+  .back {
+    text-decoration: none; /* Loại bỏ gạch chân */
+    font-weight: bold; /* Bỏ in đậm */
+    color: #294764; /* Đổi màu chữ */
+    font-size: 16px;
+    display: inline-flex; /* Giữ icon và text trên cùng một dòng */
+    align-items: center; /* Căn giữa icon với text */
+    gap: 5px; /* Khoảng cách giữa icon và text */
+  }
+  
+  .back:hover {
+    color: #1f3554; /* Màu đậm hơn khi hover */
+  }
+  

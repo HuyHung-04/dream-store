@@ -44,7 +44,13 @@ export class BanhangComponent implements OnInit {
   selectedDiscount: any = null;
   paymentMethods: any[] = [];
   selectedPaymentMethod: string = '';
+  quetQr: boolean = false;
 
+  bankId = 'vietinbank'; // mã ngân hàng viết thường
+  accountNo = '0379083813';
+  template = 'compact';
+  addInfo = 'thanh toan hoa don';
+  accountName = 'HOANG HUY HUNG';
 
   constructor(private banhangService: BanhangService, private cdr: ChangeDetectorRef) { }
 
@@ -288,6 +294,8 @@ export class BanhangComponent implements OnInit {
       return;
     }
 
+    
+
     let existingItem = this.cart.find(item => item.id === product.id);
     if (existingItem) {
       if (existingItem.soLuong < product.soLuong) {
@@ -394,7 +402,6 @@ export class BanhangComponent implements OnInit {
           alert("Không tìm thấy thông tin voucher!");
           return;
         }
-
         console.log("Voucher từ API:", voucher);
 
         // Tính giá trị giảm giá ban đầu
@@ -546,17 +553,20 @@ export class BanhangComponent implements OnInit {
   loadPaymentMethods(): void {
     this.banhangService.getDanhSachPTTT().subscribe(
       (data: any[]) => {
-        this.paymentMethods = data;
-        console.log(data);
-        if (data.length > 0) {
-          this.selectedPaymentMethod = data[0].id;
+        // Lọc ra chỉ những phương thức có id là 2 hoặc 3
+        this.paymentMethods = data.filter(method => method.id === 2 || method.id === 3);
+        
+        console.log(this.paymentMethods);
+        
+        if (this.paymentMethods.length > 0) {
+          this.selectedPaymentMethod = this.paymentMethods[0].id;
         }
       },
       error => {
         console.error('Lỗi khi lấy dữ liệu phương thức thanh toán:', error);
       }
     );
-  }
+  }  
 
   loadInvoices(): void {
     const request = {};
@@ -630,6 +640,30 @@ export class BanhangComponent implements OnInit {
         }
       );
     }
+  }
+
+  get qrUrl(): string {
+    const amount = this.selectedInvoice?.tongTienThanhToan || 0;
+    const encodedInfo = encodeURIComponent(this.addInfo);
+    const encodedName = encodeURIComponent(this.accountName);
+    return `https://img.vietqr.io/image/${this.bankId}-${this.accountNo}-${this.template}.png?amount=${amount}&addInfo=${encodedInfo}&accountName=${encodedName}`;
+  }
+
+  kiemTraMoModal() {
+    console.log(this.selectedPaymentMethod)
+    if (Number(this.selectedPaymentMethod) === 3) {
+      this.openQuetQr();
+    } else {
+      this.closeQuetQr();
+    }
+  }
+  
+  openQuetQr(){
+    this.quetQr = true;
+  }
+
+  closeQuetQr(){
+    this.quetQr = false;
   }
 
 }

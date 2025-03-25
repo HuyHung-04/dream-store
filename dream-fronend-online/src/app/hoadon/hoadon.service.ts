@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,20 @@ export class HoadonService {
   private phuongThuc = 'http://localhost:8080/api/phuong-thuc-thanh-toan/payment-methods';
   private ghtkToken = '1DESBs0s4MRO5AjNEhe47wZvX98OHZ0TSIg6gOg';
   private clientSource = 'S22879257';
+
+  private newOrderCount = 0; // Lưu số đơn hàng chưa xem
+  private newOrderSubject = new BehaviorSubject<number>(this.newOrderCount);
+  newOrderCount$ = this.newOrderSubject.asObservable();
+
+  increaseOrderCount() {
+    this.newOrderCount++; // Tăng số đơn hàng mới
+    this.newOrderSubject.next(this.newOrderCount); // Phát sự kiện cập nhật
+  }
+
+  resetOrderCount() {
+    this.newOrderCount = 0; // Đặt lại về 0 khi người dùng xem
+    this.newOrderSubject.next(this.newOrderCount);
+  }
   constructor(private http: HttpClient) {
   }
 

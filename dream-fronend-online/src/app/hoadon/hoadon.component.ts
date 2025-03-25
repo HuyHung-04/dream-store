@@ -29,9 +29,9 @@ export class HoadonComponent {
     tenKhachHang: '',
     sdtNguoiNhan: '',
     diaChiCuThe: '',
-    tinhThanhPho: null,
-    quanHuyen: null,
-    phuongXa: null
+    tinhThanhPho: '',
+    quanHuyen: '',
+    phuongXa: ''
   };
   giaTriGiam?: number;
   giamToiDa?: number;
@@ -71,9 +71,9 @@ export class HoadonComponent {
     tenNguoiNhan: '',
     sdtNguoiNhan: '',
     diaChiCuThe: '',
-    tinhThanhPho: null,
-    quanHuyen: null,
-    phuongXa: null,
+    tinhThanhPho: '',
+    quanHuyen: '',
+    phuongXa: '',
     idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
   };
   AddressEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
@@ -303,15 +303,22 @@ export class HoadonComponent {
   loadPaymentMethods(): void {
     this.hoadonService.getPaymentMethods().subscribe(
       (response: any) => {
-        this.phuongThucThanhToan = response; // Gán dữ liệu lấy được vào mảng paymentMethods
-        console.log("phuong thuc", this.phuongThucThanhToan)
+        // Lọc ra phương thức có id = 1
+        this.phuongThucThanhToan = response.filter((method: any) => method.id === 1);
+        // Nếu có phương thức thanh toán id = 1, đặt nó làm mặc định
+        if (this.phuongThucThanhToan.length > 0) {
+          this.selectedPhuongThucThanhToan = this.phuongThucThanhToan[0].id;
+        }
+        // console.log("Phương thức thanh toán:", this.phuongThucThanhToan);
       },
       (error) => {
-        this.errorMessage = 'Có lỗi xảy ra khi lấy danh sách phương thức thanh toán.'; // Hiển thị lỗi nếu có
+        this.errorMessage = 'Có lỗi xảy ra khi lấy danh sách phương thức thanh toán.';
         console.error(error);
       }
     );
   }
+  
+  
 
   // Gọi API để cập nhật thông tin địa chỉ
   updateDiaChi(): void {
@@ -486,6 +493,7 @@ export class HoadonComponent {
       (response) => {
         console.log('Hóa đơn đã được tạo thành công:', response);
         alert('Hóa đơn đã được tạo thành công!');
+        this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
         this.modalthongbao = true;
         this.maHoaDon = response.ma;
 
@@ -533,9 +541,9 @@ export class HoadonComponent {
       tenNguoiNhan: '',
       sdtNguoiNhan: '',
       diaChiCuThe: '',
-      tinhThanhPho: null,
-      quanHuyen: null,
-      phuongXa: null,
+      tinhThanhPho: '',
+      quanHuyen: '',
+      phuongXa: '',
       idKhachHang: this.idKhachHang
     };
 
@@ -548,7 +556,7 @@ export class HoadonComponent {
 
     // Nếu là giảm trực tiếp
     if (v.hinhThucGiam) {
-      return `Giảm trực tiếp: ${v.giaTriGiam.toLocaleString()} VND`;
+      return `Giá trị giảm: ${v.giaTriGiam.toLocaleString()} VND`;
     }
 
     // Nếu là giảm phần trăm

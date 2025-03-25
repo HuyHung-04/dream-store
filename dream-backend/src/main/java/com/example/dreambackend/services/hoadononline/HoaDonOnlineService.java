@@ -135,12 +135,14 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             } else {
                 // Giảm theo phần trăm
                 discountAmount = totalPrice * voucher.getGiaTriGiam().doubleValue() / 100;
+
+                // Giảm tối đa chỉ áp dụng cho giảm theo phần trăm
+                if (voucher.getGiamToiDa() != null && discountAmount > voucher.getGiamToiDa().doubleValue()) {
+                    discountAmount = voucher.getGiamToiDa().doubleValue();
+                }
             }
 
-            // Giảm tối đa
-            if (voucher.getGiamToiDa() != null && discountAmount > voucher.getGiamToiDa().doubleValue()) {
-                discountAmount = voucher.getGiamToiDa().doubleValue();
-            }
+
         }
 
         // Tổng tiền sau giảm = tổng - giảm + ship
@@ -185,27 +187,12 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
                 SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(item.getIdSanPhamChiTiet())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sản phẩm chi tiết không tồn tại"));
-
-                // Kiểm tra và áp dụng khuyến mãi (nếu có)
-                Double donGiaSauGiam = item.getDonGia(); // Bắt đầu với giá gốc của sản phẩm
-
-                if (voucherId != null) {
-                    // Lấy voucher từ repository
-
-                    if (voucher != null && item.getDonGia() >= voucher.getDonToiThieu().doubleValue()) {
-                        if (voucher.isHinhThucGiam()) {
-                            // Giảm theo tỷ lệ phần trăm
-                            donGiaSauGiam = item.getDonGia() * (1 - voucher.getGiaTriGiam().doubleValue() / 100);
-                        }
-                    }
-                }
-
                 HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
                 hoaDonChiTiet.setMa("HDCT" + System.currentTimeMillis());
                 hoaDonChiTiet.setHoaDon(hoaDon1);
                 hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
                 hoaDonChiTiet.setSoLuong(item.getSoLuong());
-                hoaDonChiTiet.setDonGia(donGiaSauGiam); // Giá ban đầu trước khi giảm giá
+                hoaDonChiTiet.setDonGia(item.getDonGia());
                 hoaDonChiTietRepository.save(hoaDonChiTiet);
 
 //                // ✅ Trừ số lượng tồn kho của sản phẩm chi tiết
@@ -269,9 +256,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return chiTietDtos;
     }
 
-
-    public List<HoaDonDto> getHoaDonChiTietDto() {
-        List<Object[]> result = hoaDonChiTietRepository.getHoaDonChiTiet();
+    @Override
+    public List<HoaDonDto> getHoaDonChiTietDto(Integer idKhachHang) {
+        List<Object[]> result = hoaDonChiTietRepository.getHoaDonByKhachHang(idKhachHang);
         List<HoaDonDto> hoaDonDtos = new ArrayList<>();
 
 
@@ -298,6 +285,41 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
     // Lấy hóa đơn với voucher, khách hàng và phương thức thanh toán
     public Optional<HoaDon> getHoaDonWithDetailsByMa(String ma) {
         return hoaDonRepository.findHoaDonWithDetailsByMa(ma);
+    }
+
+
+    @Override
+    public HoaDon huyHoaDon(String maHoaDon,String ghiChu) {
+
+        HoaDon hoaDon = hoaDonRepository.findByMa(maHoaDon)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tồn tại"));
+
+        hoaDon.setTrangThai(5);
+        hoaDon.setGhiChu(ghiChu);
+        hoaDonRepository.save(hoaDon);
+
+        return hoaDon; // Return the updated invoice
+    }
+
+    @Override
+    public HoaDon tangTrangThaiHoaDon(Integer id) {
+        Optional<HoaDon> optionalHoaDon = hoaDonRepository.findById(id);
+
+        if (optionalHoaDon.isPresent()) {
+            HoaDon hoaDon = optionalHoaDon.get();
+            Integer trangThaiHienTai = hoaDon.getTrangThai();
+
+            if (trangThaiHienTai != null && trangThaiHienTai < 4) {
+                hoaDon.setTrangThai(trangThaiHienTai + 1);
+                hoaDon.setNgaySua(LocalDate.now());
+                return hoaDonRepository.save(hoaDon);
+            }
+
+            // Nếu trạng thái đã là 4 thì vẫn trả về không đổi
+            return hoaDon;
+        }
+
+        return null; // Không tìm thấy hóa đơn
     }
 
 }

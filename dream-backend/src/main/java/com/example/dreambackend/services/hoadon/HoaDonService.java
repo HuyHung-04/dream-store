@@ -131,7 +131,7 @@ public class HoaDonService implements IHoaDonService {
                 .orElseThrow(() -> new RuntimeException("Hoá đơn không tồn tại"));
 
         if (hoaDon.getTrangThai() ==1 || hoaDon.getTrangThai() == 6) {
-            hoaDon.setTrangThai(5);
+            hoaDon.setTrangThai(8);
             if (hoaDon.getTrangThai() == 1) {
                 hoaDon.setGhiChu(ghiChu);
             }

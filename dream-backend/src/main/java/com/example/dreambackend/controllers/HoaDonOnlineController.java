@@ -94,14 +94,10 @@ public class HoaDonOnlineController {
         }
     }
 
-    @GetMapping("/hoa-don-chi-tiet")
-    public ResponseEntity<List<HoaDonDto>> getHoaDonChiTiet() {
-        try {
-            List<HoaDonDto> hoaDonDtos = hoaDonOnlineService.getHoaDonChiTietDto();
-            return ResponseEntity.ok(hoaDonDtos);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
-        }
+    // Lấy danh sách hóa đơn theo id khách hàng
+    @GetMapping("/hoa-don/{idKhachHang}")
+    public List<HoaDonDto> getHoaDonByKhachHang(@PathVariable Integer idKhachHang) {
+        return hoaDonOnlineService.getHoaDonChiTietDto(idKhachHang);
     }
 
 
@@ -109,4 +105,23 @@ public class HoaDonOnlineController {
     public Optional<HoaDon> getHoaDonWithDetailsByMa(@PathVariable("ma") String ma) {
         return hoaDonOnlineService.getHoaDonWithDetailsByMa(ma);
     }
+    @PostMapping("/huy")
+    public ResponseEntity<HoaDon> huyHoaDon(@RequestParam String maHoaDon,
+                                            @RequestParam String ghiChu) {
+        // Gọi service để hủy đơn, giả sử service trả về hóa đơn đã cập nhật
+        HoaDon hoadon = hoaDonOnlineService.huyHoaDon(maHoaDon, ghiChu);
+
+        return ResponseEntity.ok(hoadon);
+    }
+
+    @PostMapping("/{id}/tang-trang-thai")
+    public ResponseEntity<?> tangTrangThai(@PathVariable Integer id) {
+        HoaDon updated = hoaDonOnlineService.tangTrangThaiHoaDon(id);
+        if (updated != null) {
+            return ResponseEntity.ok(updated); // trả về JSON hóa đơn sau cập nhật
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn không tồn tại");
+        }
+    }
+
 }

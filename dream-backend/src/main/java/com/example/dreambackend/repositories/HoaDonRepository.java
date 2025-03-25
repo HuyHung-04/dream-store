@@ -130,7 +130,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
 //            sql.append(" AND UPPER(hd.id) LIKE UPPER(:idHoaDon)");
 //        }
 
-        sql.append(" ORDER BY hd.ngay_tao DESC, hd.ngay_sua DESC");
+        sql.append(" ORDER BY hd.id DESC");
         jakarta.persistence.Query query = entityManager.createNativeQuery(sql.toString(), "HoaDonResponseMapping");
 
         if (searchRequest.getMaHoaDon() != null && !searchRequest.getMaHoaDon().isEmpty()) {

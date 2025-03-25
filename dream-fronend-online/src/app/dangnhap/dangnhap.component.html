@@ -7,7 +7,7 @@
             <h2>Đăng Nhập</h2>
             <form (ngSubmit)="kiemTraTaiKhoan()" #taiKhoanForm="ngForm">
                 <div class="textbox">
-                    <input type="text" placeholder="email" name="tenTaiKhoan" [(ngModel)]="tentaikhoan" required>
+                    <input type="text" placeholder="Tài khoản" name="tenTaiKhoan" [(ngModel)]="tentaikhoan" required>
                     <div class="tooltip-error" *ngIf="errors.email">
                         {{ errors.email}}
                       </div>

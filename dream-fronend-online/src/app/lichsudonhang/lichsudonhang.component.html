@@ -3,6 +3,7 @@
   </div>
   <ng-template #dataTemplate>
     <div *ngIf="hoaDonChiTiet.length > 0; else noData" class="container">
+      <a class="back" href="" (click)="goHome()"><i class="bi bi-box-arrow-left"></i> Trở lại</a>
       <h2>Đơn hàng của bạn</h2>
       <ul class="hoa-don-list">
         <li *ngFor="let item of hoaDonChiTiet" class="hoa-don-item"  (click)="viewInvoiceDetail(item.maHoaDon)">
@@ -24,7 +25,7 @@
     </div>
   
     <ng-template #noData>
-      <p>Không có dữ liệu hóa đơn.</p>
+      <!-- <p>Không có dữ liệu hóa đơn.</p> -->
     </ng-template>
   </ng-template>
   

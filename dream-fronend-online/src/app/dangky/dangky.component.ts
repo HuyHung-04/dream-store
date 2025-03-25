@@ -65,18 +65,33 @@ export class DangkyComponent implements OnInit {
   
   addKhachHang() {
     if (!this.validateForm()) {
-      return; // Stop execution if form is invalid
+      return; // Dừng nếu form không hợp lệ
     }
-    console.log(this.khachhang);
-    this.dangKyService.addKhachHang(this.khachhang).subscribe(
-      (response) => {
-        alert('Thêm khách hàng thành công!');
-        this.router.navigate(['']);
-        this.resetForm();
+  
+    // Kiểm tra email đã tồn tại hay chưa
+    this.dangKyService.getKhachHangByEmail(this.khachhang.email).subscribe(
+      (existingKhachHang) => {
+        if (existingKhachHang) {
+          this.errors.email ='Email đã tồn tại, vui lòng chọn email khác!';
+          return;
+        } else {
+          // Nếu email chưa tồn tại, tiến hành thêm khách hàng
+          this.dangKyService.addKhachHang(this.khachhang).subscribe(
+            (response) => {
+              alert('Thêm khách hàng thành công!');
+              this.router.navigate(['']);
+              this.resetForm();
+            },
+            (error) => {
+              console.error('Error:', error);
+              alert('Có lỗi xảy ra khi thêm khách hàng.');
+            }
+          );
+        }
       },
       (error) => {
         console.error('Error:', error);
-        alert('Có lỗi xảy ra khi thêm khách hàng.');
+        alert('Có lỗi xảy ra khi kiểm tra email.');
       }
     );
   }
