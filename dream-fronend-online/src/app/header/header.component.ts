@@ -190,9 +190,9 @@ export class HeaderComponent implements OnInit {
           this.isSearching = false;
   
           // Kiểm tra nếu không có sản phẩm nào được tìm thấy
-          if (data.content.length ===0) {
-            alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
-          }
+          // if (data.content.length ===0) {
+          //   alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
+          // }
         },
         (error) => {
           console.error('Lỗi khi tìm kiếm sản phẩm', error);
@@ -286,5 +286,21 @@ export class HeaderComponent implements OnInit {
 
     this.newOrderCount = 0; // Xóa số thông báo khi người dùng xem đơn hàng
   }
+
+  scrollToProducts() {
+    if (this.router.url.includes('/ban-hang')) {
+      // Nếu đã ở trang bán hàng thì chỉ cần cuộn xuống danh sách sản phẩm
+      this.router.navigate([], {
+        queryParams: { scroll: new Date().getTime() }, // Luôn thay đổi query để đảm bảo trigger
+        queryParamsHandling: 'merge'
+      });
+    } else {
+      // Nếu đang ở trang khác, điều hướng đến trang bán hàng rồi mới cuộn
+      this.router.navigate(['/ban-hang'], {
+        queryParams: { scroll: new Date().getTime() }
+      });
+    }
+  }
+  
   
 }

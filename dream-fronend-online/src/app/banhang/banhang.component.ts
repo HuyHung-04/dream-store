@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BanhangService } from './banhang.service';
 import { HeaderComponent } from '../header/header.component';
 import { RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-banhang',
@@ -21,7 +22,7 @@ export class BanhangComponent{
  // Khai báo biến lưu trữ kết quả tìm kiếm
  searchResults: any[] = [];
  isSearching: boolean = false;
-  constructor(private banHangService : BanhangService) {}
+  constructor(private banHangService : BanhangService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -75,5 +76,23 @@ export class BanhangComponent{
     if (this.currentPage > 0) {
       this.loadSanPhamOnline(this.currentPage - 1);
     }
+  }
+
+  ngAfterViewInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['scroll']) {
+        setTimeout(() => {
+          const productList = document.getElementById('product-list');
+          if (productList) {
+            productList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Dịch lên để không bị che
+            // setTimeout(() => {
+            //   window.scrollBy(0, -50);
+            // }, 500);
+          }
+        }, 500);
+      }
+    });
   }
 }
