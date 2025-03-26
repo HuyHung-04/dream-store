@@ -3,6 +3,7 @@ package com.example.dreambackend.services.sanphamonline;
 import com.example.dreambackend.dtos.SanPhamChiTietDto;
 import com.example.dreambackend.dtos.SanPhamChiTietOnlineDto;
 import com.example.dreambackend.dtos.SanPhamDto;
+import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.repositories.SanPhamChiTietOnlineRepository;
 import com.example.dreambackend.repositories.SanPhamOnlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class SanPhamOnlineService implements ISanPhamOnlineService {
     @Autowired
     SanPhamOnlineRepository sanPhamOnlineRepository;
+
+
 
     @Autowired
     SanPhamChiTietOnlineRepository sanPhamChiTietOnlineRepository;
@@ -33,5 +38,6 @@ public class SanPhamOnlineService implements ISanPhamOnlineService {
     public Page<SanPhamDto> searchSanPhamByNameAndTrangThai(String name, Pageable pageable) {
         return sanPhamOnlineRepository.searchSanPhamByName(name, pageable);
     }
+
 
 }

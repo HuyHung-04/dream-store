@@ -154,4 +154,5 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
     //     check trùng spct khi thêm cùng màu và size
     Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
+
 }

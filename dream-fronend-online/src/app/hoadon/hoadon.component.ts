@@ -432,8 +432,6 @@ export class HoadonComponent {
       (response: any) => {
         this.vouchers = response;
         console.log('Danh sách voucher:', response); // Log danh sách voucher để kiểm tra
-        // Lưu dữ liệu voucher vào mảng hoặc biến nếu cần
-        // Example: this.vouchers = response;
       },
       (error) => {
         console.error("Lỗi khi lấy danh sách voucher", error);
@@ -548,7 +546,7 @@ export class HoadonComponent {
 
     // Nếu là giảm trực tiếp
     if (v.hinhThucGiam) {
-      return `Giảm trực tiếp: ${v.giaTriGiam.toLocaleString()} VND`;
+      return `Gía trị giảm: ${v.giaTriGiam.toLocaleString()} VND`;
     }
 
     // Nếu là giảm phần trăm

@@ -234,9 +234,11 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     JOIN san_pham sp ON spct.id_san_pham = sp.id
     JOIN mau_sac ms ON spct.id_mau_sac = ms.id
     JOIN size sz ON spct.id_size = sz.id
-    ORDER BY hd.id DESC  -- Sắp xếp hóa đơn theo id giảm dần
+    WHERE hd.id_khach_hang = :idKhachHang
+    ORDER BY hd.id DESC
 """, nativeQuery = true)
-    List<Object[]> getHoaDonChiTiet();
+    List<Object[]> getHoaDonByKhachHang(@Param("idKhachHang") Integer idKhachHang);
+
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
             "JOIN FETCH hdct.hoaDon hd " +

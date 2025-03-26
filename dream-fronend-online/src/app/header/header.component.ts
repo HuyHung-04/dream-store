@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderService } from './header.service';
 import { CommonModule } from '@angular/common';
-import { BanhangService } from '../banhang/banhang.service'; 
+import { BanhangService } from '../banhang/banhang.service';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-
+import { SanphamDetailService } from '../sanpham-detail/sanpham-detail.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-    imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  timkiem: boolean=false;
-  luachon: boolean=false;
+  timkiem: boolean = false;
+  luachon: boolean = false;
   modalCard: boolean = false;
   showResults: boolean = false;
   gioHang: any[] = []; // Danh sách sản phẩm trong giỏ hàng
@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
   searchResults: any[] = []; // Kết quả tìm kiếm
   gioHangIds: number[] = [];
   sanphams: any[] = [];
+  soLuongSanPham: number = 0;
   sanpham: any = {
     idSanPhamChiTiet: '',
     tenSanPham: '',
@@ -35,10 +36,10 @@ export class HeaderComponent implements OnInit {
     tenXuatXu: '',
     tenMauSac: '',
     tenSize: '',
-    soLuongSanPham:'',
-    soLuongGioHang:'',
-    hinhThucGiam:true,
-    giaTriGiam:''
+    soLuongSanPham: '',
+    soLuongGioHang: '',
+    hinhThucGiam: true,
+    giaTriGiam: ''
   };
   khachhang: any = {
     id: '',
@@ -53,21 +54,21 @@ export class HeaderComponent implements OnInit {
     trangThai: 1,
   };
 
-  constructor(private headerService: HeaderService,private banhangService: BanhangService, private router: Router,private cookieService: CookieService) {}
+  constructor(private headerService: HeaderService, private banhangService: BanhangService, private router: Router, private cookieService: CookieService, private sanPhamDetailService: SanphamDetailService) { }
 
   ngOnInit(): void {
     const khachhangCookie = this.cookieService.get('khachhang'); // Retrieve customer data from the cookie
     if (khachhangCookie) {
       this.khachhang = JSON.parse(khachhangCookie); // Parse and assign the data to khachhang
-      this.luachon=true;
-    }else{
-      this.luachon=false;
+      this.luachon = true;
+    } else {
+      this.luachon = false;
     }
     this.loadGioHang();
 
     this.headerService.gioHangUpdated$.subscribe(() => {
       this.loadGioHang(); // Cập nhật giỏ hàng ngay lập tức
-  });
+    });
   }
 
   loadGioHang(): void {
@@ -75,10 +76,11 @@ export class HeaderComponent implements OnInit {
       console.warn("Chưa có khách hàng đăng nhập!");
       return;
     }
-  
+
     this.headerService.getGioHang(this.khachhang.id).subscribe(
       (data) => {
         this.gioHang = data;
+        this.headerService.setGioHang(data);
         console.log("Dữ liệu giỏ hàng:", data);
       },
       (error) => {
@@ -86,8 +88,8 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
-  
-  
+
+
 
   xoaSanPham(id: number) {
     this.headerService.deleteFromCart(id).subscribe(() => {
@@ -97,17 +99,45 @@ export class HeaderComponent implements OnInit {
   }
 
   suaSoLuong(id: number, soLuongMoi: number) {
-    this.headerService.updateSoLuong(id, soLuongMoi).subscribe(() => {
-      this.headerService.notifyGioHangUpdated(); // Cập nhật giỏ hàng sau khi thay đổi số lượng
-    });
+    // Tìm sản phẩm trong giỏ hàng theo ID giỏ
+    const gioHangItem = this.gioHang.find(item => item.id === id);
+    if (!gioHangItem) {
+      alert("Không tìm thấy sản phẩm trong giỏ hàng.");
+      return;
+    }
+
+    const idSanPhamChiTiet = gioHangItem.idSanPhamChiTiet;
+    console.log(idSanPhamChiTiet)
+    // Gọi API để lấy thông tin sản phẩm chi tiết (bao gồm tồn kho)
+    this.sanPhamDetailService.getGioHangChiTietById(idSanPhamChiTiet).subscribe(
+      (sanPhamChiTiet) => {
+        const soLuongTonKho = sanPhamChiTiet;
+        console.log(sanPhamChiTiet)
+        if (soLuongMoi > soLuongTonKho) {
+          alert(`Số lượng bạn nhập đang vượt quá tồn kho hiện tại.`);
+          return;
+        }
+
+        // ✅ Nếu hợp lệ, gọi API để cập nhật
+        this.headerService.updateSoLuong(id, soLuongMoi).subscribe((response) => {
+          console.log("✅ Cập nhật số lượng thành công:", response);
+          this.headerService.notifyGioHangUpdated(); // Cập nhật lại giỏ hàng
+        });
+      },
+      (error) => {
+        console.error("❌ Lỗi khi lấy thông tin sản phẩm:", error);
+        alert("Không thể kiểm tra tồn kho. Vui lòng thử lại.");
+      }
+    );
   }
+
 
   getTongTien(): number {
     return this.gioHang.reduce((total, item) => {
       return total + item.donGia * item.soLuong;
     }, 0);
   }
-  
+
   cardModal(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
@@ -126,7 +156,7 @@ export class HeaderComponent implements OnInit {
       alert("Bạn cần đăng nhập để tiếp tục");
       return;
     }
-  
+
     this.headerService.getGioHangIdsForThanhToan(this.khachhang.id).subscribe(
       (ids) => {
         this.gioHangIds = ids;
@@ -137,41 +167,41 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
-  
+
   // Gọi phương thức tìm kiếm khi người dùng nhấn nút tìm kiếm hoặc Enter
   searchSanPham(page: number = 0): void {
     if (this.searchQuery.trim()) {
       this.banhangService.setIsSearching(true);
-      
-    }else{
+
+    } else {
       this.banhangService.setIsSearching(false);
 
     }
-    
-      this.isSearching = true;
-      this.banhangService.timKiemSanPham(this.searchQuery, page, 10).subscribe(
-        (data) => {
-          this.banhangService.setSearchResults(data); // Lưu kết quả vào BanhangService
-          this.isSearching = false;
-  
-          // Kiểm tra nếu không có sản phẩm nào được tìm thấy
-          if (data.content.length ===0) {
-            alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
-          }
-        },
-        (error) => {
-          console.error('Lỗi khi tìm kiếm sản phẩm', error);
-          this.isSearching = false;
+
+    this.isSearching = true;
+    this.banhangService.timKiemSanPham(this.searchQuery, page, 10).subscribe(
+      (data) => {
+        this.banhangService.setSearchResults(data); // Lưu kết quả vào BanhangService
+        this.isSearching = false;
+
+        // Kiểm tra nếu không có sản phẩm nào được tìm thấy
+        if (data.content.length === 0) {
+          alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
         }
-      );
-   
+      },
+      (error) => {
+        console.error('Lỗi khi tìm kiếm sản phẩm', error);
+        this.isSearching = false;
+      }
+    );
+
   }
-  xoacookie(){
+  xoacookie() {
     if (window.confirm('Bạn có muốn đăng xuất không?')) {
       this.cookieService.delete('khachhang');
     }
   }
-  hoso(){
+  hoso() {
     this.router.navigate(['taikhoan']);
   }
   dangnhap() {
@@ -224,24 +254,24 @@ export class HeaderComponent implements OnInit {
     }, 200); // Thêm thời gian delay để người dùng có thể click vào kết quả
   }
   onSearchChange(): void {
-    
-
-      this.banhangService.timKiemSanPham(this.searchQuery, 0, 10).subscribe(
-        (data) => {
-          this.banhangService.setSearchResults(data); // Lưu kết quả vào BanhangService
 
 
-          // Kiểm tra nếu không có sản phẩm nào được tìm thấy
-          // if (data.length == null) {
-          //   alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
-          // }
-        },
-        (error) => {
-          console.error('Lỗi khi tìm kiếm sản phẩm', error);
+    this.banhangService.timKiemSanPham(this.searchQuery, 0, 10).subscribe(
+      (data) => {
+        this.banhangService.setSearchResults(data); // Lưu kết quả vào BanhangService
 
-        }
-      );
-    
+
+        // Kiểm tra nếu không có sản phẩm nào được tìm thấy
+        // if (data.length == null) {
+        //   alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
+        // }
+      },
+      (error) => {
+        console.error('Lỗi khi tìm kiếm sản phẩm', error);
+
+      }
+    );
+
   }
-  
+
 }

@@ -8,6 +8,8 @@ import { Observable, BehaviorSubject  } from 'rxjs';
 export class HeaderService {
   private apiUrl = 'http://localhost:8080/api/gio-hang';
   // hiện modal thanh toán
+  private gioHangSubject = new BehaviorSubject<any[]>([]);
+  gioHang$ = this.gioHangSubject.asObservable();
   private modalThanhToanSubject = new BehaviorSubject<boolean>(false);
   modalThanhToan$ = this.modalThanhToanSubject.asObservable();
   
@@ -61,4 +63,13 @@ export class HeaderService {
     return this.http.get<number[]>(`${this.apiUrl}/thanh-toan/${idKhachHang}`);
   }
   
+   // Hàm gọi từ HeaderComponent sau khi load giỏ hàng thành công
+   setGioHang(gioHang: any[]) {
+    this.gioHangSubject.next(gioHang);
+  }
+
+  // Hàm cho các component khác gọi để lấy dữ liệu
+  getGioHangData(): Observable<any[]> {
+    return this.gioHang$;
+  }
 }

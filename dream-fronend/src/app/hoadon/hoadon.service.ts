@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface HoaDonResponse {
@@ -38,7 +38,7 @@ export interface HoaDonSearchRequest {
   ngayTaoTo: string | null;
   listTrangThai: number | null;
   pageSize: number;
-  page:number;
+  page: number;
 }
 
 
@@ -48,7 +48,7 @@ export interface HoaDonSearchRequest {
 export class HoaDonService {
   private readonly apiUrl = 'http://localhost:8080/api/hoa-don';
   private readonly apiUrlHDCT = 'http://localhost:8080/api/hoa-don-chi-tiet';
-
+  private apiHoaDonOnline = 'http://localhost:8080/api/hoa-don-online';
   constructor(private http: HttpClient) { }
 
   getHoaDons(request: HoaDonSearchRequest): Observable<any> {
@@ -57,5 +57,27 @@ export class HoaDonService {
 
   getHDCTByHD(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrlHDCT}/${id}/all`);
+  }
+
+  capNhatTrangThai(id: number): Observable<HoaDonResponse> {
+    return this.http.post<any>(`${this.apiHoaDonOnline}/${id}/tang-trang-thai`, null);
+  }
+
+  // Phương thức lấy chi tiết hóa đơn theo mã hóa đơn
+  getChiTietHoaDon(maHoaDon: string): Observable<any> {
+    return this.http.get<any>(`${this.apiHoaDonOnline}/chi-tiet/${maHoaDon}`);
+  }
+
+  getHoaDonByMa(ma: string): Observable<any> {
+    return this.http.get<any>(`${this.apiHoaDonOnline}/find-by-ma/${ma}`);
+  }
+
+  // Phương thức hủy hóa đơn sử dụng RequestParam
+  huyHoaDon(maHoaDon: string, ghiChu: string): Observable<any> {
+    const params = new HttpParams()
+      .set('maHoaDon', maHoaDon)
+      .set('ghiChu', ghiChu);
+
+    return this.http.post<any>(`${this.apiHoaDonOnline}/huy`, null, { params });
   }
 }

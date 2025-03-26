@@ -464,7 +464,7 @@ li.address-item {
   position: fixed;
   top: 10px;  /* Đặt vị trí cách top một chút để không che nội dung */
   right: 20px;
-  width: 750px;
+  width: 650px;
   height: 100%;
   background-color: #fff;
   padding: 20px;

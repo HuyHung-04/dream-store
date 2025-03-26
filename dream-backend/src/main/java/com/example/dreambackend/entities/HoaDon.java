@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "hoa_don")
 public class HoaDon {
     @Id
