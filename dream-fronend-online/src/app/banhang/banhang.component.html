@@ -7,22 +7,24 @@
   <h1>Enjoy Your Youth!</h1>
     <p>Không chỉ là thời trang, DREAM còn là “phòng thí nghiệm” của tuổi trẻ - nơi nghiên cứu và <br> cho ra đời nguồn năng lượng mang tên “Youth”. Chúng mình luôn muốn tạo nên những trải <br> nghiệm vui vẻ, năng động và trẻ trung.</p>
  </div>
+
  <div class="container">
   <div class="input-group">
     <div class="input-form">
       <label for="brand">Tìm thương hiệu</label>
-      <select id="brand">
+      <select id="brand" (change)="locSanPham(brand.value, minPrice.value, maxPrice.value)" #brand>
         <option value="">-- Chọn --</option>
-        <option value="1">Nike</option>
-        <option value="2">Adidas</option>
+        <option *ngFor="let thuongHieu of thuongHieuList" [value]="thuongHieu.ten">
+          {{ thuongHieu.ten }}
+        </option>
       </select>
     </div>
 
     <div class="input-form">
       <label for="price">Tìm khoảng giá</label>
       <div class="price-range">
-        <input type="text" placeholder="Từ giá">
-        <input type="text" placeholder="Đến giá">
+        <input type="text" placeholder="Từ giá" #minPrice (keyup)="locSanPham(brand.value, minPrice.value, maxPrice.value)">
+        <input type="text" placeholder="Đến giá" #maxPrice (keyup)="locSanPham(brand.value, minPrice.value, maxPrice.value)">
       </div>
     </div>
   </div>

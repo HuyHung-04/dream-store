@@ -173,7 +173,14 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         hoaDon.setNgayTao(LocalDate.now());
         hoaDon.setNgaySua(LocalDate.now());
         hoaDon.setVoucher(voucher);
-        hoaDon.setTrangThai(1); // Đánh dấu hóa đơn là hoạt động
+        // Nếu id phương thức thanh toán là 4, thì trạng thái hóa đơn là 2
+        if (paymentMethodId == 4) {
+            hoaDon.setTrangThai(2); // Trạng thái hóa đơn là 2
+        } else {
+            hoaDon.setTrangThai(1); // Đánh dấu hóa đơn là hoạt động
+        }
+
+        hoaDon.setPhuongThucThanhToan(phuongThucThanhToan); // Gán phương thức thanh toán cho hóa đơn
         hoaDon.setPhuongThucThanhToan(phuongThucThanhToan); // Gán phương thức thanh toán cho hóa đơn
 
         // Lưu hóa đơn vào repository

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Component, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 interface Voucher {
   id: number;
   ten: string;
@@ -66,6 +67,8 @@ export class HoadonComponent {
   fullAddress: string = '';
   thongBaoTrong: boolean = false;
   maHoaDon: string = '';
+  vnpTransactionStatus: string | null = null;
+  paymentUrl: string = '';
   newAddress = {
     id: '',
     tenNguoiNhan: '',
@@ -77,15 +80,20 @@ export class HoadonComponent {
     idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
   };
   AddressEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
-  constructor(private hoadonService: HoadonService, private router: Router, private cookieService: CookieService, private cdRef: ChangeDetectorRef) { }
+  constructor(private hoadonService: HoadonService, private router: Router, private cookieService: CookieService, private cdRef: ChangeDetectorRef,private activatedRoute: ActivatedRoute) { }
 
   // Phương thức gọi API khi component được khởi tạo
   ngOnInit(): void {
+   
+
+
     const khachhangStr = this.cookieService.get('khachhang');
     if (khachhangStr) {
       const khachhang = JSON.parse(khachhangStr);
       this.idKhachHang = khachhang.id; // hoặc khachhang.idKhachHang tùy theo API trả về
       console.log("ID khách hàng từ cookie:", this.idKhachHang);
+      // Kiểm tra trạng thái thanh toán
+
       this.resetForm();
       this.getDiaChiKhachHang();
       this.loadTinhThanh();
@@ -98,7 +106,62 @@ export class HoadonComponent {
       this.router.navigate(['/dangnhap']);
     }
     this.loadPaymentMethods();
+    // Sử dụng this.activatedRoute.queryParams.subscribe để lấy các tham số từ URL trả về của VNPAY
+this.vnpay()
   }
+
+
+vnpay():void{
+  this.activatedRoute.queryParams.subscribe(params => {
+    const vnp_ResponseCode = params['vnp_ResponseCode'];  // Mã phản hồi từ VNPAY
+    // Kiểm tra mã phản hồi từ VNPAY để xử lý kết quả thanh toán
+    debugger
+    if (vnp_ResponseCode === '00') {
+      const paymentData = localStorage.getItem('paymentData');
+      if (paymentData) {
+        const paymentDetails = JSON.parse(paymentData);
+        console.log('Dữ liệu thanh toán từ localStorage:', paymentDetails);
+        // Gọi phương thức createHoaDon với các giá trị từ paymentDetails
+        this.createHoaDonFromPaymentData(paymentDetails);
+         // Xóa dữ liệu thanh toán sau khi xử lý xong
+         localStorage.removeItem('paymentData');
+         
+      }
+    } else {
+    }
+  });
+}
+
+createHoaDonFromPaymentData(paymentData: any): void {
+  // Lấy các dữ liệu từ paymentData để gọi API tạo hóa đơn
+  const paymentMethodId = paymentData.selectedPhuongThucThanhToan;
+  const voucherId = paymentData.selectedVoucherId || null;
+
+  // Gọi API tạo hóa đơn với các giá trị đã lưu trong paymentData
+  this.hoadonService.createHoaDon(
+    this.idKhachHang,
+    voucherId,
+    paymentData.totalPrice,
+    paymentMethodId,
+    paymentData.tongTienSauVoucher,
+    paymentData.selectedSdtNguoiNhan,
+    paymentData.selectedTenNguoiNhan,
+    paymentData.fullAddress,
+    paymentData.shippingFee
+  ).subscribe(
+    (response) => {
+      console.log('Hóa đơn đã được tạo thành công:', response);
+      alert('Đơn hàng đã được thanh toán thành công!');
+      this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
+      this.modalthongbao = true;
+      this.maHoaDon = response.ma;
+    },
+    (error) => {
+      console.error('Lỗi khi tạo hóa đơn:', error);
+      alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
+    }
+  );
+}
 
   // Phương thức gọi API để lấy danh sách địa chỉ của khách hàng
   getDiaChiKhachHang(): void {
@@ -299,12 +362,66 @@ export class HoadonComponent {
     }
   }
 
+  // Phương thức gửi yêu cầu tạo thanh toán
+  createPayment(): void {
+  
+    const paymentData = {
+      idKhachHang: this.idKhachHang,
+      selectedVoucherId: this.selectedVoucher ? this.selectedVoucher.id : null,
+      totalPrice: this.totalPrice,
+      selectedPhuongThucThanhToan: this.selectedPhuongThucThanhToan,
+      tongTienSauVoucher: this.tongTienSauVoucher,
+      selectedSdtNguoiNhan: this.selectedSdtNguoiNhan,
+      selectedTenNguoiNhan: this.selectedTenNguoiNhan,
+      fullAddress: this.fullAddress,
+      shippingFee: this.shippingFee ?? 0
+    };
+  console.log("thong tin ",paymentData)
+    // Lưu vào localStorage
+    localStorage.setItem('paymentData', JSON.stringify(paymentData));
+    console.log(this.selectedPhuongThucThanhToan)
+
+    if (this.selectedPhuongThucThanhToan == 4) {
+      // Nếu phương thức thanh toán là VNPAY (ID 4), gọi VNPAY API
+
+      this.hoadonService.createPayment(this.tongTienSauVoucher).subscribe(
+        (response: any) => {
+          if (response.code == 'ok') {
+            window.localStorage.setItem('paymentStatus', 'success');  // Lưu trạng thái thanh toán vào localStorage
+            const paymentUrl = response.paymentUrl;
+            
+
+
+            // Xác nhận và chuyển hướng đến URL thanh toán
+            const isConfirmed = confirm('Bạn có chắc chắn muốn thanh toán qua VNPAY không?');
+            if (isConfirmed) {
+              // Nếu người dùng xác nhận, chuyển hướng đến URL thanh toán
+              window.location.href = paymentUrl;
+
+            }
+           
+          }
+        },
+        (error) => {
+          console.error('Lỗi khi tạo thanh toán:', error);
+          this.errorMessage = 'Có lỗi xảy ra khi tạo thanh toán. Vui lòng thử lại!';
+        }
+      );
+    } else if (this.selectedPhuongThucThanhToan == 1) {
+      // Nếu phương thức thanh toán là nhận hàng tại nơi (ID 1), tạo hóa đơn
+      this.createHoaDon();
+    } else {
+      alert("Phương thức thanh toán không hợp lệ!");
+    }
+  }
+
+
   // Phương thức gọi API lấy danh sách phương thức thanh toán
   loadPaymentMethods(): void {
     this.hoadonService.getPaymentMethods().subscribe(
       (response: any) => {
-        // Lọc ra phương thức có id = 1
-        this.phuongThucThanhToan = response.filter((method: any) => method.id === 1);
+        // Lọc ra các phương thức có id = 1 hoặc id = 4
+        this.phuongThucThanhToan = response.filter((method: any) => method.id === 1 || method.id === 4);
         // Nếu có phương thức thanh toán id = 1, đặt nó làm mặc định
         if (this.phuongThucThanhToan.length > 0) {
           this.selectedPhuongThucThanhToan = this.phuongThucThanhToan[0].id;
@@ -317,8 +434,8 @@ export class HoadonComponent {
       }
     );
   }
-  
-  
+
+
 
   // Gọi API để cập nhật thông tin địa chỉ
   updateDiaChi(): void {
@@ -477,6 +594,13 @@ export class HoadonComponent {
       return;
     }
 
+    // Hiển thị confirm nếu không phải VNPAY (id !== 4)
+    if (this.selectedPhuongThucThanhToan != 4) {
+      const confirmCreateInvoice = confirm('Bạn có muốn tạo đơn hàng không?');
+      if (!confirmCreateInvoice) {
+        return; // Nếu người dùng không muốn tạo hóa đơn thì dừng lại
+      }
+    }
     const paymentMethodId = this.selectedPhuongThucThanhToan;
     const voucherId = this.selectedVoucher ? this.selectedVoucher.id : null;
     this.hoadonService.createHoaDon(
@@ -503,6 +627,7 @@ export class HoadonComponent {
         alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
       }
     );
+
   }
 
 

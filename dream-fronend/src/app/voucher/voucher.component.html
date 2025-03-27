@@ -46,7 +46,7 @@
             <td>{{ voucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %' }}</td>
             <td>{{ voucher.giaTriGiam }} {{ voucher.hinhThucGiam ? 'VND' : '%' }} </td>
             <td>{{ voucher.donToiThieu}}</td>
-            <td>{{ voucher.giamToiDa }}</td>
+            <td>{{ voucher.giamToiDa != null && voucher.giamToiDa !== '' ? voucher.giamToiDa : 'Không áp dụng' }}</td>
             <td>{{ voucher.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
             <td>{{ voucher.ngayTao }}</td>
             <td>{{ voucher.ngaySua }}</td>
@@ -131,7 +131,7 @@
           </div>
   
           <div class="input-row">
-            <div class="input-field">
+            <div class="input-field" *ngIf="!selectedVoucher.hinhThucGiam">
               <input type="text" class="input" [(ngModel)]="selectedVoucher.giamToiDa" name="giamToiDa" readonly />
               <label for="ten">Giảm tối đa</label>
             </div>
@@ -196,14 +196,14 @@
               </div>
             </div>
             <div class="input-field">
-              <select class="input" [(ngModel)]="voucherEdit.hinhThucGiam" name="hinhThucGiam" required (change)="onHinhThucGiamChange2()"
-                (change)="clearError('hinhThucGiam')">
-                <option [ngValue]="true">Giảm giá</option>
+              <select class="input" [(ngModel)]="voucherEdit.hinhThucGiam" name="hinhThucGiam" required 
+                (change)="onHinhThucGiamChange2(); clearError('hinhThucGiam')">
+                <option [ngValue]="true">Giảm tiền</option>
                 <option [ngValue]="false">Giảm %</option>
               </select>
               <label for="hinhThucGiam">Hình thức giảm</label>
               <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-                {{ errors.hinhThucGiam}}
+                {{ errors.hinhThucGiam }}
               </div>
             </div>
           </div>
@@ -232,11 +232,11 @@
           </div>
   
           <div class="input-row">
-            <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required [disabled]="isGiamToiDaDisabled"/>
+            <div class="input-field" *ngIf="!voucherEdit.hinhThucGiam">
+              <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required />
               <label for="giamToiDa">Giảm tối đa</label>
               <div class="tooltip-error" *ngIf="errors.giamToiDa">
-                {{ errors.giamToiDa}}
+                {{ errors.giamToiDa }}
               </div>
             </div>
             <div class="input-field">
@@ -313,14 +313,14 @@
             </div>
             <div class="input-field">
               <select class="input" [(ngModel)]="voucher.hinhThucGiam" name="hinhThucGiam" required
-                (change)="clearError('hinhThucGiam')" (change)="onHinhThucGiamChange()">
+                (change)="clearError('hinhThucGiam'); onHinhThucGiamChange()">
                 <option value="" disabled selected>Hình thức giảm</option>
-                <option [ngValue]="true">Giảm giá</option>
+                <option [ngValue]="true">Giảm tiền</option>
                 <option [ngValue]="false">Giảm %</option>
               </select>
               <label for="hinhThucGiam">Hình thức giảm</label>
               <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-                {{ errors.hinhThucGiam}}
+                {{ errors.hinhThucGiam }}
               </div>
             </div>
             
@@ -350,12 +350,13 @@
           </div>
   
           <div class="input-row">
-            <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucher.giamToiDa" name="giamToiDa" required #ten="ngModel"
-                (input)="clearError('giamToiDa')" [disabled]="isGiamToiDaDisabled"/>
-              <label for="ten">Giảm tối đa</label>
+            <div class="input-field" *ngIf="voucher.hinhThucGiam === false">
+              <input type="text" class="input" [(ngModel)]="voucher.giamToiDa" name="giamToiDa"
+                [required]="voucher.hinhThucGiam === false" #ten="ngModel"
+                (input)="clearError('giamToiDa')" />
+              <label for="giamToiDa">Giảm tối đa</label>
               <div class="tooltip-error" *ngIf="errors.giamToiDa">
-                {{ errors.giamToiDa}}
+                {{ errors.giamToiDa }}
               </div>
             </div>
             <div class="input-field">

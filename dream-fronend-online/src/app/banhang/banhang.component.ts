@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 export class BanhangComponent{
   @ViewChild('searchResultsContainer') searchResultsContainer!: ElementRef;
   sanPhamOnlines: any[] = [];
+  thuongHieuList: any[] = [];
   totalPages: number = 0;
   currentPage: number = 0;
   size: number = 20;
@@ -52,6 +53,7 @@ export class BanhangComponent{
 
   loadData(): void {
     this.loadSanPhamOnline(0);
+    this.loadThuongHieu();
   }
 
   loadSanPhamOnline(page: number): void {
@@ -94,5 +96,32 @@ export class BanhangComponent{
         }, 500);
       }
     });
+  }
+
+  locSanPham(thuongHieu: string, minGia: string, maxGia: string): void {
+    const min = minGia ? parseFloat(minGia) : null;
+    const max = maxGia ? parseFloat(maxGia) : null;
+
+    this.banHangService.filterSanPhamByBrandAndPrice(thuongHieu, min ?? 0, max ?? Number.MAX_VALUE, 0, this.size).subscribe(
+      (data) => {
+        this.sanPhamOnlines = data.content;
+        this.totalPages = data.totalPages;
+        this.currentPage = 0;
+      },
+      (error) => {
+        console.error('Lỗi khi lọc sản phẩm:', error);
+      }
+    );
+  }
+  
+  loadThuongHieu(): void {
+    this.banHangService.getThuongHieu().subscribe(
+      (data) => {
+        this.thuongHieuList = data;
+      },
+      (error) => {
+        console.error('Lỗi khi lấy danh sách thương hiệu:', error);
+      }
+    );
   }
 }
