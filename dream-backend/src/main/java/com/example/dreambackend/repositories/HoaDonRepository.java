@@ -4,6 +4,8 @@ import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.*;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -197,4 +199,13 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
             "LEFT JOIN FETCH hd.phuongThucThanhToan ptt " +
             "WHERE hd.id = :idHoaDon")
     Optional<HoaDon> getHoaDonById(@Param("idHoaDon") Integer idHoaDon);
+
+
+    @Query("SELECT h FROM HoaDon h WHERE h.trangThai IN (1, 2, 3, 4, 5) " +
+            "AND (h.trangThai = ?1 OR ?1 = 0) " +  // Lọc trạng thái
+            "AND (LOWER(h.tenNguoiNhan) LIKE LOWER(CONCAT('%', ?2, '%')) OR ?2 IS NULL) " +  // Lọc tên người nhận
+            "AND (h.sdtNguoiNhan LIKE CONCAT('%', ?3, '%') OR ?3 IS NULL) " +  // Lọc số điện thoại người nhận
+            "AND (h.ma LIKE CONCAT('%', ?4, '%') OR ?4 IS NULL)"+
+            "ORDER BY h.id DESC")  // Lọc mã hóa đơn
+    Page<HoaDon> findByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon, Pageable pageable);
 }

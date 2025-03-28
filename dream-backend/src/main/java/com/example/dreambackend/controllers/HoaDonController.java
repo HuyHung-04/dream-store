@@ -1,12 +1,14 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.dtos.DataTableResults;
+import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.requests.HoaDonRequest;
 import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
 import com.example.dreambackend.services.hoadon.IHoaDonService;
 import com.example.dreambackend.services.pdf.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,5 +87,16 @@ public class HoaDonController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(("Lỗi khi xuất PDF: " + e.getMessage()).getBytes());
         }
+    }
+
+    @GetMapping("/filter")
+    public Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(
+            @RequestParam(defaultValue = "0") Integer trangThai,  // Trạng thái mặc định là 0 (Tất cả)
+            @RequestParam(defaultValue = "") String tenNguoiNhan, // Tìm kiếm tên người nhận
+            @RequestParam(defaultValue = "") String sdtNguoiNhan, // Tìm kiếm số điện thoại người nhận
+            @RequestParam(defaultValue = "") String maHoaDon,  // Tìm kiếm mã hóa đơn
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return hoaDonService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon, page, size);
     }
 }

@@ -10,6 +10,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -220,5 +223,12 @@ public class HoaDonService implements IHoaDonService {
             ma = "HD" + randomNum;
         } while (hoaDonRepository.findByMa(ma).isPresent()); // Kiểm tra trùng mã trong DB
         return ma;
+    }
+
+    // Lọc hóa đơn theo trạng thái và phân trang
+    @Override
+    public Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return hoaDonRepository.findByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon, pageable);
     }
 }
