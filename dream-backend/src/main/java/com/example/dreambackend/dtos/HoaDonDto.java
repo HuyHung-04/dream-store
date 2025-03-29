@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 public class HoaDonDto {
     private Integer idHoaDon;
     private String maHoaDon;
+    private String tenNguoiNhan;
+    private String sdtNguoiNhan;
+    private Integer trangThai;
+    private String diaChiNhanHang;
     private Double tongTienThanhToan;
     private Integer idHoaDonChiTiet;
     private String maSanPham;

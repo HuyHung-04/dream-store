@@ -19,5 +19,5 @@ public interface IHoaDonOnlineService {
     List<HoaDonChiTietDto> getChiTietHoaDonByMa(String maHoaDon);
     HoaDon huyHoaDon(String maHoaDon,String ghiChu);
     HoaDon tangTrangThaiHoaDon(Integer id);
-    List<HoaDonDto> getHoaDonChiTietDto(Integer idKhachHang);
+    List<HoaDonDto> getHoaDonChiTietDto(Integer idKhachHang,Integer trangThai);
 }

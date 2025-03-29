@@ -18,6 +18,8 @@ export class ChitietlichsuComponent {
   hoaDonData: any;
   showCancelModal = false; // Trạng thái hiển thị modal
   ghiChu: string = '';     // Lưu lý do hủy
+  showGiamToiDa: boolean = false;
+  showGiamPhanTram: boolean = false;
   constructor(private route: ActivatedRoute, private chitietlichsuService: ChitietlichsuService,private donhangService: DonhangService ) { }
 
   ngOnInit(): void {
@@ -135,6 +137,32 @@ export class ChitietlichsuComponent {
   closeCancelModal(): void {
     this.showCancelModal = false;
     this.ghiChu = '';
+  }
+
+  tinhHienThiVoucher(): void {
+    const voucher = this.hoaDonData?.voucher;
+  
+    this.showGiamPhanTram = false;
+    this.showGiamToiDa = false;
+  
+    // Không có voucher hoặc giảm tiền => ẩn cả 2
+    if (!voucher || voucher.hinhThucGiam === true) {
+      return;
+    }
+  
+    // Giảm phần trăm
+    const tongTien = this.hoaDonData.tongTienTruocVoucher || 0;
+    const giamPhanTram = voucher.giaTriGiam || 0;
+    const giamTien = tongTien * giamPhanTram / 100;
+    const giamToiDa = voucher.giamToiDa;
+  
+    if (giamToiDa && giamTien > giamToiDa) {
+      this.showGiamToiDa = true;
+      this.showGiamPhanTram = false;
+    } else {
+      this.showGiamPhanTram = true;
+      this.showGiamToiDa = false;
+    }
   }
 
 }

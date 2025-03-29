@@ -1,4 +1,4 @@
-/* Đảm bảo list không có dấu chấm đầu dòng và khoảng cách */
+Đảm bảo list không có dấu chấm đầu dòng và khoảng cách
 .hoa-don-list {
     list-style-type: none;
     padding: 0;
@@ -23,11 +23,12 @@
   
   /* Cấu hình cho ảnh sản phẩm */
   .product-image {
-    width: 250px; /* Kích thước ảnh nhỏ lại */
-    height: 250px; /* Cố định chiều cao cho ảnh */
+    width: 160px; /* Kích thước ảnh nhỏ lại */
+    height: 150px; /* Cố định chiều cao cho ảnh */
     object-fit: cover; /* Cắt ảnh để giữ tỷ lệ mà không bị kéo dài */
     margin-right: 20px; /* Khoảng cách giữa ảnh và thông tin */
     border-radius: 5px; /* Bo tròn góc ảnh */
+    padding-left: 10px;
   }
   
   /* Thông tin hóa đơn nằm bên phải ảnh */
@@ -36,7 +37,7 @@
     flex-direction: column; /* Sắp xếp thông tin theo chiều dọc */
     justify-content: space-between; /* Phân bố không gian đều cho các thông tin */
     width: 100%; /* Chiếm toàn bộ không gian còn lại bên phải ảnh */
-    padding-left: 100px;
+    padding-left: 0px;
   }
   
   .hoa-don-info h3 {
@@ -75,7 +76,7 @@
   }
   
   .container{
-    width: 900px;
+    width: 1000px;
   }
 
   .container h2{
@@ -96,4 +97,76 @@
   .back:hover {
     color: #1f3554; /* Màu đậm hơn khi hover */
   }
-  
+
+  /* Cập nhật CSS cho .hoa-don-item để căn chỉnh ngang */
+.hoa-don-item {
+  display: flex;               /* Căn chỉnh các phần tử con trong li theo chiều ngang */
+  justify-content: space-between;  /* Đẩy các phần tử về 2 phía */
+  align-items: center;         /* Căn chỉnh theo chiều dọc */
+  padding: 10px 0;             /* Khoảng cách giữa các phần tử */
+  border-bottom: 1px solid #ddd; /* Để dễ dàng phân biệt các mục trong danh sách */
+}
+
+.hoa-don-info {
+  flex: 1;                     /* Chiếm không gian còn lại */
+}
+
+.trang-thai {
+  margin-right: 15px; 
+  margin-bottom: 120px;           /* Đặt khoảng cách giữa trạng thái và phần tử khác */
+  white-space: nowrap;          /* Ngăn không cho văn bản bị xuống dòng */
+  text-align: right;            /* Căn phải cho trạng thái */
+  color: red;
+}
+
+/* Container cho bộ lọc trạng thái */
+.status-filter-container {
+  background-color: #f8f9fa; /* Màu nền nhẹ nhàng */
+  padding: 15px; /* Thêm khoảng cách trong khung */
+
+  border-radius: 8px; /* Bo góc nhẹ cho khung */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tạo bóng mờ cho khung */
+  margin-bottom: 20px; /* Khoảng cách dưới phần bộ lọc */
+  width: 940px;
+  margin-left: 35px;
+}
+
+/* Phần lọc trạng thái */
+.status-filter {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+/* Style cho các tab lọc trạng thái */
+.status-filter button {
+  padding: 12px 18px;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: capitalize;
+  border: none;
+  background-color: transparent;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent; /* Dòng gạch chân */
+}
+
+/* Hiệu ứng hover cho tab */
+.status-filter button:hover {
+  color: #294764;
+  border-bottom: 2px solid #294764; /* Dòng gạch chân khi hover */
+}
+
+/* Định nghĩa trạng thái được chọn (active) */
+.status-filter button.active {
+  color: #294764; /* Màu chữ khi active */
+  font-weight: 600; /* Đậm hơn */
+  border-bottom: 2px solid #294764; /* Dòng gạch chân màu cam khi active */
+}
+
+/* Tạo hiệu ứng khi focus vào tab */
+.status-filter button:focus {
+  outline: none;
+  border-bottom: 2px solid #294764; /* Dòng gạch chân sáng lên khi focus */
+}
