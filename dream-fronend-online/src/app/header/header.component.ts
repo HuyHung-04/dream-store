@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router'; 
 import { CookieService } from 'ngx-cookie-service';
 import { HoadonService } from '../hoadon/hoadon.service';
+import { SanphamDetailService } from '../sanpham-detail/sanpham-detail.service';
 
 @Component({
   selector: 'app-header',
@@ -56,7 +57,7 @@ export class HeaderComponent implements OnInit {
   newOrderCount: number = 0;
 
   constructor(private headerService: HeaderService,private banhangService: BanhangService,
-     private router: Router,private cookieService: CookieService, private hoaDonService: HoadonService) {}
+     private router: Router,private cookieService: CookieService, private hoaDonService: HoadonService, private sanPhamDetailService: SanphamDetailService) {}
 
   ngOnInit(): void {
     const khachhangCookie = this.cookieService.get('khachhang'); // Retrieve customer data from the cookie
@@ -104,9 +105,36 @@ export class HeaderComponent implements OnInit {
   }
 
   suaSoLuong(id: number, soLuongMoi: number) {
-    this.headerService.updateSoLuong(id, soLuongMoi).subscribe(() => {
-      this.headerService.notifyGioHangUpdated(); // Cập nhật giỏ hàng sau khi thay đổi số lượng
-    });
+    // Tìm sản phẩm trong giỏ hàng theo ID giỏ
+    const gioHangItem = this.gioHang.find(item => item.id === id);
+    if (!gioHangItem) {
+      alert("Không tìm thấy sản phẩm trong giỏ hàng.");
+      return;
+    }
+
+    const idSanPhamChiTiet = gioHangItem.idSanPhamChiTiet;
+    console.log(idSanPhamChiTiet)
+    // Gọi API để lấy thông tin sản phẩm chi tiết (bao gồm tồn kho)
+    this.sanPhamDetailService.getGioHangChiTietById(idSanPhamChiTiet).subscribe(
+      (sanPhamChiTiet) => {
+        const soLuongTonKho = sanPhamChiTiet;
+        console.log(sanPhamChiTiet)
+        if (soLuongMoi > soLuongTonKho) {
+          alert(`Số lượng bạn nhập đang vượt quá tồn kho hiện tại.`);
+          return;
+        }
+
+        // ✅ Nếu hợp lệ, gọi API để cập nhật
+        this.headerService.updateSoLuong(id, soLuongMoi).subscribe((response) => {
+          console.log("✅ Cập nhật số lượng thành công:", response);
+          this.headerService.notifyGioHangUpdated(); // Cập nhật lại giỏ hàng
+        });
+      },
+      (error) => {
+        console.error("❌ Lỗi khi lấy thông tin sản phẩm:", error);
+        alert("Không thể kiểm tra tồn kho. Vui lòng thử lại.");
+      }
+    );
   }
 
   getTongTien(): number {
@@ -162,9 +190,9 @@ export class HeaderComponent implements OnInit {
           this.isSearching = false;
   
           // Kiểm tra nếu không có sản phẩm nào được tìm thấy
-          if (data.content.length ===0) {
-            alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
-          }
+          // if (data.content.length ===0) {
+          //   alert('Không có sản phẩm nào phù hợp với từ khóa tìm kiếm.');
+          // }
         },
         (error) => {
           console.error('Lỗi khi tìm kiếm sản phẩm', error);
@@ -258,5 +286,19 @@ export class HeaderComponent implements OnInit {
 
     this.newOrderCount = 0; // Xóa số thông báo khi người dùng xem đơn hàng
   }
-  
+
+  scrollToProducts() {
+    if (this.router.url.includes('/ban-hang')) {
+      // Nếu đã ở trang bán hàng thì chỉ cần cuộn xuống danh sách sản phẩm
+      this.router.navigate([], {
+        queryParams: { scroll: new Date().getTime() }, // Luôn thay đổi query để đảm bảo trigger
+        queryParamsHandling: 'merge'
+      });
+    } else {
+      // Nếu đang ở trang khác, điều hướng đến trang bán hàng rồi mới cuộn
+      this.router.navigate(['/ban-hang'], {
+        queryParams: { scroll: new Date().getTime() }
+      });
+    }
+  }
 }

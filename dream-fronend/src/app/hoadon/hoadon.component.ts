@@ -137,7 +137,7 @@ nextPage(): void {
 
 selectHoaDonChiTiet(invoice: HoaDonResponse): void {
   const maHoaDon = invoice.maHoaDon;
-  console.log("🔍 Mã hóa đơn:", maHoaDon);
+  console.log(" Mã hóa đơn:", maHoaDon);
   // Gọi API lấy chi tiết sản phẩm trong hóa đơn
   this.hoaDonService.getChiTietHoaDon(maHoaDon).subscribe({
     next: (res) => {

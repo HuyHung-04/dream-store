@@ -15,7 +15,7 @@ export class VoucherComponent implements OnInit {
   showModalDetail: boolean = false;
   showModalSearch: boolean = false;
   isGiamToiDaDisabled: boolean = false;
-  maxVisiblePages = 3;
+  maxPages = 3;
   totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 10;
@@ -24,8 +24,8 @@ export class VoucherComponent implements OnInit {
   selectedVoucher: any = null;
   voucherEdit: any = {};
   searchText: string = '';
-  visiblePages: number[] = [];
-  filteredVouchers: any[] = [];
+  numberPages: number[] = [];
+  tenVouchers: any[] = [];
   errors: any = {};
   voucher: any = {
     id: '',
@@ -63,38 +63,43 @@ export class VoucherComponent implements OnInit {
   }
   editVoucher(voucherId: number) {
     this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
-      this.voucherEdit = { ...voucher }; // Gán dữ liệu vào đối tượng voucherEdit
-      this.showModalEdit = true; // Hiển thị modal chỉnh sửa
+      this.voucherEdit = { ...voucher };
+      console.log(this.voucherEdit)
+      this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true; // Nếu giảm tiền thì ẩn Giảm tối đa
+      this.showModalEdit = true;
     });
   }
-  onHinhThucGiamChange2(){
+  onHinhThucGiamChange2() {
     console.log(this.voucherEdit.hinhThucGiam);
-    if (this.voucherEdit.hinhThucGiam===true ) { // 0 là "Giảm theo tiền"
-      this.voucherEdit.giamToiDa = 0;
-      this.isGiamToiDaDisabled = true;
-    }
-  }
-  onHinhThucGiamChange(): void {
-    if (this.voucher.hinhThucGiam===true ) { // 0 là "Giảm theo tiền"
-      this.voucher.giamToiDa = 0;
-      this.isGiamToiDaDisabled = true;
-    } else {
-      this.voucher.giamToiDa = '';
-      this.isGiamToiDaDisabled = false;
+    this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
+    if (this.isGiamToiDaDisabled) {
+      this.voucherEdit.giamToiDa = null; // Xóa giá trị khi giảm theo tiền
     }
   }
   
-
-  addVoucher() {
-    if (!this.validateForm()) {
-      return; // Stop execution if form is invalid
+  onHinhThucGiamChange() {
+    console.log(this.voucher.hinhThucGiam);
+    if (this.voucher.hinhThucGiam === true) { // Giảm giá
+      this.voucher.giamToiDa = null; // Xóa giá trị giảm tối đa khi không cần dùng
     }
-    
+  }
+  
+  addVoucher() {
+
+    if (!this.validateForm()) {
+      return; 
+    }
+
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn thêm voucher này?');
+
+    if (!isConfirmed) {
+      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+    }
+
     this.voucherService.addVoucher(this.voucher).subscribe(
       (response) => {
         alert('Thêm voucher thành công!');
         this.loadData();
-        // Tải lại danh sách voucher
         this.closeModal();
         this.resetForm();
       },
@@ -119,17 +124,52 @@ export class VoucherComponent implements OnInit {
       this.errors.ma = 'Mã voucher không được để trống!';
     }
     else {
+      const checkTrungMa = this.vouchers.some(voucher => voucher.ma == this.voucher.ma);
 
-      // Kiểm tra mã voucher đã tồn tại trong danh sách
-      const isDuplicate = this.vouchers.some(voucher => voucher.ma == this.voucher.ma);
-
-      if (isDuplicate) {
+      if (checkTrungMa) {
         this.errors.ma = 'Mã voucher đã tồn tại!';
       }
     }
 
     if (!this.voucher.ten.trim()) {
       this.errors.ten = 'Tên voucher không được để trống!';
+    }
+
+    if (!this.voucher.soLuong==null) {
+      this.errors.soLuong = 'Số lượng không được để trống!';
+    }
+
+    if (
+      this.voucher.soLuong === null ||
+      this.voucher.soLuong === undefined ||
+      this.voucher.soLuong === ''
+    ) {
+      this.errors.soLuong = 'Số lượng không được để trống!';
+    } else {
+      const checkSo = Number(this.voucher.soLuong);
+      if (isNaN(checkSo)) {
+        this.errors.soLuong = 'Số lượng phải là số!';
+      } else if (checkSo <= 0) {
+        this.errors.soLuong = 'Số lượng phải lớn hơn 0!';
+      }
+    }
+    
+    
+    if (
+      this.voucher.donToiThieu === null ||
+      this.voucher.donToiThieu === undefined ||
+      this.voucher.donToiThieu === ''
+    ) {
+      this.errors.donToiThieu = 'Đơn tối thiểu không được để trống!';
+    }    
+    else {
+      // Ép về kiểu number để check
+      const checkSo = Number(this.voucher.donToiThieu);
+      if (isNaN(checkSo)) {
+        this.errors.donToiThieu = 'Đơn tối thiểu phải là số!';
+      } else if (checkSo < 0) {
+        this.errors.donToiThieu = 'Đơn tối thiểu không được âm!';
+      }
     }
 
     if (this.voucher.hinhThucGiam === null || this.voucher.hinhThucGiam === undefined) {
@@ -139,38 +179,57 @@ export class VoucherComponent implements OnInit {
     if (this.voucher.giaTriGiam === null || this.voucher.giaTriGiam === undefined || this.voucher.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
-      // Ép về kiểu number để check
-      const numericValue = Number(this.voucher.giaTriGiam);
-      if (isNaN(numericValue)) {
-        this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-      } else if (numericValue < 0) {
-        this.errors.giaTriGiam = 'Giá trị giảm không được âm!';
+      const checkPhanTram = Number(this.voucher.giaTriGiam);
+
+      if (this.voucher.hinhThucGiam === true) {  // Giảm theo số tiền
+        // Nếu hình thức giảm là theo số tiền
+        if (isNaN(checkPhanTram)) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
+        } else if (checkPhanTram <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+        }
+      } else {  // Giảm theo phần trăm
+        // Nếu hình thức giảm là theo phần trăm
+        if (isNaN(checkPhanTram)) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
+        } else if (checkPhanTram <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+        } else if (checkPhanTram > 100) {
+          this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn 100%!';
+        }
       }
     }
 
-    if (this.voucher.donToiThieu === null || this.voucher.donToiThieu === undefined || this.voucher.donToiThieu === '') {
-      this.errors.donToiThieu = 'Giảm tối đa không được để trống!';
-    } else {
-      // Ép về kiểu number để check
-      const numericValue = Number(this.voucher.donToiThieu);
-      if (isNaN(numericValue)) {
-        this.errors.donToiThieu = 'Giảm tối đa phải là số!';
-      } else if (numericValue < 0) {
-        this.errors.donToiThieu = 'Giảm tối đa không được âm!';
+    if (this.voucher.hinhThucGiam == true) {
+      // Nếu giảm theo tiền, phải để trống giảm tối đa
+      this.voucher.giamToiDa = null;
+    } else if (this.voucher.hinhThucGiam == false) {
+      if (this.voucher.giamToiDa === null || this.voucher.giamToiDa === undefined || this.voucher.giamToiDa === '') {
+        this.errors.giamToiDa = 'Giảm tối đa không được để trống khi giảm theo %!';
+      } else { 
+        const checkSo = Number(this.voucher.giamToiDa);
+        if (isNaN(checkSo)) {
+          this.errors.giamToiDa = 'Giảm tối đa phải là số!';
+        } else if (checkSo < 1) {
+          this.errors.giamToiDa = 'Giảm tối đa không được nhỏ hơn 1!';
+        }
       }
     }
+    
 
-    if (this.voucher.giamToiDa === null || this.voucher.giamToiDa === undefined || this.voucher.giamToiDa === '') {
-      this.errors.giamToiDa = 'Giảm tối đa không được để trống!';
-    } else {
-      // Ép về kiểu number để check
-      const numericValue = Number(this.voucher.giamToiDa);
-      if (isNaN(numericValue)) {
-        this.errors.giamToiDa = 'Đơn tối thiểu phải là số!';
-      } else if (numericValue < 0) {
-        this.errors.giamToiDa = 'Đơn tối thiểu không được âm!';
+    if (this.voucher.hinhThucGiam === false) { // Chỉ kiểm tra nếu giảm theo %
+      if (this.voucher.giamToiDa === null || this.voucher.giamToiDa === undefined || this.voucher.giamToiDa === '') {
+        this.errors.giamToiDa = 'Giảm tối đa không được để trống!';
+      } else {
+        // Ép về kiểu number để check
+        const numericValue = Number(this.voucher.giamToiDa);
+        if (isNaN(numericValue)) {
+          this.errors.giamToiDa = 'Giảm tối đa phải là số!';
+        } else if (numericValue < 0) {
+          this.errors.giamToiDa = 'Giảm tối đa không được âm!';
+        }
       }
-    }
+    }    
 
     if (!this.voucher.ngayBatDau) {
       this.errors.ngayBatDau = 'Ngày bắt đầu không được để trống!';
@@ -200,14 +259,14 @@ export class VoucherComponent implements OnInit {
     return Object.keys(this.errors).length === 0;
   }
 
-  searchAndShowSearch(): void {
+  searchVoucherTheoTen(): void {
     if (this.searchText.trim() === '') {
       alert('Vui lòng nhập tên voucher để tìm kiếm.');
       return;
     }
 
     // Tìm kiếm voucher theo tên
-    this.voucherService.searchVoucherByName(this.searchText).subscribe(
+    this.voucherService.searchVoucherTheoTen(this.searchText).subscribe(
       (data) => {
         if (data.length > 0) {
           this.selectedVoucher = data[0]; // Hiển thị voucher đầu tiên trong kết quả
@@ -237,16 +296,42 @@ export class VoucherComponent implements OnInit {
       this.errors.hinhThucGiam = 'Vui lòng chọn hình thức giảm!';
     }
 
+    if (
+      this.voucherEdit.soLuong === null ||
+      this.voucherEdit.soLuong === undefined ||
+      this.voucherEdit.soLuong === ''
+    ) {
+      this.errors.soLuong = 'Số lượng không được để trống!';
+    } else {
+      const checkSo = Number(this.voucherEdit.soLuong);
+      if (isNaN(checkSo)) {
+        this.errors.soLuong = 'Số lượng phải là số!';
+      } else if (checkSo <= 0) {
+        this.errors.soLuong = 'Số lượng phải lớn hơn 0!';
+      }
+    }
     // Sửa bên trong validateForm()
     if (this.voucherEdit.giaTriGiam === null || this.voucherEdit.giaTriGiam === undefined || this.voucherEdit.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
-      // Ép về kiểu number để check
-      const numericValue = Number(this.voucherEdit.giaTriGiam);
-      if (isNaN(numericValue)) {
-        this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-      } else if (numericValue < 0) {
-        this.errors.giaTriGiam = 'Giá trị giảm không được âm!';
+      const checkPhanTram = Number(this.voucherEdit.giaTriGiam);
+
+      if (this.voucherEdit.hinhThucGiam === true) {  // Giảm theo số tiền
+        // Nếu hình thức giảm là theo số tiền
+        if (isNaN(checkPhanTram)) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
+        } else if (checkPhanTram <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+        }
+      } else {  // Giảm theo phần trăm
+        // Nếu hình thức giảm là theo phần trăm
+        if (isNaN(checkPhanTram)) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
+        } else if (checkPhanTram <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+        } else if (checkPhanTram > 100) {
+          this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn 100%!';
+        }
       }
     }
 
@@ -254,25 +339,30 @@ export class VoucherComponent implements OnInit {
       this.errors.donToiThieu = 'Đơn tối thiểu không được để trống!';
     } else {
       // Ép về kiểu number để check
-      const numericValue = Number(this.voucherEdit.donToiThieu);
-      if (isNaN(numericValue)) {
+      const checkSo = Number(this.voucherEdit.donToiThieu);
+      if (isNaN(checkSo)) {
         this.errors.donToiThieu = 'Đơn tối thiểu phải là số!';
-      } else if (numericValue < 0) {
+      } else if (checkSo < 0) {
         this.errors.donToiThieu = 'Đơn tối thiểu không được âm!';
       }
     }
 
-    if (this.voucherEdit.giamToiDa === null || this.voucherEdit.giamToiDa === undefined || this.voucherEdit.giamToiDa === '') {
-      this.errors.giamToiDa = 'Giảm tối đa không được để trống!';
-    } else { 
-      // Ép về kiểu number để check
-      const numericValue = Number(this.voucherEdit.giamToiDa);
-      if (isNaN(numericValue)) {
-        this.errors.giamToiDa = 'Giảm tối đa phải là số!';
-      } else if (numericValue < 0) {
-        this.errors.giamToiDa = 'Giảm tối đa không được âm!';
+    if (this.voucherEdit.hinhThucGiam == true) {
+      // Nếu giảm theo tiền, phải để trống giảm tối đa
+      this.voucherEdit.giamToiDa = null;
+    } else if (this.voucherEdit.hinhThucGiam == false) {
+      if (this.voucherEdit.giamToiDa === null || this.voucherEdit.giamToiDa === undefined || this.voucherEdit.giamToiDa === '') {
+        this.errors.giamToiDa = 'Giảm tối đa không được để trống khi giảm theo %!';
+      } else { 
+        const checkSo = Number(this.voucherEdit.giamToiDa);
+        if (isNaN(checkSo)) {
+          this.errors.giamToiDa = 'Giảm tối đa phải là số!';
+        } else if (checkSo < 1) {
+          this.errors.giamToiDa = 'Giảm tối đa không được nhỏ hơn 1!';
+        }
       }
     }
+    
 
 
     if (!this.voucherEdit.ngayBatDau) {
@@ -312,11 +402,15 @@ export class VoucherComponent implements OnInit {
       return;
     }
 
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn cập nhật voucher này?');
+
+    if (!isConfirmed) {
+      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+    }
+
     if (this.voucherEdit.id) {
       this.voucherService.updateVoucher(this.voucherEdit).subscribe(
         (response) => {
-
-
           alert('Cập nhật voucher thành công!');
           this.loadData();
           console.log('Updated Voucher:', this.voucher.ngaySua);
@@ -324,7 +418,6 @@ export class VoucherComponent implements OnInit {
 
         },
         (error) => {
-          console.error('Error:', error);
           alert('Có lỗi xảy ra khi cập nhật voucher.');
         }
       );
@@ -337,37 +430,24 @@ export class VoucherComponent implements OnInit {
     this.selectedVoucher = this.vouchers.find(voucher => voucher.id === voucherId);
     this.showModalDetail = true;
   }
-  loadVoucherByTrangThai(trangThai: number, page: number): void {
-    this.voucherService.getVoucherMaiByTrangThai(trangThai, page, 8).subscribe((response) => {
+  locTrangThai(trangThai: number, page: number): void {
+    this.voucherService.locTrangThai(trangThai, page, 8).subscribe((response) => {
       this.vouchers = response.content;
       this.totalPages = response.totalPages;
       this.currentPage = page;
-      this.updateVisiblePages();
-      this.filterVouchers();
+      this.tinhSoTrang();
+      this.searchTenVoucher();
     });
   }
   
   loadData(): void {
     console.log(this.selectedTrangThai);
-    console.log(this.filterVouchers());
+    console.log(this.searchTenVoucher());
     if (this.selectedTrangThai !== 3) {
-      this.loadVoucherByTrangThai(this.selectedTrangThai, 0);
+      this.locTrangThai(this.selectedTrangThai, 0);
     } else {
       this.loadPage(0);
     }
-  }
-
-  getVoucherDetail(id: number): void {
-    this.voucherService.getVoucherDetail(id).subscribe(
-      (data) => {
-        this.voucher = data;
-
-      },
-      (error) => {
-        console.error('Lỗi khi lấy chi tiết voucher:', error);
-        alert('Không tìm thấy thông tin voucher!');
-      }
-    );
   }
 
   loadPage(page: number): void {
@@ -375,46 +455,46 @@ export class VoucherComponent implements OnInit {
       this.vouchers = response.content; // Dữ liệu của trang hiện tại
       this.totalPages = response.totalPages; // Tổng số trang
       this.currentPage = page; // Cập nhật trang hiện tại
-      this.updateVisiblePages();
-      this.filterVouchers();
+      this.tinhSoTrang();
+      this.searchTenVoucher();
     });
   }
-  goToPage(page: number): void {
+  Page(page: number): void {
     if (page >= 0 && page < this.totalPages) {
       if (this.selectedTrangThai !== 3) {
-        this.loadVoucherByTrangThai(this.selectedTrangThai, page);
+        this.locTrangThai(this.selectedTrangThai, page);
       } else {
         this.loadPage(page);
       }
       
     } else {
-      console.warn('Invalid page number:', page);
+     
     }
   }
-  filterVouchers() {
+  searchTenVoucher() {
     if (this.searchText.trim()) {
-      this.filteredVouchers = this.vouchers.filter((voucher) =>
+      this.tenVouchers = this.vouchers.filter((voucher) =>
         voucher.ten.toLowerCase().includes(this.searchText.toLowerCase())
       );
     } else {
-      this.filteredVouchers = [...this.vouchers]; // Hiển thị tất cả nếu không tìm kiếm
+      this.tenVouchers = [...this.vouchers]; // Hiển thị tất cả nếu không tìm kiếm
     }
   }
 
   
   
   
-  updateVisiblePages(): void {
-    const startPage = Math.floor(this.currentPage / this.maxVisiblePages) * this.maxVisiblePages;
-    const endPage = Math.min(startPage + this.maxVisiblePages, this.totalPages);
+  tinhSoTrang(): void {
+    const startPage = Math.floor(this.currentPage / this.maxPages) * this.maxPages;
+    const endPage = Math.min(startPage + this.maxPages, this.totalPages);
 
-    this.visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
+    this.numberPages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
   }
 
-  goToPreviousPage(): void {
+  PreviousPage(): void {
     if (this.currentPage > 0) {
       if (this.selectedTrangThai !== 3) {
-        this.loadVoucherByTrangThai(this.selectedTrangThai, this.currentPage - 1);
+        this.locTrangThai(this.selectedTrangThai, this.currentPage - 1);
       } else {
         this.loadPage(this.currentPage - 1);
       }
@@ -422,10 +502,10 @@ export class VoucherComponent implements OnInit {
     }
   }
 
-  goToNextPage(): void {
+  NextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
       if (this.selectedTrangThai !== 3) {
-        this.loadVoucherByTrangThai(this.selectedTrangThai, this.currentPage + 1);
+        this.locTrangThai(this.selectedTrangThai, this.currentPage + 1);
       } else {
         this.loadPage(this.currentPage + 1);
       }

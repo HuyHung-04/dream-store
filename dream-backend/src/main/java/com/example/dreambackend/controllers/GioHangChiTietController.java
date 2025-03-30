@@ -3,6 +3,8 @@ package com.example.dreambackend.controllers;
 import com.example.dreambackend.entities.GioHangChiTiet;
 import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.HoaDonChiTiet;
+import com.example.dreambackend.entities.SanPhamChiTiet;
+import com.example.dreambackend.repositories.SanPhamChiTietOnlineRepository;
 import com.example.dreambackend.requests.GioHangChiTietRequest;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
 import com.example.dreambackend.services.giohangchitiet.GioHangChiTietService;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/gio-hang")
@@ -23,6 +26,8 @@ public class GioHangChiTietController {
     GioHangChiTietService gioHangChiTietService;
     @Autowired
     HoaDonOnlineService hoaDonOnlineService;
+    @Autowired
+    SanPhamChiTietOnlineRepository sanPhamChiTietOnlineRepository;
     @GetMapping("/hien-thi")
     public ResponseEntity<List<GioHangChiTietResponse>> getGioHangChiTiet(@RequestParam Integer idKhachHang) {
         List<GioHangChiTietResponse> responseList = gioHangChiTietService.getGioHangChiTietByKhachHangId(idKhachHang);
@@ -63,4 +68,13 @@ public class GioHangChiTietController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Integer> getSoLuong(@PathVariable Integer id) {
+        Optional<SanPhamChiTiet> optional = sanPhamChiTietOnlineRepository.findById(id);
+        if (optional.isPresent()) {
+            return ResponseEntity.ok(optional.get().getSoLuong());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

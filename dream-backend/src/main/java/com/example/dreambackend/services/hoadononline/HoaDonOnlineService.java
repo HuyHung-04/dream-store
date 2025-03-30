@@ -169,11 +169,18 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         // Bước 1: Tạo Hóa Đơn (HoaDon)
         HoaDon hoaDon = new HoaDon();
         hoaDon.setKhachHang(khachHang);
-        hoaDon.setMa("HD" + System.currentTimeMillis()); // Sinh mã hóa đơn (có thể thay đổi theo logic của bạn)
+        hoaDon.setMa("HD" + (System.currentTimeMillis() % 10000000)); // Sinh mã hóa đơn (có thể thay đổi theo logic của bạn)
         hoaDon.setNgayTao(LocalDate.now());
         hoaDon.setNgaySua(LocalDate.now());
         hoaDon.setVoucher(voucher);
-        hoaDon.setTrangThai(1); // Đánh dấu hóa đơn là hoạt động
+        // Nếu id phương thức thanh toán là 4, thì trạng thái hóa đơn là 2
+        if (paymentMethodId == 4) {
+            hoaDon.setTrangThai(2); // Trạng thái hóa đơn là 2
+        } else {
+            hoaDon.setTrangThai(1); // Đánh dấu hóa đơn là hoạt động
+        }
+
+        hoaDon.setPhuongThucThanhToan(phuongThucThanhToan); // Gán phương thức thanh toán cho hóa đơn
         hoaDon.setPhuongThucThanhToan(phuongThucThanhToan); // Gán phương thức thanh toán cho hóa đơn
 
         // Lưu hóa đơn vào repository
@@ -257,8 +264,8 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
     }
 
     @Override
-    public List<HoaDonDto> getHoaDonChiTietDto(Integer idKhachHang) {
-        List<Object[]> result = hoaDonChiTietRepository.getHoaDonByKhachHang(idKhachHang);
+    public List<HoaDonDto> getHoaDonChiTietDto(Integer idKhachHang,Integer trangThai) {
+        List<Object[]> result = hoaDonChiTietRepository.getHoaDonByKhachHangAndTrangThai(idKhachHang,trangThai);
         List<HoaDonDto> hoaDonDtos = new ArrayList<>();
 
 
@@ -268,15 +275,19 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             HoaDonDto hoaDonDto = new HoaDonDto();
             hoaDonDto.setIdHoaDon((Integer) row[0]);
             hoaDonDto.setMaHoaDon((String) row[1]);
-            hoaDonDto.setTongTienThanhToan(row[2] != null ? (Double) row[2] : 0.0);
-            hoaDonDto.setIdHoaDonChiTiet((Integer) row[3]);
-            hoaDonDto.setMaSanPham((String) row[4]);
-            hoaDonDto.setTenSanPham((String) row[5]);
-            hoaDonDto.setSoLuong(row[6] != null ? (Integer) row[6] : 0);  // Kiểm tra nếu có dữ liệu
-            hoaDonDto.setMauSac((String) row[7]);
-            hoaDonDto.setSize((String) row[9]);
-            hoaDonDto.setAnhUrl((String) row[10]);  // Kiểm tra nếu có ảnh
-            hoaDonDto.setDonGia(row[8] != null ? (Double) row[8] : 0.0);
+            hoaDonDto.setTenNguoiNhan((String) row[2]);
+            hoaDonDto.setSdtNguoiNhan((String) row[3]);
+            hoaDonDto.setTrangThai((Integer) row[4]);
+            hoaDonDto.setDiaChiNhanHang((String) row[5]);
+            hoaDonDto.setTongTienThanhToan(row[6] != null ? (Double) row[6] : 0.0);
+            hoaDonDto.setIdHoaDonChiTiet((Integer) row[7]);
+            hoaDonDto.setMaSanPham((String) row[8]);
+            hoaDonDto.setTenSanPham((String) row[9]);
+            hoaDonDto.setSoLuong(row[10] != null ? (Integer) row[10] : 0);  // Kiểm tra nếu có dữ liệu
+            hoaDonDto.setMauSac((String) row[11]);
+            hoaDonDto.setSize((String) row[13]);
+            hoaDonDto.setAnhUrl((String) row[14]);  // Kiểm tra nếu có ảnh
+            hoaDonDto.setDonGia(row[12] != null ? (Double) row[12] : 0.0);
             hoaDonDtos.add(hoaDonDto);
 
         }
@@ -309,18 +320,45 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             HoaDon hoaDon = optionalHoaDon.get();
             Integer trangThaiHienTai = hoaDon.getTrangThai();
 
+            // Nếu trạng thái chưa là 4, tăng trạng thái và ghi lại ngày sửa
             if (trangThaiHienTai != null && trangThaiHienTai < 4) {
-                hoaDon.setTrangThai(trangThaiHienTai + 1);
+                hoaDon.setTrangThai(trangThaiHienTai + 1); // Tăng trạng thái (ví dụ: từ 1->2, từ 2->3...)
                 hoaDon.setNgaySua(LocalDate.now());
+
+                // Nếu trạng thái là 2, trừ số lượng sản phẩm và giảm số lượng voucher
+                if (trangThaiHienTai == 2) {
+                    // Lấy danh sách chi tiết hóa đơn từ HoaDonChiTietRepository
+                    List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.findByHoaDonId(hoaDon.getId());
+
+                    // Giảm số lượng sản phẩm trong chi tiết hóa đơn
+                    for (HoaDonChiTiet hct : hoaDonChiTietList) {
+                        SanPhamChiTiet spct = hct.getSanPhamChiTiet();
+                        // Giảm số lượng sản phẩm theo số lượng của chi tiết hóa đơn
+                        if (spct != null) {
+                            spct.setSoLuong(spct.getSoLuong() - hct.getSoLuong());
+                            sanPhamChiTietRepository.save(spct); // Lưu lại sự thay đổi trong kho
+                        }
+                    }
+
+                    // Nếu có voucher, giảm số lượng voucher
+                    if (hoaDon.getVoucher() != null) {
+                        Voucher voucher = hoaDon.getVoucher();
+                        voucher.setSoLuong(voucher.getSoLuong() - 1); // Giảm 1 voucher đã sử dụng
+                        voucherRepository.save(voucher); // Lưu lại sự thay đổi của voucher
+                    }
+                }
+
+                // Lưu lại hóa đơn đã cập nhật
                 return hoaDonRepository.save(hoaDon);
             }
 
-            // Nếu trạng thái đã là 4 thì vẫn trả về không đổi
+            // Nếu trạng thái đã là 4 thì trả lại hóa đơn không thay đổi
             return hoaDon;
         }
 
         return null; // Không tìm thấy hóa đơn
     }
+
 
 }
 

@@ -7,29 +7,53 @@
   <h1>Enjoy Your Youth!</h1>
     <p>Không chỉ là thời trang, DREAM còn là “phòng thí nghiệm” của tuổi trẻ - nơi nghiên cứu và <br> cho ra đời nguồn năng lượng mang tên “Youth”. Chúng mình luôn muốn tạo nên những trải <br> nghiệm vui vẻ, năng động và trẻ trung.</p>
  </div>
- <!-- *ngFor="let sanPham of searchResults" -->
+
+ <div class="container">
+  <div class="input-group">
+    <div class="input-form">
+      <label for="brand">Tìm thương hiệu</label>
+      <select id="brand" (change)="locSanPham(brand.value, minPrice.value, maxPrice.value)" #brand>
+        <option value="">-- Chọn --</option>
+        <option *ngFor="let thuongHieu of thuongHieuList" [value]="thuongHieu.ten">
+          {{ thuongHieu.ten }}
+        </option>
+      </select>
+    </div>
+
+    <div class="input-form">
+      <label for="price">Tìm khoảng giá</label>
+      <div class="price-range">
+        <input type="text" placeholder="Từ giá" #minPrice (keyup)="locSanPham(brand.value, minPrice.value, maxPrice.value)">
+        <input type="text" placeholder="Đến giá" #maxPrice (keyup)="locSanPham(brand.value, minPrice.value, maxPrice.value)">
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Danh sách sản phẩm -->
-<div class="scroll-container">
-  <div class="container">
-    <div class="row" *ngIf="sanPhamOnlines.length > 0">
-      <div class="col-md-2_4 mb-4" *ngFor="let sanPham of sanPhamOnlines">
-        <div class="card">
-          <img [src]="'http://localhost:8080' + sanPham.anhUrl" class="card-img-top" alt="Sản phẩm">
-          <div class="card-body">
-            <h5 class="card-title">{{ sanPham.ten }}</h5>
-            <p class="card-text"><strong>Giá:</strong> {{ sanPham.gia }} VND</p>
-            <button class="btn" [routerLink]="['/sanpham', sanPham.id]">
-              Xem chi tiết
-            </button>                                  
+<div id="product-list">
+  <div class="scroll-container">
+    <div class="container">
+      <div class="row" *ngIf="sanPhamOnlines.length > 0">
+        <div class="col-md-2_4 mb-4" *ngFor="let sanPham of sanPhamOnlines">
+          <div class="card">
+            <img [src]="'http://localhost:8080' + sanPham.anhUrl" class="card-img-top" alt="Sản phẩm">
+            <div class="card-body">
+              <h5 class="card-title">{{ sanPham.ten }}</h5>
+              <p class="card-text"><strong>Giá:</strong> {{ sanPham.gia }} VND</p>
+              <button class="btn" [routerLink]="['/sanpham', sanPham.id]">
+                Xem chi tiết
+              </button>                                  
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="text-center mt-4" *ngIf="sanPhamOnlines.length === 0">
-      <p class="text-danger">Không tìm thấy sản phẩm nào.</p>
+      <div class="text-center mt-4" *ngIf="sanPhamOnlines.length === 0">
+        <p class="text-danger">Không tìm thấy sản phẩm nào.</p>
+      </div>
     </div>
   </div>
-</div>>
+</div>
 
 <div class="pagination">
   <button (click)="prevPage()" [disabled]="currentPage === 0"><<</button>

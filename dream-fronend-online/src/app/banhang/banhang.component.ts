@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BanhangService } from './banhang.service';
 import { HeaderComponent } from '../header/header.component';
 import { RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-banhang',
@@ -15,13 +16,14 @@ import { RouterModule } from '@angular/router';
 export class BanhangComponent{
   @ViewChild('searchResultsContainer') searchResultsContainer!: ElementRef;
   sanPhamOnlines: any[] = [];
+  thuongHieuList: any[] = [];
   totalPages: number = 0;
   currentPage: number = 0;
   size: number = 20;
  // Khai báo biến lưu trữ kết quả tìm kiếm
  searchResults: any[] = [];
  isSearching: boolean = false;
-  constructor(private banHangService : BanhangService) {}
+  constructor(private banHangService : BanhangService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -51,6 +53,7 @@ export class BanhangComponent{
 
   loadData(): void {
     this.loadSanPhamOnline(0);
+    this.loadThuongHieu();
   }
 
   loadSanPhamOnline(page: number): void {
@@ -75,5 +78,50 @@ export class BanhangComponent{
     if (this.currentPage > 0) {
       this.loadSanPhamOnline(this.currentPage - 1);
     }
+  }
+
+  ngAfterViewInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['scroll']) {
+        setTimeout(() => {
+          const productList = document.getElementById('product-list');
+          if (productList) {
+            productList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Dịch lên để không bị che
+            // setTimeout(() => {
+            //   window.scrollBy(0, -50);
+            // }, 500);
+          }
+        }, 500);
+      }
+    });
+  }
+
+  locSanPham(thuongHieu: string, minGia: string, maxGia: string): void {
+    const min = minGia ? parseFloat(minGia) : null;
+    const max = maxGia ? parseFloat(maxGia) : null;
+
+    this.banHangService.filterSanPhamByBrandAndPrice(thuongHieu, min ?? 0, max ?? Number.MAX_VALUE, 0, this.size).subscribe(
+      (data) => {
+        this.sanPhamOnlines = data.content;
+        this.totalPages = data.totalPages;
+        this.currentPage = 0;
+      },
+      (error) => {
+        console.error('Lỗi khi lọc sản phẩm:', error);
+      }
+    );
+  }
+  
+  loadThuongHieu(): void {
+    this.banHangService.getThuongHieu().subscribe(
+      (data) => {
+        this.thuongHieuList = data;
+      },
+      (error) => {
+        console.error('Lỗi khi lấy danh sách thương hiệu:', error);
+      }
+    );
   }
 }

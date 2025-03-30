@@ -87,11 +87,10 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
                 	hdct.don_gia AS gia,
                 	hdct.so_luong AS soLuong,
                 	hdct.trang_thai AS trangThai,
-                	km.hinh_thuc_giam AS hinhThucGiam,
-                	km.gia_tri_giam AS giaTriGiam,
                 	vc.ten AS tenVoucher,
                 	vc.hinh_thuc_giam AS hinhThucGiam,
                 	vc.gia_tri_giam AS giaTriGiam,
+                	km.gia_tri_giam AS giaTriGiamKM,
                 	nv.ten AS tenNhanVien,
                 	COUNT(1) OVER () AS totalRecords
                 FROM hoa_don_chi_tiet hdct
@@ -215,6 +214,10 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     SELECT 
         hd.id AS idHoaDon,
         hd.ma AS maHoaDon,
+        hd.ten_nguoi_nhan AS tenNguoiNhan,
+        hd.sdt_nguoi_nhan AS sdtNguoiNhan,
+        hd.trang_thai AS trangThai,
+        hd.dia_chi_nhan_hang AS diaChiNhanHang,
         hd.tong_tien_thanh_toan AS tongTienThanhToan,
         hct.id AS idHoaDonChiTiet,
         spct.ma AS maSanPham,
@@ -235,10 +238,14 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     JOIN mau_sac ms ON spct.id_mau_sac = ms.id
     JOIN size sz ON spct.id_size = sz.id
     WHERE hd.id_khach_hang = :idKhachHang
+      AND hd.trang_thai IN (1, 2, 3, 4, 5)  -- Lọc trạng thái chỉ trong các giá trị này
+      AND (:trangThai = 0 OR hd.trang_thai = :trangThai)  -- Nếu trangThai là 0 thì lấy tất cả hóa đơn trong 1, 2, 3, 4, 5
     ORDER BY hd.id DESC
 """, nativeQuery = true)
-    List<Object[]> getHoaDonByKhachHang(@Param("idKhachHang") Integer idKhachHang);
-
+    List<Object[]> getHoaDonByKhachHangAndTrangThai(
+            @Param("idKhachHang") Integer idKhachHang,
+            @Param("trangThai") Integer trangThai
+    );
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
             "JOIN FETCH hdct.hoaDon hd " +

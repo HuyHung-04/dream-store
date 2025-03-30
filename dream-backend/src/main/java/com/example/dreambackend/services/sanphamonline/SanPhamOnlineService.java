@@ -34,4 +34,8 @@ public class SanPhamOnlineService implements ISanPhamOnlineService {
         return sanPhamOnlineRepository.searchSanPhamByName(name, pageable);
     }
 
+    public Page<SanPhamDto> searchSanPham(String thuongHieu, Double minGia, Double maxGia, Pageable pageable) {
+        return sanPhamOnlineRepository.searchSanPham(thuongHieu, minGia, maxGia, pageable);
+    }
+
 }

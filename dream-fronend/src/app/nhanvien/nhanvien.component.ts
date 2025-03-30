@@ -173,15 +173,15 @@ export class NhanvienComponent implements OnInit {
     this.errors = {};
   
     // Kiểm tra mã nhân viên
-    if (!this.nhanVien.ma || this.nhanVien.ma.trim() === '') {
-      this.errors.ma = 'Mã nhân viên không được để trống!';
-  } else {
+   // if (!this.nhanVien.ma || this.nhanVien.ma.trim() === '') {
+   //   this.errors.ma = 'Mã nhân viên không được để trống!';
+ // } else {
       // Kiểm tra trùng lặp mã nhân viên trong danh sách
-      const isDuplicate = this.nhanViens.some(nv => nv.ma === this.nhanVien.ma && nv.id !== this.nhanVien.id);
-      if (isDuplicate) {
-          this.errors.ma = 'Mã nhân viên đã tồn tại!';
-      }
-  }
+  //     const isDuplicate = this.nhanViens.some(nv => nv.ma === this.nhanVien.ma && nv.id !== this.nhanVien.id);
+  //     if (isDuplicate) {
+  //         this.errors.ma = 'Mã nhân viên đã tồn tại!';
+  //     }
+  // }
   
     // Kiểm tra tên nhân viên
     if (!this.nhanVien.ten || this.nhanVien.ten.trim() === '') {
@@ -199,10 +199,22 @@ export class NhanvienComponent implements OnInit {
     } else {
       const birthDate = new Date(this.nhanVien.ngaySinh);
       const currentDate = new Date();
+      const age = currentDate.getFullYear() - birthDate.getFullYear();
+    
+      // Kiểm tra nếu tuổi < 18 hoặc ngày sinh trong tương lai
       if (birthDate > currentDate) {
         this.errors.ngaySinh = 'Ngày sinh không hợp lệ!';
+      } else if (
+        age < 18 ||
+        (age === 18 &&
+          (currentDate.getMonth() < birthDate.getMonth() ||
+            (currentDate.getMonth() === birthDate.getMonth() &&
+              currentDate.getDate() < birthDate.getDate())))
+      ) {
+        this.errors.ngaySinh = 'Nhân viên phải đủ 18 tuổi!';
       }
     }
+    
   
     // Kiểm tra email
     if (!this.nhanVien.email || this.nhanVien.email.trim() === '') {
@@ -289,11 +301,22 @@ export class NhanvienComponent implements OnInit {
     } else {
       const birthDate = new Date(this.nhanVienEdit.ngaySinh);
       const currentDate = new Date();
+      const age = currentDate.getFullYear() - birthDate.getFullYear();
+    
+      // Kiểm tra nếu ngày sinh trong tương lai
       if (birthDate > currentDate) {
         this.errors.ngaySinh = 'Ngày sinh không hợp lệ!';
+      } else if (
+        age < 18 ||
+        (age === 18 &&
+          (currentDate.getMonth() < birthDate.getMonth() ||
+            (currentDate.getMonth() === birthDate.getMonth() &&
+              currentDate.getDate() < birthDate.getDate())))
+      ) {
+        this.errors.ngaySinh = 'Nhân viên phải đủ 18 tuổi!';
       }
     }
-  
+    
     // Kiểm tra email
     if (!this.nhanVienEdit.email || !this.nhanVienEdit.email.trim()) {
       this.errors.email = 'Email không được để trống!';
@@ -338,7 +361,7 @@ export class NhanvienComponent implements OnInit {
     if (this.nhanVienEdit.id) {
       // Nếu vai trò là Admin, giữ nguyên
       if (this.nhanVienEdit.vaiTro.ten !== 'Admin') {
-        this.nhanVienEdit.vaiTro = { id: 6, ten: 'Nhân viên' };
+        this.nhanVienEdit.vaiTro = { id: 2, ten: 'Nhân viên' };
       }
       this.nhanVienService.updateNhanVien(this.nhanVienEdit).subscribe(
         (response) => {

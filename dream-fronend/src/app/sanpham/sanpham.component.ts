@@ -771,6 +771,7 @@ export class SanphamComponent implements OnInit {
             alert("Thêm sản phẩm chi tiết thành công");
             this.closeModalSanPhamChiTietThem();
             this.openModalSanPhamChiTiet(this.selectedProduct.id);
+            this.loadData();
           },
           error: (error) => {
             console.error("Lỗi khi thêm sản phẩm chi tiết:", error);

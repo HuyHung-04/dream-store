@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
  import { TaiKhoanService } from './taikhoan.service';
  import { FormsModule } from '@angular/forms';
  import { CookieService } from 'ngx-cookie-service';
- 
+ import { Router } from '@angular/router'
  @Component({
    selector: 'app-taikhoan',
    imports: [CommonModule, FormsModule],
@@ -36,7 +36,7 @@ import { Component, OnInit } from '@angular/core';
      trangThai: 1,
    };
  
-   constructor(private taiKhoanService: TaiKhoanService, private cookieService: CookieService) {}
+   constructor(private taiKhoanService: TaiKhoanService,private router: Router, private cookieService: CookieService) {}
  
    ngOnInit(): void {
      const khachhangCookie = this.cookieService.get('khachhang');
@@ -108,7 +108,7 @@ import { Component, OnInit } from '@angular/core';
     if (!this.matKhauXacNhan.trim()) {
       this.error.matKhauXacNhan = 'Xác nhận mật khẩu không được để trống!';
     }
-    if (this.matKhauXacNhan==this.matKhauHienTai) {
+    if (this.matKhauXacNhan==this.matKhauXacNhan) {
       this.error.matKhauXacNhan = 'Xác nhận mật khẩu phải giống mật khẩu!';
     }
     return Object.keys(this.error).length === 0;
@@ -148,6 +148,14 @@ import { Component, OnInit } from '@angular/core';
        this.doimatkhau2=false;
      }
    }
+   xoacookie(){
+    if (window.confirm('Bạn có muốn đăng xuất không?')) {
+      this.cookieService.delete('khachhang');
+    }
+  }
+  goHome(): void {
+    this.router.navigate(['']);
+  }
    openhoso(){
      this.hoso=true;
      this.doimatkhau1=false;

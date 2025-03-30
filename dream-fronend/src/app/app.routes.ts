@@ -9,6 +9,7 @@ import { NhanvienComponent } from './nhanvien/nhanvien.component';
 import { ThongkeComponent } from './thongke/thongke.component';
 import { VoucherComponent } from './voucher/voucher.component';
 import { DangnhapComponent } from './dangnhap/dangnhap.component';
+import { DonhangComponent } from './donhang/donhang.component';
 // Các routes được cấu hình cho ứng dụng
 export const routes: Routes = [
   { path: '', component: DangnhapComponent }, // Trang đăng nhập là mặc định
@@ -25,6 +26,7 @@ export const routes: Routes = [
       { path: 'khachhang', component: KhachhangComponent }, // Khách hàng
       { path: 'nhanvien', component: NhanvienComponent }, // Nhân viên
       { path: 'thongke', component: ThongkeComponent }, // Thống kê
+      { path: 'donhang', component: DonhangComponent }, // Thống kê
     ],
   },
   { path: '**', redirectTo: '' }, // Redirect tất cả các đường dẫn không hợp lệ

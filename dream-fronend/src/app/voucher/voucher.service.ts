@@ -24,10 +24,10 @@ export class VoucherService {
   updateVoucher(voucher: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/voucher/update`, voucher);
   }
-  searchVoucherByName(name: string): Observable<any[]> {
+  searchVoucherTheoTen(name: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/voucher/search?ten=${name}`);
   }
-  getVoucherMaiByTrangThai(trangThai:number,page: number, size: number): Observable<any> {
+  locTrangThai(trangThai:number,page: number, size: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/voucher/loc-trang-thai?trangThai=${trangThai}&page=${page}&size=${size}`);
   }
 }

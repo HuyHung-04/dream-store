@@ -77,7 +77,7 @@ public class HoaDonOnlineController {
 
         try {
             HoaDon hoaDon = hoaDonOnlineService.createHoaDonAndAddProducts(
-                    idKhachHang, voucherId, tongTienTruocGiam, paymentMethodId, TongTienSauGiam,sdtNguoiNhan,tenNguoiNhan,diaChi,shippingFee     );
+                    idKhachHang, voucherId, tongTienTruocGiam, paymentMethodId, TongTienSauGiam,sdtNguoiNhan,tenNguoiNhan,diaChi,shippingFee );
             return new ResponseEntity<>(hoaDon, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,8 +96,9 @@ public class HoaDonOnlineController {
 
     // Lấy danh sách hóa đơn theo id khách hàng
     @GetMapping("/hoa-don/{idKhachHang}")
-    public List<HoaDonDto> getHoaDonByKhachHang(@PathVariable Integer idKhachHang) {
-        return hoaDonOnlineService.getHoaDonChiTietDto(idKhachHang);
+    public List<HoaDonDto> getHoaDonByKhachHang(@RequestParam Integer idKhachHang,
+                                                @RequestParam(required = false, defaultValue = "0") Integer trangThai) {
+        return hoaDonOnlineService.getHoaDonChiTietDto(idKhachHang,trangThai);
     }
 
 

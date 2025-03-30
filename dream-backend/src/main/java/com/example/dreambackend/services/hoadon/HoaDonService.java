@@ -10,6 +10,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -66,6 +69,7 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setPhiVanChuyen(request.getPhiVanChuyen());
         hoaDon.setTongTienThanhToan(request.getTongTienThanhToan());
         hoaDon.setTongTienTruocVoucher(request.getTongTienTruocVoucher());
+        hoaDon.setPhuongThucThanhToan(ptttRepository.findById(request.getIdPhuongThucThanhToan()).orElse(null));
         hoaDon.setTrangThai(request.getTrangThai());
         hoaDon.setNgaySua(LocalDate.now());
     }
@@ -219,9 +223,16 @@ public class HoaDonService implements IHoaDonService {
     private String generateMaHoaDon() {
         String ma;
         do {
-            int randomNum = (int) (Math.random() * 9000) + 1000; // Tạo số ngẫu nhiên từ 1000 - 9999
+            int randomNum = (int) (Math.random() * 90000000) + 10000000; // Tạo số ngẫu nhiên từ 1000 - 9999
             ma = "HD" + randomNum;
         } while (hoaDonRepository.findByMa(ma).isPresent()); // Kiểm tra trùng mã trong DB
         return ma;
+    }
+
+    // Lọc hóa đơn theo trạng thái và phân trang
+    @Override
+    public Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return hoaDonRepository.findByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon, pageable);
     }
 }

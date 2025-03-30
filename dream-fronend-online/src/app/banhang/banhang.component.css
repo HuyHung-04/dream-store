@@ -91,7 +91,7 @@
 }
 /* Phần từ <hr> trở xuống sẽ cuộn được */
 .scroll-container {
-  margin-top: 100px; /* Để tránh bị header che */
+  margin-top: 50px; /* Để tránh bị header che */
   overflow-y: auto;
   padding: 20px;
 }
@@ -199,6 +199,69 @@
   font-size: 14px;
   font-weight: bold;
 }
+/* lọc */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.input-group {
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+  gap: 20px; /* Tăng khoảng cách giữa các phần tử */
+  width: 100%;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-form label {
+  font-weight: bold;
+  font-size: 15px;
+  color: #294764;
+}
+
+.input-form select,
+.input-form input {
+  width: 100%; /* Đảm bảo input và select có cùng chiều rộng */
+  min-width: 150px; /* Giới hạn nhỏ nhất để tránh bị bó hẹp */
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #294764;
+  outline: none;
+  font-size: 14px;
+}
+
+.input-form select {
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.input-form select:focus,
+.input-form input:focus {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Chỉnh khoảng giá có 2 ô input cùng hàng */
+.price-range {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.price-range input {
+  flex: 1;
+  min-width: 80px; /* Để tránh bị bó hẹp quá mức */
+}
+
+
+
 
 
 

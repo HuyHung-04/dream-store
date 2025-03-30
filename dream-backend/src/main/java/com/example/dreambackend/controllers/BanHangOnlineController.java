@@ -61,4 +61,16 @@ public class BanHangOnlineController {
         }
     }
 
+    @GetMapping("/loc")
+    public ResponseEntity<Page<SanPhamDto>> searchSanPhamByBrandAndPrice(
+            @RequestParam(required = false) String thuongHieu,
+            @RequestParam(required = false) Double minGia,
+            @RequestParam(required = false) Double maxGia,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<SanPhamDto> sanPhams = sanPhamOnlineService.searchSanPham(thuongHieu, minGia, maxGia, pageable);
+        return ResponseEntity.ok(sanPhams);
+    }
 }

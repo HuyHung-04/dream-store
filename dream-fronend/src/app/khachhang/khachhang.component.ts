@@ -42,7 +42,6 @@ export class KhachhangComponent implements OnInit {
   constructor(private khachHangService: KhachHangService) { }
   ngOnInit(): void {
     this.loadData()
-
   }
 
   resetForm() {
@@ -127,10 +126,6 @@ export class KhachhangComponent implements OnInit {
       this.errors.email = 'Email đã tồn tại!';
     }
   }
-
-
-
-
     if (!this.khachhang.matKhau.trim()) {
       this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
     }
@@ -197,9 +192,9 @@ export class KhachhangComponent implements OnInit {
   }
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-  if (!this.khachhang.email.trim()) {
+  if (!this.khachHangEdit.email.trim()) {
     this.errors.email = 'Email không được để trống!';
-  } else if (!emailRegex.test(this.khachhang.email)) {
+  } else if (!emailRegex.test(this.khachHangEdit.email)) {
     this.errors.email = 'Email phải có định dạng @gmail.com!';
   }
     if (!this.khachHangEdit.matKhau.trim()) {
@@ -221,8 +216,6 @@ export class KhachhangComponent implements OnInit {
     if (this.khachHangEdit!=null) {
       this.khachHangService.updateKhachHang(this.khachHangEdit).subscribe(
         (response) => {
-
-
           alert('Cập nhật khách hàng thành công!');
           this.loadData();
           console.log('Updated khách hàng:', this.khachhang.ngaySua);

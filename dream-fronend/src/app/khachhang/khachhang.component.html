@@ -1,10 +1,10 @@
 <p class="title">Danh sách khách hàng</p>
-<div class="input-field">
-  <label for="trangThai">Trạng Thái:</label>
+<div class="input-field-search">
+  <label class="label-search" for="trangThai">Trạng Thái:</label>
   <select id="trangThai" [(ngModel)]="selectedTrangThai" (change)="loadData()" class="input">
     <option [value]="3">Tất cả khách hàng</option>
     <option [value]="1">Hoạt động</option>
-    <option [value]="0">Ngừng hoạt động</option>
+    <option [value]="0">Không hoạt động</option>
   </select>
 </div>
 
@@ -14,13 +14,6 @@
     <p>Tìm Kiếm:</p>
     <input type="text" (input)="filterKhachHangs()" class="input search-input"
       placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
-      <!-- <div class="input-field">
-        <label for="trangThai">Trạng thái</label>
-        <select class="input" id="trangThai" name="trangThai">
-          <option value="1">Hoạt động</option>
-          <option value="0">Không hoạt động</option>
-        </select>
-      </div> -->
   </div>
   
 </div>
@@ -133,7 +126,7 @@
         </div>
         <div class="input-row">
           <div class="input-field">
-            <input type="text" class="input" [value]="selectedKhachHang.trangThai ? 'Hoạt động' : 'Không hoạt động'"
+            <input type="text" class="input" [value]="selectedKhachHang.trangThai ? 'Hoạt động' : 'Không hoạt động'" style="width: 182px;"
               readonly />
             <label for="trangThai">Trạng thái</label>
           </div>
@@ -156,18 +149,15 @@
       
       <form (ngSubmit)="updateKhachHang()" #khachHangForm="ngForm">
         <div class="input-row">
-          <div class="input-field">
+          <!-- <div class="input-field">
             
             <input type="text" class="input" [(ngModel)]="khachHangEdit.id" name="id" readonly />
             <label for="id">Id</label>
-          </div>
+          </div> -->
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khachHangEdit.ma" name="ma" required readonly />
             <label for="ma">Mã khách hàng</label>
           </div>
-        </div>
-
-        <div class="input-row">
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khachHangEdit.ten" name="ten" required
               (input)="clearErrorEdit('ten')" />
@@ -176,6 +166,9 @@
               {{ errors.ten}}
             </div>
           </div>
+        </div>
+
+        <div class="input-row">
            <div class="input-field">
             <select class="input" [(ngModel)]="khachHangEdit.gioiTinh"name="gioiTinh" required
               (change)="clearErrorEdit('gioiTinh')">
@@ -187,9 +180,6 @@
               {{ errors.gioiTinh}}
             </div>
           </div> 
-        </div>
-
-        <div class="input-row">
           <div class="input-field">
             <input type="email" class="input" [(ngModel)]="khachHangEdit.email" name="email" required
               (input)="clearErrorEdit('email')" />
@@ -198,6 +188,9 @@
               {{ errors.email}}
             </div>
           </div>
+        </div>
+
+        <div class="input-row">
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khachHangEdit.soDienThoai" name="soDienThoai" required
               (input)="clearErrorEdit('soDienThoai')" />
@@ -206,12 +199,6 @@
               {{ errors.soDienThoai}}
             </div>
           </div>
-          
-
-          
-        </div>
-
-        <div class="input-row">
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khachHangEdit.matKhau" name="matKhau" required />
             <label for="matKhau">Mật khẩu</label>
@@ -219,8 +206,11 @@
               {{ errors.matKhau}}
             </div>
           </div>
+        </div>
+
+        <div class="input-row">
           <div class="input-field">
-            <select class="input" [(ngModel)]="khachHangEdit.trangThai"  [value]="khachHangEdit.trangThai" name="trangThai" required
+            <select class="input" [(ngModel)]="khachHangEdit.trangThai"  [value]="khachHangEdit.trangThai" name="trangThai" required style="width: 182px;"
               (change)="clearErrorEdit('trangThai')">
               <option [value]="1">Hoạt động</option>
               <option [value]="0">Không hoạt động</option>
@@ -254,7 +244,10 @@
       <p class="titleadd">Thêm khách hàng</p> <br> <br>
       <form (ngSubmit)="addKhachHang()" #khachHangForm="ngForm">
         <div class="input-row">
-          
+          <div class="input-field">
+            <input type="text" class="input" [(ngModel)]="khachhang.ma" name="ma" required readonly />
+            <label for="ma">Mã khách hàng</label>
+          </div>
           <div class="input-field">
             <input type="text" class="input" [(ngModel)]="khachhang.ten" name="ten" required #ten="ngModel"
               (input)="clearError('ten')" />

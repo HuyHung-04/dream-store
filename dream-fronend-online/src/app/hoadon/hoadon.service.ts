@@ -15,6 +15,7 @@ export class HoadonService {
   private phuongThuc = 'http://localhost:8080/api/phuong-thuc-thanh-toan/payment-methods';
   private ghtkToken = '1DESBs0s4MRO5AjNEhe47wZvX98OHZ0TSIg6gOg';
   private clientSource = 'S22879257';
+  private vnPay = 'http://localhost:8080/vnpay';
 
   private newOrderCount = 0; // Lưu số đơn hàng chưa xem
   private newOrderSubject = new BehaviorSubject<number>(this.newOrderCount);
@@ -46,6 +47,16 @@ export class HoadonService {
       'X-Client-Source': this.clientSource,
     });
   }
+
+  
+ // Phương thức gọi API tạo thanh toán từ Spring Boot
+ createPayment(amount: number): Observable<any> {
+  const url = `${this.vnPay}/createPay`;  // Gọi API Spring Boot
+
+  return this.http.get<any>(url, {
+    params: new HttpParams().set('amount', amount.toString())  // Truyền amount qua query params
+  });
+}
 
   // Phương thức gọi API lấy địa chỉ khách hàng theo idKhachHang
   getDiaChiKhachHang(idKhachHang: number): Observable<any> {
@@ -158,7 +169,6 @@ export class HoadonService {
       headers: this.getGhtkHeaders()
     });
   }
-
 
 
   // Phương thức gọi API để tạo hóa đơn và chi tiết hóa đơn

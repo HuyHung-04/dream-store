@@ -180,8 +180,8 @@ margin-bottom: 20px; /* Thêm khoảng cách giữa các mục */
 
 /* Định dạng cho ảnh */
 .invoice-details-item img {
-width: 150px; /* Giảm kích thước ảnh */
-height: 150px; /* Giảm chiều cao ảnh */
+width: 110px; /* Giảm kích thước ảnh */
+height: 110px; /* Giảm chiều cao ảnh */
 object-fit: cover; /* Đảm bảo ảnh không bị méo */
 margin-right: 20px; /* Khoảng cách giữa ảnh và thông tin */
 }

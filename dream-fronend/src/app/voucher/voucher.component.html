@@ -1,6 +1,6 @@
 <p class="title">Danh sách voucher</p>
-<div class="input-field">
-  <label for="">Trạng thái</label>
+<div class="input-field-search">
+  <label class="lable-search" for="">Trạng thái:   </label>
   <select [(ngModel)]="selectedTrangThai" (change)="loadData()" class="input">
     <option [value]="3">Tất cả voucher</option>
     <option [value]="1">Hoạt động</option>
@@ -11,8 +11,8 @@
     <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Voucher</button>
     <div class="search-container">
       <p>Tìm Kiếm:</p>
-      <input type="text" (input)="filterVouchers()" class="input search-input"
-        placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
+      <input type="text" (input)="searchTenVoucher()" class="input search-input"
+        placeholder="Nhập tên voucher cần tìm..." [(ngModel)]="searchText" />
     </div>
   </div>
   
@@ -38,7 +38,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let voucher of filteredVouchers,">
+          <tr *ngFor="let voucher of tenVouchers,">
             <td>{{voucher.id}}</td>
             <td>{{ voucher.ma }}</td>
             <td>{{ voucher.ten }}</td>
@@ -46,7 +46,7 @@
             <td>{{ voucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %' }}</td>
             <td>{{ voucher.giaTriGiam }} {{ voucher.hinhThucGiam ? 'VND' : '%' }} </td>
             <td>{{ voucher.donToiThieu}}</td>
-            <td>{{ voucher.giamToiDa }}</td>
+            <td>{{ voucher.giamToiDa != null && voucher.giamToiDa !== '' ? voucher.giamToiDa : 'Không áp dụng' }}</td>
             <td>{{ voucher.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
             <td>{{ voucher.ngayTao }}</td>
             <td>{{ voucher.ngaySua }}</td>
@@ -67,16 +67,16 @@
         <ul class="pagination">
           <!-- Nút Trang trước -->
           <li class="page-item" [class.disabled]="currentPage === 0">
-            <button class="page-link" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+            <button class="page-link" (click)="PreviousPage()" [disabled]="currentPage === 0">
               &laquo;
             </button>
           </li>
-          <li class="page-item" *ngFor="let page of visiblePages" [class.active]="currentPage === page">
-            <button class="page-link" (click)="goToPage(page)">{{ page + 1 }}</button>
+          <li class="page-item" *ngFor="let page of numberPages" [class.active]="currentPage === page">
+            <button class="page-link" (click)="Page(page)">{{ page + 1 }}</button>
           </li>
           <!-- Nút Trang sau -->
           <li class="page-item" [class.disabled]="currentPage >= totalPages - 1">
-            <button class="page-link" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+            <button class="page-link" (click)="NextPage()" [disabled]="currentPage >= totalPages - 1">
               &raquo;
             </button>
           </li>
@@ -131,7 +131,7 @@
           </div>
   
           <div class="input-row">
-            <div class="input-field">
+            <div class="input-field" *ngIf="!selectedVoucher.hinhThucGiam">
               <input type="text" class="input" [(ngModel)]="selectedVoucher.giamToiDa" name="giamToiDa" readonly />
               <label for="ten">Giảm tối đa</label>
             </div>
@@ -156,6 +156,8 @@
         </form>
       </div>
     </div>
+
+
     <!-- Modal hiển thị chi tiết voucher khi sửa -->
     <div class="modal-overlay" *ngIf="showModalEdit" (click)="closeModalEdit()">
       <div class="modal-box" (click)="$event.stopPropagation()">
@@ -196,14 +198,14 @@
               </div>
             </div>
             <div class="input-field">
-              <select class="input" [(ngModel)]="voucherEdit.hinhThucGiam" name="hinhThucGiam" required (change)="onHinhThucGiamChange2()"
-                (change)="clearError('hinhThucGiam')">
-                <option [ngValue]="true">Giảm giá</option>
+              <select class="input" [(ngModel)]="voucherEdit.hinhThucGiam" name="hinhThucGiam" required 
+                (change)="onHinhThucGiamChange2(); clearError('hinhThucGiam')">
+                <option [ngValue]="true">Giảm tiền</option>
                 <option [ngValue]="false">Giảm %</option>
               </select>
               <label for="hinhThucGiam">Hình thức giảm</label>
               <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-                {{ errors.hinhThucGiam}}
+                {{ errors.hinhThucGiam }}
               </div>
             </div>
           </div>
@@ -232,11 +234,11 @@
           </div>
   
           <div class="input-row">
-            <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required [disabled]="isGiamToiDaDisabled"/>
+            <div class="input-field" *ngIf="!voucherEdit.hinhThucGiam">
+              <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required />
               <label for="giamToiDa">Giảm tối đa</label>
               <div class="tooltip-error" *ngIf="errors.giamToiDa">
-                {{ errors.giamToiDa}}
+                {{ errors.giamToiDa }}
               </div>
             </div>
             <div class="input-field">
@@ -278,7 +280,8 @@
         </form>
       </div>
     </div>
-  
+
+  <!-- form thêm voucher -->
     <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
       <div class="modal-box" (click)="$event.stopPropagation()">
         <button class="close-btn" (click)="closeModal()">×</button>
@@ -304,7 +307,7 @@
           </div>
           <div class="input-row">
             <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucher.soLuong" name="soLuong" autocomplete="off" required
+              <input type="number" class="input" [(ngModel)]="voucher.soLuong" name="soLuong" autocomplete="off" required
                 autocomplete="off" #ma="ngModel" (input)="clearError('soLuong')" />
               <label for="soLuong">Số lượng</label>
               <div class="tooltip-error" *ngIf="errors.soLuong">
@@ -313,14 +316,14 @@
             </div>
             <div class="input-field">
               <select class="input" [(ngModel)]="voucher.hinhThucGiam" name="hinhThucGiam" required
-                (change)="clearError('hinhThucGiam')" (change)="onHinhThucGiamChange()">
+                (change)="clearError('hinhThucGiam'); onHinhThucGiamChange()">
                 <option value="" disabled selected>Hình thức giảm</option>
-                <option [ngValue]="true">Giảm giá</option>
+                <option [ngValue]="true">Giảm tiền</option>
                 <option [ngValue]="false">Giảm %</option>
               </select>
               <label for="hinhThucGiam">Hình thức giảm</label>
               <div class="tooltip-error" *ngIf="errors.hinhThucGiam">
-                {{ errors.hinhThucGiam}}
+                {{ errors.hinhThucGiam }}
               </div>
             </div>
             
@@ -350,12 +353,13 @@
           </div>
   
           <div class="input-row">
-            <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucher.giamToiDa" name="giamToiDa" required #ten="ngModel"
-                (input)="clearError('giamToiDa')" [disabled]="isGiamToiDaDisabled"/>
-              <label for="ten">Giảm tối đa</label>
+            <div class="input-field" *ngIf="voucher.hinhThucGiam === false">
+              <input type="text" class="input" [(ngModel)]="voucher.giamToiDa" name="giamToiDa"
+                [required]="voucher.hinhThucGiam === false" #ten="ngModel"
+                (input)="clearError('giamToiDa')" />
+              <label for="giamToiDa">Giảm tối đa</label>
               <div class="tooltip-error" *ngIf="errors.giamToiDa">
-                {{ errors.giamToiDa}}
+                {{ errors.giamToiDa }}
               </div>
             </div>
             <div class="input-field">

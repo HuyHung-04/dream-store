@@ -294,7 +294,7 @@ export class BanhangComponent implements OnInit {
       return;
     }
 
-    
+
 
     let existingItem = this.cart.find(item => item.id === product.id);
     if (existingItem) {
@@ -404,17 +404,22 @@ export class BanhangComponent implements OnInit {
         }
         console.log("Voucher từ API:", voucher);
 
+
         // Tính giá trị giảm giá ban đầu
         let discountAmount: number;
         if (voucher.hinhThucGiam) {
-          discountAmount = total * (voucher.giaTriGiam / 100); // Giảm theo phần trăm
+          discountAmount = voucher.giaTriGiam; // Giảm số tiền cố định// Giảm theo phần trăm
         } else {
-          discountAmount = voucher.giaTriGiam; // Giảm số tiền cố định
+          discountAmount = total * (voucher.giaTriGiam / 100);
+
         }
+        // console.log("Voucher từ API:", voucher);
+        // console.log("Giá trị giảm trước khi giới hạn:", discountAmount);
+        // console.log("Giá trị giảm tối đa:", voucher.giaTriToiDa);
 
         // Kiểm tra giá trị tối đa
-        if (voucher.giaTriToiDa && discountAmount > voucher.giaTriToiDa) {
-          discountAmount = voucher.giaTriToiDa;
+        if (voucher.giamToiDa && discountAmount > Number(voucher.giamToiDa)) {
+          discountAmount = Number(voucher.giamToiDa);
         }
 
         // Gán giá trị cuối cùng
@@ -442,7 +447,7 @@ export class BanhangComponent implements OnInit {
       alert('Giỏ hàng đang trống!');
       return;
     }
-    console.log(this.selectedInvoice);
+    console.log('Phương thức thanh toán đã chọn:', this.selectedPaymentMethod);
 
     // Cập nhật hóa đơn với trạng thái thanh toán và reset các trường liên quan
     const updatedInvoice = {
@@ -451,6 +456,8 @@ export class BanhangComponent implements OnInit {
       idPhuongThucThanhToan: this.selectedPaymentMethod,
       ngaySua: new Date().toISOString()
     };
+
+    console.log('Dữ liệu gửi lên API:', updatedInvoice); // Log dữ liệu gửi API
 
     this.banhangService.updateHoaDon(updatedInvoice.id, updatedInvoice).subscribe(
       response => {
@@ -555,9 +562,9 @@ export class BanhangComponent implements OnInit {
       (data: any[]) => {
         // Lọc ra chỉ những phương thức có id là 2 hoặc 3
         this.paymentMethods = data.filter(method => method.id === 2 || method.id === 3);
-        
+
         console.log(this.paymentMethods);
-        
+
         if (this.paymentMethods.length > 0) {
           this.selectedPaymentMethod = this.paymentMethods[0].id;
         }
@@ -566,7 +573,12 @@ export class BanhangComponent implements OnInit {
         console.error('Lỗi khi lấy dữ liệu phương thức thanh toán:', error);
       }
     );
-  }  
+  }
+
+  logSelectedMethod() {
+    console.log('Phương thức thanh toán đã chọn:', this.selectedPaymentMethod);
+  }
+
 
   loadInvoices(): void {
     const request = {};
@@ -602,6 +614,7 @@ export class BanhangComponent implements OnInit {
     // console.log("Request gửi lên API:", params.toString());
 
     this.banhangService.locSanPham(params).subscribe(response => {
+      // console.log("Dữ liệu trả về từ API:", response);
 
       if (response && response.content) {
         this.sanPhams = response.content.map((sp: any) => ({
@@ -657,7 +670,7 @@ export class BanhangComponent implements OnInit {
       this.closeQuetQr();
     }
   }
-  
+
   openQuetQr(){
     this.quetQr = true;
   }

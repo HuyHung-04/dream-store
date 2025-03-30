@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="" />
+    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/VoucherRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/VoucherRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/voucher/VoucherService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/voucher/VoucherService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -92,6 +97,7 @@
       <command value="mvn clean" />
       <command value="mvn clean install" />
       <command value="mvn spring-boot:run" />
+      <command value="mvn clean install " />
     </option>
   </component>
   <component name="RunManager">
@@ -208,6 +214,17 @@
       <workItem from="1742738388278" duration="3950000" />
       <workItem from="1742799314098" duration="1123000" />
       <workItem from="1742822997985" duration="3610000" />
+      <workItem from="1742887111967" duration="9268000" />
+      <workItem from="1742906375450" duration="2994000" />
+      <workItem from="1742975448264" duration="1934000" />
+      <workItem from="1742997476836" duration="4790000" />
+      <workItem from="1743005667656" duration="2376000" />
+      <workItem from="1743059467035" duration="1830000" />
+      <workItem from="1743080316322" duration="3875000" />
+      <workItem from="1743155115271" duration="5218000" />
+      <workItem from="1743183523677" duration="301000" />
+      <workItem from="1743254173739" duration="6440000" />
+      <workItem from="1743316171843" duration="1839000" />
     </task>
     <servers />
   </component>

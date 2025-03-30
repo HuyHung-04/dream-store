@@ -29,6 +29,20 @@ public interface SanPhamOnlineRepository extends JpaRepository<SanPham, Integer>
             "AND EXISTS (SELECT 1 FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id)")
     Page<SanPhamDto> searchSanPhamByName(@Param("name") String name, Pageable pageable);
 
-
+    // lọc thương hiệu tìm theo giá
+    @Query("SELECT new com.example.dreambackend.dtos.SanPhamDto(sp.id, sp.ten, " +
+            "(SELECT MIN(spct.gia) FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id), " +
+            "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham.id = sp.id ORDER BY a.id ASC LIMIT 1)) " +
+            "FROM SanPham sp " +
+            "LEFT JOIN sp.thuongHieu th " +
+            "WHERE sp.trangThai = 1 " +
+            "AND (:thuongHieu IS NULL OR th.ten = :thuongHieu) " +
+            "AND (:minGia IS NULL OR EXISTS (SELECT 1 FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id AND spct.gia >= :minGia)) " +
+            "AND (:maxGia IS NULL OR EXISTS (SELECT 1 FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id AND spct.gia <= :maxGia)) " +
+            "AND EXISTS (SELECT 1 FROM Anh a WHERE a.sanPham.id = sp.id)")
+    Page<SanPhamDto> searchSanPham(@Param("thuongHieu") String thuongHieu,
+                                   @Param("minGia") Double minGia,
+                                   @Param("maxGia") Double maxGia,
+                                   Pageable pageable);
 }
 

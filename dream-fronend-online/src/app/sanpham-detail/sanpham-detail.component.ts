@@ -244,31 +244,40 @@ import { CookieService } from 'ngx-cookie-service';
 
   themVaoGio() {
     if (!this.khachhang.id) {
-      alert("Bạn cần đăng nhập mới có thể thêm sản phảm vào giỏ");
+      alert("Bạn cần đăng nhập mới có thể thêm sản phẩm vào giỏ hàng.");
       return;
     }
   
-    const sanPhamGioHang = {
-      idKhachHang: this.khachhang.id, // Lấy ID khách hàng từ đối tượng `khachhang`
-      idSanPhamChiTiet: this.selectedSanPham.idSanPhamChiTiet, 
-      mauSac: this.selectedMauSac,
-      size: this.selectedSize,
-      soLuong: this.soLuongMua
-    };
+    const idKhachHang = this.khachhang.id;
+    const idSanPhamChiTiet = this.selectedSanPham.idSanPhamChiTiet;
+    const soLuongTonKho = this.selectedSanPham.soLuongSanPham;
   
-    console.log("Dữ liệu gửi lên API:", sanPhamGioHang);
+    // Gọi API lấy giỏ hàng của khách hàng
+    this.headerService.getGioHang(idKhachHang).subscribe((gioHangList) => {
+      const gioItem = gioHangList.find(item => item.idSanPhamChiTiet === idSanPhamChiTiet);
+      const soLuongTrongGio = gioItem?.soLuong || 0;
+      const tong = soLuongTrongGio + this.soLuongMua;
   
-    this.headerService.addToCart(sanPhamGioHang).subscribe(
-      (response) => {
-        console.log("Thêm vào giỏ hàng thành công:", response);
+      if (tong > soLuongTonKho) {
+        alert(`Số lượng sản phẩm thêm đang vượt quá số lượng tồn kho. Vui lòng thử lại`);
+        return;
+      }
+  
+      // Nếu hợp lệ thì thêm
+      const sanPhamGioHang = {
+        idKhachHang: idKhachHang,
+        idSanPhamChiTiet: idSanPhamChiTiet,
+        mauSac: this.selectedMauSac,
+        size: this.selectedSize,
+        soLuong: this.soLuongMua
+      };
+  
+      this.headerService.addToCart(sanPhamGioHang).subscribe(res => {
         this.headerService.notifyGioHangUpdated();
         this.soLuongMua = 1;
         this.hienToast();
-      },
-      (error) => {
-        console.error("Lỗi khi thêm vào giỏ hàng:", error);
-      }
-    );
+      });
+    });
   }
   
   muaNgay() {

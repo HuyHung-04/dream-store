@@ -1,6 +1,6 @@
 <p class="title">Danh sách khuyến mãi</p>
-<div class="input-field">
-  <label for="">Trạng thái</label>
+<div class="input-field-search">
+  <label class="lable-search" for="">Trạng thái: </label>
   <select [(ngModel)]="selectedTrangThai" (change)="loadData()" class="input">
     <option [value]="3">Tất cả khuyến mãi</option>
     <option [value]="1">Hoạt động</option>
@@ -11,7 +11,7 @@
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm khuyến mãi</button>
   <div class="search-container">
     <p>Tìm Kiếm:</p>
-    <input type="text" (input)="filterKhuyenMais()" class="input search-input"
+    <input type="text" (input)="searchTenVoucher()" class="input search-input"
       placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
   </div>
 </div>
@@ -47,7 +47,7 @@
           <td>
             <button (click)="showDetail(khuyenmai.id)" class="button btn-primary">Chi tiết</button>
             <button (click)="editKhuyenMai(khuyenmai.id)" class="button btn-primary">Sửa</button>
-            <button (click)="openProductSelectionModal(khuyenmai.id)" class="button btn-primary">Chọn sản phẩm</button>
+            <button (click)="chonSanPham(khuyenmai.id)" class="button btn-primary">Chọn sản phẩm</button>
 
           </td>
         </tr>
@@ -60,16 +60,16 @@
       <ul class="pagination">
         <!-- Nút Trang trước -->
         <li class="page-item" [class.disabled]="currentPage === 0">
-          <button class="page-link" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+          <button class="page-link" (click)="PreviousPage()" [disabled]="currentPage === 0">
             &laquo;
           </button>
         </li>
-        <li class="page-item" *ngFor="let page of visiblePages" [class.active]="currentPage === page">
-          <button class="page-link" (click)="goToPage(page)">{{ page + 1 }}</button>
+        <li class="page-item" *ngFor="let page of numberPages" [class.active]="currentPage === page">
+          <button class="page-link" (click)="Page(page)">{{ page + 1 }}</button>
         </li>
         <!-- Nút Trang sau -->
         <li class="page-item" [class.disabled]="currentPage >= totalPages - 1">
-          <button class="page-link" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+          <button class="page-link" (click)="NextPage()" [disabled]="currentPage >= totalPages - 1">
             &raquo;
           </button>
         </li>
@@ -109,8 +109,8 @@
 
         <div class="input-row">
           <div class="input-field">
-            <input type="text" class="input" [value]="selectedKhuyenMai.trangThai ? 'Hoạt động' : 'Không hoạt động'" style="width:185px;"
-              readonly />
+            <input type="text" class="input" [value]="selectedKhuyenMai.trangThai ? 'Hoạt động' : 'Không hoạt động'"
+              style="width:185px;" readonly />
             <label for="trangThai">Trạng thái</label>
           </div>
           <div class="input-field">
@@ -120,7 +120,7 @@
         </div>
 
         <div class="input-row">
-          
+
         </div>
       </form>
     </div>
@@ -135,8 +135,8 @@
       <form (ngSubmit)="updateKhuyenMai()" #khuyenmaiForm="ngForm">
         <div class="input-row">
           <!-- <div class="input-field"> -->
-            <!-- Trường ID là readonly -->
-            <!-- <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.id" name="id" readonly />
+          <!-- Trường ID là readonly -->
+          <!-- <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.id" name="id" readonly />
             <label for="id">Id</label>
           </div> -->
           <div class="input-field">
@@ -157,7 +157,7 @@
         </div>
 
         <div class="input-row">
-          
+
           <div class="input-field">
             <div style="display: flex; align-items: center;">
               <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.giaTriGiam" name="giaTriGiam" required
@@ -198,10 +198,10 @@
               {{ errors.ngayKetThuc}}
             </div>
           </div>
-          
+
         </div>
-        
-        
+
+
 
         <div class="button-container">
           <button type="submit" class="button btn-primary">Lưu thay đổi</button>
@@ -209,7 +209,7 @@
       </form>
     </div>
   </div>
-
+<!-- form thêm khuyến mãi -->
   <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
     <div class="modal-box" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="closeModal()">×</button>
@@ -274,7 +274,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="button-container">
           <button type="submit" class="button btn-primary">Thêm khuyến mãi</button>
         </div>
@@ -283,13 +283,13 @@
   </div>
 
   <!-- Modal for Product Selection -->
-  <div class="modal-overlay" *ngIf="showProductSelectionModal" (click)="closeProductSelectionModal()">
+  <div class="modal-overlay" *ngIf="showChonSanPham" (click)="closeChonSanPham()">
     <div class="modal-box-select" (click)="$event.stopPropagation()">
       <p class="title">Chọn Sản Phẩm</p>
-      <div class="search-container" style="margin-top: -70px;">
+      <div class="search-container" style="margin-top: -70px;margin-left: 10px;">
         <p>Tìm Kiếm:</p>
-        <input 
-        type="text" class="input search-input"placeholder="Nhập tên sản phẩm cần tìm..." [(ngModel)]="searchText" (ngModelChange)="searchSanPham()"/>
+        <input type="text" class="input search-input" placeholder="Nhập tên sản phẩm cần tìm..."
+          [(ngModel)]="searchText" (ngModelChange)="searchSanPham()" />
       </div>
       <div class="table-scrollable-select">
         <table class="product-table-select">
@@ -305,25 +305,25 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let product of availableProducts">
+            <tr *ngFor="let sanpham of sanPham">
               <td>
                 <!-- Checkbox xuất hiện nếu sản phẩm không bị disabled -->
-                <input type="checkbox" [(ngModel)]="product.selected" />
+                <input type="checkbox" [(ngModel)]="sanpham.selected" />
               </td>
-              <td>{{ product.ma }}</td>
-              <td>{{ product.sanPhamTen }}</td>
-              <td>{{ product.mauSacTen }}</td>
-              <td>{{ product.sizeTen }}</td>
-              <td>{{ product.gia }}</td>
-              <td>{{ product.soLuong }}</td>
+              <td>{{ sanpham.ma }}</td>
+              <td>{{ sanpham.sanPhamTen }}</td>
+              <td>{{ sanpham.mauSacTen }}</td>
+              <td>{{ sanpham.sizeTen }}</td>
+              <td>{{ sanpham.gia }}</td>
+              <td>{{ sanpham.soLuong }}</td>
             </tr>
           </tbody>
         </table>
 
       </div>
       <div class="button-container-select">
-        <button class="button btn-primary" (click)="saveSelectedProducts()">Lưu</button>
-        <button class="button btn-secondary" (click)="closeProductSelectionModal()">Đóng</button>
+        <button class="button btn-primary" (click)="luuSanPham()">Lưu</button>
+        <button class="button btn-secondary" (click)="closeChonSanPham()">Đóng</button>
       </div>
     </div>
   </div>
