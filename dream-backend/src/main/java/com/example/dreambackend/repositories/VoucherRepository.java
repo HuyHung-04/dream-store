@@ -16,7 +16,7 @@ import java.util.List;
 public interface VoucherRepository extends JpaRepository<Voucher,Integer> {
     List<Voucher> findByTenContainingIgnoreCase(String ten);
     @Query("SELECT new com.example.dreambackend.dtos.VoucherDto(v.id, v.ten, v.giamToiDa, v.hinhThucGiam, v.giaTriGiam) " +
-            "FROM Voucher v WHERE v.trangThai = 1")
+            "FROM Voucher v WHERE v.trangThai = 1 AND v.soLuong >0")
     List<VoucherDto> findIdAndTen();
 
     @Query("SELECT v FROM Voucher v WHERE v.trangThai = :trangThai")

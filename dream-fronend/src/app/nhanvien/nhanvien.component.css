@@ -656,3 +656,17 @@
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
+.input-field-search{
+  margin-left: 480px;
+  position: relative;
+  top: 100px;
+}
+
+.lable-search{
+  color:  #294764;
+  margin-right: 10px;
+  position: relative;
+  top: 5px;
+  font-weight: bold;
+}

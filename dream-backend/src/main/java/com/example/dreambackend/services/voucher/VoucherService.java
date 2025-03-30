@@ -54,11 +54,22 @@ public class VoucherService implements IVoucherService {
     }
 
     private void checkAndUpdateStatus(Voucher voucher) {
-        if (voucher.getNgayKetThuc() != null && voucher.getNgayKetThuc().isBefore(LocalDate.now())) {
-            if (voucher.getTrangThai() != 0) { // Tránh cập nhật không cần thiết
-                voucher.setTrangThai(0); // 0 = Không hoạt động
-                voucherRepository.save(voucher); // Lưu thay đổi vào database
-            }
+        boolean updated = false;
+
+        // Kiểm tra null trước khi so sánh
+        if (voucher.getSoLuong() != null && voucher.getSoLuong() == 0 && voucher.getTrangThai() != 0) {
+            voucher.setTrangThai(0);
+            updated = true;
+        }
+
+        if (voucher.getNgayKetThuc() != null && voucher.getNgayKetThuc().isBefore(LocalDate.now())
+                && voucher.getTrangThai() != 0) {
+            voucher.setTrangThai(0);
+            updated = true;
+        }
+
+        if (updated) {
+            voucherRepository.save(voucher);
         }
     }
     @Override

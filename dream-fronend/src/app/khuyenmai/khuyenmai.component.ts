@@ -15,19 +15,19 @@ export class KhuyenmaiComponent implements OnInit {
   showModal: boolean = false;
   showModalDetail: boolean = false;
   showModalSearch: boolean = false;
-  maxVisiblePages = 3;
+  maxPages = 3;
   selectedTrangThai: number = 3;
   totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 10;
-  availableProducts: SanPhamChiTietDto[] = [];
-  showProductSelectionModal: boolean = false;
+  sanPham: SanPhamChiTietDto[] = [];
+  showChonSanPham: boolean = false;
   selectedKhuyenMaiId: number | null = null;
   showModalEdit = false;
   selectedKhuyenMai: any = null;
   khuyenmaiEdit: any = {};
   searchText: string = '';
-  visiblePages: number[] = [];
+  numberPages: number[] = [];
   filteredKhuyenMais: any[] = [];
   errors: any = {};
   khuyenmai: any = {
@@ -43,7 +43,7 @@ export class KhuyenmaiComponent implements OnInit {
   };
 
   constructor(private khuyenmaiService: KhuyenmaiService, sanphamService: SanphamService) { }
- 
+
   ngOnInit(): void {
     this.loadData()
   }
@@ -60,7 +60,7 @@ export class KhuyenmaiComponent implements OnInit {
 
   }
   editKhuyenMai(khuyenmaiId: number) {
-    this.khuyenmaiService.getKhuyenMaiDetail(khuyenmaiId).subscribe((khuyenmai) => {
+    this.khuyenmaiService.chiTietKhuyenMai(khuyenmaiId).subscribe((khuyenmai) => {
       console.log(khuyenmai);
       this.khuyenmaiEdit = { ...khuyenmai };
       this.showModalEdit = true;
@@ -69,9 +69,19 @@ export class KhuyenmaiComponent implements OnInit {
 
 
   addKhuyenMai() {
+   
     if (!this.validateForm()) {
       return;
     }
+
+     // Hiển thị hộp thoại xác nhận
+     const isConfirmed = window.confirm('Bạn có chắc chắn muốn thêm khuyến mãi này?');
+
+     if (!isConfirmed) {
+       return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+     }
+ 
+
     this.khuyenmaiService.addKhuyenMai(this.khuyenmai).subscribe(
       (response) => {
         alert('Thêm khuyến mãi thành công!');
@@ -92,27 +102,27 @@ export class KhuyenmaiComponent implements OnInit {
     }
   }
 
-  openProductSelectionModal(khuyenMaiId: number): void {
+  chonSanPham(khuyenMaiId: number): void {
     // Tìm khuyến mãi theo ID
-  const selectedKhuyenMai = this.khuyenmais.find(km => km.id === khuyenMaiId);
+    const selectedKhuyenMai = this.khuyenmais.find(km => km.id === khuyenMaiId);
 
-  if (!selectedKhuyenMai) {
-    alert('Không tìm thấy khuyến mãi!');
-    return;
-  }
+    if (!selectedKhuyenMai) {
+      alert('Không tìm thấy khuyến mãi!');
+      return;
+    }
 
-  // Kiểm tra nếu khuyến mãi không hoạt động
-  if (!selectedKhuyenMai.trangThai) {
-    alert('Khuyến mãi không hoạt động, không thể chọn sản phẩm!');
-    return;
-  }
+    // Kiểm tra nếu khuyến mãi không hoạt động
+    if (!selectedKhuyenMai.trangThai) {
+      alert('Khuyến mãi không hoạt động, không thể chọn sản phẩm!');
+      return;
+    }
 
     this.selectedKhuyenMaiId = khuyenMaiId;
-    this.khuyenmaiService.getAvailableProducts(khuyenMaiId).subscribe(
+    this.khuyenmaiService.getSanPham(khuyenMaiId).subscribe(
       (products) => {
-        this.availableProducts = products.filter((product) => !product.disabled);
-        console.log('Filtered products:', this.availableProducts);
-        this.showProductSelectionModal = true;
+        this.sanPham = products.filter((product) => !product.disabled);
+        console.log('Filtered products:', this.sanPham);
+        this.showChonSanPham = true;
       },
       (error) => {
         console.error('Error fetching available products:', error);
@@ -121,26 +131,31 @@ export class KhuyenmaiComponent implements OnInit {
     );
   }
 
-  closeProductSelectionModal(): void {
-    this.showProductSelectionModal = false;
-    this.availableProducts = [];
+  closeChonSanPham(): void {
+    this.showChonSanPham = false;
+    this.sanPham = [];
   }
 
 
-  saveSelectedProducts(): void {
+  luuSanPham(): void {
     if (this.selectedKhuyenMaiId === null) {
       alert('Không tìm thấy ID khuyến mãi!');
       return;
     }
+    // Hiển thị hộp thoại xác nhận chỉ khi form hợp lệ
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn lưu khuyến mãi cho sản phẩm không');
 
-    const selectedProductIds = this.availableProducts
+    if (!isConfirmed) {
+      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+    }
+    const selectedProductIds = this.sanPham
       .filter((product) => product.selected)
       .map((product) => product.id);
 
-    this.khuyenmaiService.updateKhuyenMaiProducts(this.selectedKhuyenMaiId, selectedProductIds).subscribe(
+    this.khuyenmaiService.saveSanPhamWithKhuyenMai(this.selectedKhuyenMaiId, selectedProductIds).subscribe(
       (response: string) => {
         alert("Đã lưu sản phẩm");
-        this.closeProductSelectionModal();
+        this.closeChonSanPham();
       },
       (error) => {
         alert('Có lỗi xảy ra khi lưu sản phẩm.');
@@ -154,26 +169,27 @@ export class KhuyenmaiComponent implements OnInit {
       this.errors.ma = 'Mã khuyến mãi không được để trống!';
     }
     else {
-      const isDuplicate = this.khuyenmais.some(khuyenmai => khuyenmai.ma == this.khuyenmai.ma);
-      if (isDuplicate) {
+      const checkTrungMa = this.khuyenmais.some(khuyenmai => khuyenmai.ma == this.khuyenmai.ma);
+      if (checkTrungMa) {
         this.errors.ma = 'Mã khuyến mãi đã tồn tại!';
       }
     }
     if (!this.khuyenmai.ten.trim()) {
       this.errors.ten = 'Tên khuyến mãi không được để trống!';
     }
-    if (this.khuyenmai.hinhThucGiam === null || this.khuyenmai.hinhThucGiam === undefined) {
-      this.errors.hinhThucGiam = 'Vui lòng chọn hình thức giảm!';
-    }
+
     if (this.khuyenmai.giaTriGiam === null || this.khuyenmai.giaTriGiam === undefined || this.khuyenmai.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
 
-      const numericValue = Number(this.khuyenmai.giaTriGiam);
-      if (isNaN(numericValue)) {
+      const checkSo = Number(this.khuyenmai.giaTriGiam);
+      if (isNaN(checkSo)) {
         this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-      } else if (numericValue < 0) {
-        this.errors.giaTriGiam = 'Giá trị giảm không được âm!';
+      } else if (checkSo <= 0) {
+        this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+      }
+      else if (checkSo >100) {
+        this.errors.giaTriGiam = 'Giá trị giảm không được quá 100%';
       }
     }
 
@@ -205,14 +221,14 @@ export class KhuyenmaiComponent implements OnInit {
     return Object.keys(this.errors).length === 0;
   }
 
-  searchAndShowSearch(): void {
+  searchVoucherTheoTen(): void {
     if (this.searchText.trim() === '') {
       alert('Vui lòng nhập tên khuyến mãi để tìm kiếm.');
       return;
     }
 
 
-    this.khuyenmaiService.searchKhuyenMaiByName(this.searchText).subscribe(
+    this.khuyenmaiService.timKhuyenMaiTheoTen(this.searchText).subscribe(
       (data) => {
         if (data.length > 0) {
           this.selectedKhuyenMai = data[0];
@@ -237,17 +253,18 @@ export class KhuyenmaiComponent implements OnInit {
     if (!this.khuyenmaiEdit.ten || !this.khuyenmaiEdit.ten.trim()) {
       this.errors.ten = 'Tên khuyến mãi không được để trống!';
     }
-    if (this.khuyenmaiEdit.hinhThucGiam === null || this.khuyenmaiEdit.hinhThucGiam === undefined) {
-      this.errors.hinhThucGiam = 'Vui lòng chọn hình thức giảm!';
-    }
+
     if (this.khuyenmaiEdit.giaTriGiam === null || this.khuyenmaiEdit.giaTriGiam === undefined || this.khuyenmaiEdit.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
-      const numericValue = Number(this.khuyenmaiEdit.giaTriGiam);
-      if (isNaN(numericValue)) {
+      const checkSo = Number(this.khuyenmaiEdit.giaTriGiam);
+      if (isNaN(checkSo)) {
         this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-      } else if (numericValue < 0) {
-        this.errors.giaTriGiam = 'Giá trị giảm không được âm!';
+      } else if (checkSo <1) {
+        this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1';
+      }
+      else if (checkSo >100) {
+        this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn 100%';
       }
     }
     if (!this.khuyenmaiEdit.ngayBatDau) {
@@ -266,29 +283,37 @@ export class KhuyenmaiComponent implements OnInit {
       if (startDate > endDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc phải sau ngày bắt đầu!';
       }
-       else if (endDate < currentDate && this.khuyenmaiEdit.trangThai == true) {
-          this.errors.trangThai = 'Khuyến mãi đã hết hạn, trạng thái phải là "Không hoạt động".';
-        }
-      
+      else if (endDate < currentDate && this.khuyenmaiEdit.trangThai == true) {
+        this.errors.trangThai = 'Khuyến mãi đã hết hạn, trạng thái phải là "Không hoạt động".';
+      }
+
     }
     if (this.khuyenmaiEdit.trangThai === null || this.khuyenmaiEdit.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';
     }
-    
-  
+
+
     return Object.keys(this.errors).length === 0;
   }
 
   updateKhuyenMai() {
+    console.log("them")
     if (!this.validateEditForm()) {
       return; // return nếu chưa hợp lệ
     }
 
+    // Hiển thị hộp thoại xác nhận chỉ khi form hợp lệ
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn sửa khuyến mãi này?');
+
+    if (!isConfirmed) {
+      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+    }
     if (this.khuyenmaiEdit.id) {
+      console.log("giatri", this.khuyenmaiEdit)
       this.khuyenmaiService.updateKhuyenMai(this.khuyenmaiEdit).subscribe(
         (response) => {
-          console.log('Voucher to update:', this.khuyenmaiEdit.ngaySua);
           alert('Cập nhật khuyến mãi thành công!');
+          console.log("sua", response)
           this.loadData();
           this.closeModalEdit();
         },
@@ -307,51 +332,37 @@ export class KhuyenmaiComponent implements OnInit {
     this.selectedKhuyenMai = this.khuyenmais.find(khuyenmai => khuyenmai.id === khuyenmaiId);
     this.showModalDetail = true;
   }
-  
-  loadKhuyenMaiByTrangThai(trangThai: number, page: number): void {
-    this.khuyenmaiService.getKhhuyenMaiByTrangThai(trangThai, page, 8).subscribe((response) => {
+
+  locTheoTrangThai(trangThai: number, page: number): void {
+    this.khuyenmaiService.locTrangThai(trangThai, page, 8).subscribe((response) => {
       this.khuyenmais = response.content;
       this.totalPages = response.totalPages;
       this.currentPage = page;
-      this.updateVisiblePages();
-      this.filterKhuyenMais();
+      this.tinhSoTrang();
+      this.searchTenVoucher();
     });
   }
   loadData(): void {
     console.log(this.selectedTrangThai);
-    console.log(this.filterKhuyenMais());
+    console.log(this.searchTenVoucher());
     if (this.selectedTrangThai !== 3) {
-      this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, 0);
+      this.locTheoTrangThai(this.selectedTrangThai, 0);
     } else {
       this.loadPage(0);
     }
   }
-
-  getKhuyenMaiDetail(id: number): void {
-    this.khuyenmaiService.getKhuyenMaiDetail(id).subscribe(
-      (data) => {
-        this.khuyenmai = data;
-        console.log('Chi tiết voucher:', this.khuyenmai);
-      },
-      (error) => {
-        console.error('Lỗi khi lấy chi tiết khuyến mãi:', error);
-        alert('Không tìm thấy thông tin khuyến mãi!');
-      }
-    );
-  }
-
 
   loadPage(page: number): void {
     this.khuyenmaiService.getKhuyenMai(page, 8).subscribe((response) => {
       this.khuyenmais = response.content; // Dữ liệu của trang hiện tại
       this.totalPages = response.totalPages; // Tổng số trang
       this.currentPage = page; // Cập nhật trang hiện tại
-      this.updateVisiblePages();
-      this.filterKhuyenMais();
+      this.tinhSoTrang();
+      this.searchTenVoucher();
     });
   }
 
-  filterKhuyenMais() {
+  searchTenVoucher() {
     if (this.searchText.trim()) {
       this.filteredKhuyenMais = this.khuyenmais.filter((khuyenmai) =>
         khuyenmai.ten.toLowerCase().includes(this.searchText.toLowerCase())
@@ -361,44 +372,43 @@ export class KhuyenmaiComponent implements OnInit {
     }
   }
 
-  goToPage(page: number): void {
+  Page(page: number): void {
     if (page >= 0 && page < this.totalPages) {
       if (this.selectedTrangThai !== 3) {
-        this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, page);
+        this.locTheoTrangThai(this.selectedTrangThai, page);
       } else {
         this.loadPage(page);
       }
-      
+
     } else {
       console.warn('Invalid page number:', page);
     }
   }
-  
-  goToPreviousPage(): void {
+
+  PreviousPage(): void {
     if (this.currentPage > 0) {
       if (this.selectedTrangThai !== 3) {
-        this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, this.currentPage - 1);
+        this.locTheoTrangThai(this.selectedTrangThai, this.currentPage - 1);
       } else {
         this.loadPage(this.currentPage - 1);
       }
-    
+
     }
   }
-  updateVisiblePages(): void {
-    const startPage = Math.floor(this.currentPage / this.maxVisiblePages) * this.maxVisiblePages;
-    const endPage = Math.min(startPage + this.maxVisiblePages, this.totalPages);
-
-    this.visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
+  tinhSoTrang(): void {
+    const startPage = Math.floor(this.currentPage / this.maxPages) * this.maxPages;
+    const endPage = Math.min(startPage + this.maxPages, this.totalPages);
+    this.numberPages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
   }
 
-  goToNextPage(): void {
+  NextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
       if (this.selectedTrangThai !== 3) {
-        this.loadKhuyenMaiByTrangThai(this.selectedTrangThai, this.currentPage + 1);
+        this.locTheoTrangThai(this.selectedTrangThai, this.currentPage + 1);
       } else {
         this.loadPage(this.currentPage + 1);
       }
-      
+
     }
   }
 
@@ -407,10 +417,10 @@ export class KhuyenmaiComponent implements OnInit {
       alert('Vui lòng chọn khuyến mãi trước khi tìm kiếm sản phẩm.');
       return;
     }
-  
-    this.khuyenmaiService.getAvailableProducts(this.selectedKhuyenMaiId, this.searchText).subscribe(
-      (products) => {
-        this.availableProducts = products.filter((product) => !product.disabled);
+
+    this.khuyenmaiService.getSanPham(this.selectedKhuyenMaiId, this.searchText).subscribe(
+      (sanpham) => {
+        this.sanPham = sanpham.filter((sanpham) => !sanpham.disabled);
       },
       (error) => {
         console.error('Lỗi khi tìm kiếm sản phẩm:', error);
@@ -418,7 +428,7 @@ export class KhuyenmaiComponent implements OnInit {
       }
     );
   }
-  
+
 
   openModal() {
     this.resetForm();

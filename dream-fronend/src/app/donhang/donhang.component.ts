@@ -34,7 +34,8 @@ export class DonhangComponent {
     { value: 1, label: 'Chờ xác nhận' },
     { value: 2, label: 'Đã xác nhận' },
     { value: 3, label: 'Đang giao hàng' },
-    { value: 4, label: 'Giao hàng thành công' }
+    { value: 4, label: 'Giao hàng thành công' },
+    { value: 5, label: 'Đơn hàng đã hủy' }
   ];
   constructor(private donHangService: DonhangService) { }
 

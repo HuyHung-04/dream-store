@@ -1,6 +1,6 @@
 <p class="title">Danh sách voucher</p>
-<div class="input-field">
-  <label for="">Trạng thái</label>
+<div class="input-field-search">
+  <label class="lable-search" for="">Trạng thái:   </label>
   <select [(ngModel)]="selectedTrangThai" (change)="loadData()" class="input">
     <option [value]="3">Tất cả voucher</option>
     <option [value]="1">Hoạt động</option>
@@ -11,8 +11,8 @@
     <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Voucher</button>
     <div class="search-container">
       <p>Tìm Kiếm:</p>
-      <input type="text" (input)="filterVouchers()" class="input search-input"
-        placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
+      <input type="text" (input)="searchTenVoucher()" class="input search-input"
+        placeholder="Nhập tên voucher cần tìm..." [(ngModel)]="searchText" />
     </div>
   </div>
   
@@ -38,7 +38,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let voucher of filteredVouchers,">
+          <tr *ngFor="let voucher of tenVouchers,">
             <td>{{voucher.id}}</td>
             <td>{{ voucher.ma }}</td>
             <td>{{ voucher.ten }}</td>
@@ -67,16 +67,16 @@
         <ul class="pagination">
           <!-- Nút Trang trước -->
           <li class="page-item" [class.disabled]="currentPage === 0">
-            <button class="page-link" (click)="goToPreviousPage()" [disabled]="currentPage === 0">
+            <button class="page-link" (click)="PreviousPage()" [disabled]="currentPage === 0">
               &laquo;
             </button>
           </li>
-          <li class="page-item" *ngFor="let page of visiblePages" [class.active]="currentPage === page">
-            <button class="page-link" (click)="goToPage(page)">{{ page + 1 }}</button>
+          <li class="page-item" *ngFor="let page of numberPages" [class.active]="currentPage === page">
+            <button class="page-link" (click)="Page(page)">{{ page + 1 }}</button>
           </li>
           <!-- Nút Trang sau -->
           <li class="page-item" [class.disabled]="currentPage >= totalPages - 1">
-            <button class="page-link" (click)="goToNextPage()" [disabled]="currentPage >= totalPages - 1">
+            <button class="page-link" (click)="NextPage()" [disabled]="currentPage >= totalPages - 1">
               &raquo;
             </button>
           </li>
@@ -156,6 +156,8 @@
         </form>
       </div>
     </div>
+
+
     <!-- Modal hiển thị chi tiết voucher khi sửa -->
     <div class="modal-overlay" *ngIf="showModalEdit" (click)="closeModalEdit()">
       <div class="modal-box" (click)="$event.stopPropagation()">
@@ -278,7 +280,8 @@
         </form>
       </div>
     </div>
-  
+
+  <!-- form thêm voucher -->
     <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
       <div class="modal-box" (click)="$event.stopPropagation()">
         <button class="close-btn" (click)="closeModal()">×</button>
@@ -304,7 +307,7 @@
           </div>
           <div class="input-row">
             <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucher.soLuong" name="soLuong" autocomplete="off" required
+              <input type="number" class="input" [(ngModel)]="voucher.soLuong" name="soLuong" autocomplete="off" required
                 autocomplete="off" #ma="ngModel" (input)="clearError('soLuong')" />
               <label for="soLuong">Số lượng</label>
               <div class="tooltip-error" *ngIf="errors.soLuong">
