@@ -10,7 +10,9 @@
    <div *ngIf="hoaDonData.trangThai == 5">
     <div class="cancelHoaDon">
       <p><i class="bi bi-x-circle"></i> Đơn hàng đã bị hủy</p>
-      (Lý do hủy đơn: {{ hoaDonData.ghiChu }})
+      <p *ngIf="hoaDonData?.trangThai === 5 && hoaDonData?.ghiChu" style="font-size: 15px;color: black;">
+        (Lý do hủy đơn: {{ hoaDonData.ghiChu }})
+      </p>
     </div>
   </div>
 
