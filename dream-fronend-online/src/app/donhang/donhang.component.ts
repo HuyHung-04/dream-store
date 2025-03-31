@@ -53,6 +53,7 @@ export class DonhangComponent {
       this.chitietlichsuService.getHoaDonByMa(this.maHoaDon).subscribe(
         (data) => {
           this.hoaDonData = data;
+          this.tinhHienThiVoucher()
           console.log("hóa đơn", data)
         },
         (error) => {

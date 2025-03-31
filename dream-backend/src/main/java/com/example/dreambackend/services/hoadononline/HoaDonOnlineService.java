@@ -326,7 +326,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                 hoaDon.setNgaySua(LocalDate.now());
 
                 // Nếu trạng thái là 2, trừ số lượng sản phẩm và giảm số lượng voucher
-                if (trangThaiHienTai == 2) {
+                if (trangThaiHienTai == 1) {
                     // Lấy danh sách chi tiết hóa đơn từ HoaDonChiTietRepository
                     List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.findByHoaDonId(hoaDon.getId());
 
