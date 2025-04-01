@@ -45,9 +45,9 @@ public class HoaDonOnlineController {
         return ResponseEntity.ok(totalPrice);
     }
 
-    @GetMapping("/vouchers/{idKhachHang}")
-    public ResponseEntity<List<VoucherDto>> getAvailableVouchers(@PathVariable Integer idKhachHang) {
-        List<VoucherDto> vouchers = hoaDonOnlineService.getVoucherIdAndTen(idKhachHang);
+    @GetMapping("/vouchers/{tongTien}")
+    public ResponseEntity<List<VoucherDto>> getAvailableVouchers(@PathVariable Double tongTien) {
+        List<VoucherDto> vouchers = hoaDonOnlineService.getVoucherIdAndTen(tongTien);
         return ResponseEntity.ok(vouchers);
     }
 

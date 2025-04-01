@@ -93,14 +93,12 @@ export class HoadonComponent {
       this.idKhachHang = khachhang.id; // hoặc khachhang.idKhachHang tùy theo API trả về
       console.log("ID khách hàng từ cookie:", this.idKhachHang);
       // Kiểm tra trạng thái thanh toán
-
       this.resetForm();
       this.getDiaChiKhachHang();
       this.loadTinhThanh();
       this.getChiTietGioHangSauThanhToan();
       this.getTotalPrice();
       this.getVoucherIdAndTen();
-      console.log('Voucher list:', this.vouchers);
     } else {
       alert("Bạn chưa đăng nhập!");
       this.router.navigate(['/dangnhap']);
@@ -331,7 +329,9 @@ createHoaDonFromPaymentData(paymentData: any): void {
       (response: number) => {
         this.totalPrice = response;
         console.log("Tổng tiền giỏ hàng: ", this.totalPrice);
+        this.getVoucherIdAndTen();
         this.tongTienKhongCoVoucher()
+        
       },
       (error) => {
         console.error("Lỗi khi lấy tổng tiền giỏ hàng", error);
@@ -552,7 +552,8 @@ createHoaDonFromPaymentData(paymentData: any): void {
 
   // Phương thức gọi API để lấy danh sách voucher
   getVoucherIdAndTen(): void {
-    this.hoadonService.getAvailableVouchers(this.idKhachHang).subscribe(
+    console.log("tổng tiền",this.totalPrice)
+    this.hoadonService.getAvailableVouchers(this.totalPrice).subscribe(
       (response: any) => {
         this.vouchers = response;
         console.log('Danh sách voucher:', response); // Log danh sách voucher để kiểm tra

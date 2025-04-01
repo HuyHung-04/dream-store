@@ -94,9 +94,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
 
     @Override
-    public List<VoucherDto> getVoucherIdAndTen(Integer idKhachHang) {
-        // Lấy tổng giá trị giỏ hàng của khách hàng
-        Double totalPrice = calculateTotalPrice(idKhachHang);
+    public List<VoucherDto> getVoucherIdAndTen(Double tongTien) {
+
+
 
         // Lấy tất cả voucher từ database
         List<VoucherDto> allVouchers = voucherRepository.findIdAndTen();
@@ -105,7 +105,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return allVouchers.stream()
                 .filter(v -> {
                     Voucher voucher = voucherRepository.findById(v.getId()).orElse(null);
-                    return voucher != null && totalPrice >= voucher.getDonToiThieu().doubleValue();
+                    return voucher != null && tongTien >= voucher.getDonToiThieu().doubleValue();
                 })
                 .collect(Collectors.toList());
     }
