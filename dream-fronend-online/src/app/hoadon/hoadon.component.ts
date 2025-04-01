@@ -615,8 +615,8 @@ createHoaDonFromPaymentData(paymentData: any): void {
       this.shippingFee ?? 0
     ).subscribe(
       (response) => {
-        console.log('Hóa đơn đã được tạo thành công:', response);
-        alert('Hóa đơn đã được tạo thành công!');
+        console.log('đơn hàng đã được tạo thành công:', response);
+        alert('Đơn hàng đã được tạo thành công!');
         this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
         this.modalthongbao = true;
         this.maHoaDon = response.ma;
