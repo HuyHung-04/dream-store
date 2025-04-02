@@ -55,8 +55,8 @@
   <!-- Địa chỉ nhận hàng -->
   <section class="section">
     <h3>Thông tin khách hàng</h3>
-    <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }} (+84 | {{ hoaDonData.sdtNguoiNhan }})</p>
-    <p></p>
+    <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
+    <p><strong>Số điện thoại: </strong> {{ hoaDonData.sdtNguoiNhan }}</p>
     <!-- Chỉ hiển thị nếu địa chỉ khách hàng có dữ liệu -->
     <p *ngIf="hoaDonData.diaChiNhanHang"><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
 
