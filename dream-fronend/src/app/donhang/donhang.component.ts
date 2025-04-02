@@ -171,6 +171,7 @@ loadHoaDons(): void {
       (response) => {
         console.log('Hóa đơn đã bị hủy:', response);
         this.hoaDonData.trangThai = 5; // cập nhật UI nếu cần
+        this.hoaDonData.ghiChu = this.ghiChu;
         this.showCancelModal = false;
         this.loadHoaDons();
       },

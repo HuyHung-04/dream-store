@@ -38,7 +38,7 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
             "g.id, " +
             "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham = spct.sanPham AND a.trangThai = 1 ORDER BY a.ngayTao ASC LIMIT 1), " +
-            "s.ten, spct.mauSac.ten, spct.size.ten, " +
+            "s.ten,spct.mauSac.ten, spct.size.ten, " +
             "g.soLuong, " +
             "CASE " +
             "   WHEN km.id IS NOT NULL THEN CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +

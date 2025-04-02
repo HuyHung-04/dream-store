@@ -33,6 +33,7 @@ public class GioHangChiTietResponse {
         private Integer idKhachHang;
 
         private Integer idSanPhamChiTiet;
+
 }
 
 

@@ -117,6 +117,15 @@ export class KhuyenmaiComponent implements OnInit {
       return;
     }
 
+    // Kiểm tra xem ngày bắt đầu có lớn hơn ngày hiện tại không
+  const currentDate = new Date();
+  const startDate = new Date(selectedKhuyenMai.ngayBatDau);
+
+  if (startDate > currentDate) {
+    alert('Ngày bắt đầu khuyến mãi chưa đến, không thể chọn sản phẩm!');
+    return;
+  }
+  
     this.selectedKhuyenMaiId = khuyenMaiId;
     this.khuyenmaiService.getSanPham(khuyenMaiId).subscribe(
       (products) => {

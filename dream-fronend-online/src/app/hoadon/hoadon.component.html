@@ -138,14 +138,13 @@
 
     <div class="item-details">
       <div class="item-header">
+        <div class="item-info">
         <h3 class="item-title">{{ item.tenSanPham }}</h3>
-        <p class="item-price">{{ item.donGia }} VND</p>
+        <p>Phân loại hàng: ({{ item.mau }} /  {{ item.size }})</p>
+        <p>Đơn giá: {{ item.donGia }} VND (x{{ item.soLuong }})</p>
+        <!-- <p>Số lượng:</p> -->
+        <p>Thành tiền: {{item.donGia*item.soLuong}} VND </p>
       </div>
-
-      <div class="item-info">
-        <p><strong>Màu sắc:</strong> {{ item.mau }}</p>
-        <p><strong>Size:</strong> {{ item.size }}</p>
-        <p><strong>Số lượng:</strong> {{ item.soLuong }}</p>
       </div>
       <div *ngIf="item.khuyenMai" class="discount-info">
         <p><strong>Giảm giá:</strong> {{ item.giaTriGiam }} ({{ item.hinhThucGiam ? 'Giảm trực tiếp' : 'Giảm phần trăm'

@@ -5,16 +5,16 @@ import {
   platformServer,
   renderApplication,
   renderModule
-} from "./chunk-TRIQAXQ4.js";
+} from "./chunk-R274QWLG.js";
 import {
   ROUTES,
   Router,
   loadChildren
-} from "./chunk-T4G5YQ7D.js";
+} from "./chunk-SOSNBZE2.js";
 import {
   APP_BASE_HREF,
   PlatformLocation
-} from "./chunk-LWORY74U.js";
+} from "./chunk-X2QD4OKX.js";
 import {
   ApplicationRef,
   Compiler,
@@ -28,7 +28,7 @@ import {
   makeEnvironmentProviders,
   resetCompiledComponents,
   runInInjectionContext
-} from "./chunk-GAKRZWTD.js";
+} from "./chunk-ZFIIE6XS.js";
 import {
   __async,
   __asyncGenerator,
@@ -39,7 +39,7 @@ import {
   __spreadValues,
   __superGet,
   __yieldStar
-} from "./chunk-YHCV7DAQ.js";
+} from "./chunk-GBTWTWDP.js";
 
 // node_modules/@angular/ssr/third_party/beasties/index.js
 function createNotImplementedError(name) {
@@ -433,7 +433,7 @@ function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
 function getAugmentedNamespace(n) {
-  if (n.__esModule) return n;
+  if (Object.prototype.hasOwnProperty.call(n, "__esModule")) return n;
   var f = n.default;
   if (typeof f == "function") {
     var a = function a2() {
@@ -1001,6 +1001,9 @@ function requireNode$1() {
     return offset;
   }
   class Node2 {
+    get proxyOf() {
+      return this;
+    }
     constructor(defaults = {}) {
       this.raws = {};
       this[isClean] = false;
@@ -1308,9 +1311,6 @@ function requireNode$1() {
       for (let i in opts) data[i] = opts[i];
       return result2.warn(text, data);
     }
-    get proxyOf() {
-      return this;
-    }
   }
   node = Node2;
   Node2.default = Node2;
@@ -1339,6 +1339,9 @@ function requireDeclaration() {
   hasRequiredDeclaration = 1;
   let Node2 = requireNode$1();
   class Declaration extends Node2 {
+    get variable() {
+      return this.prop.startsWith("--") || this.prop[0] === "$";
+    }
     constructor(defaults) {
       if (defaults && typeof defaults.value !== "undefined" && typeof defaults.value !== "string") {
         defaults = __spreadProps(__spreadValues({}, defaults), {
@@ -1347,9 +1350,6 @@ function requireDeclaration() {
       }
       super(defaults);
       this.type = "decl";
-    }
-    get variable() {
-      return this.prop.startsWith("--") || this.prop[0] === "$";
     }
   }
   declaration = Declaration;
@@ -1385,6 +1385,14 @@ function requireContainer$1() {
     }
   }
   class Container2 extends Node2 {
+    get first() {
+      if (!this.proxyOf.nodes) return void 0;
+      return this.proxyOf.nodes[0];
+    }
+    get last() {
+      if (!this.proxyOf.nodes) return void 0;
+      return this.proxyOf.nodes[this.proxyOf.nodes.length - 1];
+    }
     append(...children) {
       for (let child of children) {
         let nodes = this.normalize(child, this.last);
@@ -1689,14 +1697,6 @@ function requireContainer$1() {
         }
       });
     }
-    get first() {
-      if (!this.proxyOf.nodes) return void 0;
-      return this.proxyOf.nodes[0];
-    }
-    get last() {
-      if (!this.proxyOf.nodes) return void 0;
-      return this.proxyOf.nodes[this.proxyOf.nodes.length - 1];
-    }
   }
   Container2.registerParse = (dependant) => {
     parse2 = dependant;
@@ -1971,6 +1971,9 @@ function requireInput() {
   let sourceMapAvailable = Boolean(SourceMapConsumer && SourceMapGenerator);
   let pathAvailable = Boolean(resolve2 && isAbsolute2);
   class Input {
+    get from() {
+      return this.file || this.id;
+    }
     constructor(css, opts = {}) {
       if (css === null || typeof css === "undefined" || typeof css === "object" && !css.toString) {
         throw new Error(`PostCSS received ${css} instead of CSS string`);
@@ -2161,9 +2164,6 @@ function requireInput() {
       }
       return json;
     }
-    get from() {
-      return this.file || this.id;
-    }
   }
   input = Input;
   Input.default = Input;
@@ -2289,11 +2289,6 @@ function requireRule() {
   let Container2 = requireContainer$1();
   let list = requireList();
   class Rule extends Container2 {
-    constructor(defaults) {
-      super(defaults);
-      this.type = "rule";
-      if (!this.nodes) this.nodes = [];
-    }
     get selectors() {
       return list.comma(this.selector);
     }
@@ -2301,6 +2296,11 @@ function requireRule() {
       let match = this.selector ? this.selector.match(/,\s*/) : null;
       let sep2 = match ? match[0] : "," + this.raw("between", "beforeOpen");
       this.selector = values.join(sep2);
+    }
+    constructor(defaults) {
+      super(defaults);
+      this.type = "rule";
+      if (!this.nodes) this.nodes = [];
     }
   }
   rule = Rule;
@@ -3449,7 +3449,7 @@ function requireParser() {
       });
     }
     unknownWord(tokens) {
-      throw this.input.error("Unknown word", {
+      throw this.input.error("Unknown word " + tokens[0][1], {
         offset: tokens[0][2]
       }, {
         offset: tokens[0][2] + tokens[0][1].length
@@ -3543,6 +3543,9 @@ function requireResult() {
   hasRequiredResult = 1;
   let Warning = requireWarning();
   class Result {
+    get content() {
+      return this.css;
+    }
     constructor(processor2, root2, opts) {
       this.processor = processor2;
       this.messages = [];
@@ -3566,9 +3569,6 @@ function requireResult() {
     }
     warnings() {
       return this.messages.filter((i) => i.type === "warning");
-    }
-    get content() {
-      return this.css;
     }
   }
   result = Result;
@@ -3685,6 +3685,30 @@ function requireLazyResult() {
   }
   let postcss2 = {};
   class LazyResult {
+    get content() {
+      return this.stringify().content;
+    }
+    get css() {
+      return this.stringify().css;
+    }
+    get map() {
+      return this.stringify().map;
+    }
+    get messages() {
+      return this.sync().messages;
+    }
+    get opts() {
+      return this.result.opts;
+    }
+    get processor() {
+      return this.result.processor;
+    }
+    get root() {
+      return this.sync().root;
+    }
+    get [Symbol.toStringTag]() {
+      return "LazyResult";
+    }
     constructor(processor2, css, opts) {
       this.stringified = false;
       this.processed = false;
@@ -4021,30 +4045,6 @@ function requireLazyResult() {
     warnings() {
       return this.sync().warnings();
     }
-    get content() {
-      return this.stringify().content;
-    }
-    get css() {
-      return this.stringify().css;
-    }
-    get map() {
-      return this.stringify().map;
-    }
-    get messages() {
-      return this.sync().messages;
-    }
-    get opts() {
-      return this.result.opts;
-    }
-    get processor() {
-      return this.result.processor;
-    }
-    get root() {
-      return this.sync().root;
-    }
-    get [Symbol.toStringTag]() {
-      return "LazyResult";
-    }
   }
   LazyResult.registerPostcss = (dependant) => {
     postcss2 = dependant;
@@ -4066,6 +4066,45 @@ function requireNoWorkResult() {
   let stringify2 = requireStringify();
   let warnOnce2 = requireWarnOnce();
   class NoWorkResult {
+    get content() {
+      return this.result.css;
+    }
+    get css() {
+      return this.result.css;
+    }
+    get map() {
+      return this.result.map;
+    }
+    get messages() {
+      return [];
+    }
+    get opts() {
+      return this.result.opts;
+    }
+    get processor() {
+      return this.result.processor;
+    }
+    get root() {
+      if (this._root) {
+        return this._root;
+      }
+      let root2;
+      let parser2 = parse2;
+      try {
+        root2 = parser2(this._css, this._opts);
+      } catch (error) {
+        this.error = error;
+      }
+      if (this.error) {
+        throw this.error;
+      } else {
+        this._root = root2;
+        return root2;
+      }
+    }
+    get [Symbol.toStringTag]() {
+      return "NoWorkResult";
+    }
     constructor(processor2, css, opts) {
       css = css.toString();
       this.stringified = false;
@@ -4125,45 +4164,6 @@ function requireNoWorkResult() {
     warnings() {
       return [];
     }
-    get content() {
-      return this.result.css;
-    }
-    get css() {
-      return this.result.css;
-    }
-    get map() {
-      return this.result.map;
-    }
-    get messages() {
-      return [];
-    }
-    get opts() {
-      return this.result.opts;
-    }
-    get processor() {
-      return this.result.processor;
-    }
-    get root() {
-      if (this._root) {
-        return this._root;
-      }
-      let root2;
-      let parser2 = parse2;
-      try {
-        root2 = parser2(this._css, this._opts);
-      } catch (error) {
-        this.error = error;
-      }
-      if (this.error) {
-        throw this.error;
-      } else {
-        this._root = root2;
-        return root2;
-      }
-    }
-    get [Symbol.toStringTag]() {
-      return "NoWorkResult";
-    }
   }
   noWorkResult = NoWorkResult;
   NoWorkResult.default = NoWorkResult;
@@ -4180,7 +4180,7 @@ function requireProcessor() {
   let Root2 = requireRoot();
   class Processor {
     constructor(plugins = []) {
-      this.version = "8.5.2";
+      this.version = "8.5.3";
       this.plugins = this.normalize(plugins);
     }
     normalize(plugins) {
@@ -11582,4 +11582,4 @@ export {
   AngularAppEngine,
   createRequestHandler
 };
-//# sourceMappingURL=chunk-RVTKJ42I.js.map
+//# sourceMappingURL=chunk-3X7TF3SX.js.map

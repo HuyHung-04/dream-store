@@ -53,6 +53,7 @@ export class DonhangComponent {
       this.chitietlichsuService.getHoaDonByMa(this.maHoaDon).subscribe(
         (data) => {
           this.hoaDonData = data;
+          this.tinhHienThiVoucher()
           console.log("hóa đơn", data)
         },
         (error) => {
@@ -105,6 +106,7 @@ checkTrangThaiHuy(): boolean {
         (response) => {
           console.log('Hóa đơn đã bị hủy:', response);
           this.hoaDonData.trangThai = 5;
+          this.hoaDonData.ghiChu = this.ghiChu;
           this.showCancelModal = false;
         },
         (error) => {

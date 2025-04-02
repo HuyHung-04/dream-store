@@ -417,9 +417,12 @@ li.address-item {
 
 .item-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+ height: 100px;
+ gap: 0px; 
 }
+
+
 
 .item-title {
   font-size: 1.2rem;
@@ -428,19 +431,19 @@ li.address-item {
   color: #333;
 }
 
-.item-price {
+/* .item-price {
   font-size: 1.1rem;
   color: #e60000;
-}
+} */
 
 .item-info {
-  margin-top: -10px;
+  margin-top: 3px;
+  gap: 5px;
 }
 
 .item-info p {
-  margin: 3px 0;
+  margin: 7px 0;
   font-size: 1rem;
-  color: #666;
   display: flex;
 }
 
@@ -464,7 +467,7 @@ li.address-item {
   position: fixed;
   top: 10px;  /* Đặt vị trí cách top một chút để không che nội dung */
   right: 20px;
-  width: 750px;
+  width: 650px;
   height: 100%;
   background-color: #fff;
   padding: 20px;

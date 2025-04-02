@@ -125,8 +125,8 @@ export class HoadonService {
     return this.http.get<number>(`${this.apiHoaDon}/tinh-tong-tien?idKhachHang=${idKhachHang}`);
   }
   // Gọi API để lấy danh sách voucher hợp lệ theo ID khách hàng
-  getAvailableVouchers(idKhachHang: number): Observable<any> {
-    return this.http.get<any>(`${this.apiHoaDon}/vouchers/${idKhachHang}`);
+  getAvailableVouchers(tongTien: number): Observable<any> {
+    return this.http.get<any>(`${this.apiHoaDon}/vouchers/${tongTien}`);
   }
 
   // Phương thức gọi API để tính tổng tiền thanh toán sau khi áp dụng voucher

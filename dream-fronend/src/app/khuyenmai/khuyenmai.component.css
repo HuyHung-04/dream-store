@@ -238,7 +238,7 @@
   /* Bo góc nút */
   color: white;
   /* Màu chữ trắng */
-  font-size: 10px;
+  font-size: 12px;
   /* Kích thước phông chữ */
   transition: background-color 0.3s ease;
   /* Hiệu ứng chuyển màu nền */
@@ -729,7 +729,7 @@
 
   .product-table-select th,
   .product-table-select td {
-    font-size: 12px;
+    font-size: 14px;
     /* Thu nhỏ kích thước chữ */
     padding: 10px;
     /* Giảm padding */
