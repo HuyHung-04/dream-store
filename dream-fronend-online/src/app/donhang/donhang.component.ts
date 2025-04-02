@@ -106,6 +106,7 @@ checkTrangThaiHuy(): boolean {
         (response) => {
           console.log('Hóa đơn đã bị hủy:', response);
           this.hoaDonData.trangThai = 5;
+          this.hoaDonData.ghiChu = this.ghiChu;
           this.showCancelModal = false;
         },
         (error) => {

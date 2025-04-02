@@ -176,7 +176,14 @@
 display: flex; /* Sử dụng Flexbox để chia layout thành 2 cột */
 justify-content: space-between; /* Đặt khoảng cách giữa ảnh và thông tin */
 align-items: center; /* Căn chỉnh theo chiều dọc */
-margin-bottom: 20px; /* Thêm khoảng cách giữa các mục */
+padding-bottom: 10px;
+border-bottom: 1px solid #ddd; /* Dấu gạch ngăn giữa các sản phẩm */
+margin-bottom: 10px; /* Thêm khoảng cách giữa các mục */
+}
+
+/* Xóa dấu gạch ngăn cho phần tử cuối cùng */
+.invoice-details-item:last-child {
+  border-bottom: none;
 }
 
 /* Định dạng cho ảnh */
