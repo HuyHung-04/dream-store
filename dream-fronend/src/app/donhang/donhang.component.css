@@ -460,6 +460,7 @@ table {
   align-items: center;
   flex: 1;
   position: relative;
+  white-space: nowrap;
 }
 .status-icon {
   width: 40px;
@@ -490,7 +491,6 @@ table {
   height: 3px;
   background-color: black;
   flex: 1;
-  margin: 0 10px;
   transition: all 0.3s;
 }
 
