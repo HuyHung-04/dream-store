@@ -1,4 +1,6 @@
-
+<h2 style="color: #294764; font-weight: bold; font-size: 18px;">
+  Quản lý đơn hàng
+</h2>
 <div>
   <!-- Bộ lọc trạng thái -->
   <div class="status-filter-container">
@@ -73,7 +75,7 @@
         <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không có' }}</td>
         <td>{{ hoaDon.tongTienThanhToan}}</td>
         <td>
-          <button *ngIf="hoaDon.trangThai !== 5" (click)="updateStatus(hoaDon.id,hoaDon.trangThai)">
+          <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 5" (click)="updateStatus(hoaDon.id,hoaDon.trangThai)">
             {{ getButtonLabel(hoaDon.trangThai) }}
           </button>
           <span *ngIf="hoaDon.trangThai === 5">Đơn đã hủy</span>

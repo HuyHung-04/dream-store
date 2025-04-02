@@ -7,19 +7,17 @@ table {
   
   /* Cài đặt kiểu đường viền cho bảng */
   th, td {
-    border: 1px solid #ddd;  /* Đường viền mỏng, màu xám nhạt */
-    padding: 5px 15px;  /* Khoảng cách bên trong các ô */
+    border: 0.5px solid #ddd;  /* Đường viền mỏng, màu xám nhạt */
+    padding: 10px 15px;  /* Khoảng cách bên trong các ô */
     text-align: center;  /* Canh trái nội dung */
-    font-size: 15px;
+    font-size: 12px;
   }
   
   /* Cài đặt kiểu cho tiêu đề bảng */
   th {
     background-color: #294764;  /* Màu nền xanh lá cây */
     color: white;  /* Màu chữ trắng */
-    font-weight: bold;  /* Đậm chữ */
     text-align: center;  /* Canh giữa tiêu đề */
-    
   }
   
   /* Đổi màu nền khi di chuột qua các hàng trong bảng */
@@ -37,24 +35,23 @@ table {
     background-color: #294764;  /* Màu nền xanh lá cây */
     color: white;  /* Màu chữ trắng */
     border: none;  /* Không viền */
-    padding: 10px 10px;  /* Khoảng cách bên trong nút */
     cursor: pointer;  /* Con trỏ thay đổi thành tay khi hover */
-
-    font-size: 10px;  /* Kích thước chữ */
     border-radius: 5px;  /* Bo tròn góc */
-  }
-  
-  /* Nút phân trang khi hover */
-  button:hover {
-    background-color: #45a049;  /* Thay đổi màu nền khi hover */
-  }
-  
+  } 
   /* Nút phân trang bị vô hiệu hóa */
   button[disabled] {
     background-color: #ccc;  /* Màu nền xám khi vô hiệu hóa */
     cursor: not-allowed;  /* Con trỏ không thể click */
   }
-  
+  .xac-nhan{
+    padding: 7px 7px;
+    height: auto;
+    font-size: 12px;
+    width: 170px;
+  }
+  .xem-chi-tiet{
+    padding: 6px 12px;
+  }
   /* Kiểu cho thông báo lỗi */
   p.error-message {
     color: red;

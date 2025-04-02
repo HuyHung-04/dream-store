@@ -15,7 +15,7 @@ export class DonhangComponent {
 
   errorMessage: string = '';  // Lưu thông báo lỗi
   page: number = 0;  // Số trang mặc định
-  size: number = 6;  // Số lượng bản ghi mỗi trang
+  size: number = 5;  // Số lượng bản ghi mỗi trang
   totalPages: number = 0;  // Tổng số trang (cần nhận từ API)
   chiTietHoaDonData: any[] = [];
   hoaDonData: any = null;

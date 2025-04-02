@@ -112,7 +112,7 @@
         </thead>
         <tbody>
         <ng-container *ngFor="let sp of filteredSanPhams()">
-          <tr *ngIf="sp.soLuong > 0" (click)="viewProductDetails(sp)">
+          <tr *ngIf="sp.soLuong > 0">
             <td>{{ sp.maSanPhamChiTiet }}</td>
             <td>{{ sp.tenSanPham }}</td>
             <td>

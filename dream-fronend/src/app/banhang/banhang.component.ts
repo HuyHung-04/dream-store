@@ -278,9 +278,6 @@ export class BanhangComponent implements OnInit {
     );
   }
 
-  viewProductDetails(product: any) {
-    alert(`Sản phẩm: ${product.tenSanPham}\nGiá: ${product.gia.toLocaleString()} VND`);
-  }
 
   // Thêm sản phẩm vào giỏ hàng
   addToCart(product: any) {
