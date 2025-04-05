@@ -135,10 +135,10 @@ export class BanhangService {
 
   // Cập nhật số lượng tồn kho của sản phẩm
   updateSoLuongSanPham(idSanPham: number, soLuong: number, isIncrease: boolean): Observable<any> {
-    const url = `${this.apiUrl}/san-pham/update-so-luong/${idSanPham}`;
+    const url = `http://localhost:8080/api/san-pham-chi-tiet/ban-hang/update-so-luong/${idSanPham}`;
     const params = {
-      soLuong: soLuong,
-      isIncrease: isIncrease
+      soLuong: soLuong.toString(),
+      isIncrease: isIncrease.toString()
     };
     return this.http.put(url, null, { params: params });
   }

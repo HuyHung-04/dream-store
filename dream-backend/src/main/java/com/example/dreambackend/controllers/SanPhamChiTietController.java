@@ -8,6 +8,7 @@ import com.example.dreambackend.services.mausac.MauSacService;
 import com.example.dreambackend.services.sanpham.SanPhamService;
 import com.example.dreambackend.services.sanphamchitiet.SanPhamChiTietService;
 import com.example.dreambackend.services.size.SizeService;
+import com.example.dreambackend.repositories.SanPhamChiTietRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,16 +29,19 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:4200")
 public class SanPhamChiTietController {
     @Autowired
-    SanPhamChiTietService sanPhamChiTietService;
+    private SanPhamChiTietService sanPhamChiTietService;
 
     @Autowired
-    MauSacService  mauSacService;
+    private SanPhamService sanPhamService;
 
     @Autowired
-    SanPhamService sanPhamService;
+    private MauSacService mauSacService;
 
     @Autowired
-    SizeService sizeService;
+    private SizeService sizeService;
+
+    @Autowired
+    private SanPhamChiTietRepository sanPhamChiTietRepository;
 
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<SanPhamChiTietRespone>> hienThi(
@@ -134,5 +138,20 @@ public class SanPhamChiTietController {
 
         Page<GetSanPhamToBanHangRespone> sanPhams = sanPhamChiTietService.locSanPham(tenSanPham, mauSac, size, page, sizePage);
         return ResponseEntity.ok(sanPhams);
+    }
+
+    @PutMapping("/ban-hang/update-so-luong/{id}")
+    public ResponseEntity<?> updateSoLuong(
+            @PathVariable Integer id,
+            @RequestParam Integer soLuong,
+            @RequestParam Boolean isIncrease) {
+        try {
+            SanPhamChiTiet updatedProduct = sanPhamChiTietService.updateSoLuongBanHang(id, soLuong, isIncrease);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Lỗi khi cập nhật số lượng: " + e.getMessage());
+        }
     }
 }

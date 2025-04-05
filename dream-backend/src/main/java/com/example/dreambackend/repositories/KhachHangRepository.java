@@ -20,4 +20,7 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Integer> {
     Optional<KhachHang> findBySoDienThoai(String soDienThoai);// tìm khách hàng theo số điện thoại
     @Query("SELECT k FROM KhachHang k WHERE k.trangThai = :trangThai")
     Page<KhachHang> findByTrangThai(@Param("trangThai") int trangThai, Pageable pageable);
+
+    @Query("SELECT k FROM KhachHang k WHERE k.soDienThoai != '' ")
+    Page<KhachHang> findKhachHang(Pageable pageable);
 }

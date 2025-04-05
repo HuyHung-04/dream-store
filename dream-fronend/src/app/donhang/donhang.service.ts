@@ -22,7 +22,7 @@ export class DonhangService {
 
     return this.http.get<any>(this.apiUrl, { params });
   }
-  
+
   capNhatTrangThai(id: number): Observable<any> {
     return this.http.post<any>(`${this.apiHoaDonOnline}/${id}/tang-trang-thai`, null);
   }

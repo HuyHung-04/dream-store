@@ -16,7 +16,7 @@ export interface HoaDonResponse {
   tenPhuongThucThanhToan: string;
   maHoaDon: string;
   tenNguoiNhan: string;
-  soDienThoai: string;
+  sdtNguoiNhan: string;
   diaChiNhanHang: string;
   hinhThucThanhToan: string;
   phiVanChuyen: number;
@@ -59,7 +59,7 @@ export interface HoaDonSearchRequest {
   tenNhanVien: string;
   ngayTaoFrom: string | null;
   ngayTaoTo: string | null;
-  soDienThoai: string;
+  sdtNguoiNhan: string;
   listTrangThai: number | null;
   pageSize: number;
   page: number;
