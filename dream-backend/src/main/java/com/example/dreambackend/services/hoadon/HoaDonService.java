@@ -54,6 +54,10 @@ public class HoaDonService implements IHoaDonService {
         if (request.getIdVoucher() != null) {
             updateVoucherForHoaDon(hoaDon, request.getIdVoucher());
         }
+        if (request.getIdPhuongThucThanhToan() != null) {
+            PhuongThucThanhToan phuongThucThanhToan = ptttRepository.findById(request.getIdPhuongThucThanhToan()).orElse(null);
+            hoaDon.setPhuongThucThanhToan(phuongThucThanhToan);
+        }
 
         return convertToDTO(hoaDonRepository.save(hoaDon));
     }
@@ -96,6 +100,10 @@ public class HoaDonService implements IHoaDonService {
 
     @Override
     public HoaDonResponse createHoaDon(HoaDonRequest request) {
+        List<HoaDon> hoaDons = hoaDonRepository.findAllByTrangThai(6);
+        if (hoaDons.size() >= 5) {
+            throw new RuntimeException("Hoá đơn chờ đã đạt số lượng tối đa");
+        }
         HoaDon hoaDon = convertToEntity(request);
         String maHoaDon = generateMaHoaDon();
         hoaDon.setMa(maHoaDon);

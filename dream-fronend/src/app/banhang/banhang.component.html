@@ -21,6 +21,7 @@
         <table class="cart-table">
           <thead>
             <tr>
+              <th>Mã sản phẩm</th>
               <th>Tên sản phẩm</th>
               <th>Số lượng</th>
               <th>Đơn Giá</th>
@@ -32,7 +33,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of cart">
-              <td>{{ item.tenSanPham }}</td> <!-- Tên sản phẩm -->
+              <td>{{ item.maSanPhamChiTiet }}</td>
+              <td>{{ item.tenSanPham }}</td>
               <td>
                 <input type="number" [(ngModel)]="item.soLuong" min="1" class="item-quantity" (change)="validateQuantity(item)">
               </td>
@@ -58,7 +60,6 @@
                   ) | number:'1.0-0'
                 }} VNĐ
               </td>
-
               <td>
                 <button class="item-remove" (click)="removeFromCart(item)">
                   <i class="bi bi-trash"></i>
@@ -167,13 +168,13 @@
           </select>
        </div>
        <div class="input-group">
-          <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;">
+          <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;" [disabled]="!selectedInvoice">
             <option [ngValue]="null">Chọn mã giảm giá</option>
             <option *ngFor="let discount of discountCodes" [ngValue]="discount.id">
               {{ discount.ten }}
             </option>
           </select>
-          <button (click)="applyDiscount()" class="discount-btn">Áp dụng</button>
+          <button (click)="applyDiscount()" class="discount-btn" [disabled]="!selectedInvoice">Áp dụng</button>
        </div>
      </div>
 
@@ -217,6 +218,11 @@
     <div class="modal" *ngIf="hienThiDanhSachKhachHang">
       <div class="modal-content">
         <h3>Chọn khách hàng</h3>
+        <div class="modal-actions">
+          <button class="btn btn-warning" (click)="chonKhachHangVangLai()">
+            <i class="bi bi-person-plus"></i> Khách hàng vãng lai
+          </button>
+        </div>
         <table>
           <tr *ngFor="let kh of danhSachKhachHang">
             <td>{{ kh.ten }}</td>

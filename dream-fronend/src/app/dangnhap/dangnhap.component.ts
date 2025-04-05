@@ -2,24 +2,24 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DangnhapService } from './dangnhap.service'; 
-import { FormsModule,NgForm } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-dangnhap',
-  imports: [CommonModule, FormsModule],  // Add this
+  imports: [CommonModule, FormsModule],
   templateUrl: './dangnhap.component.html',
   styleUrl: './dangnhap.component.css'
 })
 export class DangnhapComponent {
   loginData = {
-    email: '',
-    password: ''
+    taiKhoan: '',
+    matKhau: ''
   };
   loading: boolean = false;
-  submitted: boolean = false; // Biến kiểm tra đã nhấn submit chưa
-  errors: { email: string; password: string } = { email: '', password: '' }; // Chứa tất cả lỗi
-  storedUserData: any = {
-  }; // Lưu thông tin tài khoản từ backend để so sánh
+  submitted: boolean = false;
+  errors: { taiKhoan: string; matKhau: string } = { taiKhoan: '', matKhau: '' };
+  storedUserData: any = {};
+
   constructor(
     private dangnhapService: DangnhapService,
     private router: Router
@@ -30,71 +30,54 @@ export class DangnhapComponent {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailPattern.test(email);
   }
+
   onInputChange(field: string) {
     if (this.submitted) {
-      // Khi người dùng nhập lại dữ liệu, kiểm tra và xóa lỗi nếu hợp lệ
-      if (field === 'email') {
-        if(this.loginData.email.length==1){
-          this.errors.email = ''; 
+      if (field === 'taiKhoan') {
+        if (this.loginData.taiKhoan.length >= 1) {
+          this.errors.taiKhoan = '';
         }
-      else  if (this.isValidEmail(this.loginData.email)) {
-          this.errors.email = '';  // Xóa lỗi mật khẩu nếu nhập đúng
-        }
-      }
-  
-    else  if (field === 'password') {
-        if (this.loginData.password.length==1) {
-          this.errors.password = '';  // Xóa lỗi mật khẩu nếu nhập đúng
+      } else if (field === 'matKhau') {
+        if (this.loginData.matKhau.length >= 1) {
+          this.errors.matKhau = '';
         }
       }
     }
   }
   
-  // Xử lý khi nhấn đăng nhập
   onSubmit(form: NgForm) {
-    this.submitted = true; // Đánh dấu đã submit
-    this.errors = { email: '', password: '' }; // Reset lỗi
+    this.submitted = true;
+    this.errors = { taiKhoan: '', matKhau: '' };
 
-    // Kiểm tra email
-    if (!this.loginData.email) {
-      this.errors.email = 'Vui lòng nhập email!';
-    } else if (!this.isValidEmail(this.loginData.email)) {
-      this.errors.email = 'Email không đúng định dạng!';
-    }
-
-    // Kiểm tra mật khẩu
-    if (!this.loginData.password) {
-      this.errors.password = 'Vui lòng nhập mật khẩu!';
-    } else if (this.loginData.password.length < 5) {
-      this.errors.password = 'Mật khẩu phải có ít nhất 8 ký tự!';
-    }
-
-    // Nếu có lỗi, dừng lại
-    if (this.errors.email || this.errors.password) {
+    if (!this.loginData.taiKhoan) {
+      this.errors.taiKhoan = 'Vui lòng nhập tài khoản hoặc email!';
       return;
     }
 
-    // Bắt đầu đăng nhập
+    if (!this.loginData.matKhau) {
+      this.errors.matKhau = 'Vui lòng nhập mật khẩu!';
+      return;
+    } else if (this.loginData.matKhau.length < 5) {
+      this.errors.matKhau = 'Mật khẩu phải có ít nhất 5 ký tự!';
+      return;
+    }
+
     this.loading = true;
-    this.dangnhapService.login(this.loginData.email, this.loginData.password).subscribe({
+    this.dangnhapService.login(this.loginData.taiKhoan, this.loginData.matKhau).subscribe({
       next: (response) => {
         this.loading = false;
-        console.log("dau ra",this.storedUserData.email)
-        console.log("dau ra",response)
-        // So sánh dữ liệu nhập vào với dữ liệu từ backend
-       
-            alert('Đăng nhập thành công!');
-            this.router.navigate(['/layout/banhang']);
+        alert('Đăng nhập thành công!');
+        this.router.navigate(['/layout/banhang']);
       },
       error: (err) => {
         this.loading = false;
-        console.error("Lỗi hệ thống: ", err);  // In ra chi tiết lỗi
+        console.error("Lỗi hệ thống: ", err);
         if (err.status === 401) {
-          this.errors.password = 'Sai mật khẩu'; // Mật khẩu sai
+          this.errors.matKhau = 'Sai mật khẩu';
         } else if (err.status === 404) {
-          this.errors.email = 'Email không tồn tại'; // Email không tồn tại
+          this.errors.taiKhoan = 'Tài khoản hoặc email không tồn tại';
         } else {
-          this.errors.email = 'Lỗi hệ thống. Vui lòng thử lại!';
+          this.errors.taiKhoan = 'Lỗi hệ thống. Vui lòng thử lại!';
         }
       }
     });

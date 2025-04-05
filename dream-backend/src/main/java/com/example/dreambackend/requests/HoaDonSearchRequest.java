@@ -14,7 +14,7 @@ public class HoaDonSearchRequest {
     private LocalDate ngayTaoTo;
     private LocalDate ngaySuaFrom;
     private LocalDate ngaySuaTo;
-    private String soDienThoai;
+    private String sdtNguoiNhan;
     private Integer listTrangThai;
     private Integer totalRecords;
     private Integer page;

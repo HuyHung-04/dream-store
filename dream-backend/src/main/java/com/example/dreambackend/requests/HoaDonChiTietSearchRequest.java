@@ -12,6 +12,7 @@ public class HoaDonChiTietSearchRequest {
     private String tenSanPham;
     private String tenKhachHang;
     private Double donGia;
+    private String sdtNguoiNhan;
     private LocalDate ngayTaoTu;
     private LocalDate ngayTaoDen;
     private LocalDate ngaySuaTu;
