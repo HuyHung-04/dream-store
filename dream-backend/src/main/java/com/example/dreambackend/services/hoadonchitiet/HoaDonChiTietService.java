@@ -83,7 +83,7 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
         int soLuongThayDoi = soLuong - hdct.getSoLuong();
 
         if (soLuongThayDoi > 0) {
-            if (spct.getSoLuong() < soLuongThayDoi) {
+            if ((spct.getSoLuong()+soLuongThayDoi) < soLuongThayDoi) {
                 throw new RuntimeException("Số lượng vượt quá tồn kho");
             }
             spct.setSoLuong(spct.getSoLuong() - soLuongThayDoi);
