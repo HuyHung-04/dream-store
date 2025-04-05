@@ -128,7 +128,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             + "JOIN spct.mauSac m "
             + "JOIN spct.size s "
             + "LEFT JOIN spct.khuyenMai km "
-            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1"
+            + "WHERE spct.soLuong > 0 and spct.trangThai = 1"
             + "AND (km.trangThai = 1 OR km.trangThai IS NULL) "
             + "ORDER BY spct.id DESC")
     Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
@@ -142,7 +142,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             + "JOIN spct.mauSac m "
             + "JOIN spct.size s "
             + "LEFT JOIN spct.khuyenMai km "
-            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1 "
+            + "WHERE spct.soLuong > 0 and spct.trangThai = 1 "
             + "AND (km.trangThai = 1 OR km.trangThai IS NULL) "
             + "AND (:tenSanPham IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :tenSanPham, '%'))) "
             + "AND (:mauSac IS NULL OR LOWER(m.ten) = LOWER(:mauSac)) "

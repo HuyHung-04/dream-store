@@ -22,6 +22,10 @@ export class BanhangService {
     return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${size}`);
   }
 
+  getAllSanPham(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?page=0&size=10000`);
+  }
+
   getDanhSachHD(request: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrlHD}/all`, request);
   }
