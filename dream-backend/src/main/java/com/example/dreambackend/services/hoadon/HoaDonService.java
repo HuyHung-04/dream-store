@@ -48,6 +48,9 @@ public class HoaDonService implements IHoaDonService {
                 .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
 
         // Cập nhật thông tin chung của hóa đơn
+        hoaDon.setTenNguoiNhan(request.getTenNguoiNhan());
+        hoaDon.setSdtNguoiNhan(request.getSdtNguoiNhan());
+        hoaDon.setNgaySua(LocalDate.now());
         updateHoaDonInfo(hoaDon, request);
 
         // Cập nhật voucher (nếu có)
@@ -105,6 +108,10 @@ public class HoaDonService implements IHoaDonService {
             throw new RuntimeException("Hoá đơn chờ đã đạt số lượng tối đa");
         }
         HoaDon hoaDon = convertToEntity(request);
+        hoaDon.setTenNguoiNhan(request.getTenNguoiNhan());
+        hoaDon.setSdtNguoiNhan(request.getSdtNguoiNhan());
+        hoaDon.setNgayTao(LocalDate.now());
+        hoaDon.setNgaySua(LocalDate.now());
         String maHoaDon = generateMaHoaDon();
         hoaDon.setMa(maHoaDon);
         HoaDon savedHoaDon = hoaDonRepository.save(hoaDon);
@@ -143,6 +150,7 @@ public class HoaDonService implements IHoaDonService {
             if (hoaDon.getTrangThai() == 1) {
                 hoaDon.setGhiChu(ghiChu);
             }
+            hoaDon.setNgaySua(LocalDate.now());
             hoaDonRepository.save(hoaDon);
 
             List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByHoaDonId(id);

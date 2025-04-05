@@ -52,6 +52,13 @@ export class HoaDonComponent implements OnInit {
   hoaDonData: any = null; // sửa lại kiểu dữ liệu
   showCancelModal = false; // Trạng thái hiển thị modal
   ghiChu: string = '';     // Lưu lý do hủy
+  showStatusDropdown: boolean = false;
+  statusOptions = [
+    { value: null, label: 'Tất cả' },
+    { value: 6, label: 'Chưa thanh toán' },
+    { value: 7, label: 'Đã thanh toán' },
+    { value: 8, label: 'Đã huỷ' }
+  ];
   constructor(private hoaDonService: HoaDonService) {}
 
   ngOnInit(): void {
@@ -171,11 +178,6 @@ trangThaiChuyenTiep: number[] = [1, 2, 3, 4];
 
 getTrangThaiText(trangThai: number): string {
   switch (trangThai) {
-    case 1: return 'Chờ xác nhận';
-    case 2: return 'Đã xác nhận';
-    case 3: return 'Đang giao hàng';
-    case 4: return 'Giao hàng thành công';
-    case 5: return 'Hủy đơn';
     case 6: return 'Chưa thanh toán';
     case 7: return 'Đã thanh toán'
     case 8: return 'Huỷ đơn'
@@ -229,7 +231,7 @@ cancelHoaDon(maHoaDon: string): void {
     this.showCancelModal = false;
     return; // Nếu không thể hủy, đóng modal và dừng lại
   }
-  
+
 
   if (!this.ghiChu.trim()) {
     alert('Vui lòng nhập lý do hủy hóa đơn.');
@@ -282,5 +284,27 @@ closeCancelModal(): void {
       default: return 'Không xác định';
     }
   }
-  
+
+  toggleStatusDropdown(): void {
+    this.showStatusDropdown = !this.showStatusDropdown;
+  }
+
+  selectStatus(status: number | null): void {
+    this.searchRequest.listTrangThai = status;
+    this.showStatusDropdown = false;
+    this.search();
+  }
+
+  isStatusSelected(status: number | null): boolean {
+    return this.searchRequest.listTrangThai === status;
+  }
+
+  getSelectedStatusText(): string {
+    if (this.searchRequest.listTrangThai === null) {
+      return 'Chọn trạng thái';
+    }
+    const selectedStatus = this.statusOptions.find(opt => opt.value === this.searchRequest.listTrangThai);
+    return selectedStatus ? selectedStatus.label : 'Chọn trạng thái';
+  }
+
 }
