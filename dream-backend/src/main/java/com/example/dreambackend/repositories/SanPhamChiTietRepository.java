@@ -128,7 +128,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             + "JOIN spct.mauSac m "
             + "JOIN spct.size s "
             + "LEFT JOIN spct.khuyenMai km "
-            + "WHERE spct.soLuong > 0 AND spct.trangThai = 1"
+            + "WHERE spct.trangThai = 1"
             + "ORDER BY spct.id DESC")
     Page<GetSanPhamToBanHangRespone> getSanPhamForBanHang(Pageable pageable);
 
