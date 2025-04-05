@@ -58,9 +58,10 @@
 
 
   <!-- Địa chỉ nhận hàng -->
-  <section class="section">
+  <section class="section" style="margin-top: 30px;">
     <h3>Thông tin khách hàng</h3>
-    <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }} (+84 | {{ hoaDonData.sdtNguoiNhan }})</p>
+    <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
+    <p><strong>Số điện thoại: </strong>{{ hoaDonData.sdtNguoiNhan }}</p>
     <!-- Chỉ hiển thị nếu địa chỉ khách hàng có dữ liệu -->
     <p *ngIf="hoaDonData.diaChiNhanHang"><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
 
@@ -84,7 +85,7 @@
 
  <!-- Chi tiết thanh toán -->
  <section class="section">
-  <p><strong>Tổng tiền trước voucher:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
+  <p><strong>Tạm tính:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
   <!-- Điều kiện hiển thị voucher và giá trị giảm -->
   <div *ngIf="hoaDonData.voucher">
     <p>

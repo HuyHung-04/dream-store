@@ -15,7 +15,7 @@ export class DonhangComponent {
 
   errorMessage: string = '';  // Lưu thông báo lỗi
   page: number = 0;  // Số trang mặc định
-  size: number = 6;  // Số lượng bản ghi mỗi trang
+  size: number = 5;  // Số lượng bản ghi mỗi trang
   totalPages: number = 0;  // Tổng số trang (cần nhận từ API)
   chiTietHoaDonData: any[] = [];
   hoaDonData: any = null;
@@ -171,6 +171,7 @@ loadHoaDons(): void {
       (response) => {
         console.log('Hóa đơn đã bị hủy:', response);
         this.hoaDonData.trangThai = 5; // cập nhật UI nếu cần
+        this.hoaDonData.ghiChu = this.ghiChu;
         this.showCancelModal = false;
         this.loadHoaDons();
       },

@@ -81,7 +81,7 @@
 .product-table td {
   padding: 12px 15px;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
 
 }
 
@@ -246,7 +246,7 @@
   /* Bo góc nút */
   color: white;
   /* Màu chữ trắng */
-  font-size: 10px;
+  font-size: 12px;
   /* Kích thước phông chữ */
   transition: background-color 0.3s ease;
   /* Hiệu ứng chuyển màu nền */
