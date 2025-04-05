@@ -497,7 +497,7 @@ export class BanhangComponent implements OnInit {
     if (productIndex === -1) {
       console.error('Debug - item:', item);
       console.error('Debug - sanPhams:', this.sanPhams);
-      alert('Không tìm thấy sản phẩm trong kho!');
+      // alert('Không tìm thấy sản phẩm trong kho!');
       return;
     }
 

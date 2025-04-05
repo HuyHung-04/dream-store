@@ -56,6 +56,7 @@ public class ThongKeService {
     public List<ThongKeThangResponse> thongKeTungNam() {
         List<Object[]> results = hoaDonRepository.getDoanhThuTungNam();
         return results.stream()
+                .filter(obj -> obj[0] != null && obj[1] != null) // lọc bỏ các dòng có dữ liệu null
                 .map(obj -> new ThongKeThangResponse((Integer) obj[0], (Double) obj[1]))
                 .collect(Collectors.toList());
     }
