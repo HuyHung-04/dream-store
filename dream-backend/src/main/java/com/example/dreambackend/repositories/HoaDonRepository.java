@@ -123,7 +123,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
             sql.append(" AND CAST(hd.ngay_sua AS DATE) <= :ngaySuaTo");
         }
         if(searchRequest.getSdtNguoiNhan() != null && !searchRequest.getSdtNguoiNhan().isEmpty()) {
-            sql.append(" AND hd.sdt_nguoi_nhan = :soDienThoai");
+            sql.append(" AND hd.sdt_nguoi_nhan LIKE :soDienThoai");
         }
         if (searchRequest.getListTrangThai() != null) {
             sql.append(" AND hd.trang_thai = :listTrangThai");
@@ -165,7 +165,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         }
 
         if(searchRequest.getSdtNguoiNhan() != null && !searchRequest.getSdtNguoiNhan().isEmpty()) {
-            query.setParameter("soDienThoai", searchRequest.getSdtNguoiNhan());
+            query.setParameter("soDienThoai","%" + searchRequest.getSdtNguoiNhan() + "%");
         }
 //        if (searchRequest.getIdHoaDon() != null) {
 //            query.setParameter("idHoaDon", "%" + searchRequest.getIdHoaDon() + "%");

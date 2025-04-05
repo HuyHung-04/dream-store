@@ -24,4 +24,6 @@ public interface ISanPhamChiTietService {
     ResponseEntity<byte[]> exportSanPhamChiTietToExcel(List<SanPhamChiTietRespone> sanPhamChiTiets);
 
     Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable);
+
+    SanPhamChiTiet updateSoLuongBanHang(Integer id, Integer soLuong, Boolean isIncrease);
 }

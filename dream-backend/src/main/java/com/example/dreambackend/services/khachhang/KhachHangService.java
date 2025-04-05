@@ -34,7 +34,7 @@ public class KhachHangService implements IKhachHangService{
     @Override
     public Page<KhachHang> getAllKhachHangPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<KhachHang> khachhangs = khachHangRepository.findAll(pageable);
+        Page<KhachHang> khachhangs = khachHangRepository.findKhachHang(pageable);
 
         return khachhangs;
     }

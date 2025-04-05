@@ -145,6 +145,7 @@
         <div class="invoice-header">
           <h3>Chi tiết Hóa Đơn</h3>
           <p class="invoice-code"><strong>Mã hóa đơn:</strong> {{ hoaDonData.ma }}</p>
+          <p class="invoice-status"><strong>Trạng thái:</strong> {{ getTrangThaiText(hoaDonData.trangThai) }}</p>
         </div>
 
          <!-- Nếu trạng thái hóa đơn là 5 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->

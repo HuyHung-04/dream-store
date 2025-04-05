@@ -186,4 +186,29 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
         return sanPhamChiTietRepository.searchSanPhamForBanHang(tenSanPham, mauSac, size, pageable);
     }
 
+    @Override
+    public SanPhamChiTiet updateSoLuongBanHang(Integer id, Integer soLuong, Boolean isIncrease) {
+        // Lấy thông tin sản phẩm chi tiết
+        SanPhamChiTiet sanPhamChiTiet = getsanPhamChiTietById(id);
+        if (sanPhamChiTiet == null) {
+            throw new RuntimeException("Không tìm thấy sản phẩm");
+        }
+
+        // Tính toán số lượng mới
+        int currentQuantity = sanPhamChiTiet.getSoLuong();
+        int newQuantity;
+        if (isIncrease) {
+            newQuantity = currentQuantity + soLuong;
+        } else {
+            newQuantity = currentQuantity - soLuong;
+            if (newQuantity < 0) {
+                throw new RuntimeException("Số lượng không đủ");
+            }
+        }
+
+        // Cập nhật số lượng mới
+        sanPhamChiTiet.setSoLuong(newQuantity);
+        return sanPhamChiTietRepository.save(sanPhamChiTiet);
+    }
+
 }

@@ -36,7 +36,11 @@
               <td>{{ item.maSanPhamChiTiet }}</td>
               <td>{{ item.tenSanPham }}</td>
               <td>
-                <input type="number" [(ngModel)]="item.soLuong" min="1" class="item-quantity" (change)="validateQuantity(item)">
+                <input type="number" 
+                       [ngModel]="item.soLuong" 
+                       (ngModelChange)="validateQuantity(item, $event)" 
+                       min="1" 
+                       class="item-quantity">
               </td>
               <td>
                 {{
@@ -155,7 +159,7 @@
 
        <!-- Nhập số điện thoại -->
        <div class="input-group">
-         <input style="width: 285px;" type="text" class="custom-input" placeholder="Số điện thoại..." [(ngModel)]="soDienThoai" (blur)="timKhachHang()">
+         <input style="width: 285px;" type="text" class="custom-input" placeholder="Số điện thoại..." [(ngModel)]="sdtNguoiNhan" (blur)="timKhachHang()">
        </div>
 
        <!-- Chọn nhân viên -->
@@ -168,13 +172,13 @@
           </select>
        </div>
        <div class="input-group">
-          <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;" [disabled]="!selectedInvoice">
+          <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;" [disabled]="!selectedInvoice || cart.length === 0">
             <option [ngValue]="null">Chọn mã giảm giá</option>
             <option *ngFor="let discount of discountCodes" [ngValue]="discount.id">
               {{ discount.ten }}
             </option>
           </select>
-          <button (click)="applyDiscount()" class="discount-btn" [disabled]="!selectedInvoice">Áp dụng</button>
+          <button (click)="applyDiscount()" class="discount-btn" [disabled]="!selectedInvoice || cart.length === 0">Áp dụng</button>
        </div>
      </div>
 
@@ -239,7 +243,7 @@
   <div *ngIf="quetQr" class="modal-overlay">
     <!-- Modal -->
     <div class="modalQr">
-      <div class="modal-contentQr"> 
+      <div class="modal-contentQr">
         <button class="btn btn-danger" (click)="closeQuetQr()">X</button>
         <div>
           <h3>Mã QR chuyển khoản:</h3>

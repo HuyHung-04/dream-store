@@ -24,7 +24,7 @@ export class HoaDonComponent implements OnInit {
     tenNhanVien: '',
     ngayTaoFrom: null,
     ngayTaoTo: null,
-    sdtNguoiNhan:'',
+    sdtNguoiNhan: '',
     listTrangThai: null,
     pageSize: 6,
     page: 1
