@@ -147,7 +147,7 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Sản Phẩm Chi Tiết");
             Row headerRow = sheet.createRow(0);
-            String[] headers = {"Mã SPCT", "Tên Sản Phẩm", "Giá", "Số Lượng", "Ngày Tạo", "Ngày Sửa", "Trạng Thái"};
+            String[] headers = {"Mã SPCT", "Tên Sản Phẩm", "Giá", "Số Lượng", "Ngày Tạo", "Ngày Sửa","Tên Khuyến Mãi", "Giá Sau Giảm", "Trạng Thái"};
 
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
@@ -163,7 +163,9 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
                 row.createCell(3).setCellValue(sp.getSoLuong());
                 row.createCell(4).setCellValue(sp.getNgayTao().toString());
                 row.createCell(5).setCellValue(sp.getNgaySua().toString());
-                row.createCell(6).setCellValue(sp.getTrangThai());
+                row.createCell(6).setCellValue(sp.getTenKhuyenMai() != null ? sp.getTenKhuyenMai() : "Không áp dụng");
+                row.createCell(7).setCellValue(sp.getGiaSauGiam());
+                row.createCell(8).setCellValue(sp.getTrangThai() == 1 ?"Đang hoạt động":"Không hoạt động");
             }
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

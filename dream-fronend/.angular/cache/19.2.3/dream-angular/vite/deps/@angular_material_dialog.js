@@ -3,7 +3,7 @@ import {
   ScrollDispatcher,
   ScrollingModule,
   ViewportRuler
-} from "./chunk-QQXNSZRC.js";
+} from "./chunk-M4O2MWD4.js";
 import {
   A11yModule,
   ESCAPE,
@@ -14,7 +14,7 @@ import {
   _CdkPrivateStyleLoader,
   _IdGenerator,
   hasModifierKey
-} from "./chunk-CDDPUPHL.js";
+} from "./chunk-AMIJSJD5.js";
 import {
   Platform,
   _bindEventWithOptions,
@@ -25,7 +25,7 @@ import {
   coerceCssPixelValue,
   coerceNumberProperty,
   supportsScrollBehavior
-} from "./chunk-CF3HO6HL.js";
+} from "./chunk-VI7POIUZ.js";
 import {
   BidiModule,
   Directionality

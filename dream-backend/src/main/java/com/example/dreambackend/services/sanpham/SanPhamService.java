@@ -104,7 +104,7 @@ public class SanPhamService implements ISanPhamService {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Sản Phẩm");
             Row headerRow = sheet.createRow(0);
-            String[] headers = {"Mã", "Tên", "Ngày Tạo", "Ngày Sửa", "Trạng Thái", "Thương Hiệu", "Chất Liệu", "Cổ Áo", "Xuất Xứ"};
+            String[] headers = {"Mã", "Tên Sản Phẩm", "Thương Hiệu", "Xuất Xứ", "Chất Liệu", "Cổ áo", "Giá", "Tổng số Lượng", "Ngày Tạo", "Ngày Sửa", "Trạng Thái"};
 
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
@@ -116,13 +116,15 @@ public class SanPhamService implements ISanPhamService {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(sp.getMa());
                 row.createCell(1).setCellValue(sp.getTen());
-                row.createCell(2).setCellValue(sp.getNgayTao().toString());
-                row.createCell(3).setCellValue(sp.getNgaySua().toString());
-                row.createCell(4).setCellValue(sp.getTrangThai());
-                row.createCell(5).setCellValue(sp.getTenThuongHieu());
-                row.createCell(6).setCellValue(sp.getTenChatLieu());
-                row.createCell(7).setCellValue(sp.getTenCoAo());
-                row.createCell(8).setCellValue(sp.getTenXuatXu());
+                row.createCell(2).setCellValue(sp.getTenThuongHieu());
+                row.createCell(3).setCellValue(sp.getTenXuatXu());
+                row.createCell(4).setCellValue(sp.getTenChatLieu());
+                row.createCell(5).setCellValue(sp.getTenCoAo());
+                row.createCell(6).setCellValue(sp.getGiaCaoNhat());
+                row.createCell(7).setCellValue(sp.getTongSoLuong());
+                row.createCell(8).setCellValue(sp.getNgayTao().toString());
+                row.createCell(9).setCellValue(sp.getNgaySua().toString());
+                row.createCell(10).setCellValue(sp.getTrangThai() == 1 ?"Đang hoạt động":"Không hoạt động");
             }
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -134,6 +136,4 @@ public class SanPhamService implements ISanPhamService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
 }

@@ -207,8 +207,8 @@ export class BanhangComponent implements OnInit {
                       this.discountAmount = 0;
                     } else {
                       let discountAmount = voucher.hinhThucGiam
-                        ? total * (voucher.giaTriGiam / 100)
-                        : voucher.giaTriGiam;
+                        ? voucher.giaTriGiam
+                        : total * (voucher.giaTriGiam / 100);
 
                       if (voucher.giamToiDa && discountAmount > Number(voucher.giamToiDa)) {
                         discountAmount = Number(voucher.giamToiDa);
@@ -687,8 +687,8 @@ export class BanhangComponent implements OnInit {
         }
 
         let discountAmount = voucher.hinhThucGiam
-          ? total * (voucher.giaTriGiam / 100)
-          : voucher.giaTriGiam;
+          ? voucher.giaTriGiam
+          : total * (voucher.giaTriGiam / 100);
 
         if (voucher.giamToiDa && discountAmount > Number(voucher.giamToiDa)) {
           discountAmount = Number(voucher.giamToiDa);

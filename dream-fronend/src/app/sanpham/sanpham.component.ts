@@ -795,6 +795,10 @@ export class SanphamComponent implements OnInit {
     }  
     
   xuatFileExcel(): void {
+    const xacNhan = window.confirm("Bạn có muốn xuất file Excel không?");
+    if (!xacNhan) {
+      return; // Người dùng nhấn Cancel -> không làm gì cả
+    }
     this.sanphamService.exportExcel().subscribe(response => {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -847,6 +851,10 @@ export class SanphamComponent implements OnInit {
   }
     
   xuatFileExcelSanPhamChiTiet(idSanPham: number): void {
+    const xacNhan = window.confirm("Bạn có muốn xuất file Excel không?");
+    if (!xacNhan) {
+      return; // Người dùng nhấn Cancel -> không làm gì cả
+    }
     this.sanphamService.exportExcelSanPhamChiTiet(idSanPham).subscribe(response => {
       const reader = new FileReader();
       reader.onload = async (e) => {
