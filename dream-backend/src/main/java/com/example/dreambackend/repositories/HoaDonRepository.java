@@ -99,7 +99,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
                 LEFT JOIN nhan_vien nv ON nv.id = hd.id_nhan_vien
                 LEFT JOIN voucher vc ON vc.id = hd.id_voucher
                 LEFT JOIN phuong_thuc_thanh_toan pttt ON pttt.id = hd.id_phuong_thuc_thanh_toan
-                WHERE 1=1
+                WHERE 1=1 AND hd.trang_thai IN (6,7,8)
                 """);
         if (searchRequest.getMaHoaDon() != null && !searchRequest.getMaHoaDon().isEmpty()) {
             sql.append(" AND UPPER(hd.ma) LIKE UPPER(:maHoaDon)");

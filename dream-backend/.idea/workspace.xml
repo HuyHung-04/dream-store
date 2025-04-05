@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/HoaDonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/HoaDonRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/DreamBackendApplication.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/configs/SecurityConfig.class" beforeDir="false" />
@@ -226,11 +227,10 @@
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/ultils/PasswordUpdater.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/ultils/VNPayUtil.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/fonts/timesnewroman.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/hoadon/hoadon.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -451,6 +451,7 @@
       <workItem from="1743839951111" duration="165000" />
       <workItem from="1743840141278" duration="4812000" />
       <workItem from="1743852752078" duration="5165000" />
+      <workItem from="1743858532435" duration="1226000" />
     </task>
     <servers />
   </component>

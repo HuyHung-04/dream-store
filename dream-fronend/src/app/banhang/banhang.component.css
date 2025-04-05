@@ -284,7 +284,7 @@ button {
 }
 
 .modal button.btn-success {
-  background-color: #28a745;
+  background-color: #294764;
   color: white;
   border: none;
 }
@@ -584,12 +584,12 @@ button {
 }
 
 .btn-success {
-  background-color: #28a745;
+  background-color: #294764;
   color: white;
 }
 
 .btn-success:hover {
-  background-color: #218838;
+  background-color: #1e3658;
 }
 
 .btn-success:disabled {

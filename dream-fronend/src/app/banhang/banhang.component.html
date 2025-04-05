@@ -34,7 +34,9 @@
           <tbody>
             <tr *ngFor="let item of cart">
               <td>{{ item.maSanPhamChiTiet }}</td>
-              <td>{{ item.tenSanPham }}</td>
+              <td>
+                {{ item.tenSanPham }}
+              </td>
               <td>
                 <input type="number" [(ngModel)]="item.soLuong" min="1" class="item-quantity" (change)="validateQuantity(item, item.soLuong)">
               </td>
