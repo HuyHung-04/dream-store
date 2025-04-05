@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,8 @@ public class NhanVienService implements INhanVienService {
     private NhanVienRepository nhanVienRepository;
     @Autowired
     private VaiTroRepository vaiTroRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Transactional
     @Override
     public Page<NhanVien> getAllNhanVienPaged(int page, int size) {
@@ -44,6 +47,8 @@ public class NhanVienService implements INhanVienService {
         nhanVien.setMa(taoMaNhanVien());
         // Gán ngày tạo hiện tại
         nhanVien.setNgayTao(LocalDate.now());
+        // Mã hóa mật khẩu
+        nhanVien.setMatKhau(passwordEncoder.encode(nhanVien.getMatKhau()));
         return nhanVienRepository.save(nhanVien);
     }
     // Đường dẫn thư mục lưu trữ ảnh
@@ -122,7 +127,10 @@ public class NhanVienService implements INhanVienService {
         existingNhanVien.setEmail(nhanVien.getEmail());
         existingNhanVien.setSoDienThoai(nhanVien.getSoDienThoai());
         existingNhanVien.setTaiKhoan(nhanVien.getTaiKhoan());
-        existingNhanVien.setMatKhau(nhanVien.getMatKhau());
+        // Mã hóa mật khẩu mới nếu có thay đổi
+        if (nhanVien.getMatKhau() != null && !nhanVien.getMatKhau().isEmpty()) {
+            existingNhanVien.setMatKhau(passwordEncoder.encode(nhanVien.getMatKhau()));
+        }
         existingNhanVien.setTrangThai(nhanVien.getTrangThai());
         existingNhanVien.setNgaySua(LocalDate.now());
         // 🔹 Gán vai trò mới
@@ -148,19 +156,19 @@ public class NhanVienService implements INhanVienService {
         if (nhanVienOptional.isPresent()) {
             NhanVien nhanVien = nhanVienOptional.get();
 
-            // Kiểm tra mật khẩu
-            if (password.equals(nhanVien.getMatKhau())) {
+            // Kiểm tra mật khẩu sử dụng BCrypt
+            if (passwordEncoder.matches(password, nhanVien.getMatKhau())) {
                 // Đăng nhập thành công, trả về thông tin nhân viên
-                return ResponseEntity.ok(nhanVien); // Trả về thông tin nhân viên nếu đăng nhập thành công
+                return ResponseEntity.ok(nhanVien);
             } else {
                 // Mật khẩu không đúng
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Sai mật khẩu."); // Trả về lỗi với mã HTTP 401 (Unauthorized)
+                        .body("Sai mật khẩu.");
             }
         } else {
             // Không tìm thấy nhân viên với email này
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Email không tồn tại: "); // Trả về lỗi với mã HTTP 404 (Not Found)
+                    .body("Email không tồn tại: ");
         }
     }
     @Override

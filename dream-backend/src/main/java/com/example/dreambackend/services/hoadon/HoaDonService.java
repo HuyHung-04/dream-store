@@ -100,6 +100,10 @@ public class HoaDonService implements IHoaDonService {
 
     @Override
     public HoaDonResponse createHoaDon(HoaDonRequest request) {
+        List<HoaDon> hoaDons = hoaDonRepository.findAllByTrangThai(6);
+        if (hoaDons.size() >= 5) {
+            throw new RuntimeException("Hoá đơn chờ đã đạt số lượng tối đa");
+        }
         HoaDon hoaDon = convertToEntity(request);
         String maHoaDon = generateMaHoaDon();
         hoaDon.setMa(maHoaDon);

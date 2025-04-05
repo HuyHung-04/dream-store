@@ -18,15 +18,6 @@
         </div>
       </div>
       <div class="input-field">
-        <label class="label-date">Ngày sửa</label>
-        <div class="form-date" style="width: 250px;">
-          <input type="date" class="input" id="modifiedFromDate" [(ngModel)]="searchRequest.ngaySuaFrom"
-                 (change)="search()">
-          <input type="date" class="input" id="modifiedToDate" [(ngModel)]="searchRequest.ngaySuaTo"
-                 (change)="search()">
-        </div>
-      </div>
-      <div class="input-field">
         <label for="customerPhone">Số điện thoại khách hàng</label>
         <input type="text" id="customerPhone" class="input" placeholder="Nhập số điện thoại..." style="width: 250px;"
                [(ngModel)]="searchRequest.sdtNguoiNhan" (input)="search()">

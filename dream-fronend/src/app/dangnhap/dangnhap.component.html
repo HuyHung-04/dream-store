@@ -5,39 +5,38 @@
       <div class="col-md-6 right">
         <div class="input-box">
           <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
-            <header>LOGIN</header>
+            <header>ĐĂNG NHẬP</header>
 
-  <!-- Email Input -->
-<div class="input-field">
-  <input type="text" class="input" id="email" name="email" required
-         [(ngModel)]="loginData.email" #email="ngModel"
-         (input)="onInputChange('email')">
-  <label for="email">Email</label>
+            <!-- Tài khoản/Email Input -->
+            <div class="input-field">
+              <input type="text" class="input" id="taiKhoan" name="taiKhoan" required
+                     [(ngModel)]="loginData.taiKhoan" #taiKhoan="ngModel"
+                     (input)="onInputChange('taiKhoan')">
+              <label for="taiKhoan">Tài khoản hoặc Email</label>
 
-  <!-- Hiển thị lỗi email sau khi nhấn submit -->
-  <div *ngIf="submitted && errors.email" class="error">
-    {{ errors.email }}
-  </div>
-</div>
+              <!-- Hiển thị lỗi tài khoản sau khi nhấn submit -->
+              <div *ngIf="submitted && errors.taiKhoan" class="error">
+                {{ errors.taiKhoan }}
+              </div>
+            </div>
 
-<!-- Password Input -->
-<div class="input-field">
-  <input type="password" class="input" id="pass" name="password" required
-         [(ngModel)]="loginData.password" #password="ngModel"
-         (input)="onInputChange('password')">
-  <label for="pass">Password</label>
+            <!-- Mật khẩu Input -->
+            <div class="input-field">
+              <input type="password" class="input" id="matKhau" name="matKhau" required
+                     [(ngModel)]="loginData.matKhau" #matKhau="ngModel"
+                     (input)="onInputChange('matKhau')">
+              <label for="matKhau">Mật khẩu</label>
 
-  <!-- Hiển thị lỗi mật khẩu sau khi nhấn submit -->
-  <div *ngIf="submitted && errors.password" class="error">
-    {{ errors.password }}
-  </div>
-</div>
-
+              <!-- Hiển thị lỗi mật khẩu sau khi nhấn submit -->
+              <div *ngIf="submitted && errors.matKhau" class="error">
+                {{ errors.matKhau }}
+              </div>
+            </div>
 
             <!-- Submit Button -->
             <div class="input-field">
               <button type="submit" class="submit" [disabled]="loading">
-                Login
+                Đăng nhập
               </button>
             </div>
 

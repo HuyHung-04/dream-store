@@ -122,7 +122,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getNgaySuaTo() != null) {
             sql.append(" AND CAST(hd.ngay_sua AS DATE) <= :ngaySuaTo");
         }
-        if(searchRequest.getSoDienThoai() != null && !searchRequest.getSoDienThoai().isEmpty()) {
+        if(searchRequest.getSdtNguoiNhan() != null && !searchRequest.getSdtNguoiNhan().isEmpty()) {
             sql.append(" AND hd.sdt_nguoi_nhan = :soDienThoai");
         }
         if (searchRequest.getListTrangThai() != null) {
@@ -164,8 +164,8 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
             query.setParameter("ngaySuaTo", sdf.format(dateTo));
         }
 
-        if(searchRequest.getSoDienThoai() != null && !searchRequest.getSoDienThoai().isEmpty()) {
-            query.setParameter("soDienThoai", searchRequest.getSoDienThoai());
+        if(searchRequest.getSdtNguoiNhan() != null && !searchRequest.getSdtNguoiNhan().isEmpty()) {
+            query.setParameter("soDienThoai", searchRequest.getSdtNguoiNhan());
         }
 //        if (searchRequest.getIdHoaDon() != null) {
 //            query.setParameter("idHoaDon", "%" + searchRequest.getIdHoaDon() + "%");
@@ -208,4 +208,6 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
             "AND (h.ma LIKE CONCAT('%', ?4, '%') OR ?4 IS NULL)"+
             "ORDER BY h.id DESC")  // Lọc mã hóa đơn
     Page<HoaDon> findByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon, Pageable pageable);
+
+    List<HoaDon> findByTrangThai(Integer trangThai);
 }

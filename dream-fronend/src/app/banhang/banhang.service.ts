@@ -132,4 +132,14 @@ export class BanhangService {
     const apiUrl = `${this.apiUrlHD}/${hoaDonId}/export-pdf`;
     return this.http.get(apiUrl, { responseType: 'blob' }); // Trả về file PDF dạng Blob
   }
+
+  // Cập nhật số lượng tồn kho của sản phẩm
+  updateSoLuongSanPham(idSanPham: number, soLuong: number, isIncrease: boolean): Observable<any> {
+    const url = `${this.apiUrl}/san-pham/update-so-luong/${idSanPham}`;
+    const params = {
+      soLuong: soLuong,
+      isIncrease: isIncrease
+    };
+    return this.http.put(url, null, { params: params });
+  }
 }

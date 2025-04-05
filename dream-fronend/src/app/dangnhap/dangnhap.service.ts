@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams  } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class DangnhapService {
-  private apiUrl = 'http://localhost:8080/api/auth'; // Đảm bảo URL backend chính xác
+  private apiUrl = 'http://localhost:8080/api/auth';
 
   constructor(private http: HttpClient) { }
 
   // Phương thức đăng nhập
-  login(email: string, password: string): Observable<any> {
-    const params = new HttpParams()
-      .set('email', email)
-      .set('password', password);  // Thêm email và password như tham số trong URL
+  login(taiKhoan: string, matKhau: string): Observable<any> {
+    const loginData = {
+      username: taiKhoan,
+      password: matKhau
+    };
 
-    // Gửi yêu cầu POST đến API backend với tham số query
-    return this.http.post<any>(`${this.apiUrl}/login`, params, {
-      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')  // Đặt Content-Type cho form data
+    // Gửi yêu cầu POST đến API backend với JSON data
+    return this.http.post<any>(`${this.apiUrl}/login`, loginData, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
     });
   }
 }
