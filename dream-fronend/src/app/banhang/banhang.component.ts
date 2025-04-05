@@ -121,6 +121,8 @@ export class BanhangComponent implements OnInit {
   createInvoice() {
     if (!this.selectedNhanVien) {
       alert('Vui lòng chọn nhân viên!');
+      // Tự động load lại danh sách nhân viên nếu chưa có nhân viên được chọn
+      this.layDanhSachNhanVien();
       return;
     }
 
@@ -138,8 +140,11 @@ export class BanhangComponent implements OnInit {
       trangThai: 6 // Trạng thái chờ thanh toán
     };
 
+    console.log('Tạo hóa đơn với thông tin:', request);
+
     this.banhangService.createHoaDon(request).subscribe(
       (response) => {
+        console.log('Tạo hóa đơn thành công:', response);
         this.invoices.push(response);
         this.selectInvoice(response);
         this.cdr.detectChanges();
@@ -299,12 +304,18 @@ export class BanhangComponent implements OnInit {
     this.banhangService.getDanhSachNhanVien().subscribe(
       (data: any[]) => {
         this.danhSachNhanVien = data;
-        if (data.length > 0) {
+        // Luôn set nhân viên mặc định là người đầu tiên trong danh sách
+        if (data && data.length > 0) {
           this.selectedNhanVien = data[0].id;
+          console.log('Đã chọn nhân viên mặc định:', this.selectedNhanVien);
+        } else {
+          console.error('Không có nhân viên nào trong danh sách');
+          alert('Không thể tải danh sách nhân viên. Vui lòng kiểm tra lại.');
         }
       },
       (error: any) => {
         console.error('Lỗi khi lấy danh sách nhân viên:', error);
+        alert('Không thể tải danh sách nhân viên. Vui lòng thử lại.');
       }
     );
   }
@@ -496,9 +507,17 @@ export class BanhangComponent implements OnInit {
       return;
     }
 
+    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    const existingCartItem = this.cart.find(item => item.idSanPhamChiTiet === product.id);
+    if (existingCartItem) {
+      // Nếu sản phẩm đã tồn tại, tăng số lượng lên 1
+      this.validateQuantity(existingCartItem, existingCartItem.soLuong + 1);
+      return;
+    }
+
     // Thêm sản phẩm vào hóa đơn
     this.banhangService.addSanPhamToHoaDon(this.selectedInvoice.id, product.id, 1).subscribe(
-      response => {
+      (response: any) => {
         console.log('Thêm sản phẩm vào hóa đơn:', response);
         
         // Cập nhật số lượng tồn kho
@@ -512,29 +531,33 @@ export class BanhangComponent implements OnInit {
               this.sanPhams[productIndex].soLuong--;
             }
             
-            // Cập nhật giỏ hàng
-            let existingItem = this.cart.find(item => item.id === product.id);
-            if (existingItem) {
-              existingItem.soLuong++;
-            } else {
-              this.cart.push({ ...product, soLuong: 1 });
-            }
-            
-            this.updateInvoiceTotal();
-            this.updateVoucher();
-            this.cdr.detectChanges();
+            // Lấy lại danh sách chi tiết hóa đơn để cập nhật giỏ hàng
+            this.banhangService.searchHDCT({ idHoaDon: this.selectedInvoice?.id }).subscribe(
+              (cartData) => {
+                console.log('Danh sách hóa đơn chi tiết sau khi thêm:', cartData);
+                this.cart = cartData || [];
+                this.updateInvoiceTotal();
+                this.updateVoucher();
+                this.cdr.detectChanges();
+              },
+              (error) => {
+                console.error('Lỗi khi lấy danh sách hóa đơn chi tiết:', error);
+              }
+            );
           },
           error => {
             console.error('Lỗi khi cập nhật số lượng tồn:', error);
             // Xóa sản phẩm khỏi hóa đơn nếu cập nhật số lượng thất bại
-            this.banhangService.deleteHoaDonChiTiet(response.id).subscribe(
-              () => {
-                console.log('Đã xóa sản phẩm khỏi hóa đơn do cập nhật số lượng thất bại');
-              },
-              deleteError => {
-                console.error('Lỗi khi xóa sản phẩm khỏi hóa đơn:', deleteError);
-              }
-            );
+            if (response && response.id) {
+              this.banhangService.deleteHoaDonChiTiet(response.id).subscribe(
+                () => {
+                  console.log('Đã xóa sản phẩm khỏi hóa đơn do cập nhật số lượng thất bại');
+                },
+                deleteError => {
+                  console.error('Lỗi khi xóa sản phẩm khỏi hóa đơn:', deleteError);
+                }
+              );
+            }
             alert('Không thể cập nhật số lượng tồn kho. Vui lòng thử lại.');
           }
         );
@@ -941,12 +964,60 @@ export class BanhangComponent implements OnInit {
   cancelInvoice(invoice: HoaDon) {
     if (!invoice) return;
     
-    this.banhangService.cancelHoaDon(invoice.id).subscribe(
+    // Hiển thị confirm dialog
+    if (!confirm('Bạn có chắc chắn muốn hủy hóa đơn này không?')) {
+      return;
+    }
+    
+    // Lấy danh sách chi tiết hóa đơn trước khi hủy
+    this.banhangService.searchHDCT({ idHoaDon: invoice.id }).subscribe(
+      (cartItems) => {
+        if (!cartItems || cartItems.length === 0) {
+          // Nếu không có sản phẩm nào, chỉ cần hủy hóa đơn
+          this.processInvoiceCancellation(invoice.id);
+          return;
+        }
+
+        // Đếm số lượng sản phẩm đã được cập nhật thành công
+        let successCount = 0;
+        const totalItems = cartItems.length;
+
+        // Cập nhật số lượng cho từng sản phẩm
+        cartItems.forEach(item => {
+          this.banhangService.updateSoLuongSanPham(item.idSanPhamChiTiet, item.soLuong, true).subscribe(
+            () => {
+              console.log(`Đã trả lại ${item.soLuong} sản phẩm ${item.idSanPhamChiTiet} vào kho`);
+              successCount++;
+
+              // Kiểm tra nếu đã cập nhật xong tất cả sản phẩm
+              if (successCount === totalItems) {
+                // Sau khi cập nhật xong số lượng tất cả sản phẩm, tiến hành hủy hóa đơn
+                this.processInvoiceCancellation(invoice.id);
+              }
+            },
+            error => {
+              console.error(`Lỗi khi trả lại số lượng cho sản phẩm ${item.idSanPhamChiTiet}:`, error);
+              alert(`Không thể trả lại số lượng cho sản phẩm ${item.maSanPhamChiTiet}. Vui lòng kiểm tra lại.`);
+            }
+          );
+        });
+      },
+      error => {
+        console.error('Lỗi khi lấy danh sách chi tiết hóa đơn:', error);
+        alert('Không thể hủy hóa đơn. Vui lòng thử lại.');
+      }
+    );
+  }
+
+  private processInvoiceCancellation(invoiceId: number) {
+    this.banhangService.cancelHoaDon(invoiceId).subscribe(
       response => {
         console.log('Hủy hóa đơn thành công:', response);
         this.loadInvoices();
+        this.loadSanPhamToBanHang(); // Cập nhật lại danh sách sản phẩm
         this.selectedInvoice = null;
         this.cart = [];
+        alert('Đã hủy hóa đơn thành công.');
       },
       error => {
         console.error('Lỗi khi hủy hóa đơn:', error);
