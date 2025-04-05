@@ -93,12 +93,22 @@ export class BanhangComponent implements OnInit {
   paymentMethods: any[] = [];
   selectedPaymentMethod: number | null = null;
   quetQr: boolean = false;
+  showPaymentPopup: boolean = false;
+  tienKhachDua: number = 0;
+  tienThua: number = 0;
 
   bankId = 'vietinbank'; // mã ngân hàng viết thường
   accountNo = '0379083813';
   template = 'compact';
   addInfo = 'thanh toan hoa don';
   accountName = 'HOANG HUY HUNG';
+
+  // Thêm mảng số tiền nhanh
+  quickAmounts: number[] = [100000, 200000, 500000, 1000000];
+
+  // Thêm các biến mới cho tìm kiếm khách hàng
+  searchKhachHang: string = '';
+  filteredKhachHang: KhachHang[] = [];
 
   constructor(private banhangService: BanhangService, private cdr: ChangeDetectorRef) { }
 
@@ -137,7 +147,7 @@ export class BanhangComponent implements OnInit {
       idPhuongThucThanhToan: this.selectedPaymentMethod,
       tongTienTruocVoucher: 0,
       tongTienThanhToan: 0,
-      trangThai: 6 // Trạng thái chờ thanh toán
+      trangThai: 6,
     };
 
     console.log('Tạo hóa đơn với thông tin:', request);
@@ -188,11 +198,36 @@ export class BanhangComponent implements OnInit {
         // Lấy chi tiết hóa đơn và cập nhật giỏ hàng
         this.banhangService.searchHDCT({ idHoaDon: hoaDon.id }).subscribe(
           (data) => {
-            console.log('Danh sách hóa đơn chi tiết:', data);
-            this.cart = data || [];
+            console.log('=== THÔNG TIN CHI TIẾT GIỎ HÀNG ===');
+            if (data && data.length > 0) {
+              console.log('Cấu trúc của một item trong cart:');
+              const sampleItem = data[0];
+              console.log({
+                id: sampleItem.id,
+                maSanPhamChiTiet: sampleItem.maSanPhamChiTiet,
+                tenSanPham: sampleItem.tenSanPham,
+                gia: sampleItem.gia,
+                giaTriGiam: sampleItem.giaTriGiam,
+                hinhThucGiam: sampleItem.hinhThucGiam,
+                soLuong: sampleItem.soLuong,
+                tenMau: sampleItem.tenMau,
+                tenSize: sampleItem.tenSize,
+                idSanPhamChiTiet: sampleItem.idSanPhamChiTiet,
+                idHoaDon: sampleItem.idHoaDon,
+                trangThai: sampleItem.trangThai
+              });
+              
+              console.log('\nDanh sách tất cả items trong cart:');
+              data.forEach((item, index) => {
+                console.log(`\nItem ${index + 1}:`, item);
+              });
+            } else {
+              console.log('Giỏ hàng trống');
+            }
             
-            // Tính lại tổng tiền trước voucher
+            this.cart = data || [];
             const total = this.getTotal();
+            console.log('\nTổng tiền trước voucher:', total);
             
             // Cập nhật selectedDiscount từ idVoucher của hóa đơn
             if (hoaDon.idVoucher) {
@@ -207,8 +242,8 @@ export class BanhangComponent implements OnInit {
                       this.discountAmount = 0;
                     } else {
                       let discountAmount = voucher.hinhThucGiam
-                        ? total * (voucher.giaTriGiam / 100)
-                        : voucher.giaTriGiam;
+                        ? voucher.giaTriGiam
+                        : total * (voucher.giaTriGiam / 100);
 
                       if (voucher.giamToiDa && discountAmount > Number(voucher.giamToiDa)) {
                         discountAmount = Number(voucher.giamToiDa);
@@ -232,6 +267,7 @@ export class BanhangComponent implements OnInit {
             console.error('Lỗi khi lấy danh sách hóa đơn chi tiết:', error);
           }
         );
+        console.log(this.selectedInvoice);
       },
       (error) => {
         console.error('Lỗi khi lấy thông tin hóa đơn:', error);
@@ -289,59 +325,105 @@ export class BanhangComponent implements OnInit {
     this.layDanhSachKhachHang();
   }
 
+  // Lấy danh sách khách hàng
   layDanhSachKhachHang() {
     this.banhangService.getDanhSachKhachHang(0, 100).subscribe(
       (data: any) => {
         this.danhSachKhachHang = data.content;
+        this.filteredKhachHang = [...this.danhSachKhachHang];
+        console.log('Danh sách khách hàng:', this.danhSachKhachHang);
       },
       (error) => {
         console.error('Lỗi khi lấy danh sách khách hàng:', error);
+        alert('Không thể tải danh sách khách hàng. Vui lòng thử lại.');
       }
     );
   }
 
-  layDanhSachNhanVien() {
-    this.banhangService.getDanhSachNhanVien().subscribe(
-      (data: any[]) => {
-        this.danhSachNhanVien = data;
-        // Luôn set nhân viên mặc định là người đầu tiên trong danh sách
-        if (data && data.length > 0) {
-          this.selectedNhanVien = data[0].id;
-          console.log('Đã chọn nhân viên mặc định:', this.selectedNhanVien);
-        } else {
-          console.error('Không có nhân viên nào trong danh sách');
-          alert('Không thể tải danh sách nhân viên. Vui lòng kiểm tra lại.');
-        }
-      },
-      (error: any) => {
-        console.error('Lỗi khi lấy danh sách nhân viên:', error);
-        alert('Không thể tải danh sách nhân viên. Vui lòng thử lại.');
-      }
+  // Lọc danh sách khách hàng theo từ khóa tìm kiếm
+  filterKhachHang() {
+    if (!this.searchKhachHang) {
+      this.filteredKhachHang = [...this.danhSachKhachHang];
+      return;
+    }
+
+    const searchTerm = this.searchKhachHang.toLowerCase();
+    this.filteredKhachHang = this.danhSachKhachHang.filter(kh =>
+      kh.ten.toLowerCase().includes(searchTerm) ||
+      (kh.soDienThoai && kh.soDienThoai.includes(searchTerm))
     );
   }
 
   // Chọn khách hàng từ modal
-  chonKhachHang(khachHang: any) {
+  chonKhachHang(khachHang: KhachHang) {
+    console.log('Khách hàng được chọn:', khachHang);
     this.selectedKhachHang = khachHang;
     this.tenKhachHang = khachHang.ten;
     this.sdtNguoiNhan = khachHang.soDienThoai;
     this.hienThiDanhSachKhachHang = false;
+
+    // Nếu đã có hóa đơn được chọn, cập nhật thông tin khách hàng
+    if (this.selectedInvoice) {
+      const updatedInvoice = {
+        ...this.selectedInvoice,
+        idKhachHang: khachHang.id
+      };
+
+      this.banhangService.updateHoaDon(this.selectedInvoice.id, updatedInvoice).subscribe(
+        response => {
+          console.log('Cập nhật khách hàng cho hóa đơn thành công:', response);
+          this.selectedInvoice = response;
+        },
+        error => {
+          console.error('Lỗi khi cập nhật khách hàng cho hóa đơn:', error);
+          alert('Không thể cập nhật thông tin khách hàng cho hóa đơn. Vui lòng thử lại.');
+        }
+      );
+    }
   }
 
   // Chọn khách hàng vãng lai
   chonKhachHangVangLai() {
-    const khachHangVangLai: KhachHang = {
-      id: 0,
+    const khachHangVangLai = {
       ten: 'Khách vãng lai',
       soDienThoai: '',
       email: '',
       diaChi: ''
     };
 
-    this.selectedKhachHang = khachHangVangLai;
-    this.tenKhachHang = khachHangVangLai.ten;
-    this.sdtNguoiNhan = '';
-    this.hienThiDanhSachKhachHang = false;
+    // Lưu khách hàng vãng lai vào database
+    this.banhangService.createKhachHang(khachHangVangLai).subscribe(
+      (response: any) => {
+        console.log('Tạo mới khách hàng vãng lai thành công:', response);
+        this.selectedKhachHang = response;
+        this.tenKhachHang = response.ten;
+        this.sdtNguoiNhan = '';
+        this.hienThiDanhSachKhachHang = false;
+
+        // Nếu đã có hóa đơn được chọn, cập nhật thông tin khách hàng
+        if (this.selectedInvoice) {
+          const updatedInvoice = {
+            ...this.selectedInvoice,
+            idKhachHang: response.id
+          };
+
+          this.banhangService.updateHoaDon(this.selectedInvoice.id, updatedInvoice).subscribe(
+            response => {
+              console.log('Cập nhật khách hàng cho hóa đơn thành công:', response);
+              this.selectedInvoice = response;
+            },
+            error => {
+              console.error('Lỗi khi cập nhật khách hàng cho hóa đơn:', error);
+              alert('Không thể cập nhật thông tin khách hàng cho hóa đơn. Vui lòng thử lại.');
+            }
+          );
+        }
+      },
+      (error: any) => {
+        console.error('Lỗi khi tạo mới khách hàng vãng lai:', error);
+        alert('Không thể tạo khách hàng vãng lai. Vui lòng thử lại.');
+      }
+    );
   }
 
   // Lấy danh sách sản phẩm để bán
@@ -396,7 +478,10 @@ export class BanhangComponent implements OnInit {
 
   // Cập nhật số lượng sản phẩm trong giỏ hàng
   validateQuantity(item: any, newQuantity: number) {
-    console.log('Start validateQuantity');
+    console.log('=== Cập nhật số lượng ===');
+    console.log('Item cập nhật:', item);
+    console.log('Số lượng mới:', newQuantity);
+    console.log('Giỏ hàng hiện tại:', this.cart);
     const oldQuantity = item.soLuong;
     console.log('oldQuantity:', oldQuantity, 'newQuantity:', newQuantity);
 
@@ -418,7 +503,7 @@ export class BanhangComponent implements OnInit {
 
     const product = this.sanPhams[productIndex];
     // Tính toán lại difference dựa trên số lượng mới và cũ
-    const difference = oldQuantity - newQuantity;
+    const difference = newQuantity - oldQuantity;
     console.log('Calculated difference:', difference, 'oldQuantity:', oldQuantity, 'newQuantity:', newQuantity);
     
     // Tính toán số lượng có sẵn bằng cách cộng số lượng trong kho với số lượng cũ trong giỏ hàng
@@ -509,6 +594,9 @@ export class BanhangComponent implements OnInit {
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const existingCartItem = this.cart.find(item => item.idSanPhamChiTiet === product.id);
+    console.log('=== Thêm vào giỏ hàng ===');
+    console.log('Sản phẩm thêm:', product);
+    console.log('Sản phẩm đã tồn tại:', existingCartItem);
     if (existingCartItem) {
       // Nếu sản phẩm đã tồn tại, tăng số lượng lên 1
       this.validateQuantity(existingCartItem, existingCartItem.soLuong + 1);
@@ -520,7 +608,7 @@ export class BanhangComponent implements OnInit {
       (response: any) => {
         console.log('Thêm sản phẩm vào hóa đơn:', response);
         
-        // Cập nhật số lượng tồn kho
+        // Cập nhật số lượng tồn kho - chỉ trừ đi 1 sản phẩm
         this.banhangService.updateSoLuongSanPham(product.id, 1, false).subscribe(
           () => {
             console.log('Cập nhật số lượng tồn thành công');
@@ -589,6 +677,9 @@ export class BanhangComponent implements OnInit {
 
   // Xóa sản phẩm khỏi giỏ hàng
   removeFromCart(item: any) {
+    console.log('=== Xóa khỏi giỏ hàng ===');
+    console.log('Item xóa:', item);
+    console.log('Giỏ hàng trước khi xóa:', this.cart);
     // Kiểm tra xem hóa đơn đã được chọn chưa
     if (!this.selectedInvoice) {
       alert("Chưa chọn hoá đơn để xoá");
@@ -652,14 +743,29 @@ export class BanhangComponent implements OnInit {
     );
   }
 
-  // Tính tổng tiền của giỏ hàng
-  getTotal() {
-    return this.cart.reduce((total, item) => {
-      const giaSauGiam = item.hinhThucGiam === 1
-        ? item.gia - (item.gia * item.giaTriGiam / 100)
-        : item.gia - item.giaTriGiam;
-      return total + (item.soLuong * giaSauGiam);
-    }, 0);
+  // Tính đơn giá sau khuyến mãi
+  calculateDiscountedPrice(item: any): number {
+    if (!item) return 0;
+    return item.gia - (item.gia * item.giaTriGiamKM / 100);
+  }
+
+  // Tính tổng giá cho một sản phẩm trong giỏ hàng
+  calculateItemTotal(item: any): number {
+    return this.calculateDiscountedPrice(item) * item.soLuong;
+  }
+
+  // Tính tổng giá của toàn bộ giỏ hàng
+  getTotal(): number {
+    return this.cart.reduce((total, item) => total + this.calculateItemTotal(item), 0);
+  }
+
+  // Tính tổng tiền sau khi áp dụng voucher
+  getTotalAfterDiscount(): number {
+    const total = this.getTotal();
+    if (!this.selectedDiscount || !this.discountAmount) {
+      return total;
+    }
+    return total - this.discountAmount;
   }
 
   // Lấy thông tin voucher chi tiết và cập nhật giảm giá
@@ -687,8 +793,8 @@ export class BanhangComponent implements OnInit {
         }
 
         let discountAmount = voucher.hinhThucGiam
-          ? total * (voucher.giaTriGiam / 100)
-          : voucher.giaTriGiam;
+          ? voucher.giaTriGiam
+          : total * (voucher.giaTriGiam / 100);
 
         if (voucher.giamToiDa && discountAmount > Number(voucher.giamToiDa)) {
           discountAmount = Number(voucher.giamToiDa);
@@ -723,6 +829,21 @@ export class BanhangComponent implements OnInit {
     this.updateVoucher();
   }
 
+  // Thêm phương thức chọn số tiền nhanh
+  selectQuickAmount(amount: number) {
+    if (!this.selectedInvoice) return;
+    
+    // Nếu số tiền nhỏ hơn tổng tiền cần thanh toán, cộng thêm vào số tiền hiện tại
+    if (amount < this.selectedInvoice.tongTienThanhToan) {
+      this.tienKhachDua += amount;
+    } else {
+      // Nếu số tiền lớn hơn hoặc bằng tổng tiền cần thanh toán, gán trực tiếp
+      this.tienKhachDua = amount;
+    }
+    this.tinhTienThua();
+  }
+
+  // Sửa lại phương thức checkout
   checkout() {
     if (this.cart.length === 0) {
       alert('Giỏ hàng đang trống!');
@@ -739,6 +860,56 @@ export class BanhangComponent implements OnInit {
       return;
     }
 
+    // Xử lý theo phương thức thanh toán
+    switch (Number(this.selectedPaymentMethod)) {
+      case 2: // Tiền mặt
+        this.showPaymentPopup = true;
+        this.tienKhachDua = 0;
+        this.tienThua = -this.selectedInvoice.tongTienThanhToan;
+        break;
+        
+      case 3: // Chuyển khoản
+        if (confirm('Xác nhận đã nhận được tiền chuyển khoản?')) {
+          this.processPayment();
+        }
+        break;
+
+      default:
+        alert('Phương thức thanh toán không hợp lệ!');
+        break;
+    }
+  }
+
+  // Sửa lại phương thức tính tiền thừa
+  tinhTienThua() {
+    if (!this.selectedInvoice) return;
+    this.tienThua = this.tienKhachDua - this.selectedInvoice.tongTienThanhToan;
+    // Đảm bảo tiền khách đưa không âm
+    if (this.tienKhachDua < 0) {
+      this.tienKhachDua = 0;
+      this.tienThua = -this.selectedInvoice.tongTienThanhToan;
+    }
+  }
+
+  // Thêm phương thức xác nhận thanh toán từ popup
+  confirmPayment() {
+    if (this.tienKhachDua < this.selectedInvoice!.tongTienThanhToan) {
+      alert('Số tiền khách đưa không đủ!');
+      return;
+    }
+    this.showPaymentPopup = false;
+    this.processPayment();
+  }
+
+  // Thêm phương thức hủy popup thanh toán
+  cancelPayment() {
+    this.showPaymentPopup = false;
+    this.tienKhachDua = 0;
+    this.tienThua = 0;
+  }
+
+  // Sửa lại phương thức processPayment
+  private processPayment() {
     const tongTienTruocVoucher = this.getTotal();
     const tongTienThanhToan = tongTienTruocVoucher - this.discountAmount;
 
@@ -751,9 +922,20 @@ export class BanhangComponent implements OnInit {
       trangThai: 7 // Trạng thái đã thanh toán
     };
 
-    this.banhangService.updateHoaDon(this.selectedInvoice.id, request).subscribe(
+    this.banhangService.updateHoaDon(this.selectedInvoice!.id, request).subscribe(
       (response) => {
-        alert('Thanh toán thành công!');
+        // Hiển thị thông báo tùy theo phương thức thanh toán
+        switch (Number(this.selectedPaymentMethod)) {
+          case 2: // Tiền mặt
+            alert(`Thanh toán tiền mặt thành công!\nTiền thừa: ${this.tienThua.toLocaleString('vi-VN')} VNĐ`);
+            break;
+            
+          case 3: // Chuyển khoản
+            alert('Thanh toán chuyển khoản thành công!');
+            this.closeQuetQr(); // Đóng QR code nếu đang mở
+            break;
+        }
+        
         this.resetAfterCheckout();
         if (confirm('Bạn có muốn xuất hóa đơn PDF không?')) {
           this.exportPDF(response.id);
@@ -847,15 +1029,19 @@ export class BanhangComponent implements OnInit {
       (data: any[]) => {
         // Lọc ra chỉ những phương thức có id là 2 hoặc 3
         this.paymentMethods = data.filter(method => method.id === 2 || method.id === 3);
-
-        console.log(this.paymentMethods);
+        console.log('Danh sách phương thức thanh toán:', this.paymentMethods);
 
         if (this.paymentMethods.length > 0) {
           this.selectedPaymentMethod = this.paymentMethods[0].id;
+          console.log('Phương thức thanh toán mặc định:', this.selectedPaymentMethod);
+        } else {
+          console.error('Không có phương thức thanh toán nào');
+          alert('Không thể tải danh sách phương thức thanh toán. Vui lòng thử lại.');
         }
       },
       (error) => {
         console.error('Lỗi khi lấy dữ liệu phương thức thanh toán:', error);
+        alert('Không thể tải danh sách phương thức thanh toán. Vui lòng thử lại.');
       }
     );
   }
@@ -1014,7 +1200,7 @@ export class BanhangComponent implements OnInit {
       response => {
         console.log('Hủy hóa đơn thành công:', response);
         this.loadInvoices();
-        this.loadSanPhamToBanHang(); // Cập nhật lại danh sách sản phẩm
+        this.loadSanPhamToBanHang();
         this.selectedInvoice = null;
         this.cart = [];
         alert('Đã hủy hóa đơn thành công.');
@@ -1022,6 +1208,27 @@ export class BanhangComponent implements OnInit {
       error => {
         console.error('Lỗi khi hủy hóa đơn:', error);
         alert('Không thể hủy hóa đơn. Vui lòng thử lại.');
+      }
+    );
+  }
+
+  // Lấy danh sách nhân viên
+  layDanhSachNhanVien() {
+    this.banhangService.getDanhSachNhanVien().subscribe(
+      (data: any[]) => {
+        this.danhSachNhanVien = data;
+        // Luôn set nhân viên mặc định là người đầu tiên trong danh sách
+        if (data && data.length > 0) {
+          this.selectedNhanVien = data[0].id;
+          console.log('Đã chọn nhân viên mặc định:', this.selectedNhanVien);
+        } else {
+          console.error('Không có nhân viên nào trong danh sách');
+          alert('Không thể tải danh sách nhân viên. Vui lòng kiểm tra lại.');
+        }
+      },
+      (error: any) => {
+        console.error('Lỗi khi lấy danh sách nhân viên:', error);
+        alert('Không thể tải danh sách nhân viên. Vui lòng thử lại.');
       }
     );
   }

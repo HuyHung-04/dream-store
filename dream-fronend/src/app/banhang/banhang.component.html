@@ -36,31 +36,23 @@
               <td>{{ item.maSanPhamChiTiet }}</td>
               <td>{{ item.tenSanPham }}</td>
               <td>
-                <input type="number" 
-                       [ngModel]="item.soLuong" 
-                       (ngModelChange)="validateQuantity(item, $event)" 
-                       min="1" 
-                       class="item-quantity">
+                <input type="number" [(ngModel)]="item.soLuong" min="1" class="item-quantity" (change)="validateQuantity(item, item.soLuong)">
               </td>
               <td>
-                {{
-                  (
-                    item.hinhThucGiam === 1
-                      ? (item.gia - (item.gia * item.giaTriGiam / 100))
-                      : (item.gia - item.giaTriGiam)
-                  ) | number:'1.0-0'
-                }} VNĐ
+                <div>{{ item.gia | number:'1.0-0' }} VNĐ</div>
+                <div *ngIf="item.giaTriGiamKM > 0" class="discount-info">
+                  <span class="discount-percent">-{{ item.giaTriGiamKM }}%</span>
+                  <div class="discounted-price">
+                    {{ (item.gia - (item.gia * item.giaTriGiamKM / 100)) | number:'1.0-0' }} VNĐ
+                  </div>
+                </div>
               </td>
               <td>{{item.tenMau}}</td>
               <td>{{item.tenSize}}</td>
               <td>
                 {{
                   (
-                    item.soLuong * (
-                      item.hinhThucGiam === 1
-                        ? (item.gia - (item.gia * item.giaTriGiam / 100))
-                        : (item.gia - item.giaTriGiam)
-                    )
+                    item.soLuong * (item.gia - (item.gia * item.giaTriGiamKM / 100))
                   ) | number:'1.0-0'
                 }} VNĐ
               </td>
