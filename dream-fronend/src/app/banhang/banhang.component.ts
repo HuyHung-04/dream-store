@@ -250,7 +250,12 @@ export class BanhangComponent implements OnInit {
               console.log('Giỏ hàng trống');
             }
             
-            this.cart = data || [];
+            // Gán soLuongBanDau cho mỗi sản phẩm trong giỏ hàng - bằng với soLuong hiện tại
+            this.cart = data ? data.map(item => ({
+              ...item,
+              soLuongBanDau: item.soLuong
+            })) : [];
+            
             const total = this.getTotal();
             console.log('\nTổng tiền trước voucher:', total);
             
@@ -519,6 +524,15 @@ export class BanhangComponent implements OnInit {
       return;
     }
 
+    // Kiểm tra số lượng ban đầu nếu có
+    if (item.soLuongBanDau !== undefined) {
+      if (newQuantity > item.soLuongBanDau) {
+        alert(`Số lượng không thể vượt quá số lượng ban đầu (${item.soLuongBanDau})!`);
+        item.soLuong = oldQuantity;
+        return;
+      }
+    }
+
     // Load all products and wait for the response before continuing
     this.banhangService.getAllSanPham().subscribe(
       response => {
@@ -676,7 +690,12 @@ export class BanhangComponent implements OnInit {
           this.banhangService.searchHDCT({ idHoaDon: this.selectedInvoice?.id }).subscribe(
             (cartData) => {
               console.log('Danh sách hóa đơn chi tiết sau khi thêm:', cartData);
-              this.cart = cartData || [];
+              this.cart = cartData.map(item => ({
+                ...item,
+                soLuongBanDau: item.idSanPhamChiTiet === product.id ? 
+                  (existingCartItem.soLuongBanDau || existingCartItem.soLuong) + 1 : 
+                  (item.soLuongBanDau || item.soLuong)
+              })) || [];
               this.updateInvoiceTotal();
               this.updateVoucher();
               this.cdr.detectChanges();
@@ -714,7 +733,11 @@ export class BanhangComponent implements OnInit {
         this.banhangService.searchHDCT({ idHoaDon: this.selectedInvoice?.id }).subscribe(
           (cartData) => {
             console.log('Danh sách hóa đơn chi tiết sau khi thêm:', cartData);
-            this.cart = cartData || [];
+            // Gán soLuongBanDau cho mỗi sản phẩm trong giỏ hàng
+            this.cart = cartData.map(item => ({
+              ...item,
+              soLuongBanDau: item.idSanPhamChiTiet === product.id ? product.soLuong + 1 : (item.soLuongBanDau || item.soLuong)
+            })) || [];
             this.updateInvoiceTotal();
             this.updateVoucher();
             this.cdr.detectChanges();
