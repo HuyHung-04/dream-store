@@ -8,8 +8,7 @@
         <p class="customer-phone"> (+84 | {{ selectedAddress?.sdtNguoiNhan }} ) </p>
       </div>
       <p class="address-text">
-        Địa chỉ: {{ selectedAddress?.diaChiCuThe }}, {{ selectedAddress?.phuongXa }}, {{ selectedAddress?.quanHuyen }},
-        {{ selectedAddress?.tinhThanhPho }}
+        Địa chỉ: {{ selectedAddress?.tinhThanhPho }}, {{ selectedAddress?.quanHuyen }}, {{ selectedAddress?.phuongXa }},{{ selectedAddress?.diaChiCuThe }}
       </p>
     </div>
   </div>
@@ -53,8 +52,7 @@
                 <p class="customer-name">Tên người nhận: {{ diaChi.tenNguoiNhan}}</p>
                 <p class="customer-phone">(+84 | {{diaChi.sdtNguoiNhan}})</p>
               </div>
-              <p>Địa chỉ: {{ diaChi.phuongXa }}, {{ diaChi.quanHuyen }}, {{
-                diaChi.tinhThanhPho }}, {{ diaChi.diaChiCuThe }}</p>
+              <p>Địa chỉ:  {{ diaChi.tinhThanhPho }}, {{ diaChi.quanHuyen }},{{ diaChi.phuongXa }},{{ diaChi.diaChiCuThe }}</p>
               <div class="btn-container">
                 <button class="btn-edit" (click)="editDiaChi(diaChi.id); $event.stopPropagation()"><i
                     class="bi bi-pencil-square"></i> Sửa</button>
