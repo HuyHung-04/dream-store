@@ -139,10 +139,10 @@ nextPage(): void {
 }
 
 selectHoaDonChiTiet(invoice: HoaDonResponse): void {
-  const maHoaDon = invoice.maHoaDon;
-  console.log(" Mã hóa đơn:", maHoaDon);
+  const idHoaDon = invoice.id;
+  console.log(" Mã hóa đơn:", idHoaDon);
   // Gọi API lấy chi tiết sản phẩm trong hóa đơn
-  this.hoaDonService.getChiTietHoaDon(maHoaDon).subscribe({
+  this.hoaDonService.getChiTietHoaDon(idHoaDon).subscribe({
     next: (res) => {
       this.chiTietHoaDonData = res;
       console.log("Chi tiết sản phẩm:", res);
@@ -154,7 +154,7 @@ selectHoaDonChiTiet(invoice: HoaDonResponse): void {
   });
 
   // Gọi API lấy lại thông tin hóa đơn mới nhất từ server
-  this.hoaDonService.getHoaDonByMa(maHoaDon).subscribe({
+  this.hoaDonService.getHoaDonByMa(idHoaDon).subscribe({
     next: (res) => {
       this.hoaDonData = res;
       this.showDetailPopup = true;
@@ -224,39 +224,6 @@ checkTrangThaiHuy(): boolean {
   }
 
   return true; // Nếu trạng thái hợp lệ, trả về true
-}
-// Phương thức hủy hóa đơn
-cancelHoaDon(maHoaDon: string): void {
-  if (!this.checkTrangThaiHuy()) {
-    this.showCancelModal = false;
-    return; // Nếu không thể hủy, đóng modal và dừng lại
-  }
-
-
-  if (!this.ghiChu.trim()) {
-    alert('Vui lòng nhập lý do hủy hóa đơn.');
-    return;
-  }
-
-  const xacNhanHuy = window.confirm("Bạn có chắc chắn muốn hủy hóa đơn này?");
-  if (!xacNhanHuy) return;
-
-  this.hoaDonService.huyHoaDon(maHoaDon, this.ghiChu).subscribe(
-    (response) => {
-      console.log('Hóa đơn đã bị hủy:', response);
-      this.hoaDonData.trangThai = 5; // cập nhật UI nếu cần
-      this.showCancelModal = false;
-
-      // 👉 Cập nhật trạng thái trong danh sách bảng bên ngoài
-      const invoiceInList = this.hoaDons.content.find(item => item.maHoaDon === maHoaDon);
-      if (invoiceInList) {
-        invoiceInList.trangThai = 5;
-      }
-    },
-    (error) => {
-      console.error('Lỗi khi hủy hóa đơn:', error);
-    }
-  );
 }
 
 

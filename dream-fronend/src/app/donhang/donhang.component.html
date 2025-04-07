@@ -81,7 +81,7 @@
           <span *ngIf="hoaDon.trangThai === 5">Đơn đã hủy</span>
         </td>
         <td>
-          <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(hoaDon.ma)">
+          <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(hoaDon.id)">
             <i class="bi bi-eye-fill"></i>
           </button>
         </td>
@@ -114,8 +114,8 @@
       <div *ngIf="hoaDonData" class="invoice-container">
         <!-- Mã hóa đơn (Căn phải) -->
         <div class="invoice-header">
-          <h3>Chi tiết Hóa Đơn</h3>
-          <p class="invoice-code"><strong>Mã hóa đơn:</strong> {{ hoaDonData.ma }}</p>
+          <h3>Chi tiết đơn hàng</h3>
+          <p class="invoice-code"><strong>Mã đơn hàng:</strong> {{ hoaDonData.ma }}</p>
         </div>
 
         <div class="status-tracker" *ngIf="hoaDonData.trangThai != 5">
@@ -239,7 +239,7 @@
             <h4>Nhập lý do hủy hóa đơn</h4>
             <textarea [(ngModel)]="ghiChu" rows="4" placeholder="Nhập lý do..."></textarea>
             <div class="modal-buttons">
-              <button class="btn btn-danger" (click)="cancelHoaDon(hoaDonData.ma)">Xác nhận hủy</button>
+              <button class="btn btn-danger" (click)="cancelHoaDon(hoaDonData.id)">Xác nhận hủy</button>
               <button class="btn btn-secondary" (click)="closeCancelModal()">Hủy</button>
             </div>
           </div>

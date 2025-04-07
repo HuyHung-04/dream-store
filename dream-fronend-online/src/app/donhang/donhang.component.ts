@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { DonhangService } from '../donhang/donhang.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ChitietlichsuService } from '../chitietlichsu/chitietlichsu.service';
 import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-donhang',
@@ -14,20 +13,20 @@ export class DonhangComponent {
   hoaDonData: any;
   chiTietHoaDonData: any;
   isModalOpen: boolean = true; // Mở modal khi trang tải
-  maHoaDon: string | null = null;
+  idHoaDon: number =0;
   showCancelModal = false; // Trạng thái hiển thị modal
   ghiChu: string = '';     // Lưu lý do hủy
   showGiamToiDa: boolean = false;
   showGiamPhanTram: boolean = false;
-  constructor(private donhangService: DonhangService, private activatedRoute: ActivatedRoute, private chitietlichsuService: ChitietlichsuService) { }
+  constructor(private donhangService: DonhangService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
 
     this.activatedRoute.paramMap.subscribe(params => {
-      this.maHoaDon = params.get('id');
-      if (this.maHoaDon) {
+      this.idHoaDon = +params.get('id')!;
+      if (this.idHoaDon) {
         this.getHoaDonDetails();
-        this.getChiTietHoaDon(this.maHoaDon);
+        this.getChiTietHoaDon(this.idHoaDon);
       }
     });
   }
@@ -35,8 +34,8 @@ export class DonhangComponent {
 
 
   // Phương thức gọi API lấy chi tiết hóa đơn
-  getChiTietHoaDon(maHoaDon: string): void {
-    this.donhangService.getChiTietHoaDon(maHoaDon).subscribe(
+  getChiTietHoaDon(idHoaDon: number): void {
+    this.donhangService.getChiTietHoaDon(idHoaDon).subscribe(
       (data) => {
         this.chiTietHoaDonData = data;
         console.log('Dữ liệu chi tiết hóa đơn nhận được:', this.chiTietHoaDonData);
@@ -49,8 +48,8 @@ export class DonhangComponent {
 
 
   getHoaDonDetails(): void {
-    if (this.maHoaDon) {
-      this.chitietlichsuService.getHoaDonByMa(this.maHoaDon).subscribe(
+    if (this.idHoaDon) {
+      this.donhangService.getHoaDonByMa(this.idHoaDon).subscribe(
         (data) => {
           this.hoaDonData = data;
           this.tinhHienThiVoucher()
@@ -101,8 +100,8 @@ checkTrangThaiHuy(): boolean {
       if (!xacNhanHuy) {
         return; // Người dùng từ chối hủy
       }
-    if (this.maHoaDon&&this.ghiChu) {
-      this.donhangService.huyHoaDon(this.maHoaDon,this.ghiChu).subscribe(
+    if (this.idHoaDon&&this.ghiChu) {
+      this.donhangService.huyHoaDon(this.idHoaDon,this.ghiChu).subscribe(
         (response) => {
           console.log('Hóa đơn đã bị hủy:', response);
           this.hoaDonData.trangThai = 5;

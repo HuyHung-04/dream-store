@@ -24,6 +24,8 @@ export class DonhangComponent {
   ghiChu: string = '';     // Lưu lý do hủy
   showGiamToiDa: boolean = false;
   showGiamPhanTram: boolean = false;
+  fullHoaDonList: any[] = []; // Lưu toàn bộ danh sách hóa đơn đã lọc
+
    // Khai báo tên người nhận và số điện thoại người nhận để lọc
    tenNguoiNhan: string = '';  // Biến lọc tên người nhận
    sdtNguoiNhan: string = '';  // Biến lọc số điện thoại người nhận
@@ -55,17 +57,25 @@ export class DonhangComponent {
 // Phương thức để tải hóa đơn từ API với phân trang và lọc trạng thái
 loadHoaDons(): void {
   const status = this.selectedStatus === 0 ? 0 : this.selectedStatus;
-  this.donHangService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(status, this.tenNguoiNhan, this.sdtNguoiNhan, this.maHoaDon, this.page, this.size).subscribe(
+  this.donHangService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(status, this.tenNguoiNhan, this.sdtNguoiNhan, this.maHoaDon).subscribe(
     (data) => {
-      this.hoaDons = data.content;  // Dữ liệu trên trang hiện tại
-      this.totalPages = data.totalPages;  // Tổng số trang
-      console.log(data);
+      this.fullHoaDonList = data; // lưu toàn bộ kết quả vào biến
+    this.totalPages = Math.ceil(data.length / this.size); // cập nhật số trang
+    this.setPage(this.page); // phân trang
     },
     (error) => {
       this.errorMessage = 'Lỗi khi lấy dữ liệu hóa đơn!';
       console.error('Lỗi lấy hóa đơn:', error);
     }
   );
+}
+
+setPage(page: number): void {
+  if (page < 0 || page >= this.totalPages) return;
+  this.page = page;
+  const start = this.page * this.size;
+  const end = start + this.size;
+  this.hoaDons = this.fullHoaDonList.slice(start, end);
 }
 
 
@@ -79,7 +89,11 @@ loadHoaDons(): void {
   }
   
   
-
+  getStatusLabel(value: number): string {
+    const status = this.statuses.find(s => s.value === value);
+    return status ? status.label : 'Không xác định';
+  }
+  
 
   // Phương thức để cập nhật trạng thái hóa đơn (tăng 1 trạng thái)
   updateStatus(id: number, trangThai: number): void {
@@ -88,8 +102,12 @@ loadHoaDons(): void {
       alert("Đơn hàng đã giao thành công và không thể tiếp tục cập nhật.");
       return; // Không thực hiện cập nhật nếu trạng thái là Giao hàng thành công
     }
-    // Confirm trước khi cập nhật trạng thái
-    const confirmUpdate = window.confirm('Bạn có chắc chắn muốn cập nhật trạng thái hóa đơn này?');
+    const nextStatus = trangThai + 1;
+  const nextStatusLabel = this.getStatusLabel(nextStatus);
+
+  const confirmUpdate = window.confirm(
+    `Bạn có chắc chắn muốn cập nhật đến trạng thái "${nextStatusLabel}" không?`
+  );
     console.log(id)
     if (confirmUpdate) {
       this.loading = true;
@@ -124,9 +142,9 @@ loadHoaDons(): void {
     }
   }
 
-  selectHoaDonChiTiet(maHoaDon: string): void {
-    console.log("ma", maHoaDon)
-    this.donHangService.getChiTietHoaDon(maHoaDon).subscribe({
+  selectHoaDonChiTiet(idHoaDon: number): void {
+
+    this.donHangService.getChiTietHoaDon(idHoaDon).subscribe({
       next: (res) => {
         this.chiTietHoaDonData = res;
         console.log("Chi tiết sản phẩm:", res);
@@ -137,7 +155,7 @@ loadHoaDons(): void {
     });
 
     // Gọi API lấy lại thông tin hóa đơn mới nhất từ server
-    this.donHangService.getHoaDonByMa(maHoaDon).subscribe({
+    this.donHangService.getHoaDonByMa(idHoaDon).subscribe({
       next: (res) => {
         this.hoaDonData = res;
         this.showDetailPopup = true;
@@ -157,7 +175,7 @@ loadHoaDons(): void {
   }
 
   // Phương thức hủy hóa đơn
-  cancelHoaDon(maHoaDon: string): void {
+  cancelHoaDon(idHoaDon: number): void {
 
     if (!this.ghiChu.trim()) {
       alert('Vui lòng nhập lý do hủy hóa đơn.');
@@ -167,7 +185,7 @@ loadHoaDons(): void {
     const xacNhanHuy = window.confirm("Bạn có chắc chắn muốn hủy hóa đơn này?");
     if (!xacNhanHuy) return;
 
-    this.donHangService.huyHoaDon(maHoaDon, this.ghiChu).subscribe(
+    this.donHangService.huyHoaDon(idHoaDon, this.ghiChu).subscribe(
       (response) => {
         console.log('Hóa đơn đã bị hủy:', response);
         this.hoaDonData.trangThai = 5; // cập nhật UI nếu cần

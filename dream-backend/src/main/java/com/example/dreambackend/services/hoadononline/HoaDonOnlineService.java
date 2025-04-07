@@ -228,13 +228,13 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
     }
 
 
-    public List<HoaDonChiTietDto> getChiTietHoaDonByMa(String maHoaDon) {
+    public List<HoaDonChiTietDto> getChiTietHoaDonByMa(Integer idHoaDon) {
         // Lấy dữ liệu từ repository
-        List<Object[]> results = hoaDonChiTietRepository.findChiTietByMaHoaDon(maHoaDon);
+        List<Object[]> results = hoaDonChiTietRepository.findChiTietByMaHoaDon(idHoaDon);
 
         // Kiểm tra nếu không có dữ liệu
         if (results.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn chi tiết với mã: " + maHoaDon);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy hóa đơn chi tiết với mã: " + idHoaDon);
         }
 
         // Xử lý dữ liệu và map vào DTO
@@ -294,15 +294,15 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return hoaDonDtos;
     }
     // Lấy hóa đơn với voucher, khách hàng và phương thức thanh toán
-    public Optional<HoaDon> getHoaDonWithDetailsByMa(String ma) {
-        return hoaDonRepository.findHoaDonWithDetailsByMa(ma);
+    public Optional<HoaDon> getHoaDonWithDetailsByMa(Integer id) {
+        return hoaDonRepository.findHoaDonWithDetailsByMa(id);
     }
 
 
     @Override
-    public HoaDon huyHoaDon(String maHoaDon,String ghiChu) {
+    public HoaDon huyHoaDon(Integer idHoaDon,String ghiChu) {
 
-        HoaDon hoaDon = hoaDonRepository.findByMa(maHoaDon)
+        HoaDon hoaDon = hoaDonRepository.huyHoaDon(idHoaDon)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tồn tại"));
 
         hoaDon.setTrangThai(5);

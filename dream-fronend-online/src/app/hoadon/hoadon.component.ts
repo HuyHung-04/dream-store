@@ -67,6 +67,7 @@ export class HoadonComponent {
   fullAddress: string = '';
   thongBaoTrong: boolean = false;
   maHoaDon: string = '';
+  idHoaDon: number=0;
   vnpTransactionStatus: string | null = null;
   paymentUrl: string = '';
   newAddress = {
@@ -152,7 +153,7 @@ createHoaDonFromPaymentData(paymentData: any): void {
       alert('Đơn hàng đã được thanh toán thành công!');
       this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
       this.modalthongbao = true;
-      this.maHoaDon = response.ma;
+      this.idHoaDon = response.id;
     },
     (error) => {
       console.error('Lỗi khi tạo hóa đơn:', error);
@@ -620,7 +621,7 @@ createHoaDonFromPaymentData(paymentData: any): void {
         alert('Đơn hàng đã được tạo thành công!');
         this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
         this.modalthongbao = true;
-        this.maHoaDon = response.ma;
+        this.idHoaDon = response.id;
 
       },
       (error) => {
@@ -643,7 +644,7 @@ createHoaDonFromPaymentData(paymentData: any): void {
   }
   viewInvoiceDetails(): void {
     console.log('Xem chi tiết đơn hàng');
-    this.router.navigate(['/donhang', this.maHoaDon]);
+    this.router.navigate(['/donhang', this.idHoaDon]);
     this.closeModalThongBao();  // Đóng modal khi thực hiện hành động
   }
 

@@ -243,8 +243,8 @@ public class HoaDonService implements IHoaDonService {
 
     // Lọc hóa đơn theo trạng thái và phân trang
     @Override
-    public Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return hoaDonRepository.findByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon, pageable);
+    public List<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon) {
+
+        return hoaDonRepository.findByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon);
     }
 }

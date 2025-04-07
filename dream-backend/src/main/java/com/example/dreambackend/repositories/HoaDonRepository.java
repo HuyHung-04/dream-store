@@ -6,6 +6,7 @@ import com.example.dreambackend.responses.*;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -64,6 +65,11 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
     List<HoaDon> findAllByTrangThai(int i);
 
     Optional<HoaDon> findByMa(String ma);
+
+
+    @Query("SELECT h FROM HoaDon h WHERE h.id = :id")
+    Optional<HoaDon> huyHoaDon(@Param("id") Integer id);
+
 
     default List<HoaDonResponse> search(HoaDonSearchRequest searchRequest, EntityManager entityManager) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -189,8 +195,8 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
             "LEFT JOIN FETCH h.voucher " +
             "LEFT JOIN FETCH h.khachHang " +
             "LEFT JOIN FETCH h.phuongThucThanhToan " +
-            "WHERE h.ma = :ma")
-    Optional<HoaDon> findHoaDonWithDetailsByMa(String ma);
+            "WHERE h.id = :id")
+    Optional<HoaDon> findHoaDonWithDetailsByMa(Integer id);
 
     @Query("SELECT hd FROM HoaDon hd " +
             "JOIN FETCH hd.khachHang kh " +
@@ -207,7 +213,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
             "AND (h.sdtNguoiNhan LIKE CONCAT('%', ?3, '%') OR ?3 IS NULL) " +  // Lọc số điện thoại người nhận
             "AND (h.ma LIKE CONCAT('%', ?4, '%') OR ?4 IS NULL)"+
             "ORDER BY h.id DESC")  // Lọc mã hóa đơn
-    Page<HoaDon> findByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon, Pageable pageable);
+    List<HoaDon> findByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon);
 
     List<HoaDon> findByTrangThai(Integer trangThai);
 }

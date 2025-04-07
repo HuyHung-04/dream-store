@@ -16,8 +16,8 @@ public interface IHoaDonOnlineService {
     Double calculateTotalPriceWithVoucher(Integer idKhachHang, Integer voucherId, Double shippingFee);
     List<VoucherDto> getVoucherIdAndTen(Double tongTien);
     HoaDon createHoaDonAndAddProducts(Integer idKhachHang, Integer voucherId,Double tongTienTruocGiam, Integer paymentMethodId,Double TongTienSauGiam,String sdtNguoiNhan,String tenNguoiNhan,String diaChi,Double shippingFee);
-    List<HoaDonChiTietDto> getChiTietHoaDonByMa(String maHoaDon);
-    HoaDon huyHoaDon(String maHoaDon,String ghiChu);
+    List<HoaDonChiTietDto> getChiTietHoaDonByMa(Integer idHoaDon);
+    HoaDon huyHoaDon(Integer idHoaDon,String ghiChu);
     HoaDon tangTrangThaiHoaDon(Integer id);
     List<HoaDonDto> getHoaDonChiTietDto(Integer idKhachHang,Integer trangThai);
 }

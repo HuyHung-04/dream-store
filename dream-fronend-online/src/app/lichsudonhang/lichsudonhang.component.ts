@@ -75,8 +75,8 @@ export class LichsudonhangComponent {
     return Object.values(groupedData).sort((a, b) => b.idHoaDon - a.idHoaDon);
   }
 
-  viewInvoiceDetail(maHoaDon: string): void {
-    this.router.navigate(['/chitietlichsu', maHoaDon]); // Navigate to chitietlichsu with the maHoaDon as a route parameter
+  viewInvoiceDetail(idHoaDon: number): void {
+    this.router.navigate(['/donhang', idHoaDon]); 
   }
 
   goHome(): void {
