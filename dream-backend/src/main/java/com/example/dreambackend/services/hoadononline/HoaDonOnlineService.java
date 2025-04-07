@@ -171,7 +171,6 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         hoaDon.setKhachHang(khachHang);
         hoaDon.setMa("HD" + (System.currentTimeMillis() % 10000000)); // Sinh mã hóa đơn (có thể thay đổi theo logic của bạn)
         hoaDon.setNgayTao(LocalDate.now());
-        hoaDon.setNgaySua(LocalDate.now());
         hoaDon.setVoucher(voucher);
         // Nếu id phương thức thanh toán là 4, thì trạng thái hóa đơn là 2
         if (paymentMethodId == 4) {
@@ -323,7 +322,6 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             // Nếu trạng thái chưa là 4, tăng trạng thái và ghi lại ngày sửa
             if (trangThaiHienTai != null && trangThaiHienTai < 4) {
                 hoaDon.setTrangThai(trangThaiHienTai + 1); // Tăng trạng thái (ví dụ: từ 1->2, từ 2->3...)
-                hoaDon.setNgaySua(LocalDate.now());
 
                 // Nếu trạng thái là 2, trừ số lượng sản phẩm và giảm số lượng voucher
                 if (trangThaiHienTai == 1) {
@@ -349,6 +347,12 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                 }
 
                 // Lưu lại hóa đơn đã cập nhật
+                return hoaDonRepository.save(hoaDon);
+            }
+
+            //  Nếu trạng thái đã là 4 → vẫn cập nhật ngày sửa
+            if (trangThaiHienTai != null && trangThaiHienTai == 4) {
+                hoaDon.setNgaySua(LocalDate.now()); // Cập nhật ngày sửa tại trạng thái cuối
                 return hoaDonRepository.save(hoaDon);
             }
 
