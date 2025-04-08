@@ -346,15 +346,15 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                     }
                 }
 
+                if (trangThaiHienTai != null && trangThaiHienTai == 3) {
+                    hoaDon.setNgaySua(LocalDate.now()); // Cập nhật ngày sửa tại trạng thái cuối
+                }
+
                 // Lưu lại hóa đơn đã cập nhật
                 return hoaDonRepository.save(hoaDon);
             }
 
-            //  Nếu trạng thái đã là 4 → vẫn cập nhật ngày sửa
-            if (trangThaiHienTai != null && trangThaiHienTai == 4) {
-                hoaDon.setNgaySua(LocalDate.now()); // Cập nhật ngày sửa tại trạng thái cuối
-                return hoaDonRepository.save(hoaDon);
-            }
+
 
             // Nếu trạng thái đã là 4 thì trả lại hóa đơn không thay đổi
             return hoaDon;
