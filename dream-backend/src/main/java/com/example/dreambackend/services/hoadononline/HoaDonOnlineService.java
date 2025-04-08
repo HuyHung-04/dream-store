@@ -319,6 +319,8 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             HoaDon hoaDon = optionalHoaDon.get();
             Integer trangThaiHienTai = hoaDon.getTrangThai();
 
+
+
             // Nếu trạng thái chưa là 4, tăng trạng thái và ghi lại ngày sửa
             if (trangThaiHienTai != null && trangThaiHienTai < 4) {
                 hoaDon.setTrangThai(trangThaiHienTai + 1); // Tăng trạng thái (ví dụ: từ 1->2, từ 2->3...)
@@ -346,15 +348,16 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                     }
                 }
 
+                //  Nếu trạng thái đã là 4 → vẫn cập nhật ngày sửa
+                if (trangThaiHienTai != null && trangThaiHienTai == 3) {
+                    hoaDon.setNgaySua(LocalDate.now()); // Cập nhật ngày sửa tại trạng thái cuối
+                }
                 // Lưu lại hóa đơn đã cập nhật
                 return hoaDonRepository.save(hoaDon);
             }
 
-            //  Nếu trạng thái đã là 4 → vẫn cập nhật ngày sửa
-            if (trangThaiHienTai != null && trangThaiHienTai == 4) {
-                hoaDon.setNgaySua(LocalDate.now()); // Cập nhật ngày sửa tại trạng thái cuối
-                return hoaDonRepository.save(hoaDon);
-            }
+
+
 
             // Nếu trạng thái đã là 4 thì trả lại hóa đơn không thay đổi
             return hoaDon;

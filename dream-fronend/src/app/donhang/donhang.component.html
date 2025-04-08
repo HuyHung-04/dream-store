@@ -119,7 +119,7 @@
         </div>
 
         <div class="status-tracker" *ngIf="hoaDonData.trangThai != 5">
-          <div class="status-step" [class.active]="hoaDonData.trangThai == 1"  style="margin-top: 10px;">
+          <div class="status-step" [class.active]="hoaDonData.trangThai == 1"  style="margin-top: 20px;">
             <div class="status-icon">📄</div>
             <p>Chờ xác nhận</p>
             <span style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngayTao}}</span>
@@ -141,7 +141,7 @@
       
           <div class="status-line" [class.active]="hoaDonData.trangThai == 4"></div>
       
-          <div class="status-step" [class.active]="hoaDonData.trangThai == 4">
+          <div class="status-step" [class.active]="hoaDonData.trangThai == 4" style="margin-top: 10px;">
             <div class="status-icon">📦</div>
             <p>Giao hàng thành công</p>
             <span  style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngaySua}}</span>
