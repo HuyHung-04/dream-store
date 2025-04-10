@@ -14,6 +14,6 @@ public interface IXuatXuService {
 
     XuatXu addXuatXu(XuatXuRequest xuatXuRequest);
 
-    XuatXu updateXuatXu(XuatXuRequest xuatXuRequest);
+    XuatXu updateTrangThaiXuatXu(XuatXuRequest request);
 
 }

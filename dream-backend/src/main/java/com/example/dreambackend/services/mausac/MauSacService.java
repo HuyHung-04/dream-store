@@ -1,8 +1,10 @@
 package com.example.dreambackend.services.mausac;
 
 import com.example.dreambackend.entities.MauSac;
+import com.example.dreambackend.entities.XuatXu;
 import com.example.dreambackend.repositories.MauSacRepository;
 import com.example.dreambackend.requests.MauSacRequest;
+import com.example.dreambackend.requests.XuatXuRequest;
 import com.example.dreambackend.responses.MauSacRepone;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +55,11 @@ public class MauSacService implements IMauSacService{
     }
 
     @Override
-    public MauSac updateMauSac(MauSacRequest mauSacRequest) {
-        MauSac mauSacUpdate = mauSacRepository.findById(mauSacRequest.getId()).orElseThrow(()->
-                new RuntimeException("Không tìm thấy màu sắc với id: "+mauSacRequest.getId()));
-        // copy thuộc tính từ request sang đối tượng
-        BeanUtils.copyProperties(mauSacRequest, mauSacUpdate,"id","ngayTao");
-        mauSacUpdate.setNgaySua(LocalDate.now());
-        return mauSacRepository.save(mauSacUpdate);
+    public MauSac updateTrangThaiMauSac(MauSacRequest request) {
+        MauSac mauSac = mauSacRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy size với id: " + request.getId()));
+        mauSac.setTrangThai(request.getTrangThai());
+        mauSac.setNgaySua(LocalDate.now());
+        return mauSacRepository.save(mauSac);
     }
 }

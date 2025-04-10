@@ -43,9 +43,12 @@ public class ChatLieuController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update-trang-thai")
     public ResponseEntity<?> update(@RequestBody ChatLieuRequest chatLieuRequest){
-        chatLieuService.updateChatLieu(chatLieuRequest);
-        return ResponseEntity.ok("Sửa thành công");
+        chatLieuService.updateTrangThaiChatLieu(chatLieuRequest);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Cập nhật trạng thái thành công");
+        return ResponseEntity.ok(response);
+
     }
 }

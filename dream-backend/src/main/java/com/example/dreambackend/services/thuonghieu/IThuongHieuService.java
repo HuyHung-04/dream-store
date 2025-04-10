@@ -15,6 +15,6 @@ public interface IThuongHieuService {
 
     ThuongHieu addThuongHieu(ThuongHieuRequest thuongHieuRequest);
 
-    ThuongHieu updateThuongHieu(ThuongHieuRequest thuongHieuRequest);
+    ThuongHieu updateTrangThaiThuongHieu(ThuongHieuRequest request);
 
 }

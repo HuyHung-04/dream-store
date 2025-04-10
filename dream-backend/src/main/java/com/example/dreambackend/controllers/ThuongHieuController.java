@@ -42,9 +42,12 @@ public class ThuongHieuController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update-trang-thai")
     public ResponseEntity<?> update(@RequestBody ThuongHieuRequest thuongHieuRequest) {
-        thuongHieuService.updateThuongHieu(thuongHieuRequest);
-        return ResponseEntity.ok("Sửa thành công");
+        thuongHieuService.updateTrangThaiThuongHieu(thuongHieuRequest);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Cập nhật trạng thái thành công");
+        return ResponseEntity.ok(response);
+
     }
 }

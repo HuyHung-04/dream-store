@@ -2,8 +2,10 @@ package com.example.dreambackend.services.thuonghieu;
 
 
 import com.example.dreambackend.entities.ThuongHieu;
+import com.example.dreambackend.entities.XuatXu;
 import com.example.dreambackend.repositories.ThuongHieuRepository;
 import com.example.dreambackend.requests.ThuongHieuRequest;
+import com.example.dreambackend.requests.XuatXuRequest;
 import com.example.dreambackend.responses.ThuongHieuRespone;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +57,11 @@ public class ThuongHieuService implements IThuongHieuService{
     }
 
     @Override
-    public ThuongHieu updateThuongHieu(ThuongHieuRequest thuongHieuRequest) {
-        ThuongHieu thuongHieuUpdate = thuongHieuRepository.findById(thuongHieuRequest.getId()).orElseThrow(()->
-                new RuntimeException("Không tìm thấy sản phẩm với id: "+thuongHieuRequest.getId()));
-        BeanUtils.copyProperties(thuongHieuRequest, thuongHieuUpdate,"id","ngayTao");
-        thuongHieuUpdate.setNgaySua(LocalDate.now());
-        return thuongHieuRepository.save(thuongHieuUpdate);
+    public ThuongHieu updateTrangThaiThuongHieu(ThuongHieuRequest request) {
+        ThuongHieu thuongHieu = thuongHieuRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy size với id: " + request.getId()));
+        thuongHieu.setTrangThai(request.getTrangThai());
+        thuongHieu.setNgaySua(LocalDate.now());
+        return thuongHieuRepository.save(thuongHieu);
     }
 }

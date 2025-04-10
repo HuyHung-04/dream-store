@@ -44,9 +44,11 @@ public class CoAoController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update-trang-thai")
     public ResponseEntity<?> update(@RequestBody CoAoRequest coAoRequest) {
-        coAoService.updateCoAo(coAoRequest);
-        return ResponseEntity.ok("Sửa thành công");
+        coAoService.updateTrangThaiCoAo(coAoRequest);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Cập nhật trạng thái thành công");
+        return ResponseEntity.ok(response);
     }
 }

@@ -13,5 +13,5 @@ public interface IChatLieuService {
 
     ChatLieu getChatLieuById(Integer id);
 
-    ChatLieu updateChatLieu(ChatLieuRequest chatLieuRequest);
+    ChatLieu updateTrangThaiChatLieu(ChatLieuRequest request);
 }

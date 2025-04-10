@@ -74,8 +74,12 @@
         <div class="input-field error">
           <select class="input" id="thuongHieu" name="thuongHieu" [(ngModel)]="sanPhamRequest.thuongHieu.id">
             <option value="" selected>Chọn thương hiệu</option>
-            <option *ngFor="let thuongHieu of thuongHieus" [value]="thuongHieu.id">{{thuongHieu.ten}}</option>
-          </select>
+            <ng-container *ngFor="let thuongHieu of thuongHieus">
+              <option *ngIf="thuongHieu.trangThai === 1" [value]="thuongHieu.id">
+                {{ thuongHieu.ten }}
+              </option>
+            </ng-container>
+          </select>          
           <label for="thuongHieu">Thương hiệu</label>
           <div *ngIf="validationErrors['thuongHieu']" class="error-message">{{ validationErrors['thuongHieu'] }}</div>
         </div>
@@ -84,24 +88,40 @@
         <div class="input-field error">
           <select class="input" id="xuatXu" name="xuatXu" [(ngModel)]="sanPhamRequest.xuatXu.id">
             <option value="" selected>Chọn xuất xứ</option>
-            <option *ngFor="let xuatXu of xuatXus" [value]="xuatXu.id">{{xuatXu.ten}}</option>
-          </select>
+            <ng-container *ngFor="let xuatXu of xuatXus">
+              <option *ngIf="xuatXu.trangThai === 1" [value]="xuatXu.id">
+                {{ xuatXu.ten }}
+              </option>
+            </ng-container>
+          </select>          
+          <!-- <select class="input" id="xuatXu" name="xuatXu" [(ngModel)]="sanPhamRequest.xuatXu.id">
+            <option value="" selected>Chọn xuất xứ</option>
+            <option *ngFor="let xuatXu of xuatXus" [value]="xuatXu.id" >{{xuatXu.ten}}</option>
+          </select> -->
           <label for="xuatXu">Xuất xứ</label>
           <div *ngIf="validationErrors['xuatXu']" class="error-message">{{ validationErrors['xuatXu'] }}</div>
         </div>
         <div class="input-field error">
           <select class="input" id="chatLieu" name="chatLieu" [(ngModel)]="sanPhamRequest.chatLieu.id">
             <option value="" selected>Chọn chất liệu</option>
-            <option *ngFor="let chatLieu of chatLieus" [value]="chatLieu.id">{{chatLieu.ten}}</option>
-          </select>
+            <ng-container *ngFor="let chatLieu of chatLieus">
+              <option *ngIf="chatLieu.trangThai === 1" [value]="chatLieu.id">
+                {{ chatLieu.ten }}
+              </option>
+            </ng-container>
+          </select>          
           <label for="chatLieu">Chất liệu</label>
           <div *ngIf="validationErrors['chatLieu']" class="error-message">{{ validationErrors['chatLieu'] }}</div>
         </div>
         <div class="input-field error">
           <select class="input" id="coAo" name="coAo" [(ngModel)]="sanPhamRequest.coAo.id">
             <option value="" selected>Chọn cổ áo</option>
-            <option *ngFor="let coAo of coAos" [value]="coAo.id">{{coAo.ten}}</option>
-          </select>
+            <ng-container *ngFor="let coAo of coAos">
+              <option *ngIf="coAo.trangThai === 1" [value]="coAo.id">
+                {{ coAo.ten }}
+              </option>
+            </ng-container>
+          </select>          
           <label for="coAo">Cổ áo</label>
           <div *ngIf="validationErrors['coAo']" class="error-message">{{ validationErrors['coAo'] }}</div>
         </div>
@@ -156,16 +176,39 @@
               <div *ngIf="validationErrors['trangThai']" class="error-message">{{ validationErrors['trangThai'] }}</div>
             </div> -->
           </div>
-            
-            <div class="radio-group">
-              <label><input type="radio" name="thuocTinh" value="thuongHieu" [(ngModel)]="selectedThuocTinh"> Thương hiệu</label>
-              <label><input type="radio" name="thuocTinh" value="chatLieu" [(ngModel)]="selectedThuocTinh"> Chất liệu</label>
-              <label><input type="radio" name="thuocTinh" value="coAo" [(ngModel)]="selectedThuocTinh"> Cổ áo</label>
-              <label><input type="radio" name="thuocTinh" value="mauSac" [(ngModel)]="selectedThuocTinh"> Màu sắc</label>
-              <label><input type="radio" name="thuocTinh" value="size" [(ngModel)]="selectedThuocTinh"> Size</label>
-              <label><input type="radio" name="thuocTinh" value="xuatXu" [(ngModel)]="selectedThuocTinh"> Xuất xứ</label>
-            </div>            
+          <div class="radio-group">
+            <label><input type="radio" name="thuocTinh" value="thuongHieu" [(ngModel)]="selectedThuocTinh" (ngModelChange)="loadSelectedList()"> Thương hiệu</label>
+            <label><input type="radio" name="thuocTinh" value="chatLieu" [(ngModel)]="selectedThuocTinh" (ngModelChange)="loadSelectedList()"> Chất liệu</label>
+            <label><input type="radio" name="thuocTinh" value="coAo" [(ngModel)]="selectedThuocTinh" (ngModelChange)="loadSelectedList()"> Cổ áo</label>
+            <label><input type="radio" name="thuocTinh" value="mauSac" [(ngModel)]="selectedThuocTinh" (ngModelChange)="loadSelectedList()"> Màu sắc</label>
+            <label><input type="radio" name="thuocTinh" value="size" [(ngModel)]="selectedThuocTinh" (ngModelChange)="loadSelectedList()"> Size</label>
+            <label><input type="radio" name="thuocTinh" value="xuatXu" [(ngModel)]="selectedThuocTinh" (ngModelChange)="loadSelectedList()"> Xuất xứ</label>
+          </div>           
           <button type="button" class="btn-primary" (click)="addThuocTinh()">Thêm</button>
+          <div class="table-thuoctinh">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã thuộc tính</th>
+                  <th>Tên thuộc tính</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of getSelectedList()">
+                  <td>{{ item.ma }}</td>
+                  <td>{{ item.ten }}</td>
+                  <td>
+                    <button 
+                      (click)="confirmToggleTrangThai(item)" 
+                      [ngClass]="item.trangThai === 1 ? 'btn-hoatdong' : 'btn-khonghoatdong'">
+                      {{ item.trangThai === 1 ? 'Hoạt động' : 'Không hoạt động' }}
+                    </button>
+                  </td>                                   
+                </tr>
+              </tbody>
+            </table>
+          </div>          
         </form>
       </div>
     </div>
@@ -347,7 +390,7 @@
                   <label for="sizes">Size</label>
                   <ng-select class="input"
                     name="sizes"
-                    [items]="sizes"
+                    [items]="activeSizes"
                     bindLabel="ten"
                     bindValue="id"
                     [compareWith]="compareFn"
@@ -367,7 +410,7 @@
                   <label for="mauSacs">Màu sắc</label>
                   <ng-select class="input"
                     name="mauSacs"
-                    [items]="mauSacs"
+                    [items]="activeMauSacs"
                     bindLabel="ten"
                     bindValue="id"
                     [compareWith]="compareFn"

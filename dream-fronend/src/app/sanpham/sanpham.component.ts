@@ -39,6 +39,8 @@ export class SanphamComponent implements OnInit {
   // list ảnh
   anhHienCo: Anh[] = [];
   selectedFiles: File[] = [];
+  activeSizes: any[] = [];
+  activeMauSacs: any[] = [];
   // thêm sản phẩm
   sanPhamRequest: any = {
     ma: '',
@@ -191,6 +193,8 @@ export class SanphamComponent implements OnInit {
   this.listXuatXu()
   this.listSize()
   this.listMauSac()
+  this.listMauSacStatus()
+  this.listSizeStatus()
   }
   
   // phân trang và danh sách sản phẩm
@@ -1077,5 +1081,96 @@ export class SanphamComponent implements OnInit {
           this.xuatXuRequest = { ten: '', trangThai: 1 };
           break;
       }
+    }
+    getSelectedList() {
+      switch (this.selectedThuocTinh) {
+        case 'thuongHieu': return this.thuongHieus;
+        case 'chatLieu': return this.chatLieus;
+        case 'coAo': return this.coAos;
+        case 'mauSac': return this.mauSacs;
+        case 'size': return this.sizes;
+        case 'xuatXu': return this.xuatXus;
+        default: return [];
+      }
+    }
+
+    loadSelectedList() {
+      switch (this.selectedThuocTinh) {
+        case 'thuongHieu': this.listThuongHieu(); break;
+        case 'chatLieu': this.listChatLieu(); break;
+        case 'coAo': this.listCoAo(); break;
+        case 'mauSac': this.listMauSac(); break;
+        case 'size': this.listSize(); break;
+        case 'xuatXu': this.listXuatXu(); break;
+      }
+    }
+    
+
+    confirmToggleTrangThai(item: any) {
+      const newTrangThai = item.trangThai === 1 ? 0 : 1;
+      const message = item.trangThai === 1
+        ? 'Bạn chắc chắn muốn đổi trạng thái sang *Không hoạt động*?'
+        : 'Bạn chắc chắn muốn đổi trạng thái sang *Hoạt động*?';
+    
+      if (!confirm(message)) {
+        return; // người dùng không đồng ý => thoát
+      }
+    
+      const request = {
+        id: item.id,
+        trangThai: newTrangThai,
+      };
+    
+      let apiCall;
+    
+      switch (this.selectedThuocTinh) {
+        case 'thuongHieu':
+          apiCall = this.sanphamService.updateTrangThaiThuongHieu(request);
+          break;
+        case 'chatLieu':
+          apiCall = this.sanphamService.updateTrangThaiChatLieu(request);
+          break;
+        case 'coAo':
+          apiCall = this.sanphamService.updateTrangThaiCoAo(request);
+          break;
+        case 'mauSac':
+          apiCall = this.sanphamService.updateTrangThaiMauSac(request);
+          break;
+        case 'size':
+          apiCall = this.sanphamService.updateTrangThaiSize(request);
+          break;
+        case 'xuatXu':
+          apiCall = this.sanphamService.updateTrangThaiXuatXu(request);
+          break;
+        default:
+          console.error("Thuộc tính không hợp lệ");
+          return;
+      }
+    
+      apiCall.subscribe(
+        () => {
+          item.trangThai = newTrangThai;
+          this.loadData();
+          alert("Cập nhật trạng thái thành công!");
+        },
+        error => {
+          console.error("Lỗi khi cập nhật trạng thái", error);
+          alert("Lỗi khi cập nhật trạng thái!");
+        }
+      );
+    }
+
+    listSizeStatus() {
+      this.sanphamService.getSize().subscribe(data => {
+        this.sizes = data;
+        this.activeSizes = this.sizes.filter(s => s.trangThai === 1);
+      });
+    }
+    
+    listMauSacStatus() {
+      this.sanphamService.getMauSac().subscribe(data => {
+        this.mauSacs = data;
+        this.activeMauSacs = this.mauSacs.filter(m => m.trangThai === 1);
+      });
     }
 }

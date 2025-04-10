@@ -13,5 +13,5 @@ public interface ICoAoService {
 
     CoAo addCoAo(CoAoRequest coAoRequest);
 
-    CoAo updateCoAo(CoAoRequest coAoRequest);
+    CoAo updateTrangThaiCoAo(CoAoRequest request);
 }

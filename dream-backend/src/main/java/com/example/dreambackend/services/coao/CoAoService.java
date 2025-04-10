@@ -1,7 +1,9 @@
 package com.example.dreambackend.services.coao;
 
+import com.example.dreambackend.entities.ChatLieu;
 import com.example.dreambackend.entities.CoAo;
 import com.example.dreambackend.repositories.CoAoRepository;
+import com.example.dreambackend.requests.ChatLieuRequest;
 import com.example.dreambackend.requests.CoAoRequest;
 import com.example.dreambackend.responses.CoAoRespone;
 import org.springframework.beans.BeanUtils;
@@ -54,12 +56,11 @@ public class CoAoService implements ICoAoService {
     }
 
     @Override
-    public CoAo updateCoAo(CoAoRequest coAoRequest) {
-        CoAo coAoUpdate = coAoRepository.findById(coAoRequest.getId()).orElseThrow(()->
-                new RuntimeException("Không tìm thấy cổ áo với id: "+coAoRequest.getId()));
-        // sao chép thuộc tính từ request sang đối tượng cần nhập trừ id với ngày tạo
-        BeanUtils.copyProperties(coAoRequest, coAoUpdate,"id","ngayTao");
-        coAoUpdate.setNgaySua(LocalDate.now());
-        return coAoRepository.save(coAoUpdate);
+    public CoAo updateTrangThaiCoAo(CoAoRequest request) {
+        CoAo coAo = coAoRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy size với id: " + request.getId()));
+        coAo.setTrangThai(request.getTrangThai());
+        coAo.setNgaySua(LocalDate.now());
+        return coAoRepository.save(coAo);
     }
 }

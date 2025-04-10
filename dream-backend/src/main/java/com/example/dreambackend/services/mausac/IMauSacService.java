@@ -13,5 +13,5 @@ public interface IMauSacService {
 
     MauSac addMauSac(MauSacRequest mauSacRequest);
 
-    MauSac updateMauSac(MauSacRequest mauSacRequest);
+    MauSac updateTrangThaiMauSac(MauSacRequest request);
 }

@@ -1,8 +1,10 @@
 package com.example.dreambackend.services.xuatxu;
 
 
+import com.example.dreambackend.entities.Size;
 import com.example.dreambackend.entities.XuatXu;
 import com.example.dreambackend.repositories.XuatXuRepository;
+import com.example.dreambackend.requests.SizeRequest;
 import com.example.dreambackend.requests.XuatXuRequest;
 import com.example.dreambackend.responses.XuatXuRespone;
 import org.springframework.beans.BeanUtils;
@@ -55,11 +57,11 @@ public class XuatXuService implements IXuatXuService {
     }
 
     @Override
-    public XuatXu updateXuatXu(XuatXuRequest xuatXuRequest) {
-        XuatXu xuatXuUpDate = xuatXuRepository.findById(xuatXuRequest.getId()).orElseThrow(()->
-                new RuntimeException("Không tìm thấy xuất xứ với id: " + xuatXuRequest.getId()));
-        BeanUtils.copyProperties(xuatXuRequest, xuatXuUpDate,"id","ngayTao");
-        xuatXuUpDate.setNgaySua(LocalDate.now());
-        return xuatXuRepository.save(xuatXuUpDate);
+    public XuatXu updateTrangThaiXuatXu(XuatXuRequest request) {
+        XuatXu xuatXu = xuatXuRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy size với id: " + request.getId()));
+        xuatXu.setTrangThai(request.getTrangThai());
+        xuatXu.setNgaySua(LocalDate.now());
+        return xuatXuRepository.save(xuatXu);
     }
 }

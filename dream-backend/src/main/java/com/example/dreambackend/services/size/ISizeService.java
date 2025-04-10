@@ -11,7 +11,7 @@ public interface ISizeService {
 
     Size addSize(SizeRequest sizeRequest);
 
-    Size updateSize(SizeRequest sizeRequest);
+    Size updateTrangThaiSize(SizeRequest request);
 
     Size getSize(Integer id);
 }

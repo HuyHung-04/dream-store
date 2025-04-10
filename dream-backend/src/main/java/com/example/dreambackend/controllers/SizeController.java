@@ -60,11 +60,15 @@ public class SizeController {
     }
 
 
-    @PutMapping("/update")
-    public ResponseEntity<?> update(@RequestBody SizeRequest sizeRequest) {
-        sizeService.updateSize(sizeRequest);
-        return ResponseEntity.ok("Sửa thành công");
+    @PutMapping("/update-trang-thai")
+    public ResponseEntity<?> updateTrangThai(@RequestBody SizeRequest request) {
+        sizeService.updateTrangThaiSize(request);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Cập nhật trạng thái thành công");
+        return ResponseEntity.ok(response);
+
     }
+
 
     @GetMapping("/check-ten-exists")
     public ResponseEntity<Boolean> checkTenExists(@RequestParam String ten, @RequestParam String loai) {

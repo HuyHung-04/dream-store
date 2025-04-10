@@ -529,6 +529,60 @@ form:last-child {
 .upload-section input[type="file"]::-webkit-file-upload-button:hover {
   background-color: #1f3b5c;
 }
+.table-thuoctinh {
+  max-height: 180px; /* giới hạn chiều cao khoảng 4 dòng (tùy độ cao dòng) */
+  overflow-y: auto; /* cuộn khi vượt quá */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.table-thuoctinh table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-thuoctinh th {
+  background-color: #294764;
+  color: white;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-thuoctinh td {
+  color: #294764;
+  padding: 10px;
+}
+
+.table-thuoctinh th,
+.table-thuoctinh td {
+  border: 1px solid #ccc;
+  text-align: left;
+  font-size: 11px;
+  text-align: center;
+}
+
+.btn-hoatdong {
+  background-color: #294764;
+  color: white;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  padding: 5px 10px  !important;
+  border-radius: 3px;
+}
+
+.btn-khonghoatdong {
+  background-color: gray !important;
+  color: white;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  padding: 5px 10px  !important;
+  border-radius: 3px;
+}
+
+
+
 
 
 

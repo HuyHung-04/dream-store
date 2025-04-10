@@ -42,9 +42,12 @@ public class MauSacController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update-trang-thai")
     public ResponseEntity<?> update(@RequestBody MauSacRequest mauSacRequest) {
-        mauSacService.updateMauSac(mauSacRequest);
-        return ResponseEntity.ok("Sửa thành công");
+        mauSacService.updateTrangThaiMauSac(mauSacRequest);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Cập nhật trạng thái thành công");
+        return ResponseEntity.ok(response);
+
     }
 }

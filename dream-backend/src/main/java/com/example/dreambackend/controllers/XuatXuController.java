@@ -1,4 +1,5 @@
 package com.example.dreambackend.controllers;
+import com.example.dreambackend.requests.SizeRequest;
 import com.example.dreambackend.requests.XuatXuRequest;
 import com.example.dreambackend.responses.XuatXuRespone;
 import com.example.dreambackend.services.xuatxu.XuatXuService;
@@ -42,9 +43,11 @@ public class XuatXuController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> update(@RequestBody XuatXuRequest xuatXuRequest) {
-        xuatXuService.updateXuatXu(xuatXuRequest);
-        return ResponseEntity.ok("Sửa thành công");
+    @PutMapping("/update-trang-thai")
+    public ResponseEntity<?> updateTrangThai(@RequestBody XuatXuRequest request) {
+        xuatXuService.updateTrangThaiXuatXu(request);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Cập nhật trạng thái thành công");
+        return ResponseEntity.ok(response);
     }
 }

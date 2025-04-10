@@ -47,13 +47,16 @@ public class SizeService implements ISizeService {
     }
 
     @Override
-    public Size updateSize(SizeRequest sizeRequest) {
-        Size sizeUpdate = sizeRepository.findById(sizeRequest.getId()).orElseThrow(()->
-                new RuntimeException("Không tìm thấy size với id: " + sizeRequest.getId()));
-        BeanUtils.copyProperties(sizeRequest, sizeUpdate,"id", "ngayTao");
-        sizeUpdate.setNgaySua(LocalDate.now());
-        return sizeRepository.save(sizeUpdate);
+    public Size updateTrangThaiSize(SizeRequest request) {
+        Size size = sizeRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy size với id: " + request.getId()));
+
+        size.setTrangThai(request.getTrangThai());
+        size.setNgaySua(LocalDate.now());
+
+        return sizeRepository.save(size);
     }
+
 
     @Override
     public Size getSize(Integer id) {

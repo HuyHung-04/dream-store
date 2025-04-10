@@ -149,8 +149,30 @@ export class SanphamService {
     }
     return this.http.get<any>(this.apiUrl + '/san-pham/tim-kiem', { params });
   }
+
+  updateTrangThaiThuongHieu(request: any) {
+    return this.http.put(`${this.apiUrl}/thuong-hieu/update-trang-thai`, request);
+  }
   
+  updateTrangThaiChatLieu(request: any) {
+    return this.http.put(`${this.apiUrl}/chat-lieu/update-trang-thai`, request);
+  }
   
+  updateTrangThaiCoAo(request: any) {
+    return this.http.put(`${this.apiUrl}/co-ao/update-trang-thai`, request);
+  }
+  
+  updateTrangThaiMauSac(request: any) {
+    return this.http.put(`${this.apiUrl}/mau-sac/update-trang-thai`, request);
+  }
+  
+  updateTrangThaiSize(request: any) {
+    return this.http.put(`${this.apiUrl}/size/update-trang-thai`, request);
+  }
+  
+  updateTrangThaiXuatXu(request: any) {
+    return this.http.put(`${this.apiUrl}/xuat-xu/update-trang-thai`, request);
+  }
   
 }
 export interface SanPham {
