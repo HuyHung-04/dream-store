@@ -6,6 +6,7 @@
   margin-left: 100px;
 }
 ul.address-list {
+  
   list-style: none;  /* Loại bỏ chấm tròn */
   padding-left: 0;
 }
@@ -15,14 +16,45 @@ li.address-item {
 }
 .address-item {
   transition: transform 0.2s ease, box-shadow 0.3s ease;
-  position: relative;
-  right: 35px;
-  width: 415px;
+  width: 413px;
 }
 
 .address-item-select {
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
+
+
+.address-scroll-wrapper {
+  max-height: 420px;
+  width: 470px; /* Tăng width để bù trừ */
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  right: 35px; /* Điều chỉnh khoảng dịch */
+  box-sizing: border-box; /* Quan trọng: Giữ nguyên tổng kích thước */
+  scrollbar-gutter: stable;
+}
+
+/* Tùy chỉnh scrollbar chi tiết hơn */
+.address-scroll-wrapper::-webkit-scrollbar {
+  width: 10px; /* Tăng độ rộng scrollbar */
+  background-color: transparent;
+}
+
+.address-scroll-wrapper::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-left: 1px solid #dee2e6; /* Thêm border trái cho track */
+ 
+}
+
+.address-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #adb5bd;
+  border-radius: 6px;
+  border: 2px solid #f8f9fa; /* Tạo khoảng trống xung quanh thumb */
+
+}
+
+
 
 .customer-info {
   display: flex;
