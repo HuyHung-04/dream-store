@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DonhangService {
-  // URL của API (có thể thay đổi nếu bạn muốn)
   private apiUrl = 'http://localhost:8080/api/hoa-don/filter';
   private apiHoaDonOnline = 'http://localhost:8080/api/hoa-don-online';
   constructor(private http: HttpClient) { }
@@ -13,24 +12,26 @@ export class DonhangService {
   // Phương thức gọi API để lấy hóa đơn theo các tiêu chí lọc
   getHoaDonsByTrangThaiAndNguoiNhanAndMa(trangThai: number, tenNguoiNhan: string, sdtNguoiNhan: string, maHoaDon: string): Observable<any> {
     let params = new HttpParams()
-      .set('trangThai', trangThai.toString()) // Lọc theo trạng thái
-      .set('tenNguoiNhan', tenNguoiNhan) // Lọc theo tên người nhận
-      .set('sdtNguoiNhan', sdtNguoiNhan) // Lọc theo số điện thoại người nhận
-      .set('maHoaDon', maHoaDon) // Lọc theo mã hóa đơn; // Số bản ghi mỗi trang
+      .set('trangThai', trangThai.toString())
+      .set('tenNguoiNhan', tenNguoiNhan)
+      .set('sdtNguoiNhan', sdtNguoiNhan)
+      .set('maHoaDon', maHoaDon)
 
     return this.http.get<any>(this.apiUrl, { params });
   }
 
+  //phương thức cập nhật trạng thái cho đơn hàng
   capNhatTrangThai(id: number): Observable<any> {
     return this.http.post<any>(`${this.apiHoaDonOnline}/${id}/tang-trang-thai`, null);
   }
 
   // Phương thức lấy chi tiết hóa đơn theo mã hóa đơn
-  getChiTietHoaDon(idHoaDon: number): Observable<any> {
+  getHoaDonChiTiet(idHoaDon: number): Observable<any> {
     return this.http.get<any>(`${this.apiHoaDonOnline}/chi-tiet/${idHoaDon}`);
   }
 
-  getHoaDonByMa(idHoaDon: number): Observable<any> {
+  //phương thức lấy hóa đơn theo mã
+  getHoaDon(idHoaDon: number): Observable<any> {
     return this.http.get<any>(`${this.apiHoaDonOnline}/find-by-ma/${idHoaDon}`);
   }
 

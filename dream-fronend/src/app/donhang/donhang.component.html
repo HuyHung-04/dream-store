@@ -4,55 +4,38 @@
 <div>
   <!-- Bộ lọc trạng thái -->
   <div class="status-filter-container">
-  <div class="status-filter">
-    <button 
-      *ngFor="let status of statuses"
-      [ngClass]="{'active': selectedStatus === status.value}"
-      (click)="filterByStatus(status.value)">
-      {{ status.label }}
-    </button>
-  </div>
-</div>
-
-<div class="input-field-container">
-  <div class="input-field">
-    <label for="customerPhone">Số điện thoại khách hàng</label>
-    <input 
-      type="text" 
-      id="customerPhone" 
-      [(ngModel)]="sdtNguoiNhan" 
-      (input)="loadHoaDons()" 
-      class="input" 
-      placeholder="Nhập số điện thoại..." 
-      style="width: 250px;">
+    <div class="status-filter">
+      <button *ngFor="let trangThai of trangThai" [ngClass]="{'active': chonTrangThai === trangThai.value}"
+        (click)="locTrangThai(trangThai.value)">
+        {{ trangThai.label }}
+      </button>
+    </div>
   </div>
 
-  <div class="input-field">
-    <label for="invoiceCode">Mã hóa đơn</label>
-    <input 
-      style="width: 250px;" 
-      type="text" 
-      id="invoiceCode" 
-      [(ngModel)]="maHoaDon" 
-      (input)="loadHoaDons()" 
-      class="input" 
-      placeholder="Nhập mã hóa đơn...">
+  <!-- tìm kiếm số điện thoại -->
+  <div class="input-field-container">
+    <div class="input-field">
+      <label for="customerPhone">Số điện thoại khách hàng</label>
+      <input type="text" id="customerPhone" [(ngModel)]="sdtNguoiNhan" (input)="loadHoaDons()" class="input"
+        placeholder="Nhập số điện thoại..." style="width: 250px;">
+    </div>
+
+    <!-- tìm kiếm mã hóa đơn -->
+    <div class="input-field">
+      <label for="invoiceCode">Mã hóa đơn</label>
+      <input style="width: 250px;" type="text" id="invoiceCode" [(ngModel)]="maHoaDon" (input)="loadHoaDons()"
+        class="input" placeholder="Nhập mã hóa đơn...">
+    </div>
+
+    <!-- tìm kiếm tên khách hàng -->
+    <div class="input-field">
+      <label for="tenKhachHang">Tên khách hàng</label>
+      <input style="width: 250px;" type="text" id="tenKhachHang" [(ngModel)]="tenNguoiNhan" (input)="loadHoaDons()"
+        class="input" placeholder="Nhập tên khách hàng...">
+    </div>
   </div>
 
-  <div class="input-field">
-    <label for="tenKhachHang">Tên khách hàng</label>
-    <input 
-      style="width: 250px;" 
-      type="text" 
-      id="tenKhachHang" 
-      [(ngModel)]="tenNguoiNhan" 
-      (input)="loadHoaDons()" 
-      class="input" 
-      placeholder="Nhập tên khách hàng...">
-  </div>
-</div>
-
-
+  <!-- bảng đơn hàng -->
   <table border="1" cellpadding="5" cellspacing="0">
     <thead>
       <tr>
@@ -75,13 +58,14 @@
         <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không có' }}</td>
         <td>{{ hoaDon.tongTienThanhToan}}</td>
         <td>
-          <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 5" (click)="updateStatus(hoaDon.id,hoaDon.trangThai)">
+          <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 4 && hoaDon.trangThai !== 5" (click)="updateTrangThai(hoaDon.id,hoaDon.trangThai)">
             {{ getButtonLabel(hoaDon.trangThai) }}
           </button>
           <span *ngIf="hoaDon.trangThai === 5">Đơn đã hủy</span>
+          <span *ngIf="hoaDon.trangThai === 4">Giao hàng thành công</span>
         </td>
         <td>
-          <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(hoaDon.id)">
+          <button class="xem-chi-tiet" (click)="chonDonHang(hoaDon.id)">
             <i class="bi bi-eye-fill"></i>
           </button>
         </td>
@@ -89,164 +73,152 @@
     </tbody>
   </table>
 
-<!-- Pagination Controls -->
-<div class="pagination">
-  <!-- Previous Page Button -->
-  <button class="preve" (click)="changePage(page - 1)" [disabled]="page === 0">
-    <i class="bi bi-chevron-double-left"></i> 
-  </button>
+  <!-- phân trang -->
+  <div class="pagination">
+    <!-- lùi 1 trang -->
+    <button class="preve" (click)="changePage(page - 1)" [disabled]="page === 0">
+      <i class="bi bi-chevron-double-left"></i>
+    </button>
 
-  <!-- Show current page number -->
-  <span style="margin-top: 10px;">{{ page + 1 }} / {{ totalPages }}</span>
+    <!-- số trang -->
+    <span style="margin-top: 10px;">{{ page + 1 }} / {{ totalPages }}</span>
 
-  <!-- Next Page Button -->
-  <button class="next" (click)="changePage(page + 1)" [disabled]="page === totalPages - 1">
-    <i class="bi bi-chevron-double-right"></i>
-  </button>
-</div>
+    <!-- tiến 1 trang -->
+    <button class="next" (click)="changePage(page + 1)" [disabled]="page === totalPages - 1">
+      <i class="bi bi-chevron-double-right"></i>
+    </button>
+  </div>
 
 
-<!-- Modal chi tiết (trống) -->
-<div class="modal" *ngIf="showDetailPopup">
-  <div class="modal-content">
-    <!-- Nội dung trống -->
-    <div class="modal-body">
-      <div *ngIf="hoaDonData" class="invoice-container">
-        <!-- Mã hóa đơn (Căn phải) -->
-        <div class="invoice-header">
-          <h3>Chi tiết đơn hàng</h3>
-          <p class="invoice-code"><strong>Mã đơn hàng:</strong> {{ hoaDonData.ma }}</p>
-        </div>
-
-        <div class="status-tracker" *ngIf="hoaDonData.trangThai != 5">
-          <div class="status-step" [class.active]="hoaDonData.trangThai == 1"  style="margin-top: 10px;">
-            <div class="status-icon">📄</div>
-            <p>Chờ xác nhận</p>
-            <span style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngayTao}}</span>
-          </div>
-      
-          <div class="status-line" [class.active]="hoaDonData.trangThai == 2"></div>
-      
-          <div class="status-step" [class.active]="hoaDonData.trangThai == 2">
-            <div class="status-icon">✔️</div>
-            <p>Đã xác nhận</p>
-          </div>
-      
-          <div class="status-line" [class.active]="hoaDonData.trangThai == 3"></div>
-      
-          <div class="status-step" [class.active]="hoaDonData.trangThai == 3">
-            <div class="status-icon">🚚</div>
-            <p>Đang giao hàng</p>
-          </div>
-      
-          <div class="status-line" [class.active]="hoaDonData.trangThai == 4"></div>
-      
-          <div class="status-step" [class.active]="hoaDonData.trangThai == 4">
-            <div class="status-icon">📦</div>
-            <p>Giao hàng thành công</p>
-            <span  style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngaySua}}</span>
-          </div>
-      
-          
-          <!-- <div class="status-line" [class.active]="hoaDonData.trangThai === 5"></div>
-          
-              <div class="status-step" [class.active]="hoaDonData.trangThai === 5">
-                <div class="status-icon">⭐</div>
-                <p>Đơn Hàng Đã Hoàn Thành</p>
-                <small>{{ hoaDonData.ngayHoanThanh || '---' }}</small>
-              </div> -->
-        </div>
-        <!-- Nếu trạng thái hóa đơn là 5 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->
-        <div *ngIf="hoaDonData.trangThai == 5">
-          <div class="cancelHoaDon">
-            <p><i class="bi bi-x-circle"></i> Đơn hàng đã bị hủy</p>
-            <!-- Chỉ hiển thị nếu trạng thái = 5 -->
-            <p *ngIf="hoaDonData?.trangThai === 5 && hoaDonData?.ghiChu" style="font-size: 15px;color: black;">
-              (Lý do hủy đơn: {{ hoaDonData.ghiChu }})
-            </p>
+  <!-- Modal chi tiết -->
+  <div class="modal" *ngIf="showDetailPopup">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div *ngIf="hoaDonData" class="invoice-container">
+          <!-- Mã hóa đơn (Căn phải) -->
+          <div class="invoice-header">
+            <h3>Chi tiết đơn hàng</h3>
+            <p class="invoice-code"><strong>Mã đơn hàng:</strong> {{ hoaDonData.ma }}</p>
           </div>
 
-        </div>
-
-        <!-- Địa chỉ nhận hàng -->
-        <section class="section" style="margin-top: 30px;">
-          <h3>Thông tin khách hàng</h3>
-          <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }} (+84 | {{ hoaDonData.sdtNguoiNhan }})</p>
-          <!-- Chỉ hiển thị nếu địa chỉ khách hàng có dữ liệu -->
-          <p *ngIf="hoaDonData.diaChiNhanHang"><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
-
-        </section>
-
-        <!-- Chi tiết hóa đơn -->
-        <section class="section">
-
-          <div *ngFor="let item of chiTietHoaDonData" class="invoice-details-item">
-            <img [src]="'http://localhost:8080' + item.anhUrls" alt="{{ item.tenSanPham }}" />
-            <div class="invoice-details-info">
-              <p><strong>Tên Sản Phẩm:</strong> {{ item.tenSanPham }} ({{item.maSanPham}})</p>
-              <p><strong>Phân loại hàng: </strong>({{ item.mauSac }} / {{item.size}})</p>
-              <p><strong>Đơn Giá:</strong> {{ item.donGia | number }} VND (x{{ item.soLuong }})</p>
-
-              <p></p>
-              <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
+          <div class="status-tracker" *ngIf="hoaDonData.trangThai != 5">
+            <div class="status-step" [class.active]="hoaDonData.trangThai == 1" style="margin-top: 20px;">
+              <div class="status-icon">📄</div>
+              <p>Chờ xác nhận</p>
+              <span style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngayTao}}</span>
             </div>
-          </div>
-        </section>
 
-        <!-- Chi tiết thanh toán -->
-        <section class="section">
-          <p><strong>Tổng tiền trước voucher:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
-          <!-- Điều kiện hiển thị voucher và giá trị giảm -->
-          <div *ngIf="hoaDonData.voucher">
-            <p>
-              <strong>Tên voucher:</strong> {{ hoaDonData.voucher?.ten }}
-          
-              <!-- Hiện nếu giảm % và không vượt giảm tối đa -->
-              <span *ngIf="showGiamPhanTram">
-                (Giảm: {{ hoaDonData.voucher?.giaTriGiam }}%)
-              </span>
-          
-              <!-- Hiện nếu giảm % nhưng vượt quá mức giảm tối đa -->
-              <span *ngIf="showGiamToiDa">
-                (Giảm tối đa: {{ hoaDonData.voucher?.giamToiDa | number }} VNĐ)
-              </span>
-          
-              <!-- Hiện nếu giảm bằng số tiền -->
-              <span *ngIf="hoaDonData.voucher?.hinhThucGiam === true">
-                (Giảm: {{ hoaDonData.voucher?.giaTriGiam | number }} VNĐ)
-              </span>
+            <div class="status-line" [class.active]="hoaDonData.trangThai == 2"></div>
+
+            <div class="status-step" [class.active]="hoaDonData.trangThai == 2">
+              <div class="status-icon">✔️</div>
+              <p>Đã xác nhận</p>
+            </div>
+
+            <div class="status-line" [class.active]="hoaDonData.trangThai == 3"></div>
+
+            <div class="status-step" [class.active]="hoaDonData.trangThai == 3">
+              <div class="status-icon">🚚</div>
+              <p>Đang giao hàng</p>
+            </div>
+
+            <div class="status-line" [class.active]="hoaDonData.trangThai == 4"></div>
+
+            <div class="status-step" [class.active]="hoaDonData.trangThai == 4" style="margin-top: 10px;">
+              <div class="status-icon">📦</div>
+              <p>Giao hàng thành công</p>
+              <span style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngaySua}}</span>
+            </div>
+
+          </div>
+          <!-- Nếu trạng thái hóa đơn là 5 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->
+          <div *ngIf="hoaDonData.trangThai == 5">
+            <div class="cancelHoaDon">
+              <p><i class="bi bi-x-circle"></i> Đơn hàng đã bị hủy</p>
+              <!-- Chỉ hiển thị nếu trạng thái = 5 -->
+              <p *ngIf="hoaDonData?.trangThai === 5 && hoaDonData?.ghiChu" style="font-size: 15px;color: black;">
+                (Lý do hủy đơn: {{ hoaDonData.ghiChu }})
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Địa chỉ nhận hàng -->
+          <section class="section" style="margin-top: 30px;">
+            <h3>Thông tin khách hàng</h3>
+            <p><strong>Tên người nhận:</strong> {{ hoaDonData.tenNguoiNhan }} (+84 | {{ hoaDonData.sdtNguoiNhan }})</p>
+            <!-- Chỉ hiển thị nếu địa chỉ khách hàng có dữ liệu -->
+            <p *ngIf="hoaDonData.diaChiNhanHang"><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
+          </section>
+
+          <!-- Chi tiết hóa đơn -->
+          <section class="section">
+            <div *ngFor="let item of chiTietHoaDonData" class="invoice-details-item">
+              <img [src]="'http://localhost:8080' + item.anhUrls" alt="{{ item.tenSanPham }}" />
+              <div class="invoice-details-info">
+                <p><strong>Tên Sản Phẩm:</strong> {{ item.tenSanPham }} ({{item.maSanPham}})</p>
+                <p><strong>Phân loại hàng: </strong>({{ item.mauSac }} / {{item.size}})</p>
+                <p><strong>Đơn Giá:</strong> {{ item.donGia | number }} VND (x{{ item.soLuong }})</p>
+                <p></p>
+                <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Chi tiết thanh toán -->
+          <section class="section">
+            <p><strong>Tổng tiền trước voucher:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
+
+            <!-- Điều kiện hiển thị voucher và giá trị giảm -->
+            <div *ngIf="hoaDonData.voucher">
+              <p>
+                <strong>Tên voucher:</strong> {{ hoaDonData.voucher?.ten }}
+
+                <!-- Hiện nếu giảm % và không vượt giảm tối đa -->
+                <span *ngIf="showGiamPhanTram">
+                  (Giảm: {{ hoaDonData.voucher?.giaTriGiam }}%)
+                </span>
+
+                <!-- Hiện nếu giảm % nhưng vượt quá mức giảm tối đa -->
+                <span *ngIf="showGiamToiDa">
+                  (Giảm tối đa: {{ hoaDonData.voucher?.giamToiDa | number }} VNĐ)
+                </span>
+
+                <!-- Hiện nếu giảm bằng số tiền -->
+                <span *ngIf="hoaDonData.voucher?.hinhThucGiam === true">
+                  (Giảm: {{ hoaDonData.voucher?.giaTriGiam | number }} VNĐ)
+                </span>
+              </p>
+            </div>
+
+            <!-- Nếu không có voucher thì không hiển thị thông tin voucher -->
+            <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
+            <p><strong>Phương thức thanh toán:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
+            <p *ngIf="hoaDonData.phiVanChuyen && hoaDonData.phiVanChuyen > 0">
+              <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ
             </p>
+            <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
+          </section>
+
+          <!-- Nút Hủy và Nút Quay Về Trang Chủ -->
+          <div class="btn">
+            <button *ngIf="!([5,2,3,4].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn-danger">
+              Hủy Hóa Đơn
+            </button>
+            <button (click)="goHome()" class="btn-primary">Đóng</button>
           </div>
-
-          <!-- Nếu không có voucher thì không hiển thị thông tin voucher -->
-          <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
-
-          <p><strong>Phương thức thanh toán:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
-          <p *ngIf="hoaDonData.phiVanChuyen && hoaDonData.phiVanChuyen > 0">
-            <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ
-          </p>
-          <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
-        </section>
-
-        <!-- Nút Hủy và Nút Quay Về Trang Chủ -->
-        <div class="btn">
-        <button *ngIf="!([5,2,3,4].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn-danger">
-          Hủy Hóa Đơn
-        </button>
-        <button (click)="goHome()" class="btn-primary">Đóng</button>
-      </div>
-        <!-- Modal nhập lý do hủy -->
-        <div class="modal-overlay-huy" *ngIf="showCancelModal">
-          <div class="modal-huy">
-            <h4>Nhập lý do hủy hóa đơn</h4>
-            <textarea [(ngModel)]="ghiChu" rows="4" placeholder="Nhập lý do..."></textarea>
-            <div class="modal-buttons">
-              <button class="btn btn-danger" (click)="cancelHoaDon(hoaDonData.id)">Xác nhận hủy</button>
-              <button class="btn btn-secondary" (click)="closeCancelModal()">Hủy</button>
+          <!-- Modal nhập lý do hủy -->
+          <div class="modal-overlay-huy" *ngIf="showCancelModal">
+            <div class="modal-huy">
+              <h4>Nhập lý do hủy hóa đơn</h4>
+              <textarea [(ngModel)]="ghiChu" rows="4" placeholder="Nhập lý do..."></textarea>
+              <div class="modal-buttons">
+                <button class="btn btn-danger" (click)="cancelHoaDon(hoaDonData.id)">Xác nhận hủy</button>
+                <button class="btn btn-secondary" (click)="closeCancelModal()">Hủy</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>

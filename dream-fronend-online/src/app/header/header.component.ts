@@ -98,12 +98,20 @@ export class HeaderComponent implements OnInit {
   
 
   xoaSanPham(id: number) {
-    this.headerService.deleteFromCart(id).subscribe(() => {
-      alert('Bạn chắc chắn muốn xoá');
-      this.headerService.notifyGioHangUpdated(); // Cập nhật giỏ hàng sau khi xoá
-    });
+    // Hiển thị hộp thoại xác nhận
+    const confirmDelete = window.confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?');
+    
+    // Chỉ thực hiện xóa nếu người dùng đồng ý
+    if (confirmDelete) {
+      this.headerService.deleteFromCart(id).subscribe(() => {
+        alert('Đã xoá sản phẩm thành công');
+        this.headerService.notifyGioHangUpdated(); // Cập nhật giỏ hàng
+      }, (error) => {
+        console.error('Lỗi khi xoá sản phẩm:', error);
+        alert('Xoá sản phẩm thất bại');
+      });
+    }
   }
-
   suaSoLuong(id: number, soLuongMoi: number) {
     // Tìm sản phẩm trong giỏ hàng theo ID giỏ
     const gioHangItem = this.gioHang.find(item => item.id === id);

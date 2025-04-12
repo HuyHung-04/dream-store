@@ -53,11 +53,11 @@ public class GioHangChiTietController {
     }
 
     @GetMapping("/thanh-toan/{idKhachHang}")
-    public ResponseEntity<List<Integer>> getGioHangIdsForThanhToan(@PathVariable Integer idKhachHang) {
+    public ResponseEntity<List<Integer>> getGioHangThanhToan(@PathVariable Integer idKhachHang) {
         List<Integer> gioHangIds = hoaDonOnlineService.getGioHangIdsForThanhToan(idKhachHang);
 
         if (gioHangIds.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Trả về 204 nếu không có sản phẩm nào trong giỏ
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(gioHangIds);
     }
