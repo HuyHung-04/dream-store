@@ -59,6 +59,8 @@ export class HoaDonComponent implements OnInit {
     { value: 7, label: 'Đã thanh toán' },
     { value: 8, label: 'Đã huỷ' }
   ];
+  showGiamToiDa: boolean = false;
+  showGiamPhanTram: boolean = false;
   constructor(private hoaDonService: HoaDonService) {}
 
   ngOnInit(): void {
@@ -158,6 +160,7 @@ selectHoaDonChiTiet(invoice: HoaDonResponse): void {
     next: (res) => {
       this.hoaDonData = res;
       this.showDetailPopup = true;
+      this.tinhHienThiVoucher();
       console.log("ℹHóa đơn chi tiết:", res);
     },
     error: (err) => {
@@ -189,55 +192,37 @@ isTrangThaiCoTheChuyen(trangThai: number): boolean {
   return this.trangThaiChuyenTiep.includes(trangThai);
 }
 
-doiTrangThai(invoice: HoaDonResponse): void {
-  const id = invoice.id;
-  const currentTrangThai = invoice.trangThai;
-  const index = this.trangThaiChuyenTiep.indexOf(currentTrangThai);
-  if (index >= 0 && index < this.trangThaiChuyenTiep.length - 1) {
-    const newTrangThai = this.trangThaiChuyenTiep[index + 1];
-    this.hoaDonService.capNhatTrangThai(id).subscribe(
-      (response) => {
-        invoice.trangThai = response.trangThai; // cập nhật trực tiếp trong bảng
-        console.log(`✅ Đã cập nhật trạng thái hóa đơn ${id} sang: ${this.getTrangThaiText(newTrangThai)}`);
-      },
-      (err) => {
-        console.error(" Lỗi cập nhật trạng thái:", err);
-      }
-    );
+//phương thức tính số tiền giảm cho voucher
+tinhHienThiVoucher(): void {
+  const voucher = this.hoaDonData?.voucher;
+
+  this.showGiamPhanTram = false;
+  this.showGiamToiDa = false;
+
+  // Không có voucher hoặc giảm tiền => ẩn cả 2
+  if (!voucher || voucher.hinhThucGiam === true) {
+    return;
+  }
+
+  // Giảm phần trăm
+  const tongTien = this.hoaDonData.tongTienTruocVoucher || 0;
+  const giamPhanTram = voucher.giaTriGiam || 0;
+  const giamTien = tongTien * giamPhanTram / 100;
+  const giamToiDa = voucher.giamToiDa;
+
+  if (giamToiDa && giamTien > giamToiDa) {
+    this.showGiamToiDa = true;
+    this.showGiamPhanTram = false;
+  } else {
+    this.showGiamPhanTram = true;
+    this.showGiamToiDa = false;
   }
 }
 
-checkTrangThaiHuy(): boolean {
-  if (this.hoaDonData.trangThai === 2) {
-    alert('Đơn hàng đã xác nhận, không thể hủy đơn.');
-    return false;
-  }
-
-  if (this.hoaDonData.trangThai === 3) {
-    alert('Đơn hàng đang giao, không thể hủy đơn.');
-    return false;
-  }
-
-  if (this.hoaDonData.trangThai === 4) {
-    alert('Đơn hàng đã giao, không thể hủy đơn.');
-    return false;
-  }
-
-  return true; // Nếu trạng thái hợp lệ, trả về true
-}
 
 
-openCancelModal(): void {
-  if (!this.checkTrangThaiHuy()) {
-    return; // Nếu không thể hủy, không mở modal
-  }
-  this.showCancelModal = true;
-}
 
-closeCancelModal(): void {
-  this.showCancelModal = false;
-  this.ghiChu = '';
-}
+
 // Phương thức xử lý nút "Quay Về Trang Chủ"
   goHome(): void {
     this.showDetailPopup=false

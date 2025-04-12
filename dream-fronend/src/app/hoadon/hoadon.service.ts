@@ -104,12 +104,5 @@ export class HoaDonService {
     return this.http.put<any>(url, request);
   }
 
-   // Phương thức hủy hóa đơn sử dụng RequestParam
-   huyHoaDon(idHoaDon: number, ghiChu: string): Observable<any> {
-    const params = new HttpParams()
-      .set('idHoaDon', idHoaDon)
-      .set('ghiChu', ghiChu);
-
-    return this.http.post<any>(`${this.apiHoaDonOnline}/huy`, null, { params });
-  }
+  
 }
