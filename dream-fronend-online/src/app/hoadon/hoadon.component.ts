@@ -184,6 +184,7 @@ export class HoadonComponent {
           } else {
             this.isModalOpen = true;
             this.activeTab = 'add';
+            alert("Chưa có địa chỉ! Vui lòng tạo địa chỉ để thanh toán")
           }
           this.cdRef.detectChanges();
         },
