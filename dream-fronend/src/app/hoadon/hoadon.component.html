@@ -11,16 +11,16 @@
           <label class="label-date">Ngày tạo</label>
           <div class="form-date" style="width: 250px;">
             <input type="date" class="input" id="createdFromDate" [(ngModel)]="searchRequest.ngayTaoFrom"
-                   (change)="search()">
+              (change)="search()">
             <input type="date" class="input" id="createdToDate" [(ngModel)]="searchRequest.ngayTaoTo"
-                   (change)="search()">
+              (change)="search()">
           </div>
         </div>
       </div>
       <div class="input-field">
         <label for="customerPhone">Số điện thoại khách hàng</label>
         <input type="text" id="customerPhone" class="input" placeholder="Nhập số điện thoại..." style="width: 250px;"
-               [(ngModel)]="searchRequest.sdtNguoiNhan" (input)="search()">
+          [(ngModel)]="searchRequest.sdtNguoiNhan" (input)="search()">
       </div>
       <div class="input-field">
         <label for="trangThai">Trạng thái</label>
@@ -32,8 +32,7 @@
             <i class="bi bi-chevron-down"></i>
           </div>
           <div class="status-dropdown" *ngIf="showStatusDropdown">
-            <div class="status-option" *ngFor="let status of statusOptions" 
-                 (click)="selectStatus(status.value)">
+            <div class="status-option" *ngFor="let status of statusOptions" (click)="selectStatus(status.value)">
               <span>{{ status.label }}</span>
             </div>
           </div>
@@ -44,17 +43,17 @@
       <div class="input-field">
         <label for="invoiceCode">Mã hóa đơn</label>
         <input style="width: 250px;" type="text" id="invoiceCode" class="input" placeholder="Nhập mã hóa đơn..."
-               [(ngModel)]="searchRequest.maHoaDon" (input)="search()">
+          [(ngModel)]="searchRequest.maHoaDon" (input)="search()">
       </div>
       <div class="input-field">
         <label for="tenKhachHang">Tên khách hàng</label>
         <input style="width: 250px;" type="text" id="tenKhachHang" class="input" placeholder="Nhập tên khách hàng..."
-               [(ngModel)]="searchRequest.tenKhachHang" (input)="search()">
+          [(ngModel)]="searchRequest.tenKhachHang" (input)="search()">
       </div>
       <div class="input-field">
         <label for="tenNhanVien">Tên nhân viên</label>
         <input style="width: 250px;" type="text" id="tenNhanVien" class="input" placeholder="Nhập tên nhân viên..."
-               [(ngModel)]="searchRequest.tenNhanVien" (input)="search()">
+          [(ngModel)]="searchRequest.tenNhanVien" (input)="search()">
       </div>
       <!--      <div class="input-field">-->
       <!--        <label for="invoiceType">Loại hóa đơn</label>-->
@@ -72,57 +71,53 @@
     <div class="table-wrapper">
       <table>
         <thead>
-        <tr>
-          <th>Mã hóa đơn</th>
-          <th>Tên khách hàng</th>
-          <th>Số điện thoại khách hàng</th>
-          <th>Tên nhân viên</th>
-          <th>Phương thức thanh toán</th>
-          <th>Tiền trước voucher</th>
-          <th>Tổng tiền thanh toán</th>
-          <th>Ngày tạo</th>
-          <th>Trạng thái</th>
-          <th>Xem chi tiết</th>
-        </tr>
+          <tr>
+            <th>Mã hóa đơn</th>
+            <th>Tên khách hàng</th>
+            <th>Số điện thoại khách hàng</th>
+            <th>Tên nhân viên</th>
+            <th>Phương thức thanh toán</th>
+            <th>Tiền trước voucher</th>
+            <th>Tổng tiền thanh toán</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+            <th>Xem chi tiết</th>
+          </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let invoice of hoaDons.content; trackBy: trackById">
-          <td>{{ invoice.maHoaDon }}</td>
-          <td>{{ invoice.tenKhachHang }}</td>
-          <td>{{ invoice.sdtNguoiNhan }}</td>
-          <td>{{ invoice.tenNhanVien }}</td>
-          <td>{{ getTenPhuongThucThanhToan(invoice.idPhuongThucThanhToan) }}</td>
-          <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</td>
-          <!-- <td>
+          <tr *ngFor="let invoice of hoaDons.content; trackBy: trackById">
+            <td>{{ invoice.maHoaDon }}</td>
+            <td>{{ invoice.tenKhachHang }}</td>
+            <td>{{ invoice.sdtNguoiNhan }}</td>
+            <td>{{ invoice.tenNhanVien }}</td>
+            <td>{{ getTenPhuongThucThanhToan(invoice.idPhuongThucThanhToan) }}</td>
+            <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</td>
+            <!-- <td>
               <span *ngIf="invoice.tenVoucher; else noVoucher">
                 {{ invoice.tenVoucher }} (Giảm {{ invoice.giaTriGiam }}{{ invoice.hinhThucGiam ? ' %' : ' VNĐ' }})
               </span>
             <ng-template #noVoucher>Không</ng-template>
           </td> -->
-          <td>{{ invoice.tongTienThanhToan | number:'1.0-0' }} VNĐ</td>
-          <td>{{ invoice.ngayTao | date:'yyyy-MM-dd' }}</td>
-          <td>
-            <!-- Hiển thị nút trạng thái nếu trong danh sách có thể đổi -->
-            <button
-              *ngIf="isTrangThaiCoTheChuyen(invoice.trangThai)"
-              (click)="doiTrangThai(invoice)"
-              class="btn-doi-trang-thai"
-            >
-              {{ getTrangThaiText(invoice.trangThai) }}
-            </button>
+            <td>{{ invoice.tongTienThanhToan | number:'1.0-0' }} VNĐ</td>
+            <td>{{ invoice.ngayTao | date:'yyyy-MM-dd' }}</td>
+            <td>
+              <!-- Hiển thị nút trạng thái nếu trong danh sách có thể đổi -->
+              <button *ngIf="isTrangThaiCoTheChuyen(invoice.trangThai)" class="btn-doi-trang-thai">
+                {{ getTrangThaiText(invoice.trangThai) }}
+              </button>
 
-            <!-- Nếu không đổi được, chỉ hiển thị text -->
-            <span *ngIf="!isTrangThaiCoTheChuyen(invoice.trangThai)">
-              {{ getTrangThaiText(invoice.trangThai) }}
-            </span>
-          </td>
+              <!-- Nếu không đổi được, chỉ hiển thị text -->
+              <span *ngIf="!isTrangThaiCoTheChuyen(invoice.trangThai)">
+                {{ getTrangThaiText(invoice.trangThai) }}
+              </span>
+            </td>
 
-          <td>
-            <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(invoice)">
-              <i class="bi bi-eye-fill"></i>
-            </button>
-          </td>
-        </tr>
+            <td>
+              <button class="xem-chi-tiet" (click)="selectHoaDonChiTiet(invoice)">
+                <i class="bi bi-eye-fill"></i>
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -138,87 +133,82 @@
     </div>
   </div>
 
-<!-- Modal chi tiết (trống) -->
-<div class="modal" *ngIf="showDetailPopup">
-  <div class="modal-content">
-    <!-- Nội dung trống -->
-    <div class="modal-body">
-      <div *ngIf="hoaDonData" class="invoice-container">
-        <!-- Mã hóa đơn (Căn phải) -->
-        <div class="invoice-header">
-          <h3>Chi tiết Hóa Đơn</h3>
-          <p class="invoice-code"><strong>Mã hóa đơn:</strong> {{ hoaDonData.ma }}</p>
-          <p style="color: #294764;" class="invoice-status"><strong>Trạng thái:</strong> {{ getTrangThaiText(hoaDonData.trangThai) }}</p>
-        </div>
-
-         <!-- Nếu trạng thái hóa đơn là 5 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->
-         <div *ngIf="hoaDonData.trangThai == 5">
-          <div class="cancelHoaDon">
-            <p><i class="bi bi-x-circle"></i> Đơn hàng đã bị hủy</p>
-            <small>{{ hoaDonData.ngayHoanThanh || '---' }}</small>
+  <!-- Modal chi tiết (trống) -->
+  <div class="modal" *ngIf="showDetailPopup">
+    <div class="modal-content">
+      <!-- Nội dung trống -->
+      <div class="modal-body">
+        <div *ngIf="hoaDonData" class="invoice-container">
+          <!-- Mã hóa đơn (Căn phải) -->
+          <div class="invoice-header">
+            <h3>Chi tiết Hóa Đơn</h3>
+            <p class="invoice-code"><strong>Mã hóa đơn:</strong> {{ hoaDonData.ma }} (<span
+                style="color: red;font-weight: 500;"> {{ getTrangThaiText(hoaDonData.trangThai) }} </span>) </p>
+            <!-- <p style="color: red;" class="invoice-status"  ></p> -->
           </div>
-        </div>
 
-        <!-- Địa chỉ nhận hàng -->
-        <section class="section">
-          <h3>Thông tin khách hàng</h3>
-          <p><strong>Tên khách hàng:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
-          <p><strong>Số điện thoại:</strong> {{ hoaDonData.sdtNguoiNhan }}</p>
-          <!-- Chỉ hiển thị nếu địa chỉ khách hàng có dữ liệu -->
-          <p *ngIf="hoaDonData.diaChiNhanHang"><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
+          <!-- Địa chỉ nhận hàng -->
+          <section class="section">
+            <h3>Thông tin khách hàng</h3>
+            <p><strong>Tên khách hàng:</strong> {{ hoaDonData.tenNguoiNhan }}</p>
+            <p><strong>Số điện thoại:</strong> {{ hoaDonData.sdtNguoiNhan }}</p>
+            <!-- Chỉ hiển thị nếu địa chỉ khách hàng có dữ liệu -->
+            <p *ngIf="hoaDonData.diaChiNhanHang"><strong>Địa chỉ:</strong> {{ hoaDonData.diaChiNhanHang }}</p>
 
-        </section>
+          </section>
 
-        <!-- Chi tiết hóa đơn -->
-        <section class="section">
+          <!-- Chi tiết hóa đơn -->
+          <section class="section">
 
-          <div *ngFor="let item of chiTietHoaDonData" class="invoice-details-item">
-            <img [src]="'http://localhost:8080' + item.anhUrls" alt="{{ item.tenSanPham }}" />
-            <div class="invoice-details-info">
-              <p><strong>Tên Sản Phẩm:</strong> {{ item.tenSanPham }}</p>
-              <p><strong>Đơn Giá:</strong> {{ item.donGia | number }}</p>
-              <p><strong>Số Lượng:</strong> {{ item.soLuong }}</p>
-              <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
-              <p><strong>Màu Sắc:</strong> {{ item.mauSac }}</p>
+            <div *ngFor="let item of chiTietHoaDonData" class="invoice-details-item">
+              <img [src]="'http://localhost:8080' + item.anhUrls" alt="{{ item.tenSanPham }}" />
+              <div class="invoice-details-info">
+                <p><strong>Tên Sản Phẩm:</strong> {{ item.tenSanPham }} ({{item.maSanPham}})</p>
+                <p><strong>Phân loại hàng: </strong>({{ item.mauSac }} / {{item.size}})</p>
+                <p><strong>Đơn Giá:</strong> {{ item.donGia | number }} VND </p>
+                <p><strong>Số lượng:</strong> {{ item.soLuong }}</p>
+                <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <!-- Chi tiết thanh toán -->
-        <section class="section">
-          <h3>Chi tiết thanh toán</h3>
-          <p><strong>Tổng tiền trước voucher:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
-          <!-- Điều kiện hiển thị voucher và giá trị giảm -->
-          <div *ngIf="hoaDonData.voucher">
-            <p><strong>Tên voucher:</strong> {{ hoaDonData.voucher?.ten }}</p>
+          <!-- Chi tiết thanh toán -->
+          <section class="section">
+            <p><strong>Tổng tiền trước voucher:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
 
-            <!-- Hiển thị giá trị giảm nếu voucher giảm phần trăm -->
-            <p *ngIf="hoaDonData.voucher?.hinhThucGiam === false"><strong>Giảm giá:</strong> {{ hoaDonData.voucher?.giaTriGiam
-              + '%' }}</p>
+            <!-- Điều kiện hiển thị voucher và giá trị giảm -->
+            <div *ngIf="hoaDonData.voucher">
+              <p>
+                <strong>Tên voucher:</strong> {{ hoaDonData.voucher?.ten }}
 
-            <!-- Hiển thị giá trị giảm nếu voucher giảm tiền -->
-            <p *ngIf="hoaDonData.voucher?.hinhThucGiam === true"><strong>Giảm giá:</strong> {{ hoaDonData.voucher?.giaTriGiam
-              + ' VND' }}</p>
+                <!-- Hiện nếu giảm % và không vượt giảm tối đa -->
+                <span *ngIf="showGiamPhanTram">
+                  (Giảm: {{ hoaDonData.voucher?.giaTriGiam }}%)
+                </span>
 
-            <!-- Ẩn "Giảm tối đa" nếu giảm tiền -->
-            <p *ngIf="hoaDonData.voucher?.hinhThucGiam === false"><strong>Giảm tối đa:</strong> {{
-              hoaDonData.voucher?.giamToiDa }} VNĐ</p>
-          </div>
+                <!-- Hiện nếu giảm % nhưng vượt quá mức giảm tối đa -->
+                <span *ngIf="showGiamToiDa">
+                  (Giảm tối đa: {{ hoaDonData.voucher?.giamToiDa | number }} VNĐ)
+                </span>
 
-            <!-- Chỉ hiển thị nếu trạng thái = 5 -->
-            <p *ngIf="hoaDonData?.trangThai === 5 && hoaDonData?.ghiChu">
-              <strong>Lý do hủy:</strong> {{ hoaDonData.ghiChu }}
+                <!-- Hiện nếu giảm bằng số tiền -->
+                <span *ngIf="hoaDonData.voucher?.hinhThucGiam === true">
+                  (Giảm: {{ hoaDonData.voucher?.giaTriGiam | number }} VNĐ)
+                </span>
+              </p>
+            </div>
+
+            <!-- Nếu không có voucher thì không hiển thị thông tin voucher -->
+            <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
+            <p><strong>Phương thức thanh toán:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
+            <p *ngIf="hoaDonData.phiVanChuyen && hoaDonData.phiVanChuyen > 0">
+              <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ
             </p>
-
-          <!-- Nếu không có voucher thì không hiển thị thông tin voucher -->
-          <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
-          <p><strong>Phương thức thanh toán:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
-          <p *ngIf="hoaDonData.phiVanChuyen && hoaDonData.phiVanChuyen > 0">
-            <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ
-          </p>          
-          <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
-        </section>
-          <button (click)="goHome()" class="btn btn-primary">Đóng</button>
+            <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
+          </section>
+          <div class="close">
+            <button (click)="goHome()" class="btn-primary">Đóng</button>
+          </div>
         </div>
       </div>
     </div>

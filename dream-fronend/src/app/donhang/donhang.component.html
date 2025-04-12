@@ -193,6 +193,7 @@
 
             <!-- Nếu không có voucher thì không hiển thị thông tin voucher -->
             <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
+            
             <p><strong>Phương thức thanh toán:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
             <p *ngIf="hoaDonData.phiVanChuyen && hoaDonData.phiVanChuyen > 0">
               <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ
