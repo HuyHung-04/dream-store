@@ -58,10 +58,11 @@
         <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không có' }}</td>
         <td>{{ hoaDon.tongTienThanhToan}}</td>
         <td>
-          <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 5" (click)="updateTrangThai(hoaDon.id,hoaDon.trangThai)">
+          <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 4 && hoaDon.trangThai !== 5" (click)="updateTrangThai(hoaDon.id,hoaDon.trangThai)">
             {{ getButtonLabel(hoaDon.trangThai) }}
           </button>
           <span *ngIf="hoaDon.trangThai === 5">Đơn đã hủy</span>
+          <span *ngIf="hoaDon.trangThai === 4">Giao hàng thành công</span>
         </td>
         <td>
           <button class="xem-chi-tiet" (click)="chonDonHang(hoaDon.id)">

@@ -102,10 +102,6 @@ export class DonhangComponent {
 
   // Phương thức để cập nhật trạng thái hóa đơn (tăng 1 trạng thái)
   updateTrangThai(id: number, trangThai: number): void {
-    if (trangThai === 4) {
-      alert("Đơn hàng đã giao thành công và không thể tiếp tục cập nhật.");
-      return;
-    }
 
     const nextTrangThai = trangThai + 1;
     const nextTrangThaiLabel = this.getTrangThaiLabel(nextTrangThai);
@@ -131,7 +127,7 @@ export class DonhangComponent {
 
   // Kiểm tra xem trạng thái hiện tại có phải là trạng thái cuối cùng không
   checkStatus(trangThai: number): boolean {
-    const validTrangThai = [1, 2, 3, 4];
+    const validTrangThai = [1, 2, 3];
     return validTrangThai.indexOf(trangThai) === -1;
   }
 
