@@ -1,5 +1,5 @@
-import { Component,OnInit  } from '@angular/core';
-import { LichsudonhangService } from './lichsudonhang.service'; 
+import { Component, OnInit } from '@angular/core';
+import { LichsudonhangService } from './lichsudonhang.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -11,10 +11,10 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrl: './lichsudonhang.component.css'
 })
 export class LichsudonhangComponent {
-  hoaDonChiTiet: any[] = [];  // Array to store fetched data
-  errorMessage: string = '';  // To store error message if any
+  hoaDonChiTiet: any[] = [];
+  errorMessage: string = '';
   idKhachHang: number = 0;
-  statuses = [
+  trangThai = [
     { value: 0, label: 'Tất cả' },
     { value: 1, label: 'Chờ xác nhận' },
     { value: 2, label: 'Đã xác nhận' },
@@ -22,7 +22,7 @@ export class LichsudonhangComponent {
     { value: 4, label: 'Giao hàng thành công' },
     { value: 5, label: 'Đơn đã hủy' }
   ];
-  selectedStatus: number = 0;  // Trạng thái được chọn mặc định là "Tất cả"
+  selectedStatus: number = 0;
   constructor(private lichsudonhangService: LichsudonhangService, private router: Router, private cookieService: CookieService) { }
 
   ngOnInit(): void {
@@ -30,53 +30,50 @@ export class LichsudonhangComponent {
     if (khachhangStr) {
       const khachhang = JSON.parse(khachhangStr);
       this.idKhachHang = khachhang.id;
-   this.loadHoaDon()
-    
-  }
+      this.loadHoaDon()
+
+    }
   }
 
-
-  filterByStatus(status: number): void {
+  //lọc trạng thái
+  locTrangThai(status: number): void {
     this.selectedStatus = status;
-
-    this.loadHoaDon();  // Tải lại danh sách hóa đơn khi thay đổi trạng thái
+    this.loadHoaDon();
   }
-  loadHoaDon():void{
+
+  //load dánh sách hóa đơn
+  loadHoaDon(): void {
     const status = this.selectedStatus === 0 ? 0 : this.selectedStatus;
-    this.lichsudonhangService.getHoaDonChiTiet(this.idKhachHang,status).subscribe({
+    this.lichsudonhangService.getHoaDonChiTiet(this.idKhachHang, status).subscribe({
       next: (data) => {
-        this.hoaDonChiTiet = this.processHoaDonData(data);
-      
-        console.log(this.hoaDonChiTiet);
+        this.hoaDonChiTiet = this.xuLyHoaDonData(data);
       },
       error: (error) => {
-        this.errorMessage = 'Error fetching data';  // Store error message if there's any
-        console.error('There was an error!', error);
+        this.errorMessage = 'Error';
+        console.error('Error!', error);
       }
     });
   }
-  
 
 
-  processHoaDonData(data: any[]): any[] {
-    const groupedData: { [key: string]: any } = {}; 
-
+  //xử lý dữ liệu từ hóa đơn
+  xuLyHoaDonData(data: any[]): any[] {
+    const nhomData: { [key: string]: any } = {};
 
     data.forEach(item => {
       const id = item.idHoaDon;
-      if (groupedData[id]) {
-        groupedData[id].soLuong += item.soLuong;  
+      if (nhomData[id]) {
+        nhomData[id].soLuong += item.soLuong;
       } else {
-        groupedData[id] = { ...item }; 
+        nhomData[id] = { ...item };
       }
     });
 
-    // Convert the grouped data object back to an array
-    return Object.values(groupedData).sort((a, b) => b.idHoaDon - a.idHoaDon);
+    return Object.values(nhomData).sort((a, b) => b.idHoaDon - a.idHoaDon);
   }
 
-  viewInvoiceDetail(maHoaDon: string): void {
-    this.router.navigate(['/chitietlichsu', maHoaDon]); // Navigate to chitietlichsu with the maHoaDon as a route parameter
+  viewInvoiceDetail(idHoaDon: number): void {
+    this.router.navigate(['/donhang', idHoaDon]);
   }
 
   goHome(): void {

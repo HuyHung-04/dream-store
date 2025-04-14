@@ -25,26 +25,28 @@ public class HoaDonOnlineController {
     @Autowired
     private HoaDonOnlineService hoaDonOnlineService;
 
+    //phương thức load giỏ hàng chi tiết
     @GetMapping("/gio-hang-hoa-don/{idKhachHang}")
     public ResponseEntity<List<GioHangChiTietResponse>> getChiTietGioHangSauThanhToan(@PathVariable Integer idKhachHang) {
         List<GioHangChiTietResponse> gioHangChiTietList = hoaDonOnlineService.getChiTietGioHangSauThanhToan(idKhachHang);
-
         if (gioHangChiTietList.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Trả về HTTP 204 nếu giỏ hàng trống
+            return ResponseEntity.noContent().build();
         }
 
         return ResponseEntity.ok(gioHangChiTietList);
     }
 
+    //phương thức tính tổng tiền trước voucher
     @GetMapping("/tinh-tong-tien")
     public ResponseEntity<Double> getTotalPrice(@RequestParam Integer idKhachHang) {
-        Double totalPrice = hoaDonOnlineService.calculateTotalPrice(idKhachHang);
+        Double totalPrice = hoaDonOnlineService.getTamTinh(idKhachHang);
         if (totalPrice == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0.0);
         }
         return ResponseEntity.ok(totalPrice);
     }
 
+    //phương thức load voucher
     @GetMapping("/vouchers/{tongTien}")
     public ResponseEntity<List<VoucherDto>> getAvailableVouchers(@PathVariable Double tongTien) {
         List<VoucherDto> vouchers = hoaDonOnlineService.getVoucherIdAndTen(tongTien);
@@ -57,11 +59,11 @@ public class HoaDonOnlineController {
             @RequestParam Integer idKhachHang,
             @RequestParam Integer voucherId,
             @RequestParam Double shippingFee) {
-        Double totalPrice = hoaDonOnlineService.calculateTotalPriceWithVoucher(idKhachHang, voucherId, shippingFee);
+        Double totalPrice = hoaDonOnlineService.getTongTienThanhToan(idKhachHang, voucherId, shippingFee);
         return ResponseEntity.ok(totalPrice);
     }
 
-    // Tạo hóa đơn và thêm sản phẩm
+    // Tạo hóa đơn
     @PostMapping("/create")
     public ResponseEntity<HoaDon> createHoaDon(
             @RequestParam Integer idKhachHang,
@@ -76,7 +78,7 @@ public class HoaDonOnlineController {
     ) {
 
         try {
-            HoaDon hoaDon = hoaDonOnlineService.createHoaDonAndAddProducts(
+            HoaDon hoaDon = hoaDonOnlineService.createHoaDon(
                     idKhachHang, voucherId, tongTienTruocGiam, paymentMethodId, TongTienSauGiam,sdtNguoiNhan,tenNguoiNhan,diaChi,shippingFee );
             return new ResponseEntity<>(hoaDon, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -84,42 +86,45 @@ public class HoaDonOnlineController {
         }
     }
 
-    @GetMapping("/chi-tiet/{maHoaDon}")
-    public ResponseEntity<?> getChiTietHoaDon(@PathVariable String maHoaDon) {
+    //phương thức load hóa đơn chi tiết
+    @GetMapping("/chi-tiet/{idHoaDon}")
+    public ResponseEntity<?> getChiTietHoaDon(@PathVariable Integer idHoaDon) {
         try {
-            List<HoaDonChiTietDto> chiTietList = hoaDonOnlineService.getChiTietHoaDonByMa(maHoaDon);
+            List<HoaDonChiTietDto> chiTietList = hoaDonOnlineService.getHoaDonChiTiet(idHoaDon);
             return ResponseEntity.ok(chiTietList);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
     }
 
-    // Lấy danh sách hóa đơn theo id khách hàng
+    // Lấy lịch sử đơn hàng theo id khách hàng
     @GetMapping("/hoa-don/{idKhachHang}")
     public List<HoaDonDto> getHoaDonByKhachHang(@RequestParam Integer idKhachHang,
                                                 @RequestParam(required = false, defaultValue = "0") Integer trangThai) {
-        return hoaDonOnlineService.getHoaDonChiTietDto(idKhachHang,trangThai);
+        return hoaDonOnlineService.getHoaDonByKhachHang(idKhachHang,trangThai);
     }
 
-
-    @GetMapping("/find-by-ma/{ma}")
-    public Optional<HoaDon> getHoaDonWithDetailsByMa(@PathVariable("ma") String ma) {
-        return hoaDonOnlineService.getHoaDonWithDetailsByMa(ma);
+    //phương thức load hóa đơn khi xem chi tiết
+    @GetMapping("/find-by-ma/{id}")
+    public Optional<HoaDon> getHoaDon(@PathVariable("id") Integer id) {
+        return hoaDonOnlineService.getHoaDon(id);
     }
+
+    //phương thức hủy đơn hàng
     @PostMapping("/huy")
-    public ResponseEntity<HoaDon> huyHoaDon(@RequestParam String maHoaDon,
+    public ResponseEntity<HoaDon> huyHoaDon(@RequestParam Integer idHoaDon,
                                             @RequestParam String ghiChu) {
-        // Gọi service để hủy đơn, giả sử service trả về hóa đơn đã cập nhật
-        HoaDon hoadon = hoaDonOnlineService.huyHoaDon(maHoaDon, ghiChu);
+        HoaDon hoadon = hoaDonOnlineService.huyHoaDon(idHoaDon, ghiChu);
 
         return ResponseEntity.ok(hoadon);
     }
 
+    //phương thức cập nhật trạng thái cho đơn hàng
     @PostMapping("/{id}/tang-trang-thai")
     public ResponseEntity<?> tangTrangThai(@PathVariable Integer id) {
         HoaDon updated = hoaDonOnlineService.tangTrangThaiHoaDon(id);
         if (updated != null) {
-            return ResponseEntity.ok(updated); // trả về JSON hóa đơn sau cập nhật
+            return ResponseEntity.ok(updated);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn không tồn tại");
         }

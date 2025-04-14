@@ -10,7 +10,7 @@ interface Voucher {
   ten: string;
   giamToiDa: number;
   giaTriGiam: number;
-  hinhThucGiam: boolean; // true: giảm trực tiếp, false: phần trăm
+  hinhThucGiam: boolean;
 }
 
 
@@ -22,10 +22,8 @@ interface Voucher {
 })
 
 export class HoadonComponent {
-
-  // Mảng chứa danh sách địa chỉ khách hàng
   diaChiList: any[] = [];
-  idKhachHang: number = 0; // ID của khách hàng, bạn có thể thay đổi theo nhu cầu
+  idKhachHang: number = 0;
   khachHang: any = {
     tenKhachHang: '',
     sdtNguoiNhan: '',
@@ -41,35 +39,34 @@ export class HoadonComponent {
   quanHuyenList: any[] = [];
   phuongXaList: any[] = [];
   chiTietGioHang: any[] = [];
-  selectedTinh: any = null;
-  selectedSdtNguoiNhan: any = null
-  selectedTenNguoiNhan: any = null
-  selectedDiaChiCuThe: any = null
-  selectedQuan: any = null;
-  selectedPhuongXa: any = null;
+  chonTinh: any = null;
+  chonSdtNguoiNhan: any = null
+  chonTenNguoiNhan: any = null
+  chonDiaChiCuThe: any = null
+  chonQuan: any = null;
+  chonPhuongXa: any = null;
   selectedIndex: number | null = null;
   sdtNguoiNhan: string = '';
   idDiaChi: number | null = null;
-  selectedAddress: any = null; // Địa chỉ được chọn để hiển thị trong modal và giao diện chính
+  chonDiaChi: any = null;
   activeTab = 'select';
   isModalOpen = false;
   modalthongbao = false;
   isEditModalOpen = false;
-  totalPrice: number = 0;
-  selectedVoucher: Voucher | null = null;
+  TongTienTamTinh: number = 0;
+  chonVoucher: Voucher | null = null;
   errorMessage: string = '';
   shippingFee: number | null = null;
-  selectedPhuongThucThanhToan: number | null = null;
+  chonPhuongThucThanhToan: number | null = null;
   phuongThucThanhToan: any[] = [];
   vouchers: any[] = []; // Danh sách voucher
-  tongTienSauVoucher: number = 0;
-  selectedVoucherId: number = 0; // ID của voucher đã chọn
-  fullAddress: string = '';
+  tongTienThanhToan: number = 0;
+  fullDiaChi: string = '';
   thongBaoTrong: boolean = false;
   maHoaDon: string = '';
-  vnpTransactionStatus: string | null = null;
+  idHoaDon: number = 0;
   paymentUrl: string = '';
-  newAddress = {
+  newDiaChi = {
     id: '',
     tenNguoiNhan: '',
     sdtNguoiNhan: '',
@@ -77,114 +74,115 @@ export class HoadonComponent {
     tinhThanhPho: '',
     quanHuyen: '',
     phuongXa: '',
-    idKhachHang: this.idKhachHang // Truyền thẳng ID khách hàng
+    idKhachHang: this.idKhachHang
   };
-  AddressEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
-  constructor(private hoadonService: HoadonService, private router: Router, private cookieService: CookieService, private cdRef: ChangeDetectorRef,private activatedRoute: ActivatedRoute) { }
+  diaChiEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
+  constructor(private hoadonService: HoadonService, private router: Router, private cookieService: CookieService, private cdRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute) { }
 
-  // Phương thức gọi API khi component được khởi tạo
+
+  //   Khởi tạo component:
+  //  - Kiểm tra đăng nhập qua cookie
+  //  - Load địa chỉ, tỉnh thành, giỏ hàng, voucher
+  //  - Xử lý callback từ VNPay
+
   ngOnInit(): void {
-   
-
-
     const khachhangStr = this.cookieService.get('khachhang');
     if (khachhangStr) {
       const khachhang = JSON.parse(khachhangStr);
-      this.idKhachHang = khachhang.id; // hoặc khachhang.idKhachHang tùy theo API trả về
-      console.log("ID khách hàng từ cookie:", this.idKhachHang);
-      // Kiểm tra trạng thái thanh toán
+      this.idKhachHang = khachhang.id;
       this.resetForm();
       this.getDiaChiKhachHang();
       this.loadTinhThanh();
       this.getChiTietGioHangSauThanhToan();
-      this.getTotalPrice();
+      this.getTamTinh();
       this.getVoucherIdAndTen();
     } else {
       alert("Bạn chưa đăng nhập!");
       this.router.navigate(['/dangnhap']);
     }
-    this.loadPaymentMethods();
-    // Sử dụng this.activatedRoute.queryParams.subscribe để lấy các tham số từ URL trả về của VNPAY
-this.vnpay()
+    this.loadPhuongThucThanhToan();
+    this.vnpay()
   }
 
 
-vnpay():void{
-  this.activatedRoute.queryParams.subscribe(params => {
-    const vnp_ResponseCode = params['vnp_ResponseCode'];  // Mã phản hồi từ VNPAY
-    // Kiểm tra mã phản hồi từ VNPAY để xử lý kết quả thanh toán
-    debugger
-    if (vnp_ResponseCode === '00') {
-      const paymentData = localStorage.getItem('paymentData');
-      if (paymentData) {
-        const paymentDetails = JSON.parse(paymentData);
-        console.log('Dữ liệu thanh toán từ localStorage:', paymentDetails);
-        // Gọi phương thức createHoaDon với các giá trị từ paymentDetails
-        this.createHoaDonFromPaymentData(paymentDetails);
-         // Xóa dữ liệu thanh toán sau khi xử lý xong
-         localStorage.removeItem('paymentData');
-         
+
+  // Xử lý phản hồi từ VNPay:
+  // - Kiểm tra mã phản hồi thành công (00)
+  // - Tạo hóa đơn từ dữ liệu trong localStorage
+
+  vnpay(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      const vnp_ResponseCode = params['vnp_ResponseCode'];
+      if (vnp_ResponseCode === '00') {
+        const paymentData = localStorage.getItem('paymentData');
+        if (paymentData) {
+          const chiTietThanhToan = JSON.parse(paymentData);
+          this.createHoaDonFromVnPay(chiTietThanhToan);
+          localStorage.removeItem('paymentData');
+        }
+      } else {
       }
-    } else {
-    }
-  });
-}
+    });
+  }
 
-createHoaDonFromPaymentData(paymentData: any): void {
-  // Lấy các dữ liệu từ paymentData để gọi API tạo hóa đơn
-  const paymentMethodId = paymentData.selectedPhuongThucThanhToan;
-  const voucherId = paymentData.selectedVoucherId || null;
 
-  // Gọi API tạo hóa đơn với các giá trị đã lưu trong paymentData
-  this.hoadonService.createHoaDon(
-    this.idKhachHang,
-    voucherId,
-    paymentData.totalPrice,
-    paymentMethodId,
-    paymentData.tongTienSauVoucher,
-    paymentData.selectedSdtNguoiNhan,
-    paymentData.selectedTenNguoiNhan,
-    paymentData.fullAddress,
-    paymentData.shippingFee
-  ).subscribe(
-    (response) => {
-      console.log('Hóa đơn đã được tạo thành công:', response);
-      alert('Đơn hàng đã được thanh toán thành công!');
-      this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
-      this.modalthongbao = true;
-      this.maHoaDon = response.ma;
-    },
-    (error) => {
-      console.error('Lỗi khi tạo hóa đơn:', error);
-      alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
-    }
-  );
-}
 
-  // Phương thức gọi API để lấy danh sách địa chỉ của khách hàng
+  //  Tạo hóa đơn từ kết quả thanh toán VNPay thành công
+  //  @param paymentData Dữ liệu thanh toán từ localStorage
+
+  createHoaDonFromVnPay(paymentData: any): void {
+    const phuongThucThanhToanId = paymentData.chonPhuongThucThanhToan;
+    const voucherId = paymentData.selectedVoucherId || null;
+    this.hoadonService.createHoaDon(
+      this.idKhachHang,
+      voucherId,
+      paymentData.tamTinh,
+      phuongThucThanhToanId,
+      paymentData.tongTienThanhToan,
+      paymentData.chonSdtNguoiNhan,
+      paymentData.chonTenNguoiNhan,
+      paymentData.fullDiaChi,
+      paymentData.shippingFee
+    ).subscribe(
+      (response) => {
+        alert('Đơn hàng đã được thanh toán thành công!');
+        this.hoadonService.increaseOrderCount();
+        this.modalthongbao = true;
+        this.idHoaDon = response.id;
+      },
+      (error) => {
+        console.error('Lỗi khi tạo hóa đơn:', error);
+        alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
+      }
+    );
+  }
+
+
+  //  Lấy danh sách địa chỉ của khách hàng:
+  //  - Hiển thị địa chỉ đầu tiên nếu có
+  //  - Mở modal thêm địa chỉ nếu chưa có địa chỉ
+
   getDiaChiKhachHang(): void {
     this.hoadonService.getDiaChiKhachHang(this.idKhachHang)
       .subscribe(
         (response: any) => {
           this.diaChiList = response || [];
-
           if (this.diaChiList.length > 0) {
-            this.selectedAddress = this.diaChiList[0];
-            this.selectedDiaChiCuThe = this.selectedAddress.diaChiCuThe;
-            this.selectedQuan = this.selectedAddress.quanHuyen;
-            this.selectedPhuongXa = this.selectedAddress.phuongXa;
-            this.selectedSdtNguoiNhan = this.selectedAddress.sdtNguoiNhan;
-            this.selectedTenNguoiNhan = this.selectedAddress.tenNguoiNhan;
-            this.selectedTinh = this.selectedAddress.tinhThanhPho;
-            this.fullAddress = `${this.selectedTinh}-${this.selectedQuan}-${this.selectedPhuongXa}-${this.selectedDiaChiCuThe}`;
-
-            //  Gọi tính phí vận chuyển sau khi có địa chỉ
-            this.calculateShipping();
+            this.chonDiaChi = this.diaChiList[0];
+            this.chonDiaChiCuThe = this.chonDiaChi.diaChiCuThe;
+            this.chonQuan = this.chonDiaChi.quanHuyen;
+            this.chonPhuongXa = this.chonDiaChi.phuongXa;
+            this.chonSdtNguoiNhan = this.chonDiaChi.sdtNguoiNhan;
+            this.chonTenNguoiNhan = this.chonDiaChi.tenNguoiNhan;
+            this.chonTinh = this.chonDiaChi.tinhThanhPho;
+            this.fullDiaChi = `${this.chonTinh}-${this.chonQuan}-${this.chonPhuongXa}-${this.chonDiaChiCuThe}`;
+            this.tinhPhiShipping();
           } else {
             this.isModalOpen = true;
             this.activeTab = 'add';
+            alert("Chưa có địa chỉ! Vui lòng tạo địa chỉ để thanh toán")
           }
-          this.cdRef.detectChanges(); // Cập nhật giao diện ngay lập tức
+          this.cdRef.detectChanges();
         },
         (error) => {
           console.error('Lỗi khi lấy địa chỉ khách hàng:', error);
@@ -193,18 +191,18 @@ createHoaDonFromPaymentData(paymentData: any): void {
   }
 
 
-  // Phương thức để lấy chi tiết giỏ hàng sau thanh toán
+  // Lấy chi tiết giỏ hàng để thanh toán:
+  //  - Kiểm tra giỏ hàng trống
+
   getChiTietGioHangSauThanhToan(): void {
     this.hoadonService.getChiTietGioHangSauThanhToan(this.idKhachHang).subscribe(
       (response: any) => {
-        console.log('Chi tiết giỏ hàng sau thanh toán:', response);
-        this.chiTietGioHang = response; // Gán chi tiết giỏ hàng nhận được từ API vào mảng chiTietGioHang
-
+        this.chiTietGioHang = response;
         if (this.chiTietGioHang == null) {
           alert('Giỏ hàng của bạn đang trống. Vui lòng chọn sản phẩm trước khi thanh toán!');
-          this.router.navigate(['/banhang']); // hoặc điều hướng đến trang phù hợp
+          this.router.navigate(['/banhang']);
         }
-        this.cdRef.detectChanges(); // Cập nhật giao diện ngay lập tức
+        this.cdRef.detectChanges();
       },
       (error) => {
         console.error('Lỗi khi lấy chi tiết giỏ hàng sau thanh toán:', error);
@@ -213,15 +211,14 @@ createHoaDonFromPaymentData(paymentData: any): void {
     );
   }
 
-  // Phương thức mở modal và hiển thị danh sách địa chỉ
+
   openModal(): void {
-    this.isModalOpen = true; // Mở modal
+    this.isModalOpen = true;
   }
 
-  // Phương thức đóng modal
+
   closeModal(): void {
-    this.isModalOpen = false; // Đóng modal
-    // Nếu không có địa chỉ nào => hiển thị cảnh báo
+    this.isModalOpen = false;
     if (this.diaChiList.length === 0) {
       this.thongBaoTrong = true;
     }
@@ -229,64 +226,65 @@ createHoaDonFromPaymentData(paymentData: any): void {
 
   openEditModal(): void {
     this.isEditModalOpen = true;
-    this.isModalOpen = false; // Close the original modal
+    this.isModalOpen = false;
   }
 
   closeEditModal(): void {
     this.isEditModalOpen = false;
   }
 
-  // Phương thức để chọn địa chỉ từ danh sách trong modal
-  selectAddress(index: number): void {
-    console.log("chon", this.selectedAddress)
-    this.selectedDiaChiCuThe = this.selectedAddress.diaChiCuThe
+
+  // Chọn địa chỉ từ danh sách:
+  // @param index Vị trí địa chỉ trong danh sách
+
+  selectDiaChi(index: number): void {
+    this.chonDiaChiCuThe = this.chonDiaChi.diaChiCuThe
     this.selectedIndex = index;
-    this.selectedAddress = this.diaChiList[index];
-    // Ghép selectedTinh, selectedQuan, selectedPhuongXa thành một chuỗi
-    this.fullAddress = `${this.selectedTinh}-${this.selectedQuan}-${this.selectedPhuongXa}-${this.selectedDiaChiCuThe}`;
-    // Lưu tên quận/huyện và phường/xã vào biến riêng biệt
-    this.selectedTinh = this.selectedAddress.tinhThanhPho
-    this.selectedQuan = this.selectedAddress.quanHuyen;
-    this.selectedPhuongXa = this.selectedAddress.phuongXa;
-    this.selectedSdtNguoiNhan = this.selectedAddress.sdtNguoiNhan
-    this.selectedTenNguoiNhan = this.selectedAddress.tenNguoiNhan
-    // Gọi phương thức tính phí vận chuyển khi chọn địa chỉ
-    this.calculateShipping()
-    this.closeModal(); // Đóng modal sau khi chọn
+    this.chonDiaChi = this.diaChiList[index];
+    this.chonTinh = this.chonDiaChi.tinhThanhPho
+    this.chonQuan = this.chonDiaChi.quanHuyen;
+    this.chonPhuongXa = this.chonDiaChi.phuongXa;
+    this.chonSdtNguoiNhan = this.chonDiaChi.sdtNguoiNhan
+    this.chonTenNguoiNhan = this.chonDiaChi.tenNguoiNhan
+    this.fullDiaChi = `${this.chonTinh}-${this.chonQuan}-${this.chonPhuongXa}-${this.chonDiaChiCuThe}`;
+    this.tinhPhiShipping()
+    this.closeModal();
+
   }
 
-  // Lấy tỉnh thành
+  // Load danh sách tỉnh/thành phố từ API
   loadTinhThanh(): void {
     this.hoadonService.getTinhThanh().subscribe((response: any) => {
-      console.log("Danh sách tỉnh thành:", response.data);
-      // Nếu response là mảng, gán trực tiếp; nếu không, kiểm tra xem có response.data hay không
       this.tinhThanhPhoList = response.data
-      console.log("tỉnh thành", this.tinhThanhPhoList);
     });
   }
 
-  onSelectTinhThanh(event: any): void {
-    const selectedProvinceName = event.target.value;  // Lấy tên tỉnh người dùng chọn
-    const selectedProvince = this.tinhThanhPhoList.find(tinh => tinh.ProvinceName === selectedProvinceName);  // Tìm ProvinceID từ tên tỉnh
 
-    if (selectedProvince) {
-      this.newAddress.tinhThanhPho = selectedProvince.ProvinceName;  // Lưu tên tỉnh vào newAddress
-      const ProvinceID = selectedProvince.ProvinceID;  // Lấy ProvinceID
-      // Gọi API để lấy quận/huyện dựa trên ProvinceID
-      this.hoadonService.getQuanHuyen(ProvinceID).subscribe(
+  // Xử lý chọn quận/huyện:
+  // Load danh sách phường/xã tương ứng
+
+  onSelectTinhThanh(event: any): void {
+    const chonTenTinh = event.target.value;
+    const chonTinh = this.tinhThanhPhoList.find(tinh => tinh.ProvinceName === chonTenTinh);
+    if (chonTinh) {
+      this.newDiaChi.tinhThanhPho = chonTinh.ProvinceName;
+      // Reset các giá trị liên quan
+      this.newDiaChi.quanHuyen = '';
+      this.newDiaChi.phuongXa = '';
+      this.quanHuyenList = [];
+      this.phuongXaList = [];
+
+      const tinhId = chonTinh.ProvinceID;
+      this.hoadonService.getQuanHuyen(tinhId).subscribe(
         (response: any) => {
-          this.quanHuyenList = response.data || [];  // Cập nhật danh sách quận huyện
-          // Sau khi đã có danh sách quận huyện, chọn quận huyện đã lưu từ trước nếu có
-          if (this.AddressEdit.quanHuyen) {
-            this.newAddress.quanHuyen = this.AddressEdit.quanHuyen;  // Chọn lại quận huyện cũ
-            // Tìm quận huyện đã lưu và tự động chọn nó
-            const selectedDistrict = this.quanHuyenList.find(district => district.DistrictName === this.AddressEdit.quanHuyen);
-            if (selectedDistrict) {
-              // Chọn quận huyện đã lưu
-              this.newAddress.quanHuyen = selectedDistrict.DistrictName;
+          this.quanHuyenList = response.data || [];
+          if (this.diaChiEdit.quanHuyen) {
+            this.newDiaChi.quanHuyen = this.diaChiEdit.quanHuyen;
+            const chonHuyen = this.quanHuyenList.find(huyen => huyen.DistrictName === this.diaChiEdit.quanHuyen);
+            if (chonHuyen) {
+              this.newDiaChi.quanHuyen = chonHuyen.DistrictName;
             }
-            // Gọi lại để lấy phường xã nếu quận huyện đã chọn
-            this.onSelectQuanHuyen({ target: { value: this.AddressEdit.quanHuyen } });
+            this.onSelectQuanHuyen({ target: { value: this.diaChiEdit.quanHuyen } });
           }
         },
         (error) => {
@@ -296,23 +294,24 @@ createHoaDonFromPaymentData(paymentData: any): void {
     }
   }
 
+  //  Xử lý chọn quận/huyện:
+  // - Load danh sách phường/xã tương ứng
 
   onSelectQuanHuyen(event: any): void {
-    const selectedDistrictName = event.target.value;  // Lấy tên quận huyện
-    const selectedDistrict = this.quanHuyenList.find(quan => quan.DistrictName === selectedDistrictName);  // Tìm DistrictID từ tên quận
+    const chonTenHuyen = event.target.value;
+    const chonHuyen = this.quanHuyenList.find(huyen => huyen.DistrictName === chonTenHuyen);
+    if (chonHuyen) {
+      this.newDiaChi.quanHuyen = chonHuyen.DistrictName;
+      // Reset phường/xã
+      this.newDiaChi.phuongXa = '';
+      this.phuongXaList = [];
 
-    if (selectedDistrict) {
-      this.newAddress.quanHuyen = selectedDistrict.DistrictName;  // Lưu tên quận vào newAddress
-      const DistrictID = selectedDistrict.DistrictID;  // Lấy DistrictID
-
-      // Gọi API để lấy phường xã dựa trên DistrictID
-      this.hoadonService.getPhuongXa(DistrictID).subscribe(
+      const huyenId = chonHuyen.DistrictID;
+      this.hoadonService.getPhuongXa(huyenId).subscribe(
         (response: any) => {
-          this.phuongXaList = response.data || [];  // Cập nhật danh sách phường xã
-
-          // Sau khi đã có danh sách phường xã, chọn phường xã đã lưu từ trước nếu có
-          if (this.AddressEdit.phuongXa) {
-            this.newAddress.phuongXa = this.AddressEdit.phuongXa;  // Chọn lại phường xã cũ
+          this.phuongXaList = response.data || [];
+          if (this.diaChiEdit.phuongXa) {
+            this.newDiaChi.phuongXa = this.diaChiEdit.phuongXa;
           }
         },
         (error) => {
@@ -323,15 +322,13 @@ createHoaDonFromPaymentData(paymentData: any): void {
   }
 
 
-
-  getTotalPrice() {
-    this.hoadonService.getTotalPrice(this.idKhachHang).subscribe(
+  // Lấy tổng tiền tạm tính từ giỏ hàng
+  getTamTinh() {
+    this.hoadonService.getTamTinh(this.idKhachHang).subscribe(
       (response: number) => {
-        this.totalPrice = response;
-        console.log("Tổng tiền giỏ hàng: ", this.totalPrice);
+        this.TongTienTamTinh = response;
         this.getVoucherIdAndTen();
         this.tongTienKhongCoVoucher()
-        
       },
       (error) => {
         console.error("Lỗi khi lấy tổng tiền giỏ hàng", error);
@@ -340,16 +337,11 @@ createHoaDonFromPaymentData(paymentData: any): void {
   }
 
   // Cập nhật tổng tiền thanh toán sau khi áp dụng voucher
-  updateTotalPrice(): void {
-    if (this.selectedVoucher) {
-      console.log("Voucher đã chọn:", this.selectedVoucher);
-      console.log(this.idKhachHang)
-      console.log(this.shippingFee)
-      // Gọi API tính tổng tiền sau khi áp dụng voucher
-      this.hoadonService.calculateTotalWithVoucher(this.idKhachHang, this.selectedVoucher.id, this.shippingFee ?? 0).subscribe(
+  updatedTamTinh(): void {
+    if (this.chonVoucher) {
+      this.hoadonService.getTongTienThanhToan(this.idKhachHang, this.chonVoucher.id, this.shippingFee ?? 0).subscribe(
         (response: number) => {
-          this.tongTienSauVoucher = response;
-          console.log('Số tiền cần thanh toán sau khi áp dụng voucher:', this.tongTienSauVoucher);
+          this.tongTienThanhToan = response;
         },
         (error) => {
           console.error("Lỗi khi tính tổng tiền", error);
@@ -357,49 +349,34 @@ createHoaDonFromPaymentData(paymentData: any): void {
       );
     } else {
       console.warn("Không có voucher nào được chọn!");
-
-      this.tongTienSauVoucher = this.totalPrice;
+      this.tongTienThanhToan = this.TongTienTamTinh;
     }
   }
 
   // Phương thức gửi yêu cầu tạo thanh toán
-  createPayment(): void {
-  
+  createThanhToan(): void {
     const paymentData = {
       idKhachHang: this.idKhachHang,
-      selectedVoucherId: this.selectedVoucher ? this.selectedVoucher.id : null,
-      totalPrice: this.totalPrice,
-      selectedPhuongThucThanhToan: this.selectedPhuongThucThanhToan,
-      tongTienSauVoucher: this.tongTienSauVoucher,
-      selectedSdtNguoiNhan: this.selectedSdtNguoiNhan,
-      selectedTenNguoiNhan: this.selectedTenNguoiNhan,
-      fullAddress: this.fullAddress,
+      chonVoucherId: this.chonVoucher ? this.chonVoucher.id : null,
+      tamTinh: this.TongTienTamTinh,
+      chonPhuongThucThanhToan: this.chonPhuongThucThanhToan,
+      tongTienThanhToan: this.tongTienThanhToan,
+      chonSdtNguoiNhan: this.chonSdtNguoiNhan,
+      chonTenNguoiNhan: this.chonTenNguoiNhan,
+      fullDiaChi: this.fullDiaChi,
       shippingFee: this.shippingFee ?? 0
     };
-  console.log("thong tin ",paymentData)
-    // Lưu vào localStorage
     localStorage.setItem('paymentData', JSON.stringify(paymentData));
-    console.log(this.selectedPhuongThucThanhToan)
-
-    if (this.selectedPhuongThucThanhToan == 4) {
-      // Nếu phương thức thanh toán là VNPAY (ID 4), gọi VNPAY API
-
-      this.hoadonService.createPayment(this.tongTienSauVoucher).subscribe(
+    if (this.chonPhuongThucThanhToan == 4) {
+      this.hoadonService.createThanhToanVnpay(this.tongTienThanhToan).subscribe(
         (response: any) => {
           if (response.code == 'ok') {
-            window.localStorage.setItem('paymentStatus', 'success');  // Lưu trạng thái thanh toán vào localStorage
+            window.localStorage.setItem('paymentStatus', 'success');
             const paymentUrl = response.paymentUrl;
-            
-
-
-            // Xác nhận và chuyển hướng đến URL thanh toán
             const isConfirmed = confirm('Bạn có chắc chắn muốn thanh toán qua VNPAY không?');
             if (isConfirmed) {
-              // Nếu người dùng xác nhận, chuyển hướng đến URL thanh toán
               window.location.href = paymentUrl;
-
             }
-           
           }
         },
         (error) => {
@@ -407,8 +384,7 @@ createHoaDonFromPaymentData(paymentData: any): void {
           this.errorMessage = 'Có lỗi xảy ra khi tạo thanh toán. Vui lòng thử lại!';
         }
       );
-    } else if (this.selectedPhuongThucThanhToan == 1) {
-      // Nếu phương thức thanh toán là nhận hàng tại nơi (ID 1), tạo hóa đơn
+    } else if (this.chonPhuongThucThanhToan == 1) {
       this.createHoaDon();
     } else {
       alert("Phương thức thanh toán không hợp lệ!");
@@ -417,16 +393,13 @@ createHoaDonFromPaymentData(paymentData: any): void {
 
 
   // Phương thức gọi API lấy danh sách phương thức thanh toán
-  loadPaymentMethods(): void {
-    this.hoadonService.getPaymentMethods().subscribe(
+  loadPhuongThucThanhToan(): void {
+    this.hoadonService.getPhuongThucThanhToan().subscribe(
       (response: any) => {
-        // Lọc ra các phương thức có id = 1 hoặc id = 4
         this.phuongThucThanhToan = response.filter((method: any) => method.id === 1 || method.id === 4);
-        // Nếu có phương thức thanh toán id = 1, đặt nó làm mặc định
         if (this.phuongThucThanhToan.length > 0) {
-          this.selectedPhuongThucThanhToan = this.phuongThucThanhToan[0].id;
+          this.chonPhuongThucThanhToan = this.phuongThucThanhToan[0].id;
         }
-        // console.log("Phương thức thanh toán:", this.phuongThucThanhToan);
       },
       (error) => {
         this.errorMessage = 'Có lỗi xảy ra khi lấy danh sách phương thức thanh toán.';
@@ -435,22 +408,33 @@ createHoaDonFromPaymentData(paymentData: any): void {
     );
   }
 
-
-
-  // Gọi API để cập nhật thông tin địa chỉ
+  // Cập nhật địa chỉ đã chỉnh sửa
   updateDiaChi(): void {
-    if (this.AddressEdit.id) {
-      console.log("sua", this.newAddress)
-      this.hoadonService.updateDiaChiKhachHang(this.AddressEdit).subscribe(
+    const validationError = this.validateEditForm();
+    if (validationError) {
+      alert(validationError);
+      return;
+    }
+
+    const confirmAdd = window.confirm("Bạn có chắc chắn muốn lưu địa chỉ không?");
+    if (!confirmAdd) return;
+
+    if (this.diaChiEdit.id) {
+      console.log("sua", this.newDiaChi)
+      this.hoadonService.updateDiaChiKhachHang(this.diaChiEdit).subscribe(
         (response) => {
           console.log("update", response)
           alert("Địa chỉ đã được cập nhật!");
-          // Cập nhật lại địa chỉ trong danh sách
-          const index = this.diaChiList.findIndex((diaChi) => diaChi.id === this.AddressEdit.id);
+          this.activeTab = 'select';
+          const index = this.diaChiList.findIndex((diaChi) => diaChi.id === this.diaChiEdit.id);
           if (index !== -1) {
-            this.diaChiList[index] = response;  // Cập nhật địa chỉ trong danh sách với dữ liệu mới
+            this.diaChiList[index] = response;
           }
-          this.closeEditModal();  // Đóng modal sau khi cập nhật thành công
+
+          this.getDiaChiKhachHang()
+          this.closeEditModal();
+          this.activeTab = 'select';
+          this.isModalOpen = true;
         },
         (error) => {
           console.error("Lỗi khi cập nhật địa chỉ", error);
@@ -462,34 +446,81 @@ createHoaDonFromPaymentData(paymentData: any): void {
     }
   }
 
+  // Hàm kiểm tra form thêm địa chỉ 
+  validateAddForm(): string | null {
+    const dc = this.newDiaChi;
 
+    if (!dc.tenNguoiNhan?.trim()) return "Vui lòng nhập tên người nhận";
+
+    if (!dc.sdtNguoiNhan?.trim()) return "Vui lòng nhập số điện thoại";
+
+    // Kiểm tra không chứa chữ
+    if (/[a-zA-Z]/.test(dc.sdtNguoiNhan)) return "Số điện thoại không được chứa chữ cái";
+
+    // Kiểm tra đúng 10 số và bắt đầu bằng số 0
+    if (!/^0\d{9}$/.test(dc.sdtNguoiNhan)) {
+      return "Số điện thoại không đúng định dạng";
+    }
+
+    if (!dc.diaChiCuThe?.trim()) return "Vui lòng nhập địa chỉ cụ thể";
+    if (!dc.tinhThanhPho) return "Vui lòng chọn tỉnh/thành phố";
+    if (!dc.quanHuyen) return "Vui lòng chọn quận/huyện";
+    if (!dc.phuongXa) return "Vui lòng chọn phường/xã";
+
+    return null;
+  }
+
+  // Hàm kiểm tra form sửa địa chỉ
+  validateEditForm(): string | null {
+    const dc = this.diaChiEdit;
+
+    if (!dc.tenNguoiNhan?.trim()) return "Vui lòng nhập tên người nhận";
+
+    if (!dc.sdtNguoiNhan?.trim()) return "Vui lòng nhập số điện thoại";
+
+    // Kiểm tra không chứa chữ
+    if (/[a-zA-Z]/.test(dc.sdtNguoiNhan)) return "Số điện thoại không được chứa chữ cái";
+
+    // Kiểm tra đúng 10 số và bắt đầu bằng số 0
+    if (!/^0\d{9}$/.test(dc.sdtNguoiNhan)) {
+      return "Số điện thoại không đúng định dạng";
+    }
+
+    if (!dc.diaChiCuThe?.trim()) return "Vui lòng nhập địa chỉ cụ thể";
+    if (!dc.tinhThanhPho) return "Vui lòng chọn tỉnh/thành phố";
+    if (!dc.quanHuyen) return "Vui lòng chọn quận/huyện";
+    if (!dc.phuongXa) return "Vui lòng chọn phường/xã";
+
+    return null;
+  }
+
+  //Thêm địa chỉ mới
   addDiaChi() {
-    console.log(this.newAddress)
-    // Kiểm tra xem các trường có được nhập đầy đủ không
-    if (!this.newAddress.tenNguoiNhan || !this.newAddress.diaChiCuThe ||
-      !this.newAddress.tinhThanhPho || !this.newAddress.quanHuyen || !this.newAddress.phuongXa) {
-      alert("Vui lòng nhập đầy đủ thông tin địa chỉ!");
+    const validationError = this.validateAddForm();
+    if (validationError) {
+      alert(validationError);
       return;
     }
 
-    // Gọi API để thêm địa chỉ mới
-    this.hoadonService.addDiaChiKhachHang(this.newAddress).subscribe(
+    const confirmAdd = window.confirm("Bạn có chắc chắn muốn thêm địa chỉ mới không?");
+    if (!confirmAdd) return;
+
+    this.hoadonService.addDiaChiKhachHang(this.newDiaChi).subscribe(
       (response: any) => {
-        this.diaChiList.push(response); // Thêm địa chỉ mới vào danh sách
+        this.diaChiList.push(response);
         alert("Địa chỉ đã được thêm thành công!");
-        // Cập nhật địa chỉ vừa thêm làm địa chỉ được chọn
-        this.selectedAddress = response;
-        this.selectedTinh = response.tinhThanhPho;
-        this.selectedQuan = response.quanHuyen;
-        this.selectedPhuongXa = response.phuongXa;
-        this.selectedDiaChiCuThe = response.diaChiCuThe;
-        this.selectedSdtNguoiNhan = response.sdtNguoiNhan;
-        this.selectedTenNguoiNhan = response.tenNguoiNhan;
-        this.fullAddress = `${this.selectedTinh}-${this.selectedQuan}-${this.selectedPhuongXa}-${this.selectedDiaChiCuThe}`;
-        // Reset lại dữ liệu nhập
+        this.chonDiaChi = response;
+        this.chonTinh = response.tinhThanhPho;
+        this.chonQuan = response.quanHuyen;
+        this.chonPhuongXa = response.phuongXa;
+        this.chonDiaChiCuThe = response.diaChiCuThe;
+        this.chonSdtNguoiNhan = response.sdtNguoiNhan;
+        this.chonTenNguoiNhan = response.tenNguoiNhan;
+        this.fullDiaChi = `${this.chonTinh}-${this.chonQuan}-${this.chonPhuongXa}-${this.chonDiaChiCuThe}`;
         this.resetForm();
-        // Quay lại tab chọn địa chỉ
         this.activeTab = 'select';
+        this.getDiaChiKhachHang()
+
       },
       (error) => {
         console.error("Lỗi khi thêm địa chỉ:", error);
@@ -503,20 +534,18 @@ createHoaDonFromPaymentData(paymentData: any): void {
   editDiaChi(id: number) {
     this.hoadonService.getDiaChiDetail(id).subscribe((response) => {
 
-      this.AddressEdit = { ...response };  // Cập nhật dữ liệu vào AddressEdit
-      console.log("Thông tin địa chỉ lấy từ API:", this.AddressEdit);
+      this.diaChiEdit = { ...response };
+      console.log("Thông tin địa chỉ lấy từ API:", this.diaChiEdit);
       // Cập nhật thông tin tỉnh/thành phố
 
-      this.onSelectTinhThanh({ target: { value: this.AddressEdit.tinhThanhPho } });  // Gọi lại để lấy quận huyện
+      this.onSelectTinhThanh({ target: { value: this.diaChiEdit.tinhThanhPho } });
 
       // Cập nhật thông tin quận huyện
 
-      this.onSelectQuanHuyen({ target: { value: this.AddressEdit.quanHuyen } });  // Gọi lại để lấy phường xã
+      this.onSelectQuanHuyen({ target: { value: this.diaChiEdit.quanHuyen } });
 
       // Cập nhật thông tin phường xã
-      this.khachHang.phuongXa = this.AddressEdit.phuongXa;
-
-      // Mở modal chỉnh sửa
+      this.khachHang.phuongXa = this.diaChiEdit.phuongXa;
       this.openEditModal();
     }, (error) => {
       console.error('Lỗi khi lấy địa chỉ chi tiết:', error);
@@ -524,22 +553,19 @@ createHoaDonFromPaymentData(paymentData: any): void {
     });
   }
 
+  //xóa địa chỉ
   deleteDiaChi(id: number, index: number): void {
     if (confirm("Bạn có chắc chắn muốn xóa địa chỉ này?")) {
       this.hoadonService.deleteDiaChiKhachHang(id).subscribe(
         () => {
           alert("Địa chỉ đã được xóa thành công!");
-          this.diaChiList.splice(index, 1); // Xóa địa chỉ khỏi danh sách hiển thị
-
-          // Nếu không còn địa chỉ nào, đặt selectedAddress thành null hoặc mở modal để thêm địa chỉ mới
+          this.diaChiList.splice(index, 1);
           if (this.diaChiList.length === 0) {
-            this.selectedAddress = null; // Hoặc mở modal thêm địa chỉ mới
-            this.isModalOpen = true; // Nếu bạn muốn mở modal để người dùng thêm địa chỉ mới
+            this.chonDiaChi = null;
+            this.isModalOpen = true;
           } else {
-            // Nếu còn địa chỉ, chọn lại địa chỉ đầu tiên (hoặc bạn có thể thêm logic để chọn lại địa chỉ khác)
-            this.selectedAddress = this.diaChiList[0];
+            this.chonDiaChi = this.diaChiList[0];
           }
-          // Cập nhật giao diện
           this.cdRef.detectChanges();
         },
         (error) => {
@@ -552,13 +578,9 @@ createHoaDonFromPaymentData(paymentData: any): void {
 
   // Phương thức gọi API để lấy danh sách voucher
   getVoucherIdAndTen(): void {
-    console.log("tổng tiền",this.totalPrice)
-    this.hoadonService.getAvailableVouchers(this.totalPrice).subscribe(
+    this.hoadonService.getVouchers(this.TongTienTamTinh).subscribe(
       (response: any) => {
         this.vouchers = response;
-        console.log('Danh sách voucher:', response); // Log danh sách voucher để kiểm tra
-        // Lưu dữ liệu voucher vào mảng hoặc biến nếu cần
-        // Example: this.vouchers = response;
       },
       (error) => {
         console.error("Lỗi khi lấy danh sách voucher", error);
@@ -566,62 +588,59 @@ createHoaDonFromPaymentData(paymentData: any): void {
     );
   }
 
-  calculateShipping() {
+  //tính phí ship
+  tinhPhiShipping() {
     const pickProvince = 'Hà Nội';
     const pickDistrict = 'Quận Hoàn Kiếm';
     const weight = 200;
     const deliverOption = 'none';
 
-    this.hoadonService.calculateShippingFee(pickProvince, pickDistrict, this.selectedTinh, this.selectedQuan, weight, deliverOption)
+    this.hoadonService.tinhTienShip(pickProvince, pickDistrict, this.chonTinh, this.chonQuan, weight, deliverOption)
       .subscribe((response) => {
         this.shippingFee = response.fee.fee
-        console.log("tiền ship", response.fee);
         this.tongTienKhongCoVoucher()
       }, error => {
-        console.error('Error calculating shipping fee', error);
+        console.error('Error', error);
       });
   }
 
-  // Phương thức gọi API để tạo hóa đơn và thêm các sản phẩm
+  //tạo đơn hàng
   createHoaDon(): void {
-    if (!this.selectedAddress || !this.fullAddress || this.fullAddress.trim() === '') {
+    if (!this.chonDiaChi || !this.fullDiaChi || this.fullDiaChi.trim() === '') {
       alert("Vui lòng chọn địa chỉ giao hàng!");
       return;
     }
 
-    // Nếu không có voucher, gán null
-    if (this.selectedPhuongThucThanhToan == null) {
+    if (this.chonPhuongThucThanhToan == null) {
       alert("Phương thức thanh toán không được để trống");
       return;
     }
 
-    // Hiển thị confirm nếu không phải VNPAY (id !== 4)
-    if (this.selectedPhuongThucThanhToan != 4) {
+    if (this.chonPhuongThucThanhToan != 4) {
       const confirmCreateInvoice = confirm('Bạn có muốn tạo đơn hàng không?');
       if (!confirmCreateInvoice) {
-        return; // Nếu người dùng không muốn tạo hóa đơn thì dừng lại
+        return;
       }
     }
-    const paymentMethodId = this.selectedPhuongThucThanhToan;
-    const voucherId = this.selectedVoucher ? this.selectedVoucher.id : null;
+
+    const phuongThucThanhToanId = this.chonPhuongThucThanhToan;
+    const voucherId = this.chonVoucher ? this.chonVoucher.id : null;
     this.hoadonService.createHoaDon(
       this.idKhachHang,
       voucherId,
-      this.totalPrice,
-      paymentMethodId,
-      this.tongTienSauVoucher,
-      this.selectedSdtNguoiNhan,
-      this.selectedTenNguoiNhan,
-      this.fullAddress,
+      this.TongTienTamTinh,
+      phuongThucThanhToanId,
+      this.tongTienThanhToan,
+      this.chonSdtNguoiNhan,
+      this.chonTenNguoiNhan,
+      this.fullDiaChi,
       this.shippingFee ?? 0
     ).subscribe(
       (response) => {
-        console.log('đơn hàng đã được tạo thành công:', response);
         alert('Đơn hàng đã được tạo thành công!');
         this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
         this.modalthongbao = true;
-        this.maHoaDon = response.ma;
-
+        this.idHoaDon = response.id;
       },
       (error) => {
         console.error('Lỗi khi tạo hóa đơn:', error);
@@ -637,14 +656,15 @@ createHoaDonFromPaymentData(paymentData: any): void {
   }
 
 
-  // Đóng modal khi click bên ngoài
+
   closeModalThongBao() {
     this.modalthongbao = false;
   }
+
   viewInvoiceDetails(): void {
     console.log('Xem chi tiết đơn hàng');
-    this.router.navigate(['/donhang', this.maHoaDon]);
-    this.closeModalThongBao();  // Đóng modal khi thực hiện hành động
+    this.router.navigate(['/donhang', this.idHoaDon]);
+    this.closeModalThongBao();
   }
 
   viewInvoiceHistory() {
@@ -656,13 +676,11 @@ createHoaDonFromPaymentData(paymentData: any): void {
   goHome() {
     console.log('Quay về trang chủ');
     this.closeModalThongBao();
-    // Ví dụ quay về trang chủ
     this.router.navigate(['/banhang']);
   }
 
   resetForm(): void {
-    // Reset các trường trong newAddress về giá trị mặc định
-    this.newAddress = {
+    this.newDiaChi = {
       id: '',
       tenNguoiNhan: '',
       sdtNguoiNhan: '',
@@ -672,13 +690,12 @@ createHoaDonFromPaymentData(paymentData: any): void {
       phuongXa: '',
       idKhachHang: this.idKhachHang
     };
-
   }
 
-
-  getVoucherDisplayText(): string {
-    if (!this.selectedVoucher || this.totalPrice === 0) return '';
-    const v = this.selectedVoucher;
+  //tính giá trị giảm của voucher
+  getTinhVoucher(): string {
+    if (!this.chonVoucher || this.TongTienTamTinh === 0) return '';
+    const v = this.chonVoucher;
 
     // Nếu là giảm trực tiếp
     if (v.hinhThucGiam) {
@@ -686,18 +703,18 @@ createHoaDonFromPaymentData(paymentData: any): void {
     }
 
     // Nếu là giảm phần trăm
-    const calculatedDiscount = (this.totalPrice * v.giaTriGiam) / 100;
+    const giaTriGiam = (this.TongTienTamTinh * v.giaTriGiam) / 100;
 
-    if (v.giamToiDa && calculatedDiscount > v.giamToiDa) {
+    if (v.giamToiDa && giaTriGiam > v.giamToiDa) {
       return `Giảm tối đa: ${v.giamToiDa.toLocaleString()} VND`;
     } else {
-      return `Giảm ${v.giaTriGiam}% - ${calculatedDiscount.toLocaleString()} VND`;
+      return `Giảm ${v.giaTriGiam}% - ${giaTriGiam.toLocaleString()} VND`;
     }
   }
 
   tongTienKhongCoVoucher(): void {
     const shipping = this.shippingFee ?? 0;
-    this.tongTienSauVoucher = this.totalPrice + shipping;
+    this.tongTienThanhToan = this.TongTienTamTinh + shipping;
   }
 
   openAddAddress(): void {

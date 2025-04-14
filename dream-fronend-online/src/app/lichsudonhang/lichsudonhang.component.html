@@ -5,15 +5,15 @@
   <div class="status-filter-container">
     <div class="status-filter">
       <button 
-        *ngFor="let status of statuses"
-        [ngClass]="{'active': selectedStatus === status.value}"
-        (click)="filterByStatus(status.value)">
-        {{ status.label }}
+        *ngFor="let trangThai of trangThai"
+        [ngClass]="{'active': selectedStatus === trangThai.value}"
+        (click)="locTrangThai(trangThai.value)">
+        {{ trangThai.label }}
       </button>
     </div>
   </div>
   <ul class="hoa-don-list" >
-    <li *ngFor="let item of hoaDonChiTiet" class="hoa-don-item"  (click)="viewInvoiceDetail(item.maHoaDon)">
+    <li *ngFor="let item of hoaDonChiTiet" class="hoa-don-item"  (click)="viewInvoiceDetail(item.idHoaDon)">
         <div class="anh">
           <img [src]="'http://localhost:8080' + item.anhUrl" alt="{{ item.tenSanPham }}" class="product-image"/>
         </div>

@@ -91,12 +91,12 @@ export class HoaDonService {
   }
 
   // Phương thức lấy chi tiết hóa đơn theo mã hóa đơn
-  getChiTietHoaDon(maHoaDon: string): Observable<any> {
-    return this.http.get<any>(`${this.apiHoaDonOnline}/chi-tiet/${maHoaDon}`);
+  getChiTietHoaDon(idHoaDon: number): Observable<any> {
+    return this.http.get<any>(`${this.apiHoaDonOnline}/chi-tiet/${idHoaDon}`);
   }
 
-  getHoaDonByMa(ma: string): Observable<any> {
-    return this.http.get<any>(`${this.apiHoaDonOnline}/find-by-ma/${ma}`);
+  getHoaDonByMa(idHoaDon: number): Observable<any> {
+    return this.http.get<any>(`${this.apiHoaDonOnline}/find-by-ma/${idHoaDon}`);
   }
 
   updateHoaDon(invoiceId: number, request: any): Observable<any> {
@@ -104,12 +104,5 @@ export class HoaDonService {
     return this.http.put<any>(url, request);
   }
 
-   // Phương thức hủy hóa đơn sử dụng RequestParam
-   huyHoaDon(maHoaDon: string, ghiChu: string): Observable<any> {
-    const params = new HttpParams()
-      .set('maHoaDon', maHoaDon)
-      .set('ghiChu', ghiChu);
-
-    return this.http.post<any>(`${this.apiHoaDonOnline}/huy`, null, { params });
-  }
+  
 }

@@ -12,9 +12,10 @@ import java.util.List;
 @Repository
 public interface DiaChiKhachHangRepository extends JpaRepository<DiaChiKhachHang, Integer> {
     @Query("""
-        SELECT dckh FROM DiaChiKhachHang dckh 
-        WHERE dckh.khachHang.id = :idKhachHang
-    """)
+    SELECT dckh FROM DiaChiKhachHang dckh 
+    WHERE dckh.khachHang.id = :idKhachHang 
+    ORDER BY dckh.id DESC  
+""")
     List<DiaChiKhachHang> getAllDiaChiKhachHang(@Param("idKhachHang") Integer idKhachHang);
 
     @Query("SELECT dckh.id FROM DiaChiKhachHang dckh WHERE dckh.sdtNguoiNhan = :sdtNguoiNhan")

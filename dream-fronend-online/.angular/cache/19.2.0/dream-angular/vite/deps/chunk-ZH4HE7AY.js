@@ -1,20 +1,7 @@
 import {
-  Platform,
-  _bindEventWithOptions,
-  _getEventTarget,
-  _getFocusedElementPierceShadowDom,
-  _getShadowRoot,
-  coerceArray,
-  coerceElement,
-  coerceNumberProperty,
-  normalizePassiveListenerOptions
-} from "./chunk-VI7POIUZ.js";
-import {
-  BidiModule
-} from "./chunk-WB7AGOPS.js";
-import {
-  DOCUMENT
-} from "./chunk-KMQFGUY7.js";
+  DOCUMENT,
+  isPlatformBrowser
+} from "./chunk-FDHP4TYI.js";
 import {
   ANIMATION_MODULE_TYPE,
   APP_ID,
@@ -35,8 +22,10 @@ import {
   NgModule,
   NgZone,
   Output,
+  PLATFORM_ID,
   QueryList,
   RendererFactory2,
+  VERSION,
   Version,
   ViewChild,
   ViewEncapsulation,
@@ -44,7 +33,6 @@ import {
   booleanAttribute,
   createComponent,
   inject,
-  isObservable,
   isSignal,
   setClassMetadata,
   ɵɵNgOnChangesFeature,
@@ -73,17 +61,20 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate1,
   ɵɵviewQuery
-} from "./chunk-TVMJUZRJ.js";
+} from "./chunk-67NM7YT2.js";
 import {
   BehaviorSubject,
   Observable,
   Subject,
   Subscription,
+  __spreadProps,
+  __spreadValues,
   combineLatest,
   concat,
   debounceTime,
   distinctUntilChanged,
   filter,
+  isObservable,
   map,
   of,
   skip,
@@ -91,30 +82,196 @@ import {
   take,
   takeUntil,
   tap
-} from "./chunk-ADIHE7QJ.js";
-import {
-  __spreadProps,
-  __spreadValues
-} from "./chunk-5Q4GJRSR.js";
+} from "./chunk-S35MAB2V.js";
 
-// node_modules/@angular/cdk/fesm2022/keycodes.mjs
-var ENTER = 13;
-var SHIFT = 16;
-var CONTROL = 17;
-var ALT = 18;
-var ESCAPE = 27;
-var SPACE = 32;
-var ZERO = 48;
-var NINE = 57;
-var A = 65;
-var Z = 90;
-var META = 91;
-var MAC_META = 224;
-function hasModifierKey(event, ...modifiers) {
-  if (modifiers.length) {
-    return modifiers.some((modifier) => event[modifier]);
+// node_modules/@angular/cdk/fesm2022/platform.mjs
+var hasV8BreakIterator;
+try {
+  hasV8BreakIterator = typeof Intl !== "undefined" && Intl.v8BreakIterator;
+} catch {
+  hasV8BreakIterator = false;
+}
+var Platform = class _Platform {
+  _platformId = inject(PLATFORM_ID);
+  // We want to use the Angular platform check because if the Document is shimmed
+  // without the navigator, the following checks will fail. This is preferred because
+  // sometimes the Document may be shimmed without the user's knowledge or intention
+  /** Whether the Angular application is being rendered in the browser. */
+  isBrowser = this._platformId ? isPlatformBrowser(this._platformId) : typeof document === "object" && !!document;
+  /** Whether the current browser is Microsoft Edge. */
+  EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
+  /** Whether the current rendering engine is Microsoft Trident. */
+  TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
+  // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
+  /** Whether the current rendering engine is Blink. */
+  BLINK = this.isBrowser && !!(window.chrome || hasV8BreakIterator) && typeof CSS !== "undefined" && !this.EDGE && !this.TRIDENT;
+  // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
+  // ensure that Webkit runs standalone and is not used as another engine's base.
+  /** Whether the current rendering engine is WebKit. */
+  WEBKIT = this.isBrowser && /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
+  /** Whether the current platform is Apple iOS. */
+  IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
+  // It's difficult to detect the plain Gecko engine, because most of the browsers identify
+  // them self as Gecko-like browsers and modify the userAgent's according to that.
+  // Since we only cover one explicit Firefox case, we can simply check for Firefox
+  // instead of having an unstable check for Gecko.
+  /** Whether the current browser is Firefox. */
+  FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
+  /** Whether the current platform is Android. */
+  // Trident on mobile adds the android platform to the userAgent to trick detections.
+  ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
+  // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
+  // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
+  // Safari browser should also use Webkit as its layout engine.
+  /** Whether the current browser is Safari. */
+  SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
+  constructor() {
   }
-  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+  static ɵfac = function Platform_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _Platform)();
+  };
+  static ɵprov = ɵɵdefineInjectable({
+    token: _Platform,
+    factory: _Platform.ɵfac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Platform, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], () => [], null);
+})();
+var PlatformModule = class _PlatformModule {
+  static ɵfac = function PlatformModule_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _PlatformModule)();
+  };
+  static ɵmod = ɵɵdefineNgModule({
+    type: _PlatformModule
+  });
+  static ɵinj = ɵɵdefineInjector({});
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(PlatformModule, [{
+    type: NgModule,
+    args: [{}]
+  }], null, null);
+})();
+var supportsPassiveEvents;
+function supportsPassiveEventListeners() {
+  if (supportsPassiveEvents == null && typeof window !== "undefined") {
+    try {
+      window.addEventListener("test", null, Object.defineProperty({}, "passive", {
+        get: () => supportsPassiveEvents = true
+      }));
+    } finally {
+      supportsPassiveEvents = supportsPassiveEvents || false;
+    }
+  }
+  return supportsPassiveEvents;
+}
+function normalizePassiveListenerOptions(options) {
+  return supportsPassiveEventListeners() ? options : !!options.capture;
+}
+var RtlScrollAxisType;
+(function(RtlScrollAxisType2) {
+  RtlScrollAxisType2[RtlScrollAxisType2["NORMAL"] = 0] = "NORMAL";
+  RtlScrollAxisType2[RtlScrollAxisType2["NEGATED"] = 1] = "NEGATED";
+  RtlScrollAxisType2[RtlScrollAxisType2["INVERTED"] = 2] = "INVERTED";
+})(RtlScrollAxisType || (RtlScrollAxisType = {}));
+var rtlScrollAxisType;
+var scrollBehaviorSupported;
+function supportsScrollBehavior() {
+  if (scrollBehaviorSupported == null) {
+    if (typeof document !== "object" || !document || typeof Element !== "function" || !Element) {
+      scrollBehaviorSupported = false;
+      return scrollBehaviorSupported;
+    }
+    if ("scrollBehavior" in document.documentElement.style) {
+      scrollBehaviorSupported = true;
+    } else {
+      const scrollToFunction = Element.prototype.scrollTo;
+      if (scrollToFunction) {
+        scrollBehaviorSupported = !/\{\s*\[native code\]\s*\}/.test(scrollToFunction.toString());
+      } else {
+        scrollBehaviorSupported = false;
+      }
+    }
+  }
+  return scrollBehaviorSupported;
+}
+function getRtlScrollAxisType() {
+  if (typeof document !== "object" || !document) {
+    return RtlScrollAxisType.NORMAL;
+  }
+  if (rtlScrollAxisType == null) {
+    const scrollContainer = document.createElement("div");
+    const containerStyle = scrollContainer.style;
+    scrollContainer.dir = "rtl";
+    containerStyle.width = "1px";
+    containerStyle.overflow = "auto";
+    containerStyle.visibility = "hidden";
+    containerStyle.pointerEvents = "none";
+    containerStyle.position = "absolute";
+    const content = document.createElement("div");
+    const contentStyle = content.style;
+    contentStyle.width = "2px";
+    contentStyle.height = "1px";
+    scrollContainer.appendChild(content);
+    document.body.appendChild(scrollContainer);
+    rtlScrollAxisType = RtlScrollAxisType.NORMAL;
+    if (scrollContainer.scrollLeft === 0) {
+      scrollContainer.scrollLeft = 1;
+      rtlScrollAxisType = scrollContainer.scrollLeft === 0 ? RtlScrollAxisType.NEGATED : RtlScrollAxisType.INVERTED;
+    }
+    scrollContainer.remove();
+  }
+  return rtlScrollAxisType;
+}
+var shadowDomIsSupported;
+function _supportsShadowDom() {
+  if (shadowDomIsSupported == null) {
+    const head = typeof document !== "undefined" ? document.head : null;
+    shadowDomIsSupported = !!(head && (head.createShadowRoot || head.attachShadow));
+  }
+  return shadowDomIsSupported;
+}
+function _getShadowRoot(element) {
+  if (_supportsShadowDom()) {
+    const rootNode = element.getRootNode ? element.getRootNode() : null;
+    if (typeof ShadowRoot !== "undefined" && ShadowRoot && rootNode instanceof ShadowRoot) {
+      return rootNode;
+    }
+  }
+  return null;
+}
+function _getFocusedElementPierceShadowDom() {
+  let activeElement = typeof document !== "undefined" && document ? document.activeElement : null;
+  while (activeElement && activeElement.shadowRoot) {
+    const newActiveElement = activeElement.shadowRoot.activeElement;
+    if (newActiveElement === activeElement) {
+      break;
+    } else {
+      activeElement = newActiveElement;
+    }
+  }
+  return activeElement;
+}
+function _getEventTarget(event) {
+  return event.composedPath ? event.composedPath()[0] : event.target;
+}
+function _bindEventWithOptions(renderer, target, eventName, callback, options) {
+  const major = parseInt(VERSION.major);
+  const minor = parseInt(VERSION.minor);
+  if (major > 19 || major === 19 && minor > 0 || major === 0 && minor === 0) {
+    return renderer.listen(target, eventName, callback, options);
+  }
+  target.addEventListener(eventName, callback, options);
+  return () => {
+    target.removeEventListener(eventName, callback, options);
+  };
 }
 
 // node_modules/@angular/cdk/fesm2022/private.mjs
@@ -195,191 +352,44 @@ var _VisuallyHiddenLoader = class __VisuallyHiddenLoader {
   }], null, null);
 })();
 
-// node_modules/@angular/cdk/fesm2022/layout.mjs
-var LayoutModule = class _LayoutModule {
-  static ɵfac = function LayoutModule_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _LayoutModule)();
-  };
-  static ɵmod = ɵɵdefineNgModule({
-    type: _LayoutModule
-  });
-  static ɵinj = ɵɵdefineInjector({});
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(LayoutModule, [{
-    type: NgModule,
-    args: [{}]
-  }], null, null);
-})();
-var mediaQueriesForWebkitCompatibility = /* @__PURE__ */ new Set();
-var mediaQueryStyleNode;
-var MediaMatcher = class _MediaMatcher {
-  _platform = inject(Platform);
-  _nonce = inject(CSP_NONCE, {
-    optional: true
-  });
-  /** The internal matchMedia method to return back a MediaQueryList like object. */
-  _matchMedia;
-  constructor() {
-    this._matchMedia = this._platform.isBrowser && window.matchMedia ? (
-      // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
-      // call it from a different scope.
-      window.matchMedia.bind(window)
-    ) : noopMatchMedia;
+// node_modules/@angular/cdk/fesm2022/keycodes.mjs
+var ENTER = 13;
+var SHIFT = 16;
+var CONTROL = 17;
+var ALT = 18;
+var ESCAPE = 27;
+var SPACE = 32;
+var ZERO = 48;
+var NINE = 57;
+var A = 65;
+var Z = 90;
+var META = 91;
+var MAC_META = 224;
+function hasModifierKey(event, ...modifiers) {
+  if (modifiers.length) {
+    return modifiers.some((modifier) => event[modifier]);
   }
-  /**
-   * Evaluates the given media query and returns the native MediaQueryList from which results
-   * can be retrieved.
-   * Confirms the layout engine will trigger for the selector query provided and returns the
-   * MediaQueryList for the query provided.
-   */
-  matchMedia(query) {
-    if (this._platform.WEBKIT || this._platform.BLINK) {
-      createEmptyStyleRule(query, this._nonce);
-    }
-    return this._matchMedia(query);
-  }
-  static ɵfac = function MediaMatcher_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _MediaMatcher)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: _MediaMatcher,
-    factory: _MediaMatcher.ɵfac,
-    providedIn: "root"
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(MediaMatcher, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], () => [], null);
-})();
-function createEmptyStyleRule(query, nonce) {
-  if (mediaQueriesForWebkitCompatibility.has(query)) {
-    return;
-  }
-  try {
-    if (!mediaQueryStyleNode) {
-      mediaQueryStyleNode = document.createElement("style");
-      if (nonce) {
-        mediaQueryStyleNode.setAttribute("nonce", nonce);
-      }
-      mediaQueryStyleNode.setAttribute("type", "text/css");
-      document.head.appendChild(mediaQueryStyleNode);
-    }
-    if (mediaQueryStyleNode.sheet) {
-      mediaQueryStyleNode.sheet.insertRule(`@media ${query} {body{ }}`, 0);
-      mediaQueriesForWebkitCompatibility.add(query);
-    }
-  } catch (e) {
-    console.error(e);
-  }
+  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
 }
-function noopMatchMedia(query) {
-  return {
-    matches: query === "all" || query === "",
-    media: query,
-    addListener: () => {
-    },
-    removeListener: () => {
-    }
-  };
+
+// node_modules/@angular/cdk/fesm2022/coercion.mjs
+function coerceBooleanProperty(value) {
+  return value != null && `${value}` !== "false";
 }
-var BreakpointObserver = class _BreakpointObserver {
-  _mediaMatcher = inject(MediaMatcher);
-  _zone = inject(NgZone);
-  /**  A map of all media queries currently being listened for. */
-  _queries = /* @__PURE__ */ new Map();
-  /** A subject for all other observables to takeUntil based on. */
-  _destroySubject = new Subject();
-  constructor() {
+function coerceNumberProperty(value, fallbackValue = 0) {
+  if (_isNumberValue(value)) {
+    return Number(value);
   }
-  /** Completes the active subject, signalling to all other observables to complete. */
-  ngOnDestroy() {
-    this._destroySubject.next();
-    this._destroySubject.complete();
-  }
-  /**
-   * Whether one or more media queries match the current viewport size.
-   * @param value One or more media queries to check.
-   * @returns Whether any of the media queries match.
-   */
-  isMatched(value) {
-    const queries = splitQueries(coerceArray(value));
-    return queries.some((mediaQuery) => this._registerQuery(mediaQuery).mql.matches);
-  }
-  /**
-   * Gets an observable of results for the given queries that will emit new results for any changes
-   * in matching of the given queries.
-   * @param value One or more media queries to check.
-   * @returns A stream of matches for the given queries.
-   */
-  observe(value) {
-    const queries = splitQueries(coerceArray(value));
-    const observables = queries.map((query) => this._registerQuery(query).observable);
-    let stateObservable = combineLatest(observables);
-    stateObservable = concat(stateObservable.pipe(take(1)), stateObservable.pipe(skip(1), debounceTime(0)));
-    return stateObservable.pipe(map((breakpointStates) => {
-      const response = {
-        matches: false,
-        breakpoints: {}
-      };
-      breakpointStates.forEach(({
-        matches,
-        query
-      }) => {
-        response.matches = response.matches || matches;
-        response.breakpoints[query] = matches;
-      });
-      return response;
-    }));
-  }
-  /** Registers a specific query to be listened for. */
-  _registerQuery(query) {
-    if (this._queries.has(query)) {
-      return this._queries.get(query);
-    }
-    const mql = this._mediaMatcher.matchMedia(query);
-    const queryObservable = new Observable((observer) => {
-      const handler = (e) => this._zone.run(() => observer.next(e));
-      mql.addListener(handler);
-      return () => {
-        mql.removeListener(handler);
-      };
-    }).pipe(startWith(mql), map(({
-      matches
-    }) => ({
-      query,
-      matches
-    })), takeUntil(this._destroySubject));
-    const output = {
-      observable: queryObservable,
-      mql
-    };
-    this._queries.set(query, output);
-    return output;
-  }
-  static ɵfac = function BreakpointObserver_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _BreakpointObserver)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: _BreakpointObserver,
-    factory: _BreakpointObserver.ɵfac,
-    providedIn: "root"
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(BreakpointObserver, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], () => [], null);
-})();
-function splitQueries(queries) {
-  return queries.map((query) => query.split(",")).reduce((a1, a2) => a1.concat(a2)).map((query) => query.trim());
+  return arguments.length === 2 ? fallbackValue : 0;
+}
+function _isNumberValue(value) {
+  return !isNaN(parseFloat(value)) && !isNaN(Number(value));
+}
+function coerceArray(value) {
+  return Array.isArray(value) ? value : [value];
+}
+function coerceElement(elementOrRef) {
+  return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
 }
 
 // node_modules/@angular/cdk/fesm2022/coercion/private.mjs
@@ -634,6 +644,193 @@ var ObserversModule = class _ObserversModule {
     }]
   }], null, null);
 })();
+
+// node_modules/@angular/cdk/fesm2022/layout.mjs
+var LayoutModule = class _LayoutModule {
+  static ɵfac = function LayoutModule_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _LayoutModule)();
+  };
+  static ɵmod = ɵɵdefineNgModule({
+    type: _LayoutModule
+  });
+  static ɵinj = ɵɵdefineInjector({});
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(LayoutModule, [{
+    type: NgModule,
+    args: [{}]
+  }], null, null);
+})();
+var mediaQueriesForWebkitCompatibility = /* @__PURE__ */ new Set();
+var mediaQueryStyleNode;
+var MediaMatcher = class _MediaMatcher {
+  _platform = inject(Platform);
+  _nonce = inject(CSP_NONCE, {
+    optional: true
+  });
+  /** The internal matchMedia method to return back a MediaQueryList like object. */
+  _matchMedia;
+  constructor() {
+    this._matchMedia = this._platform.isBrowser && window.matchMedia ? (
+      // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
+      // call it from a different scope.
+      window.matchMedia.bind(window)
+    ) : noopMatchMedia;
+  }
+  /**
+   * Evaluates the given media query and returns the native MediaQueryList from which results
+   * can be retrieved.
+   * Confirms the layout engine will trigger for the selector query provided and returns the
+   * MediaQueryList for the query provided.
+   */
+  matchMedia(query) {
+    if (this._platform.WEBKIT || this._platform.BLINK) {
+      createEmptyStyleRule(query, this._nonce);
+    }
+    return this._matchMedia(query);
+  }
+  static ɵfac = function MediaMatcher_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _MediaMatcher)();
+  };
+  static ɵprov = ɵɵdefineInjectable({
+    token: _MediaMatcher,
+    factory: _MediaMatcher.ɵfac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(MediaMatcher, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], () => [], null);
+})();
+function createEmptyStyleRule(query, nonce) {
+  if (mediaQueriesForWebkitCompatibility.has(query)) {
+    return;
+  }
+  try {
+    if (!mediaQueryStyleNode) {
+      mediaQueryStyleNode = document.createElement("style");
+      if (nonce) {
+        mediaQueryStyleNode.setAttribute("nonce", nonce);
+      }
+      mediaQueryStyleNode.setAttribute("type", "text/css");
+      document.head.appendChild(mediaQueryStyleNode);
+    }
+    if (mediaQueryStyleNode.sheet) {
+      mediaQueryStyleNode.sheet.insertRule(`@media ${query} {body{ }}`, 0);
+      mediaQueriesForWebkitCompatibility.add(query);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+function noopMatchMedia(query) {
+  return {
+    matches: query === "all" || query === "",
+    media: query,
+    addListener: () => {
+    },
+    removeListener: () => {
+    }
+  };
+}
+var BreakpointObserver = class _BreakpointObserver {
+  _mediaMatcher = inject(MediaMatcher);
+  _zone = inject(NgZone);
+  /**  A map of all media queries currently being listened for. */
+  _queries = /* @__PURE__ */ new Map();
+  /** A subject for all other observables to takeUntil based on. */
+  _destroySubject = new Subject();
+  constructor() {
+  }
+  /** Completes the active subject, signalling to all other observables to complete. */
+  ngOnDestroy() {
+    this._destroySubject.next();
+    this._destroySubject.complete();
+  }
+  /**
+   * Whether one or more media queries match the current viewport size.
+   * @param value One or more media queries to check.
+   * @returns Whether any of the media queries match.
+   */
+  isMatched(value) {
+    const queries = splitQueries(coerceArray(value));
+    return queries.some((mediaQuery) => this._registerQuery(mediaQuery).mql.matches);
+  }
+  /**
+   * Gets an observable of results for the given queries that will emit new results for any changes
+   * in matching of the given queries.
+   * @param value One or more media queries to check.
+   * @returns A stream of matches for the given queries.
+   */
+  observe(value) {
+    const queries = splitQueries(coerceArray(value));
+    const observables = queries.map((query) => this._registerQuery(query).observable);
+    let stateObservable = combineLatest(observables);
+    stateObservable = concat(stateObservable.pipe(take(1)), stateObservable.pipe(skip(1), debounceTime(0)));
+    return stateObservable.pipe(map((breakpointStates) => {
+      const response = {
+        matches: false,
+        breakpoints: {}
+      };
+      breakpointStates.forEach(({
+        matches,
+        query
+      }) => {
+        response.matches = response.matches || matches;
+        response.breakpoints[query] = matches;
+      });
+      return response;
+    }));
+  }
+  /** Registers a specific query to be listened for. */
+  _registerQuery(query) {
+    if (this._queries.has(query)) {
+      return this._queries.get(query);
+    }
+    const mql = this._mediaMatcher.matchMedia(query);
+    const queryObservable = new Observable((observer) => {
+      const handler = (e) => this._zone.run(() => observer.next(e));
+      mql.addListener(handler);
+      return () => {
+        mql.removeListener(handler);
+      };
+    }).pipe(startWith(mql), map(({
+      matches
+    }) => ({
+      query,
+      matches
+    })), takeUntil(this._destroySubject));
+    const output = {
+      observable: queryObservable,
+      mql
+    };
+    this._queries.set(query, output);
+    return output;
+  }
+  static ɵfac = function BreakpointObserver_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _BreakpointObserver)();
+  };
+  static ɵprov = ɵɵdefineInjectable({
+    token: _BreakpointObserver,
+    factory: _BreakpointObserver.ɵfac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(BreakpointObserver, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], () => [], null);
+})();
+function splitQueries(queries) {
+  return queries.map((query) => query.split(",")).reduce((a1, a2) => a1.concat(a2)).map((query) => query.trim());
+}
 
 // node_modules/@angular/cdk/fesm2022/a11y.mjs
 var ID_DELIMITER = " ";
@@ -2740,6 +2937,159 @@ var _IdGenerator = class __IdGenerator {
   }], null, null);
 })();
 
+// node_modules/@angular/cdk/fesm2022/bidi.mjs
+var DIR_DOCUMENT = new InjectionToken("cdk-dir-doc", {
+  providedIn: "root",
+  factory: DIR_DOCUMENT_FACTORY
+});
+function DIR_DOCUMENT_FACTORY() {
+  return inject(DOCUMENT);
+}
+var RTL_LOCALE_PATTERN = /^(ar|ckb|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Adlm|Arab|Hebr|Nkoo|Rohg|Thaa))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)/i;
+function _resolveDirectionality(rawValue) {
+  const value = rawValue?.toLowerCase() || "";
+  if (value === "auto" && typeof navigator !== "undefined" && navigator?.language) {
+    return RTL_LOCALE_PATTERN.test(navigator.language) ? "rtl" : "ltr";
+  }
+  return value === "rtl" ? "rtl" : "ltr";
+}
+var Directionality = class _Directionality {
+  /** The current 'ltr' or 'rtl' value. */
+  value = "ltr";
+  /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
+  change = new EventEmitter();
+  constructor() {
+    const _document = inject(DIR_DOCUMENT, {
+      optional: true
+    });
+    if (_document) {
+      const bodyDir = _document.body ? _document.body.dir : null;
+      const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
+      this.value = _resolveDirectionality(bodyDir || htmlDir || "ltr");
+    }
+  }
+  ngOnDestroy() {
+    this.change.complete();
+  }
+  static ɵfac = function Directionality_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _Directionality)();
+  };
+  static ɵprov = ɵɵdefineInjectable({
+    token: _Directionality,
+    factory: _Directionality.ɵfac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Directionality, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], () => [], null);
+})();
+var Dir = class _Dir {
+  /** Normalized direction that accounts for invalid/unsupported values. */
+  _dir = "ltr";
+  /** Whether the `value` has been set to its initial value. */
+  _isInitialized = false;
+  /** Direction as passed in by the consumer. */
+  _rawDir;
+  /** Event emitted when the direction changes. */
+  change = new EventEmitter();
+  /** @docs-private */
+  get dir() {
+    return this._dir;
+  }
+  set dir(value) {
+    const previousValue = this._dir;
+    this._dir = _resolveDirectionality(value);
+    this._rawDir = value;
+    if (previousValue !== this._dir && this._isInitialized) {
+      this.change.emit(this._dir);
+    }
+  }
+  /** Current layout direction of the element. */
+  get value() {
+    return this.dir;
+  }
+  /** Initialize once default value has been set. */
+  ngAfterContentInit() {
+    this._isInitialized = true;
+  }
+  ngOnDestroy() {
+    this.change.complete();
+  }
+  static ɵfac = function Dir_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _Dir)();
+  };
+  static ɵdir = ɵɵdefineDirective({
+    type: _Dir,
+    selectors: [["", "dir", ""]],
+    hostVars: 1,
+    hostBindings: function Dir_HostBindings(rf, ctx) {
+      if (rf & 2) {
+        ɵɵattribute("dir", ctx._rawDir);
+      }
+    },
+    inputs: {
+      dir: "dir"
+    },
+    outputs: {
+      change: "dirChange"
+    },
+    exportAs: ["dir"],
+    features: [ɵɵProvidersFeature([{
+      provide: Directionality,
+      useExisting: _Dir
+    }])]
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Dir, [{
+    type: Directive,
+    args: [{
+      selector: "[dir]",
+      providers: [{
+        provide: Directionality,
+        useExisting: Dir
+      }],
+      host: {
+        "[attr.dir]": "_rawDir"
+      },
+      exportAs: "dir"
+    }]
+  }], null, {
+    change: [{
+      type: Output,
+      args: ["dirChange"]
+    }],
+    dir: [{
+      type: Input
+    }]
+  });
+})();
+var BidiModule = class _BidiModule {
+  static ɵfac = function BidiModule_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _BidiModule)();
+  };
+  static ɵmod = ɵɵdefineNgModule({
+    type: _BidiModule,
+    imports: [Dir],
+    exports: [Dir]
+  });
+  static ɵinj = ɵɵdefineInjector({});
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(BidiModule, [{
+    type: NgModule,
+    args: [{
+      imports: [Dir],
+      exports: [Dir]
+    }]
+  }], null, null);
+})();
+
 // node_modules/@angular/material/fesm2022/core.mjs
 var _c0 = ["*", [["mat-option"], ["ng-container"]]];
 var _c1 = ["*", "mat-option, ng-container"];
@@ -2778,7 +3128,7 @@ function MatOption_Conditional_6_Template(rf, ctx) {
 }
 var _c5 = ["mat-internal-form-field", ""];
 var _c6 = ["*"];
-var VERSION = new Version("19.2.3");
+var VERSION2 = new Version("19.2.1");
 var MATERIAL_SANITY_CHECKS = new InjectionToken("mat-sanity-checks", {
   providedIn: "root",
   factory: () => true
@@ -4801,17 +5151,24 @@ var _MatInternalFormField = class __MatInternalFormField {
 })();
 
 export {
+  Platform,
+  RtlScrollAxisType,
+  supportsScrollBehavior,
+  getRtlScrollAxisType,
+  _CdkPrivateStyleLoader,
   ESCAPE,
   hasModifierKey,
-  _CdkPrivateStyleLoader,
+  coerceBooleanProperty,
+  coerceNumberProperty,
+  coerceElement,
   InteractivityChecker,
   FocusTrapFactory,
   FocusMonitor,
-  A11yModule,
-  _IdGenerator,
+  Directionality,
+  BidiModule,
   MatCommonModule,
   _StructuralStylesLoader,
   MatRippleModule,
   MatRippleLoader
 };
-//# sourceMappingURL=chunk-AMIJSJD5.js.map
+//# sourceMappingURL=chunk-ZH4HE7AY.js.map

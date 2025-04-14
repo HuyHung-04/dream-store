@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { HoaDonService } from '../hoadon/hoadon.service';
-
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DonhangService } from './donhang.service';
@@ -11,25 +9,25 @@ import { DonhangService } from './donhang.service';
   styleUrl: './donhang.component.css'
 })
 export class DonhangComponent {
-  hoaDons: any[] = [];  // Biến lưu danh sách hóa đơn
+  hoaDons: any[] = [];
 
-  errorMessage: string = '';  // Lưu thông báo lỗi
-  page: number = 0;  // Số trang mặc định
-  size: number = 5;  // Số lượng bản ghi mỗi trang
-  totalPages: number = 0;  // Tổng số trang (cần nhận từ API)
+  errorMessage: string = '';
+  page: number = 0;
+  size: number = 5;
+  totalPages: number = 0;
   chiTietHoaDonData: any[] = [];
   hoaDonData: any = null;
   showDetailPopup: boolean = false;
-  showCancelModal = false; // Trạng thái hiển thị modal
-  ghiChu: string = '';     // Lưu lý do hủy
+  showCancelModal = false;
+  ghiChu: string = '';
   showGiamToiDa: boolean = false;
   showGiamPhanTram: boolean = false;
-   // Khai báo tên người nhận và số điện thoại người nhận để lọc
-   tenNguoiNhan: string = '';  // Biến lọc tên người nhận
-   sdtNguoiNhan: string = '';  // Biến lọc số điện thoại người nhận
-   maHoaDon: string = '';  // Biến lọc tên người nhận
-  selectedStatus: number = 0;  // Trạng thái được chọn mặc định là "Tất cả"
-  statuses = [
+  fullHoaDonList: any[] = [];
+  tenNguoiNhan: string = '';
+  sdtNguoiNhan: string = '';
+  maHoaDon: string = '';
+  chonTrangThai: number = 0;
+  trangThai = [
     { value: 0, label: 'Tất cả' },
     { value: 1, label: 'Chờ xác nhận' },
     { value: 2, label: 'Đã xác nhận' },
@@ -39,63 +37,83 @@ export class DonhangComponent {
   ];
   constructor(private donHangService: DonhangService) { }
 
-  loading: boolean = false; // Biến để kiểm tra trạng thái tải dữ liệu
+  loading: boolean = false;
 
   ngOnInit(): void {
     this.loadHoaDons();
   }
 
-  filterByStatus(status: number): void {
-    this.selectedStatus = status;
+  //phương thức lọc trạng thái đơn hàng
+  locTrangThai(trangThai: number): void {
+    this.chonTrangThai = trangThai;
     this.page = 0;
-    this.loadHoaDons();  // Tải lại danh sách hóa đơn khi thay đổi trạng thái
+    this.loadHoaDons();
   }
 
 
-// Phương thức để tải hóa đơn từ API với phân trang và lọc trạng thái
-loadHoaDons(): void {
-  const status = this.selectedStatus === 0 ? 0 : this.selectedStatus;
-  this.donHangService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(status, this.tenNguoiNhan, this.sdtNguoiNhan, this.maHoaDon, this.page, this.size).subscribe(
-    (data) => {
-      this.hoaDons = data.content;  // Dữ liệu trên trang hiện tại
-      this.totalPages = data.totalPages;  // Tổng số trang
-      console.log(data);
-    },
-    (error) => {
-      this.errorMessage = 'Lỗi khi lấy dữ liệu hóa đơn!';
-      console.error('Lỗi lấy hóa đơn:', error);
-    }
-  );
-}
+  // Phương thức để tải hóa đơn từ API với phân trang và lọc trạng thái
+  loadHoaDons(): void {
+    const status = this.chonTrangThai === 0 ? 0 : this.chonTrangThai;
+    this.donHangService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(status, this.tenNguoiNhan, this.sdtNguoiNhan, this.maHoaDon).subscribe(
+      (data) => {
+        this.fullHoaDonList = data;
+        this.totalPages = Math.ceil(data.length / this.size);
+        this.setPage(this.page);
+      },
+      (error) => {
+        this.errorMessage = 'Lỗi khi lấy dữ liệu hóa đơn!';
+        console.error('Lỗi lấy hóa đơn:', error);
+      }
+    );
+  }
+
+  //phương thức phân trang
+  setPage(page: number): void {
+    if (page < 0 || page >= this.totalPages) return;
+    this.page = page;
+    const start = this.page * this.size;
+    const end = start + this.size;
+    this.hoaDons = this.fullHoaDonList.slice(start, end);
+  }
 
 
-  
 
+  /**
+   * Thay đổi trang và tải lại dữ liệu
+   * page - Trang mới
+   */
   changePage(page: number): void {
     if (page >= 0 && page < this.totalPages) {
       this.page = page;
       this.loadHoaDons();
     }
   }
-  
-  
+
+  /**
+   * Lấy nhãn trạng thái từ giá trị số
+   *  value - Giá trị trạng thái
+   *  Nhãn trạng thái tương ứng
+   */
+  getTrangThaiLabel(value: number): string {
+    const status = this.trangThai.find(trangThai => trangThai.value === value);
+    return status ? status.label : 'Không xác định';
+  }
 
 
   // Phương thức để cập nhật trạng thái hóa đơn (tăng 1 trạng thái)
-  updateStatus(id: number, trangThai: number): void {
-    // Kiểm tra nếu trạng thái là "Giao hàng thành công" (trạng thái 4)
-    if (trangThai === 4) {
-      alert("Đơn hàng đã giao thành công và không thể tiếp tục cập nhật.");
-      return; // Không thực hiện cập nhật nếu trạng thái là Giao hàng thành công
-    }
-    // Confirm trước khi cập nhật trạng thái
-    const confirmUpdate = window.confirm('Bạn có chắc chắn muốn cập nhật trạng thái hóa đơn này?');
-    console.log(id)
+  updateTrangThai(id: number, trangThai: number): void {
+
+    const nextTrangThai = trangThai + 1;
+    const nextTrangThaiLabel = this.getTrangThaiLabel(nextTrangThai);
+    const confirmUpdate = window.confirm(
+      `Bạn có chắc chắn muốn cập nhật đến trạng thái "${nextTrangThaiLabel}" không?`
+    );
+
     if (confirmUpdate) {
       this.loading = true;
       this.donHangService.capNhatTrangThai(id).subscribe(
         (response) => {
-          // Sau khi cập nhật thành công, tải lại dữ liệu
+          alert("cập nhật trạng thái thành công")
           this.loadHoaDons();
         },
         (error) => {
@@ -108,10 +126,11 @@ loadHoaDons(): void {
   }
 
   // Kiểm tra xem trạng thái hiện tại có phải là trạng thái cuối cùng không
-  isLastStatus(trangThai: number): boolean {
-    const validStatuses = [1, 2, 3, 4];  // Mảng trạng thái hợp lệ, không bao gồm Hủy đơn (5)
-    return validStatuses.indexOf(trangThai) === -1;
+  checkStatus(trangThai: number): boolean {
+    const validTrangThai = [1, 2, 3];
+    return validTrangThai.indexOf(trangThai) === -1;
   }
+
   // Lấy nhãn nút tùy thuộc vào trạng thái hiện tại
   getButtonLabel(trangThai: number): string {
     switch (trangThai) {
@@ -124,25 +143,21 @@ loadHoaDons(): void {
     }
   }
 
-  selectHoaDonChiTiet(maHoaDon: string): void {
-    console.log("ma", maHoaDon)
-    this.donHangService.getChiTietHoaDon(maHoaDon).subscribe({
+  //phương thức load hóa đơn và hóa đơn chi tiết khi xem chi tiết đơn hàng
+  chonDonHang(idHoaDon: number): void {
+    this.donHangService.getHoaDonChiTiet(idHoaDon).subscribe({
       next: (res) => {
         this.chiTietHoaDonData = res;
-        console.log("Chi tiết sản phẩm:", res);
       },
       error: (err) => {
         console.error("Lỗi khi lấy chi tiết hóa đơn:", err);
       }
     });
-
-    // Gọi API lấy lại thông tin hóa đơn mới nhất từ server
-    this.donHangService.getHoaDonByMa(maHoaDon).subscribe({
+    this.donHangService.getHoaDon(idHoaDon).subscribe({
       next: (res) => {
         this.hoaDonData = res;
         this.showDetailPopup = true;
         this.tinhHienThiVoucher();
-        console.log("ℹHóa đơn chi tiết:", res);
       },
       error: (err) => {
         console.error("Lỗi khi lấy hóa đơn theo mã:", err);
@@ -150,6 +165,7 @@ loadHoaDons(): void {
     });
 
   }
+
   // Hàm đóng popup chi tiết hóa đơn
   closePopup(): void {
     this.showDetailPopup = false;
@@ -157,7 +173,7 @@ loadHoaDons(): void {
   }
 
   // Phương thức hủy hóa đơn
-  cancelHoaDon(maHoaDon: string): void {
+  cancelHoaDon(idHoaDon: number): void {
 
     if (!this.ghiChu.trim()) {
       alert('Vui lòng nhập lý do hủy hóa đơn.');
@@ -167,10 +183,9 @@ loadHoaDons(): void {
     const xacNhanHuy = window.confirm("Bạn có chắc chắn muốn hủy hóa đơn này?");
     if (!xacNhanHuy) return;
 
-    this.donHangService.huyHoaDon(maHoaDon, this.ghiChu).subscribe(
+    this.donHangService.huyHoaDon(idHoaDon, this.ghiChu).subscribe(
       (response) => {
-        console.log('Hóa đơn đã bị hủy:', response);
-        this.hoaDonData.trangThai = 5; // cập nhật UI nếu cần
+        this.hoaDonData.trangThai = 5;
         this.hoaDonData.ghiChu = this.ghiChu;
         this.showCancelModal = false;
         this.loadHoaDons();
@@ -185,6 +200,7 @@ loadHoaDons(): void {
     this.showCancelModal = false;
     this.ghiChu = '';
   }
+
   // Phương thức xử lý nút "Quay Về Trang Chủ"
   goHome(): void {
     this.showDetailPopup = false
@@ -194,23 +210,24 @@ loadHoaDons(): void {
     this.showCancelModal = true;
   }
 
+  //phương thức tính số tiền giảm cho voucher
   tinhHienThiVoucher(): void {
     const voucher = this.hoaDonData?.voucher;
-  
+
     this.showGiamPhanTram = false;
     this.showGiamToiDa = false;
-  
+
     // Không có voucher hoặc giảm tiền => ẩn cả 2
     if (!voucher || voucher.hinhThucGiam === true) {
       return;
     }
-  
+
     // Giảm phần trăm
     const tongTien = this.hoaDonData.tongTienTruocVoucher || 0;
     const giamPhanTram = voucher.giaTriGiam || 0;
     const giamTien = tongTien * giamPhanTram / 100;
     const giamToiDa = voucher.giamToiDa;
-  
+
     if (giamToiDa && giamTien > giamToiDa) {
       this.showGiamToiDa = true;
       this.showGiamPhanTram = false;
@@ -219,7 +236,7 @@ loadHoaDons(): void {
       this.showGiamToiDa = false;
     }
   }
-  
-  
-  
+
+
+
 }

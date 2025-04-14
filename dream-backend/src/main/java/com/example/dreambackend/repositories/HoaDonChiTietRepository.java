@@ -205,9 +205,9 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
         JOIN mau_sac ms ON spct.id_mau_sac = ms.id
         JOIN size sz ON spct.id_size = sz.id
         JOIN hoa_don hd ON hct.id_hoa_don = hd.id
-        WHERE hd.ma = :maHoaDon
+        WHERE hd.id = :idHoaDon
     """, nativeQuery = true)
-    List<Object[]> findChiTietByMaHoaDon(@Param("maHoaDon") String maHoaDon);
+    List<Object[]> findHoaDonChiTietByMaHoaDon(@Param("idHoaDon") Integer idHoaDon);
 
 
     @Query(value = """
