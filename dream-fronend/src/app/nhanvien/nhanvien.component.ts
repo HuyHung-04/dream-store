@@ -172,36 +172,34 @@ export class NhanvienComponent implements OnInit {
   validateForm(): boolean {
     this.errors = {};
   
-    // Kiểm tra mã nhân viên
-   // if (!this.nhanVien.ma || this.nhanVien.ma.trim() === '') {
-   //   this.errors.ma = 'Mã nhân viên không được để trống!';
- // } else {
-      // Kiểm tra trùng lặp mã nhân viên trong danh sách
-  //     const isDuplicate = this.nhanViens.some(nv => nv.ma === this.nhanVien.ma && nv.id !== this.nhanVien.id);
-  //     if (isDuplicate) {
-  //         this.errors.ma = 'Mã nhân viên đã tồn tại!';
-  //     }
-  // }
-  
-    // Kiểm tra tên nhân viên
+    // Validate tên nhân viên
     if (!this.nhanVien.ten || this.nhanVien.ten.trim() === '') {
       this.errors.ten = 'Tên nhân viên không được để trống!';
+    } else {
+      const name = this.nhanVien.ten.trim();
+      const specialCharPattern = /[!@#$%^&*(),.?":{}|<>0-9]/;
+      if (name.length < 4) {
+        this.errors.ten = 'Tên phải có ít nhất 4 ký tự!';
+      } else if (name.length > 25) {
+        this.errors.ten = 'Tên không được vượt quá 25 ký tự!';
+      } else if (specialCharPattern.test(name)) {
+        this.errors.ten = 'Tên không được chứa số hoặc ký tự đặc biệt!';
+      }
     }
   
-    // Kiểm tra giới tính
+    // Validate giới tính
     if (this.nhanVien.gioiTinh === null || this.nhanVien.gioiTinh === undefined) {
       this.errors.gioiTinh = 'Vui lòng chọn giới tính!';
     }
   
-    // Kiểm tra ngày sinh
+    // Validate ngày sinh và tuổi
     if (!this.nhanVien.ngaySinh) {
       this.errors.ngaySinh = 'Ngày sinh không được để trống!';
     } else {
       const birthDate = new Date(this.nhanVien.ngaySinh);
       const currentDate = new Date();
       const age = currentDate.getFullYear() - birthDate.getFullYear();
-    
-      // Kiểm tra nếu tuổi < 18 hoặc ngày sinh trong tương lai
+  
       if (birthDate > currentDate) {
         this.errors.ngaySinh = 'Ngày sinh không hợp lệ!';
       } else if (
@@ -214,48 +212,100 @@ export class NhanvienComponent implements OnInit {
         this.errors.ngaySinh = 'Nhân viên phải đủ 18 tuổi!';
       }
     }
-    
   
-    // Kiểm tra email
+    // Validate email
     if (!this.nhanVien.email || this.nhanVien.email.trim() === '') {
       this.errors.email = 'Email không được để trống!';
     } else {
+      const email = this.nhanVien.email.trim();
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(this.nhanVien.email)) {
+      if (email.length < 15) {
+        this.errors.email = 'Email phải có ít nhất 15 ký tự!';
+      } else if (email.length > 30) {
+        this.errors.email = 'Email không được quá 30 ký tự!';
+      } else if (!emailPattern.test(email)) {
         this.errors.email = 'Email không đúng định dạng!';
+      } else if (/\s/.test(email)) {
+        this.errors.email = 'Email không được chứa khoảng trắng!';
+      } else {
+        // Kiểm tra trùng email trong CSDL
+        const isDuplicate = this.nhanViens.some(
+          nv => nv.email === email && nv.id !== this.nhanVien.id
+        );
+        if (isDuplicate) {
+          this.errors.email = 'Email đã tồn tại!';
+        }
       }
     }
   
-    // Kiểm tra số điện thoại
+    // Validate số điện thoại
     if (!this.nhanVien.soDienThoai || this.nhanVien.soDienThoai.trim() === '') {
       this.errors.soDienThoai = 'Số điện thoại không được để trống!';
     } else {
-      const phonePattern = /^(0[1-9][0-9]{8})$/;
-      if (!phonePattern.test(this.nhanVien.soDienThoai)) {
+      const phone = this.nhanVien.soDienThoai.trim();
+      const phonePattern = /^0[1-9][0-9]{8}$/; // đúng 10 chữ số, bắt đầu bằng 0
+      if (!phonePattern.test(phone)) {
         this.errors.soDienThoai = 'Số điện thoại không đúng định dạng!';
+      } else if (/\s/.test(phone)) {
+        this.errors.soDienThoai = 'Số điện thoại không được chứa khoảng trắng!';
+      } else if (/[^0-9]/.test(phone)) {
+        this.errors.soDienThoai = 'Số điện thoại chỉ được chứa số!';
+      } else if (parseInt(phone) < 0) {
+        this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
+      } else {
+        const isDuplicatePhone = this.nhanViens.some(
+          nv => nv.soDienThoai === phone && nv.id !== this.nhanVien.id
+        );
+        if (isDuplicatePhone) {
+          this.errors.soDienThoai = 'Số điện thoại đã tồn tại!';
+        }
       }
     }
   
-    // Kiểm tra tài khoản
+    // Validate tài khoản
     if (!this.nhanVien.taiKhoan || this.nhanVien.taiKhoan.trim() === '') {
       this.errors.taiKhoan = 'Tài khoản không được để trống!';
+    } else {
+      const username = this.nhanVien.taiKhoan.trim();
+      if (username.length < 4) {
+        this.errors.taiKhoan = 'Tài khoản phải có ít nhất 4 ký tự!';
+      } else if (username.length > 10) {
+        this.errors.taiKhoan = 'Tài khoản không được vượt quá 10 ký tự!';
+      } else if (/[^a-zA-Z0-9]/.test(username)) {
+        this.errors.taiKhoan = 'Tài khoản không được chứa ký tự đặc biệt!';
+      } else {
+        const isDuplicateUsername = this.nhanViens.some(
+          nv => nv.taiKhoan === username && nv.id !== this.nhanVien.id
+        );
+        if (isDuplicateUsername) {
+          this.errors.taiKhoan = 'Tài khoản đã tồn tại!';
+        }
+      }
     }
   
-    // Kiểm tra mật khẩu
+    // Validate mật khẩu
     if (!this.nhanVien.matKhau || this.nhanVien.matKhau.trim() === '') {
       this.errors.matKhau = 'Mật khẩu không được để trống!';
     } else if (this.nhanVien.matKhau.length < 6) {
       this.errors.matKhau = 'Mật khẩu phải có ít nhất 6 ký tự!';
+    } else if (this.nhanVien.matKhau.length > 10) {
+      this.errors.matKhau = 'Mật khẩu không được quá 10 ký tự!';
+    } else {
+      const isDuplicatePassword = this.nhanViens.some(
+        nv => nv.matKhau === this.nhanVien.matKhau && nv.id !== this.nhanVien.id
+      );
+      if (isDuplicatePassword) {
+        this.errors.matKhau = 'Mật khẩu đã tồn tại!';
+      }
     }
   
-  
-    // Kiểm tra trạng thái
+    // Validate trạng thái
     if (this.nhanVien.trangThai === null || this.nhanVien.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';
     }
   
     return Object.keys(this.errors).length === 0;
-  }
+  }  
   searchAndShowSearch(): void {
     if (this.searchText.trim() === '') {
       alert('Vui lòng nhập tên nhân viên để tìm kiếm.');
@@ -280,30 +330,36 @@ export class NhanvienComponent implements OnInit {
   validateEditForm(): boolean {
     this.errors = {};
   
-    // Kiểm tra mã nhân viên
+    // Validate mã nhân viên
     if (!this.nhanVienEdit.ma || !this.nhanVienEdit.ma.trim()) {
       this.errors.ma = 'Mã nhân viên không được để trống!';
     }
   
-    // Kiểm tra tên nhân viên
-    if (!this.nhanVienEdit.ten || !this.nhanVienEdit.ten.trim()) {
+    // Validate tên nhân viên
+    const name = this.nhanVienEdit.ten?.trim();
+    const specialCharPattern = /[!@#$%^&*(),.?":{}|<>0-9]/;
+    if (!name) {
       this.errors.ten = 'Tên nhân viên không được để trống!';
+    } else if (name.length < 4) {
+      this.errors.ten = 'Tên phải có ít nhất 4 ký tự!';
+    } else if (name.length > 25) {
+      this.errors.ten = 'Tên không được vượt quá 25 ký tự!';
+    } else if (specialCharPattern.test(name)) {
+      this.errors.ten = 'Tên không được chứa số hoặc ký tự đặc biệt!';
     }
   
-    // Kiểm tra giới tính
+    // Validate giới tính
     if (this.nhanVienEdit.gioiTinh === null || this.nhanVienEdit.gioiTinh === undefined) {
       this.errors.gioiTinh = 'Vui lòng chọn giới tính!';
     }
   
-    // Kiểm tra ngày sinh
+    // Validate ngày sinh
     if (!this.nhanVienEdit.ngaySinh) {
       this.errors.ngaySinh = 'Ngày sinh không được để trống!';
     } else {
       const birthDate = new Date(this.nhanVienEdit.ngaySinh);
       const currentDate = new Date();
       const age = currentDate.getFullYear() - birthDate.getFullYear();
-    
-      // Kiểm tra nếu ngày sinh trong tương lai
       if (birthDate > currentDate) {
         this.errors.ngaySinh = 'Ngày sinh không hợp lệ!';
       } else if (
@@ -316,38 +372,86 @@ export class NhanvienComponent implements OnInit {
         this.errors.ngaySinh = 'Nhân viên phải đủ 18 tuổi!';
       }
     }
-    
-    // Kiểm tra email
-    if (!this.nhanVienEdit.email || !this.nhanVienEdit.email.trim()) {
+  
+    // Validate email
+    const email = this.nhanVienEdit.email?.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
       this.errors.email = 'Email không được để trống!';
+    } else if (email.length < 15) {
+      this.errors.email = 'Email phải có ít nhất 15 ký tự!';
+    } else if (email.length > 30) {
+      this.errors.email = 'Email không được quá 30 ký tự!';
+    } else if (!emailPattern.test(email)) {
+      this.errors.email = 'Email không đúng định dạng!';
+    } else if (/\s/.test(email)) {
+      this.errors.email = 'Email không được chứa khoảng trắng!';
     } else {
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(this.nhanVienEdit.email)) {
-        this.errors.email = 'Email không đúng định dạng!';
+      const isDuplicate = this.nhanViens.some(
+        nv => nv.email === email && nv.id !== this.nhanVienEdit.id
+      );
+      if (isDuplicate) {
+        this.errors.email = 'Email đã tồn tại!';
       }
     }
   
-    // Kiểm tra số điện thoại
-    if (!this.nhanVienEdit.soDienThoai || !this.nhanVienEdit.soDienThoai.trim()) {
+    // Validate số điện thoại
+    const phone = this.nhanVienEdit.soDienThoai?.trim();
+    const phonePattern = /^0[1-9][0-9]{8}$/;
+    if (!phone) {
       this.errors.soDienThoai = 'Số điện thoại không được để trống!';
+    } else if (!phonePattern.test(phone)) {
+      this.errors.soDienThoai = 'Số điện thoại không đúng định dạng!';
+    } else if (/\s/.test(phone)) {
+      this.errors.soDienThoai = 'Số điện thoại không được chứa khoảng trắng!';
+    } else if (/[^0-9]/.test(phone)) {
+      this.errors.soDienThoai = 'Số điện thoại chỉ được chứa số!';
     } else {
-      const phonePattern = /^(0[1-9][0-9]{8})$/;
-      if (!phonePattern.test(this.nhanVienEdit.soDienThoai)) {
-        this.errors.soDienThoai = 'Số điện thoại không đúng định dạng!';
+      const isDuplicatePhone = this.nhanViens.some(
+        nv => nv.soDienThoai === phone && nv.id !== this.nhanVienEdit.id
+      );
+      if (isDuplicatePhone) {
+        this.errors.soDienThoai = 'Số điện thoại đã tồn tại!';
       }
     }
   
-    // Kiểm tra tài khoản
-    if (!this.nhanVienEdit.taiKhoan || !this.nhanVienEdit.taiKhoan.trim()) {
+    // Validate tài khoản
+    const username = this.nhanVienEdit.taiKhoan?.trim();
+    if (!username) {
       this.errors.taiKhoan = 'Tài khoản không được để trống!';
-    }
-    // Kiểm tra mật khẩu (chỉ validate nếu thay đổi)
-    if (this.nhanVienEdit.matKhau && this.nhanVienEdit.matKhau.trim() !== '') {
-      if (this.nhanVienEdit.matKhau.length < 6) {
-        this.errors.matKhau = 'Mật khẩu phải có ít nhất 6 ký tự!';
+    } else if (username.length < 4) {
+      this.errors.taiKhoan = 'Tài khoản phải có ít nhất 4 ký tự!';
+    } else if (username.length > 10) {
+      this.errors.taiKhoan = 'Tài khoản không được vượt quá 10 ký tự!';
+    } else if (/[^a-zA-Z0-9]/.test(username)) {
+      this.errors.taiKhoan = 'Tài khoản không được chứa ký tự đặc biệt!';
+    } else {
+      const isDuplicateUsername = this.nhanViens.some(
+        nv => nv.taiKhoan === username && nv.id !== this.nhanVienEdit.id
+      );
+      if (isDuplicateUsername) {
+        this.errors.taiKhoan = 'Tài khoản đã tồn tại!';
       }
     }
-    // Kiểm tra trạng thái
+  
+    // Validate mật khẩu (nếu sửa)
+    const password = this.nhanVienEdit.matKhau?.trim();
+    if (password) {
+      if (password.length < 6) {
+        this.errors.matKhau = 'Mật khẩu phải có ít nhất 6 ký tự!';
+      } else if (password.length > 10) {
+        this.errors.matKhau = 'Mật khẩu không được quá 10 ký tự!';
+      } else {
+        const isDuplicatePassword = this.nhanViens.some(
+          nv => nv.matKhau === password && nv.id !== this.nhanVienEdit.id
+        );
+        if (isDuplicatePassword) {
+          this.errors.matKhau = 'Mật khẩu đã tồn tại!';
+        }
+      }
+    }
+  
+    // Validate trạng thái
     if (this.nhanVienEdit.trangThai === null || this.nhanVienEdit.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';
     }

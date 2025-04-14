@@ -13,7 +13,7 @@
     <div class="input-form">
       <label for="brand">Tìm thương hiệu</label>
       <select id="brand" (change)="locSanPham(brand.value, minPrice.value, maxPrice.value)" #brand>
-        <option value="">-- Chọn --</option>
+        <option value="">-- Tất cả thương hiệu --</option>
         <option *ngFor="let thuongHieu of thuongHieuList" [value]="thuongHieu.ten">
           {{ thuongHieu.ten }}
         </option>

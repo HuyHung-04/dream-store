@@ -9,12 +9,12 @@
             <i class="bi bi-search"></i> <!-- Icon tìm kiếm -->
         </button>
       </div>
-      <a href="#" (click)="viewInvoiceHistory($event)" class="notification-icon">
-        <i class="bi bi-bell"></i>
+      <a href="#" (click)="viewInvoiceHistory($event)" class="notification-icon" title="Đơn hàng của tôi">
+        <i class="bi bi-hourglass-split"></i>
         <span *ngIf="newOrderCount > 0" class="notification-badge">{{ newOrderCount }}</span>
       </a>      
       
-      <a href="#" (click)="cardModal($event)" class="cart-icon">
+      <a href="#" (click)="cardModal($event)" class="cart-icon" title="Giỏ hàng của tôi">
         <i class="bi bi-cart4"></i>
         <span *ngIf="gioHang.length > 0" class="cart-count">{{ gioHang.length }}</span>
       </a>

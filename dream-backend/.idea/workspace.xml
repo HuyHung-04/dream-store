@@ -6,25 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/ChatLieuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/ChatLieuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/CoAoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/CoAoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/MauSacController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/MauSacController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/SizeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/SizeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/ThuongHieuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/ThuongHieuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/XuatXuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/XuatXuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/MauSacRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/MauSacRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/chatlieu/ChatLieuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/chatlieu/ChatLieuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/chatlieu/IChatLieuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/chatlieu/IChatLieuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/coao/CoAoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/coao/CoAoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/coao/ICoAoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/coao/ICoAoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/mausac/IMauSacService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/mausac/IMauSacService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/mausac/MauSacService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/mausac/MauSacService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/size/ISizeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/size/ISizeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/size/SizeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/size/SizeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/thuonghieu/IThuongHieuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/thuonghieu/IThuongHieuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/thuonghieu/ThuongHieuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/thuonghieu/ThuongHieuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/xuatxu/IXuatXuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/xuatxu/IXuatXuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/xuatxu/XuatXuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/xuatxu/XuatXuService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/src/app/banhang/banhang.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/src/app/banhang/banhang.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/src/app/header/header.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/src/app/header/header.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,6 +235,8 @@
       <workItem from="1743943757812" duration="1691000" />
       <workItem from="1744267255119" duration="2288000" />
       <workItem from="1744289971463" duration="5031000" />
+      <workItem from="1744359011468" duration="646000" />
+      <workItem from="1744621242558" duration="1142000" />
     </task>
     <servers />
   </component>

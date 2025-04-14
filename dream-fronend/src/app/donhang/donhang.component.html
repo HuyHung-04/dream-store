@@ -72,7 +72,7 @@
         <td>{{ hoaDon.tenNguoiNhan }}</td>
         <td>{{hoaDon.sdtNguoiNhan}}</td>
         <td>{{ hoaDon.tongTienTruocVoucher}}</td>
-        <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không có' }}</td>
+        <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không áp dụng' }}</td>
         <td>{{ hoaDon.tongTienThanhToan}}</td>
         <td>
           <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 5" (click)="updateStatus(hoaDon.id,hoaDon.trangThai)">
