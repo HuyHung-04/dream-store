@@ -38,7 +38,6 @@ export class DonhangComponent {
     this.donhangService.getHoaDonChiTiet(idHoaDon).subscribe(
       (data) => {
         this.hoaDonChiTietData = data;
-        console.log('Dữ liệu chi tiết hóa đơn nhận được:', this.hoaDonChiTietData);
       },
       (error) => {
         console.error('Lỗi khi lấy chi tiết hóa đơn:', error);
@@ -53,7 +52,6 @@ export class DonhangComponent {
         (data) => {
           this.hoaDonData = data;
           this.tinhHienThiVoucher()
-          console.log("hóa đơn", data)
         },
         (error) => {
           console.error('Lỗi khi lấy chi tiết hóa đơn:', error);

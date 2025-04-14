@@ -148,7 +148,6 @@ export class DonhangComponent {
     this.donHangService.getHoaDonChiTiet(idHoaDon).subscribe({
       next: (res) => {
         this.chiTietHoaDonData = res;
-        console.log("Chi tiết sản phẩm:", res);
       },
       error: (err) => {
         console.error("Lỗi khi lấy chi tiết hóa đơn:", err);
@@ -159,7 +158,6 @@ export class DonhangComponent {
         this.hoaDonData = res;
         this.showDetailPopup = true;
         this.tinhHienThiVoucher();
-        console.log("ℹHóa đơn chi tiết:", res);
       },
       error: (err) => {
         console.error("Lỗi khi lấy hóa đơn theo mã:", err);
@@ -187,7 +185,6 @@ export class DonhangComponent {
 
     this.donHangService.huyHoaDon(idHoaDon, this.ghiChu).subscribe(
       (response) => {
-        console.log('Hóa đơn đã bị hủy:', response);
         this.hoaDonData.trangThai = 5;
         this.hoaDonData.ghiChu = this.ghiChu;
         this.showCancelModal = false;

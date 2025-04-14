@@ -5,10 +5,10 @@
   <div class="status-filter-container">
     <div class="status-filter">
       <button 
-        *ngFor="let status of statuses"
-        [ngClass]="{'active': selectedStatus === status.value}"
-        (click)="filterByStatus(status.value)">
-        {{ status.label }}
+        *ngFor="let trangThai of trangThai"
+        [ngClass]="{'active': selectedStatus === trangThai.value}"
+        (click)="locTrangThai(trangThai.value)">
+        {{ trangThai.label }}
       </button>
     </div>
   </div>

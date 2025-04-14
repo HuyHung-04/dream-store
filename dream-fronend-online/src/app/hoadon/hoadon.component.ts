@@ -79,18 +79,17 @@ export class HoadonComponent {
   diaChiEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
   constructor(private hoadonService: HoadonService, private router: Router, private cookieService: CookieService, private cdRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute) { }
 
-  /*
-   * Khởi tạo component:
-   * - Kiểm tra đăng nhập qua cookie
-   * - Load địa chỉ, tỉnh thành, giỏ hàng, voucher
-   * - Xử lý callback từ VNPay
-   */
+
+  //   Khởi tạo component:
+  //  - Kiểm tra đăng nhập qua cookie
+  //  - Load địa chỉ, tỉnh thành, giỏ hàng, voucher
+  //  - Xử lý callback từ VNPay
+
   ngOnInit(): void {
     const khachhangStr = this.cookieService.get('khachhang');
     if (khachhangStr) {
       const khachhang = JSON.parse(khachhangStr);
       this.idKhachHang = khachhang.id;
-      console.log("ID khách hàng từ cookie:", this.idKhachHang);
       this.resetForm();
       this.getDiaChiKhachHang();
       this.loadTinhThanh();
@@ -106,23 +105,20 @@ export class HoadonComponent {
   }
 
 
-  /*
-   * Xử lý phản hồi từ VNPay:
-   * - Kiểm tra mã phản hồi thành công (00)
-   * - Tạo hóa đơn từ dữ liệu trong localStorage
-   */
+
+  // Xử lý phản hồi từ VNPay:
+  // - Kiểm tra mã phản hồi thành công (00)
+  // - Tạo hóa đơn từ dữ liệu trong localStorage
+
   vnpay(): void {
     this.activatedRoute.queryParams.subscribe(params => {
       const vnp_ResponseCode = params['vnp_ResponseCode'];
-      debugger
       if (vnp_ResponseCode === '00') {
         const paymentData = localStorage.getItem('paymentData');
         if (paymentData) {
           const chiTietThanhToan = JSON.parse(paymentData);
-          console.log('Dữ liệu thanh toán từ localStorage:', chiTietThanhToan);
           this.createHoaDonFromVnPay(chiTietThanhToan);
           localStorage.removeItem('paymentData');
-
         }
       } else {
       }
@@ -130,10 +126,10 @@ export class HoadonComponent {
   }
 
 
-  /*
-  * Tạo hóa đơn từ kết quả thanh toán VNPay thành công
-  * @param paymentData Dữ liệu thanh toán từ localStorage
-  */
+
+  //  Tạo hóa đơn từ kết quả thanh toán VNPay thành công
+  //  @param paymentData Dữ liệu thanh toán từ localStorage
+
   createHoaDonFromVnPay(paymentData: any): void {
     const phuongThucThanhToanId = paymentData.chonPhuongThucThanhToan;
     const voucherId = paymentData.selectedVoucherId || null;
@@ -161,11 +157,11 @@ export class HoadonComponent {
     );
   }
 
-  /*
-   * Lấy danh sách địa chỉ của khách hàng:
-   * - Hiển thị địa chỉ đầu tiên nếu có
-   * - Mở modal thêm địa chỉ nếu chưa có địa chỉ
-   */
+
+  //  Lấy danh sách địa chỉ của khách hàng:
+  //  - Hiển thị địa chỉ đầu tiên nếu có
+  //  - Mở modal thêm địa chỉ nếu chưa có địa chỉ
+
   getDiaChiKhachHang(): void {
     this.hoadonService.getDiaChiKhachHang(this.idKhachHang)
       .subscribe(
@@ -194,14 +190,13 @@ export class HoadonComponent {
       );
   }
 
-  /*
-   * Lấy chi tiết giỏ hàng để thanh toán:
-   * - Kiểm tra giỏ hàng trống
-   */
+
+  // Lấy chi tiết giỏ hàng để thanh toán:
+  //  - Kiểm tra giỏ hàng trống
+
   getChiTietGioHangSauThanhToan(): void {
     this.hoadonService.getChiTietGioHangSauThanhToan(this.idKhachHang).subscribe(
       (response: any) => {
-        console.log('Chi tiết giỏ hàng sau thanh toán:', response);
         this.chiTietGioHang = response;
         if (this.chiTietGioHang == null) {
           alert('Giỏ hàng của bạn đang trống. Vui lòng chọn sản phẩm trước khi thanh toán!');
@@ -238,12 +233,11 @@ export class HoadonComponent {
     this.isEditModalOpen = false;
   }
 
-  /*
-   * Chọn địa chỉ từ danh sách:
-   * @param index Vị trí địa chỉ trong danh sách
-   */
+
+  // Chọn địa chỉ từ danh sách:
+  // @param index Vị trí địa chỉ trong danh sách
+
   selectDiaChi(index: number): void {
-    console.log("chon", this.chonDiaChi)
     this.chonDiaChiCuThe = this.chonDiaChi.diaChiCuThe
     this.selectedIndex = index;
     this.chonDiaChi = this.diaChiList[index];
@@ -261,16 +255,14 @@ export class HoadonComponent {
   // Load danh sách tỉnh/thành phố từ API
   loadTinhThanh(): void {
     this.hoadonService.getTinhThanh().subscribe((response: any) => {
-      console.log("Danh sách tỉnh thành:", response.data);
       this.tinhThanhPhoList = response.data
-      console.log("tỉnh thành", this.tinhThanhPhoList);
     });
   }
 
-  /*
-   * Xử lý chọn quận/huyện:
-   * Load danh sách phường/xã tương ứng
-   */
+
+  // Xử lý chọn quận/huyện:
+  // Load danh sách phường/xã tương ứng
+
   onSelectTinhThanh(event: any): void {
     const chonTenTinh = event.target.value;
     const chonTinh = this.tinhThanhPhoList.find(tinh => tinh.ProvinceName === chonTenTinh);
@@ -302,10 +294,9 @@ export class HoadonComponent {
     }
   }
 
-  /*
-   * Xử lý chọn quận/huyện:
-   * - Load danh sách phường/xã tương ứng
-   */
+  //  Xử lý chọn quận/huyện:
+  // - Load danh sách phường/xã tương ứng
+
   onSelectQuanHuyen(event: any): void {
     const chonTenHuyen = event.target.value;
     const chonHuyen = this.quanHuyenList.find(huyen => huyen.DistrictName === chonTenHuyen);
@@ -336,7 +327,6 @@ export class HoadonComponent {
     this.hoadonService.getTamTinh(this.idKhachHang).subscribe(
       (response: number) => {
         this.TongTienTamTinh = response;
-        console.log("Tổng tiền giỏ hàng: ", this.TongTienTamTinh);
         this.getVoucherIdAndTen();
         this.tongTienKhongCoVoucher()
       },
@@ -352,7 +342,6 @@ export class HoadonComponent {
       this.hoadonService.getTongTienThanhToan(this.idKhachHang, this.chonVoucher.id, this.shippingFee ?? 0).subscribe(
         (response: number) => {
           this.tongTienThanhToan = response;
-          console.log('Số tiền cần thanh toán sau khi áp dụng voucher:', this.tongTienThanhToan);
         },
         (error) => {
           console.error("Lỗi khi tính tổng tiền", error);
@@ -377,9 +366,7 @@ export class HoadonComponent {
       fullDiaChi: this.fullDiaChi,
       shippingFee: this.shippingFee ?? 0
     };
-    console.log("thong tin ", paymentData)
     localStorage.setItem('paymentData', JSON.stringify(paymentData));
-    console.log(this.chonPhuongThucThanhToan)
     if (this.chonPhuongThucThanhToan == 4) {
       this.hoadonService.createThanhToanVnpay(this.tongTienThanhToan).subscribe(
         (response: any) => {
@@ -591,11 +578,9 @@ export class HoadonComponent {
 
   // Phương thức gọi API để lấy danh sách voucher
   getVoucherIdAndTen(): void {
-    console.log("tổng tiền", this.TongTienTamTinh)
     this.hoadonService.getVouchers(this.TongTienTamTinh).subscribe(
       (response: any) => {
         this.vouchers = response;
-        console.log('Danh sách voucher:', response);
       },
       (error) => {
         console.error("Lỗi khi lấy danh sách voucher", error);
@@ -613,10 +598,9 @@ export class HoadonComponent {
     this.hoadonService.tinhTienShip(pickProvince, pickDistrict, this.chonTinh, this.chonQuan, weight, deliverOption)
       .subscribe((response) => {
         this.shippingFee = response.fee.fee
-        console.log("tiền ship", response.fee);
         this.tongTienKhongCoVoucher()
       }, error => {
-        console.error('Error calculating shipping fee', error);
+        console.error('Error', error);
       });
   }
 
@@ -653,12 +637,10 @@ export class HoadonComponent {
       this.shippingFee ?? 0
     ).subscribe(
       (response) => {
-        console.log('đơn hàng đã được tạo thành công:', response);
         alert('Đơn hàng đã được tạo thành công!');
         this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
         this.modalthongbao = true;
         this.idHoaDon = response.id;
-
       },
       (error) => {
         console.error('Lỗi khi tạo hóa đơn:', error);
