@@ -531,7 +531,7 @@ export class HoadonComponent {
 
 
   // Chỉnh sửa địa chỉ
-  editDiaChi(id: number) {
+  diaChiDetail(id: number) {
     this.hoadonService.getDiaChiDetail(id).subscribe((response) => {
 
       this.diaChiEdit = { ...response };
