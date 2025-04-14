@@ -426,11 +426,6 @@ export class HoadonComponent {
           console.log("update", response)
           alert("Địa chỉ đã được cập nhật!");
           this.activeTab = 'select';
-          const index = this.diaChiList.findIndex((diaChi) => diaChi.id === this.diaChiEdit.id);
-          if (index !== -1) {
-            this.diaChiList[index] = response;
-          }
-
           this.getDiaChiKhachHang()
           this.closeEditModal();
           this.activeTab = 'select';
