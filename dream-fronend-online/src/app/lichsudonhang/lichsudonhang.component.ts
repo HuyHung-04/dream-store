@@ -31,7 +31,10 @@ export class LichsudonhangComponent {
       const khachhang = JSON.parse(khachhangStr);
       this.idKhachHang = khachhang.id;
       this.loadHoaDon()
-
+    }
+    else {
+      alert('Bạn cần đăng nhập để xem lịch sử đơn hàng!');
+      this.router.navigate(['/dangnhap']);
     }
   }
 
