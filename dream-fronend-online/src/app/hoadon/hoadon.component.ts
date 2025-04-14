@@ -554,14 +554,7 @@ export class HoadonComponent {
       this.hoadonService.deleteDiaChiKhachHang(id).subscribe(
         () => {
           alert("Địa chỉ đã được xóa thành công!");
-          this.diaChiList.splice(index, 1);
-          if (this.diaChiList.length === 0) {
-            this.chonDiaChi = null;
-            this.isModalOpen = true;
-          } else {
-            this.chonDiaChi = this.diaChiList[0];
-          }
-          this.cdRef.detectChanges();
+          this.getDiaChiKhachHang();
         },
         (error) => {
           console.error("Lỗi khi xóa địa chỉ:", error);
