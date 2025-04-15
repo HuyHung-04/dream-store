@@ -107,6 +107,7 @@
   /* Đẩy header lên trên cùng */
   z-index: 1;
   /* Đảm bảo header nằm trên nội dung */
+  text-align: center;
 }
 
 /* Thêm khoảng cách giữa hai bảng */
@@ -655,6 +656,7 @@
   top: 0;
   z-index: 2;
   /* Đảm bảo header luôn hiển thị phía trên */
+  text-align: center;
 }
 
 .product-table-select td {

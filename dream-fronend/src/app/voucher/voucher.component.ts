@@ -64,8 +64,7 @@ export class VoucherComponent implements OnInit {
   editVoucher(voucherId: number) {
     this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
       this.voucherEdit = { ...voucher };
-      console.log(this.voucherEdit)
-      this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true; // Nếu giảm tiền thì ẩn Giảm tối đa
+      this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
       this.showModalEdit = true;
     });
   }
@@ -73,14 +72,13 @@ export class VoucherComponent implements OnInit {
     console.log(this.voucherEdit.hinhThucGiam);
     this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
     if (this.isGiamToiDaDisabled) {
-      this.voucherEdit.giamToiDa = null; // Xóa giá trị khi giảm theo tiền
+      this.voucherEdit.giamToiDa = null; 
     }
   }
   
   onHinhThucGiamChange() {
-    console.log(this.voucher.hinhThucGiam);
-    if (this.voucher.hinhThucGiam === true) { // Giảm giá
-      this.voucher.giamToiDa = null; // Xóa giá trị giảm tối đa khi không cần dùng
+    if (this.voucher.hinhThucGiam === true) { 
+      this.voucher.giamToiDa = null; 
     }
   }
   
@@ -93,7 +91,7 @@ export class VoucherComponent implements OnInit {
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn thêm voucher này?');
 
     if (!isConfirmed) {
-      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+      return;
     }
 
     this.voucherService.addVoucher(this.voucher).subscribe(
@@ -181,14 +179,14 @@ export class VoucherComponent implements OnInit {
     } else {
       const checkPhanTram = Number(this.voucher.giaTriGiam);
 
-      if (this.voucher.hinhThucGiam === true) {  // Giảm theo số tiền
+      if (this.voucher.hinhThucGiam === true) {  
         // Nếu hình thức giảm là theo số tiền
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
         } else if (checkPhanTram <= 0) {
           this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
         }
-      } else {  // Giảm theo phần trăm
+      } else {  
         // Nếu hình thức giảm là theo phần trăm
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
@@ -217,7 +215,7 @@ export class VoucherComponent implements OnInit {
     }
     
 
-    if (this.voucher.hinhThucGiam === false) { // Chỉ kiểm tra nếu giảm theo %
+    if (this.voucher.hinhThucGiam === false) { 
       if (this.voucher.giamToiDa === null || this.voucher.giamToiDa === undefined || this.voucher.giamToiDa === '') {
         this.errors.giamToiDa = 'Giảm tối đa không được để trống!';
       } else {
@@ -239,7 +237,7 @@ export class VoucherComponent implements OnInit {
       this.errors.ngayKetThuc = 'Ngày kết thúc không được để trống!';
     }
     else {
-      const currentDate = new Date(); //01/01/2024 15:09
+      const currentDate = new Date();
       const startDate = new Date(this.voucher.ngayBatDau);
       const endDate = new Date(`${this.voucher.ngayKetThuc}T23:59:59.999`);
 
@@ -265,12 +263,11 @@ export class VoucherComponent implements OnInit {
       return;
     }
 
-    // Tìm kiếm voucher theo tên
     this.voucherService.searchVoucherTheoTen(this.searchText).subscribe(
       (data) => {
         if (data.length > 0) {
-          this.selectedVoucher = data[0]; // Hiển thị voucher đầu tiên trong kết quả
-          this.showModalSearch = true; // Mở modal chi tiết
+          this.selectedVoucher = data[0]; 
+          this.showModalSearch = true;
         } else {
           alert('Không tìm thấy voucher phù hợp.');
         }
@@ -310,20 +307,20 @@ export class VoucherComponent implements OnInit {
         this.errors.soLuong = 'Số lượng phải lớn hơn 0!';
       }
     }
-    // Sửa bên trong validateForm()
+ 
     if (this.voucherEdit.giaTriGiam === null || this.voucherEdit.giaTriGiam === undefined || this.voucherEdit.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
       const checkPhanTram = Number(this.voucherEdit.giaTriGiam);
 
-      if (this.voucherEdit.hinhThucGiam === true) {  // Giảm theo số tiền
+      if (this.voucherEdit.hinhThucGiam === true) { 
         // Nếu hình thức giảm là theo số tiền
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
         } else if (checkPhanTram <= 0) {
           this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
         }
-      } else {  // Giảm theo phần trăm
+      } else {  
         // Nếu hình thức giảm là theo phần trăm
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
@@ -368,7 +365,7 @@ export class VoucherComponent implements OnInit {
     if (!this.voucherEdit.ngayBatDau) {
       this.errors.ngayBatDau = 'Ngày bắt đầu không được để trống!';
     }
-    // 6. Kiểm tra ngày kết thúc
+
     if (!this.voucherEdit.ngayKetThuc) {
       this.errors.ngayKetThuc = 'Ngày kết thúc không được để trống!';
     }
@@ -377,7 +374,7 @@ export class VoucherComponent implements OnInit {
       const startDate = new Date(this.voucherEdit.ngayBatDau);
       const endDate = new Date(`${this.voucherEdit.ngayKetThuc}T23:59:59.999`);
 
-      // Adjust startDate to 00:00 and endDate to 23:59
+   
       startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
 
@@ -405,7 +402,7 @@ export class VoucherComponent implements OnInit {
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn cập nhật voucher này?');
 
     if (!isConfirmed) {
-      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+      return; 
     }
 
     if (this.voucherEdit.id) {
@@ -413,7 +410,6 @@ export class VoucherComponent implements OnInit {
         (response) => {
           alert('Cập nhật voucher thành công!');
           this.loadData();
-          console.log('Updated Voucher:', this.voucher.ngaySua);
           this.closeModalEdit();
 
         },
@@ -441,8 +437,6 @@ export class VoucherComponent implements OnInit {
   }
   
   loadData(): void {
-    console.log(this.selectedTrangThai);
-    console.log(this.searchTenVoucher());
     if (this.selectedTrangThai !== 3) {
       this.locTrangThai(this.selectedTrangThai, 0);
     } else {
@@ -452,9 +446,9 @@ export class VoucherComponent implements OnInit {
 
   loadPage(page: number): void {
     this.voucherService.getVoucher(page, 8).subscribe((response) => {
-      this.vouchers = response.content; // Dữ liệu của trang hiện tại
-      this.totalPages = response.totalPages; // Tổng số trang
-      this.currentPage = page; // Cập nhật trang hiện tại
+      this.vouchers = response.content; 
+      this.totalPages = response.totalPages; 
+      this.currentPage = page; 
       this.tinhSoTrang();
       this.searchTenVoucher();
     });
