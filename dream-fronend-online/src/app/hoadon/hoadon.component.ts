@@ -678,6 +678,8 @@ export class HoadonComponent {
       phuongXa: '',
       idKhachHang: this.idKhachHang
     };
+    this.quanHuyenList = [];
+    this.phuongXaList = [];
   }
 
   //tính giá trị giảm của voucher
@@ -707,6 +709,7 @@ export class HoadonComponent {
 
   openAddAddress(): void {
     this.isModalOpen = true;
+    this.resetForm();
     this.activeTab = 'add';
   }
 
