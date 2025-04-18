@@ -24,9 +24,7 @@ export class DangnhapService {
     };
 
     // Gửi yêu cầu POST đến API backend với JSON data
-    return this.http.post<any>(`${this.apiUrl}/signin`, loginData, {
-      headers: new HttpHeaders().set('Content-Type', 'application/json')
-    });
+    return this.http.post<any>(`${this.apiUrl}/login`, loginData);
   }
 
   // Phương thức đăng xuất

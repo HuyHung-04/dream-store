@@ -40,7 +40,7 @@ public class AuthController {
     @Autowired
     NhanVienRepository nhanVienRepository;
 
-    @PostMapping({"/signin", "/login"})
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
             // Tìm user bằng username hoặc email

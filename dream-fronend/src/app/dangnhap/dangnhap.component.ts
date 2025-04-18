@@ -72,12 +72,16 @@ export class DangnhapComponent {
     this.dangnhapService.login(this.loginData.taiKhoan, this.loginData.matKhau).subscribe({
       next: (response) => {
         this.loading = false;
-        // Lưu token và thông tin user
-        this.jwtService.saveToken(response.token);
-        this.jwtService.saveUser(response.user);
-        alert('Đăng nhập thành công!');
-        // Chuyển hướng dựa trên role
-        this.navigateByRole();
+        if (response.status === 'success') {
+          // Lưu token và thông tin user
+          this.jwtService.saveToken(response.token);
+          this.jwtService.saveUser(response.user);
+          alert(response.message); // "Đăng nhập thành công"
+          // Chuyển hướng dựa trên role
+          this.navigateByRole();
+        } else {
+          this.errors.taiKhoan = response.message || 'Đăng nhập thất bại';
+        }
       },
       error: (err) => {
         this.loading = false;
@@ -95,11 +99,11 @@ export class DangnhapComponent {
 
   private navigateByRole() {
     if (this.jwtService.hasRole('Quản lý')) {
-      this.router.navigate(['/thongke']);
+      this.router.navigate(['/layout/thongke']);
     } else if (this.jwtService.hasRole('Nhân viên')) {
-      this.router.navigate(['/banhang']);
+      this.router.navigate(['/layout/banhang']);
     } else if (this.jwtService.hasRole('Khách hàng')) {
-      this.router.navigate(['/khachhang']);
+      this.router.navigate(['/layout/khachhang']);
     }
   }
 }
