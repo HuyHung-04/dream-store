@@ -158,7 +158,7 @@
     </div>
 
 
-    <!-- Modal hiển thị chi tiết voucher khi sửa -->
+    <!-- form sửa voucher -->
     <div class="modal-overlay" *ngIf="showModalEdit" (click)="closeModalEdit()">
       <div class="modal-box" (click)="$event.stopPropagation()">
         <button class="close-btn" (click)="closeModalEdit()">×</button>
@@ -167,11 +167,6 @@
         <!-- Form hiển thị chi tiết voucher và cho phép sửa -->
         <form (ngSubmit)="updateVoucher()" #voucherForm="ngForm">
           <div class="input-row">
-            <!-- <div class="input-field"> -->
-              <!-- Trường ID là readonly -->
-              <!-- <input type="text" class="input" [(ngModel)]="voucherEdit.id" name="id" readonly />
-              <label for="id">Id</label>
-            </div> -->
             <div class="input-field">
               <input type="text" class="input" [(ngModel)]="voucherEdit.ma" name="ma" required readonly />
               <label for="ma">Mã voucher</label>

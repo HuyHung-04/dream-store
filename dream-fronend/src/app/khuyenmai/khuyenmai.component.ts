@@ -61,7 +61,6 @@ export class KhuyenmaiComponent implements OnInit {
   }
   editKhuyenMai(khuyenmaiId: number) {
     this.khuyenmaiService.chiTietKhuyenMai(khuyenmaiId).subscribe((khuyenmai) => {
-      console.log(khuyenmai);
       this.khuyenmaiEdit = { ...khuyenmai };
       this.showModalEdit = true;
     });
@@ -69,18 +68,17 @@ export class KhuyenmaiComponent implements OnInit {
 
 
   addKhuyenMai() {
-   
+
     if (!this.validateForm()) {
       return;
     }
 
-     // Hiển thị hộp thoại xác nhận
-     const isConfirmed = window.confirm('Bạn có chắc chắn muốn thêm khuyến mãi này?');
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn thêm khuyến mãi này?');
 
-     if (!isConfirmed) {
-       return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
-     }
- 
+    if (!isConfirmed) {
+      return;
+    }
+
 
     this.khuyenmaiService.addKhuyenMai(this.khuyenmai).subscribe(
       (response) => {
@@ -102,7 +100,7 @@ export class KhuyenmaiComponent implements OnInit {
     }
   }
 
-  chonSanPham(khuyenMaiId: number): void {
+  loadSanPham(khuyenMaiId: number): void {
     // Tìm khuyến mãi theo ID
     const selectedKhuyenMai = this.khuyenmais.find(km => km.id === khuyenMaiId);
 
@@ -118,19 +116,18 @@ export class KhuyenmaiComponent implements OnInit {
     }
 
     // Kiểm tra xem ngày bắt đầu có lớn hơn ngày hiện tại không
-  const currentDate = new Date();
-  const startDate = new Date(selectedKhuyenMai.ngayBatDau);
+    const currentDate = new Date();
+    const startDate = new Date(selectedKhuyenMai.ngayBatDau);
 
-  if (startDate > currentDate) {
-    alert('Ngày bắt đầu khuyến mãi chưa đến, không thể chọn sản phẩm!');
-    return;
-  }
-  
+    if (startDate > currentDate) {
+      alert('Ngày bắt đầu khuyến mãi chưa đến, không thể chọn sản phẩm!');
+      return;
+    }
+
     this.selectedKhuyenMaiId = khuyenMaiId;
     this.khuyenmaiService.getSanPham(khuyenMaiId).subscribe(
       (products) => {
         this.sanPham = products.filter((product) => !product.disabled);
-        console.log('Filtered products:', this.sanPham);
         this.showChonSanPham = true;
       },
       (error) => {
@@ -151,11 +148,11 @@ export class KhuyenmaiComponent implements OnInit {
       alert('Không tìm thấy ID khuyến mãi!');
       return;
     }
-    // Hiển thị hộp thoại xác nhận chỉ khi form hợp lệ
+
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn lưu khuyến mãi cho sản phẩm không');
 
     if (!isConfirmed) {
-      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+      return;
     }
     const selectedProductIds = this.sanPham
       .filter((product) => product.selected)
@@ -197,7 +194,7 @@ export class KhuyenmaiComponent implements OnInit {
       } else if (checkSo <= 0) {
         this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
       }
-      else if (checkSo >100) {
+      else if (checkSo > 100) {
         this.errors.giaTriGiam = 'Giá trị giảm không được quá 100%';
       }
     }
@@ -269,17 +266,17 @@ export class KhuyenmaiComponent implements OnInit {
       const checkSo = Number(this.khuyenmaiEdit.giaTriGiam);
       if (isNaN(checkSo)) {
         this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-      } else if (checkSo <1) {
+      } else if (checkSo < 1) {
         this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1';
       }
-      else if (checkSo >100) {
+      else if (checkSo > 100) {
         this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn 100%';
       }
     }
     if (!this.khuyenmaiEdit.ngayBatDau) {
       this.errors.ngayBatDau = 'Ngày bắt đầu không được để trống!';
     }
-    // 6. Kiểm tra ngày kết thúc
+
     if (!this.khuyenmaiEdit.ngayKetThuc) {
       this.errors.ngayKetThuc = 'Ngày kết thúc không được để trống!';
     }
@@ -306,23 +303,20 @@ export class KhuyenmaiComponent implements OnInit {
   }
 
   updateKhuyenMai() {
-    console.log("them")
     if (!this.validateEditForm()) {
-      return; // return nếu chưa hợp lệ
+      return;
     }
 
-    // Hiển thị hộp thoại xác nhận chỉ khi form hợp lệ
+
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn sửa khuyến mãi này?');
 
     if (!isConfirmed) {
-      return; // Nếu người dùng không xác nhận, dừng việc thực hiện hàm
+      return;
     }
     if (this.khuyenmaiEdit.id) {
-      console.log("giatri", this.khuyenmaiEdit)
       this.khuyenmaiService.updateKhuyenMai(this.khuyenmaiEdit).subscribe(
         (response) => {
           alert('Cập nhật khuyến mãi thành công!');
-          console.log("sua", response)
           this.loadData();
           this.closeModalEdit();
         },
@@ -352,8 +346,6 @@ export class KhuyenmaiComponent implements OnInit {
     });
   }
   loadData(): void {
-    console.log(this.selectedTrangThai);
-    console.log(this.searchTenVoucher());
     if (this.selectedTrangThai !== 3) {
       this.locTheoTrangThai(this.selectedTrangThai, 0);
     } else {
@@ -363,9 +355,9 @@ export class KhuyenmaiComponent implements OnInit {
 
   loadPage(page: number): void {
     this.khuyenmaiService.getKhuyenMai(page, 8).subscribe((response) => {
-      this.khuyenmais = response.content; // Dữ liệu của trang hiện tại
-      this.totalPages = response.totalPages; // Tổng số trang
-      this.currentPage = page; // Cập nhật trang hiện tại
+      this.khuyenmais = response.content;
+      this.totalPages = response.totalPages;
+      this.currentPage = page;
       this.tinhSoTrang();
       this.searchTenVoucher();
     });
@@ -377,7 +369,7 @@ export class KhuyenmaiComponent implements OnInit {
         khuyenmai.ten.toLowerCase().includes(this.searchText.toLowerCase())
       );
     } else {
-      this.filteredKhuyenMais = [...this.khuyenmais]; // Hiển thị tất cả nếu không tìm kiếm
+      this.filteredKhuyenMais = [...this.khuyenmais];
     }
   }
 

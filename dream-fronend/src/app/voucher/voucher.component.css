@@ -115,6 +115,7 @@
   /* Đẩy header lên trên cùng */
   z-index: 1;
   /* Đảm bảo header nằm trên nội dung */
+  text-align: center;
 }
 
 /* Thêm khoảng cách giữa hai bảng */

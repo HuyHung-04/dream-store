@@ -426,11 +426,6 @@ export class HoadonComponent {
           console.log("update", response)
           alert("Địa chỉ đã được cập nhật!");
           this.activeTab = 'select';
-          const index = this.diaChiList.findIndex((diaChi) => diaChi.id === this.diaChiEdit.id);
-          if (index !== -1) {
-            this.diaChiList[index] = response;
-          }
-
           this.getDiaChiKhachHang()
           this.closeEditModal();
           this.activeTab = 'select';
@@ -531,7 +526,7 @@ export class HoadonComponent {
 
 
   // Chỉnh sửa địa chỉ
-  editDiaChi(id: number) {
+  diaChiDetail(id: number) {
     this.hoadonService.getDiaChiDetail(id).subscribe((response) => {
 
       this.diaChiEdit = { ...response };
@@ -559,14 +554,7 @@ export class HoadonComponent {
       this.hoadonService.deleteDiaChiKhachHang(id).subscribe(
         () => {
           alert("Địa chỉ đã được xóa thành công!");
-          this.diaChiList.splice(index, 1);
-          if (this.diaChiList.length === 0) {
-            this.chonDiaChi = null;
-            this.isModalOpen = true;
-          } else {
-            this.chonDiaChi = this.diaChiList[0];
-          }
-          this.cdRef.detectChanges();
+          this.getDiaChiKhachHang();
         },
         (error) => {
           console.error("Lỗi khi xóa địa chỉ:", error);
@@ -690,6 +678,8 @@ export class HoadonComponent {
       phuongXa: '',
       idKhachHang: this.idKhachHang
     };
+    this.quanHuyenList = [];
+    this.phuongXaList = [];
   }
 
   //tính giá trị giảm của voucher
@@ -719,6 +709,7 @@ export class HoadonComponent {
 
   openAddAddress(): void {
     this.isModalOpen = true;
+    this.resetForm();
     this.activeTab = 'add';
   }
 

@@ -58,7 +58,7 @@
                 <p>Địa chỉ: {{ diaChi.tinhThanhPho }}, {{ diaChi.quanHuyen }},{{ diaChi.phuongXa }},{{
                   diaChi.diaChiCuThe }}</p>
                 <div class="btn-container">
-                  <button class="btn-edit" (click)="editDiaChi(diaChi.id); $event.stopPropagation()"><i
+                  <button class="btn-edit" (click)="diaChiDetail(diaChi.id); $event.stopPropagation()"><i
                       class="bi bi-pencil-square"></i> Sửa</button>
                   <button class="btn-delete" (click)="deleteDiaChi(diaChi.id,i); $event.stopPropagation()"><i
                       class="bi bi-trash"></i> Xóa</button>
