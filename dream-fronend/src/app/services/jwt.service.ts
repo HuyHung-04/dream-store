@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TokenStorageService } from './token-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ export class JwtService {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'user_data';
 
-  constructor() { }
+  constructor(private tokenStorageService: TokenStorageService) { }
 
   // Lưu token vào localStorage
   saveToken(token: string): void {
@@ -63,26 +64,29 @@ export class JwtService {
 
   // Lấy role từ token
   getUserRole(): string | null {
-    const token = this.getToken();
-    if (!token) return null;
-
-    try {
-      const payload = this.decodeToken(token);
-      return payload.role || null;
-    } catch (error) {
+    const user = this.tokenStorageService.getUser();
+    if (!user || !user.roles || user.roles.length === 0) {
       return null;
     }
+    return user.roles[0];
   }
 
   // Kiểm tra user có quyền truy cập không
-  hasRole(requiredRole: string): boolean {
-    const userRole = this.getUserRole();
-    return userRole === requiredRole;
+  hasRole(role: string): boolean {
+    const user = this.tokenStorageService.getUser();
+    if (!user || !user.roles) {
+      return false;
+    }
+    return user.roles.includes(role);
   }
 
   // Đăng xuất
   logout(): void {
     this.removeToken();
     this.removeUser();
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.tokenStorageService.getToken();
   }
 } 

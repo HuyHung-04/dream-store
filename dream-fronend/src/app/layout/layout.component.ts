@@ -1,33 +1,63 @@
-import { Component } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterModule } from '@angular/router';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import { TokenStorageService } from '../services/token-storage.service';
+import { JwtService } from '../services/jwt.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [
-    MatToolbarModule, 
-    MatSidenavModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterModule,
-    MatDialogModule
-  ],
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.css']
+  styleUrls: ['./layout.component.scss']
 })
-export class LayoutComponent {
-  constructor(private dialog: MatDialog, private router: Router) {}
+export class LayoutComponent implements OnInit {
+  isLoggedIn = false;
+  username?: string;
+  isMenuCollapsed = true;
+  isQuanLy = false;
+  isLoading = false;
+  showUnauthorized = false;
 
-  confirmLogout() {
-    const confirmResult = confirm("Bạn có chắc chắn muốn đăng xuất không?");
-    if (confirmResult) {
-      this.router.navigate(['/layout/dangnhap']);
+  constructor(
+    private tokenStorageService: TokenStorageService,
+    private jwtService: JwtService,
+    private router: Router
+  ) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.isLoading = true;
+        this.showUnauthorized = false;
+      } else if (event instanceof NavigationEnd) {
+        this.isLoading = false;
+      } else if (event instanceof NavigationError) {
+        this.isLoading = false;
+        if (event.error.status === 403) {
+          this.showUnauthorized = true;
+        }
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.username = user.username;
+      this.isQuanLy = this.jwtService.hasRole('Quản lý');
     }
+  }
+
+  logout(): void {
+    this.tokenStorageService.signOut();
+    this.isLoggedIn = false;
+    this.router.navigate(['/dangnhap']);
+  }
+
+  toggleMenu(): void {
+    this.isMenuCollapsed = !this.isMenuCollapsed;
+  }
+
+  goToHome(): void {
+    this.router.navigate(['/layout/banhang']);
   }
 }
 

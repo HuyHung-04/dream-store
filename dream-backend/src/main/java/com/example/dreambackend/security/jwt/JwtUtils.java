@@ -32,13 +32,14 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
-        List<String> roles = userPrincipal.getAuthorities().stream()
+        String role = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .findFirst()
+                .orElse("");
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .claim("roles", roles)
+                .setSubject(userPrincipal.getUsername())
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(jwtSecret)

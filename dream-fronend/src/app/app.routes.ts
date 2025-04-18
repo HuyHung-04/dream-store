@@ -11,48 +11,57 @@ import { VoucherComponent } from './voucher/voucher.component';
 import { DangnhapComponent } from './dangnhap/dangnhap.component';
 import { DonhangComponent } from './donhang/donhang.component';
 import { AuthGuard } from './guards/auth.guard';
-import { QuanLyGuard, NhanVienGuard, KhachHangGuard } from './guards/role.guard';
+import { QuanLyGuard, NhanVienGuard } from './guards/role.guard';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 // Các routes được cấu hình cho ứng dụng
 export const routes: Routes = [
   { path: '', redirectTo: 'dangnhap', pathMatch: 'full' },
   { path: 'dangnhap', component: DangnhapComponent },
+  { path: 'unauthorized', component: UnauthorizedComponent },
   {
     path: 'layout',
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'banhang', pathMatch: 'full' },
+      // Routes cho cả Quản lý và Nhân viên
       { 
         path: 'banhang', 
         component: BanhangComponent,
-        canActivate: [NhanVienGuard]
+        canActivate: [AuthGuard]
       },
       { 
         path: 'hoadon', 
         component: HoaDonComponent,
-        canActivate: [NhanVienGuard]
+        canActivate: [AuthGuard]
       },
       { 
-        path: 'sanpham', 
-        component: SanphamComponent,
-        canActivate: [NhanVienGuard]
-      },
-      { 
-        path: 'voucher', 
-        component: VoucherComponent,
-        canActivate: [QuanLyGuard]
-      },
-      { 
-        path: 'khuyenmai', 
-        component: KhuyenmaiComponent,
-        canActivate: [QuanLyGuard]
+        path: 'donhang', 
+        component: DonhangComponent,
+        canActivate: [AuthGuard]
       },
       { 
         path: 'khachhang', 
         component: KhachhangComponent,
-        canActivate: [KhachHangGuard]
+        canActivate: [AuthGuard]
       },
+      { 
+        path: 'sanpham', 
+        component: SanphamComponent,
+        canActivate: [AuthGuard]
+      },
+      { 
+        path: 'khuyenmai', 
+        component: KhuyenmaiComponent,
+        canActivate: [AuthGuard]
+      },
+      { 
+        path: 'voucher', 
+        component: VoucherComponent,
+        canActivate: [AuthGuard]
+      },
+      // Routes chỉ cho Quản lý
       { 
         path: 'nhanvien', 
         component: NhanvienComponent,
@@ -62,12 +71,7 @@ export const routes: Routes = [
         path: 'thongke', 
         component: ThongkeComponent,
         canActivate: [QuanLyGuard]
-      },
-      { 
-        path: 'donhang', 
-        component: DonhangComponent,
-        canActivate: [NhanVienGuard]
-      },
+      }
     ],
   },
   { path: '**', redirectTo: 'dangnhap' },

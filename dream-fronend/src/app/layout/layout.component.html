@@ -1,55 +1,77 @@
-<mat-sidenav-container class="example-container">
-  <mat-sidenav #sidenav mode="side" opened>
-    <div class="sidebar-header">
-      <img src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs"
-           alt="Logo Cửa Hàng" class="logo">
+<div class="layout-wrapper">
+  <!-- Loading indicator -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
-    <nav>
-      <a mat-button routerLink="/layout/banhang" routerLinkActive="active-link">
-        <mat-icon>shopping_cart</mat-icon>
-        Bán Hàng
-      </a>
-      <a mat-button routerLink="/layout/hoadon" routerLinkActive="active-link">
-        <mat-icon>receipt_long</mat-icon>
-        Hoá Đơn
-      </a>
-      <a mat-button routerLink="/layout/donhang" routerLinkActive="active-link">
-        <mat-icon>receipt_long</mat-icon>
-        Đơn Hàng
-      </a>
-      <a mat-button routerLink="/layout/sanpham" routerLinkActive="active-link">
-        <mat-icon>inventory</mat-icon>
-        Sản Phẩm
-      </a>
-      <a mat-button routerLink="/layout/voucher" routerLinkActive="active-link">
-        <mat-icon>card_giftcard</mat-icon>
-        Voucher
-      </a>
-      <a mat-button routerLink="/layout/khuyenmai" routerLinkActive="active-link">
-        <mat-icon>local_offer</mat-icon>
-        Khuyến Mãi
-      </a>
-      <a mat-button routerLink="/layout/khachhang" routerLinkActive="active-link">
-        <mat-icon>people</mat-icon>
-        Khách Hàng
-      </a>
-      <a mat-button routerLink="/layout/nhanvien" routerLinkActive="active-link">
-        <mat-icon>person</mat-icon>
-        Nhân Viên
-      </a>
-      <a mat-button routerLink="/layout/thongke" routerLinkActive="active-link">
-        <mat-icon>bar_chart</mat-icon>
-        Thống Kê
-      </a>
-      <a mat-button (click)="confirmLogout()">
-        <mat-icon>exit_to_app</mat-icon>
-        Đăng Xuất
-      </a>
-    </nav>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <div class="content">
-      <router-outlet></router-outlet>
+  </div>
+
+  <!-- Unauthorized message -->
+  <div class="unauthorized-overlay" *ngIf="showUnauthorized">
+    <div class="unauthorized-message">
+      <h2>Không có quyền truy cập</h2>
+      <p>Bạn không có quyền truy cập trang này.</p>
+      <button class="btn btn-primary" (click)="goToHome()">Về trang chủ</button>
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Dream Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <!-- Menu items for all authenticated users -->
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <a class="nav-link" routerLink="/layout/banhang" routerLinkActive="active">Bán hàng</a>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <a class="nav-link" routerLink="/layout/hoadon" routerLinkActive="active">Hóa đơn</a>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <a class="nav-link" routerLink="/layout/donhang" routerLinkActive="active">Đơn hàng</a>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <a class="nav-link" routerLink="/layout/khachhang" routerLinkActive="active">Khách hàng</a>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <a class="nav-link" routerLink="/layout/sanpham" routerLinkActive="active">Sản phẩm</a>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <a class="nav-link" routerLink="/layout/khuyenmai" routerLinkActive="active">Khuyến mãi</a>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <a class="nav-link" routerLink="/layout/voucher" routerLinkActive="active">Voucher</a>
+          </li>
+          
+          <!-- Menu items only for Quản lý -->
+          <li class="nav-item" *ngIf="isLoggedIn && isQuanLy">
+            <a class="nav-link" routerLink="/layout/nhanvien" routerLinkActive="active">Nhân viên</a>
+          </li>
+          <li class="nav-item" *ngIf="isLoggedIn && isQuanLy">
+            <a class="nav-link" routerLink="/layout/thongke" routerLinkActive="active">Thống kê</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item" *ngIf="!isLoggedIn">
+            <a class="nav-link" routerLink="/dangnhap">Đăng nhập</a>
+          </li>
+          <li class="nav-item dropdown" *ngIf="isLoggedIn">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+              {{ username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#" (click)="logout()">Đăng xuất</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <router-outlet></router-outlet>
+  </div>
+</div>
