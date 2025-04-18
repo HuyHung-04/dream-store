@@ -13,7 +13,7 @@ public class RoleService {
     @Autowired
     VaiTroRepository vaiTroRepository;
 
-    public Optional<VaiTro> findByName(ERole name) {
+    public Optional<VaiTro> findByName(String name) {
         return vaiTroRepository.findByTen(String.valueOf(name));
     }
 } 

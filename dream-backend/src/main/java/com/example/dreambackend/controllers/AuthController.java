@@ -56,7 +56,7 @@ public class AuthController {
             String jwt = jwtUtils.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            String role = nhanVien.getVaiTro().getTen(); // Lấy role name gốc từ database
 
             // Tạo response với thông tin chi tiết
             Map<String, Object> response = new HashMap<>();

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,23 +32,33 @@ public class AuthService {
         nhanVien.setNgayTao(LocalDate.now());
         nhanVien.setNgaySua(LocalDate.now());
         nhanVien.setTrangThai(1);
+        nhanVien.setTen(username);
+        nhanVien.setMa(generateMaNhanVien());
 
         VaiTro vaiTro;
         switch (role) {
-            case "QUAN_LY":
-                vaiTro = roleService.findByName(ERole.ROLE_QUAN_LY)
+            case "ROLE_QUAN_LY":
+                vaiTro = roleService.findByName(ERole.ROLE_QUAN_LY.getTen())
                         .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                 break;
-            case "NHAN_VIEN":
-                vaiTro = roleService.findByName(ERole.ROLE_NHAN_VIEN)
+            case "ROLE_NHAN_VIEN":
+                vaiTro = roleService.findByName(ERole.ROLE_NHAN_VIEN.getTen())
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                break;
+            case "ROLE_KHACH_HANG":
+                vaiTro = roleService.findByName(ERole.ROLE_KHACH_HANG.getTen())
                         .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                 break;
             default:
-                vaiTro = roleService.findByName(ERole.ROLE_KHACH_HANG)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                throw new RuntimeException("Error: Invalid role.");
         }
 
         nhanVien.setVaiTro(vaiTro);
         return nhanVienRepository.save(nhanVien);
+    }
+
+    private String generateMaNhanVien() {
+        long count = nhanVienRepository.count();
+        return "NV" + String.format("%03d", count + 1);
     }
 } 

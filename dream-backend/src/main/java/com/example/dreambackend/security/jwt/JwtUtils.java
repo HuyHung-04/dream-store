@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,7 @@ public class JwtUtils {
 
     public JwtUtils(@Value("${dream.app.jwtSecret}") String jwtSecretString,
                    @Value("${dream.app.jwtExpirationMs}") int jwtExpirationMs) {
-        // Tạo khóa bí mật an toàn cho HS512
-        this.jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        this.jwtSecret = Keys.hmacShaKeyFor(jwtSecretString.getBytes(StandardCharsets.UTF_8));
         this.jwtExpirationMs = jwtExpirationMs;
     }
 

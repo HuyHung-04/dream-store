@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dream-backend/dream-backend.iml" filepath="$PROJECT_DIR$/dream-backend/dream-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dream-store.iml" filepath="$PROJECT_DIR$/.idea/dream-store.iml" />
+    </modules>
+  </component>
+</project>

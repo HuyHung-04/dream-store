@@ -7,6 +7,7 @@ import com.example.dreambackend.repositories.SanPhamChiTietOnlineRepository;
 import com.example.dreambackend.responses.ThanhToanDonHangOnlineRespone;
 import com.example.dreambackend.services.giohangchitiet.GioHangChiTietService;
 import com.example.dreambackend.services.sanphamonline.SanPhamOnlineService;
+import com.example.dreambackend.security.IsBanHang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,8 @@ public class BanHangOnlineController {
 
     @Autowired
     SanPhamChiTietOnlineRepository chiTietOnlineRepository;
+
+    @IsBanHang
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<SanPhamDto>> hienThi(
             @RequestParam(defaultValue = "0") int page,
@@ -36,6 +39,7 @@ public class BanHangOnlineController {
         return ResponseEntity.ok(sanPhamDtos);
     }
 
+    @IsBanHang
     @GetMapping("hien-thi-spct/{idSanPham}")
     public ResponseEntity<List<SanPhamChiTietOnlineDto>> getSanPhamChiTiet(@PathVariable Integer idSanPham) {
         List<SanPhamChiTietOnlineDto> danhSachSanPhamChiTiet = sanPhamOnlineService.getSanPhamChiTiet(idSanPham);
@@ -43,6 +47,7 @@ public class BanHangOnlineController {
     }
 
     // API tìm kiếm sản phẩm theo tên và trạng thái là 1 (đang bán)
+    @IsBanHang
     @GetMapping("/search")
     public ResponseEntity<Page<SanPhamDto>> searchSanPham(
             @RequestParam("name") String name,
@@ -61,6 +66,7 @@ public class BanHangOnlineController {
         }
     }
 
+    @IsBanHang
     @GetMapping("/loc")
     public ResponseEntity<Page<SanPhamDto>> searchSanPhamByBrandAndPrice(
             @RequestParam(required = false) String thuongHieu,

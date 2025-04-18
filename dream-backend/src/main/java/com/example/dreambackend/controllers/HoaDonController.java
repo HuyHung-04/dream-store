@@ -7,6 +7,7 @@ import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
 import com.example.dreambackend.services.hoadon.IHoaDonService;
 import com.example.dreambackend.services.pdf.PdfService;
+import com.example.dreambackend.security.IsBanHang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,7 @@ public class HoaDonController {
     @Autowired
     private PdfService pdfService;
 
+    @IsBanHang
     @PostMapping("/create")
     public ResponseEntity<?> createHoaDon(@RequestBody HoaDonRequest request) {
         try {
@@ -40,6 +42,7 @@ public class HoaDonController {
             return ResponseEntity.badRequest().body(errorResponse);
         }
     }
+    @IsBanHang
     @PutMapping("/{id}/update")
     public ResponseEntity<?> updateHoaDon(@PathVariable Integer id, @RequestBody HoaDonRequest request) {
         try {
@@ -50,6 +53,7 @@ public class HoaDonController {
         }
     }
 
+    @IsBanHang
     @PostMapping("/all")
     public DataTableResults<HoaDonResponse> getAllHoaDon(
             @RequestBody HoaDonSearchRequest request
@@ -57,6 +61,7 @@ public class HoaDonController {
         return hoaDonService.getAllHoaDon(request);
     }
 
+    @IsBanHang
     @PostMapping("/{id}/cancel")
     public ResponseEntity<Void> deleteHoaDon(
             @PathVariable Integer id,
@@ -66,6 +71,7 @@ public class HoaDonController {
         return ResponseEntity.noContent().build();
     }
 
+    @IsBanHang
     @GetMapping("/{id}")
     public ResponseEntity<HoaDonResponse> getHoaDon(@PathVariable Integer id) {
         HoaDonResponse response = hoaDonService.findById(id);
@@ -73,6 +79,7 @@ public class HoaDonController {
     }
 
     // API xuất hóa đơn PDF
+    @IsBanHang
     @GetMapping("/{id}/export-pdf")
     public ResponseEntity<byte[]> exportHoaDonPdf(@PathVariable Integer id) {
         try {
@@ -89,6 +96,7 @@ public class HoaDonController {
         }
     }
 
+    @IsBanHang
     @GetMapping("/filter")
     public Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(
             @RequestParam(defaultValue = "0") Integer trangThai,  // Trạng thái mặc định là 0 (Tất cả)

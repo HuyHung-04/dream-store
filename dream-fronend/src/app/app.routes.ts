@@ -10,24 +10,65 @@ import { ThongkeComponent } from './thongke/thongke.component';
 import { VoucherComponent } from './voucher/voucher.component';
 import { DangnhapComponent } from './dangnhap/dangnhap.component';
 import { DonhangComponent } from './donhang/donhang.component';
+import { AuthGuard } from './guards/auth.guard';
+import { QuanLyGuard, NhanVienGuard, KhachHangGuard } from './guards/role.guard';
+
 // Các routes được cấu hình cho ứng dụng
 export const routes: Routes = [
-  { path: '', component: DangnhapComponent }, // Trang đăng nhập là mặc định
+  { path: '', redirectTo: 'dangnhap', pathMatch: 'full' },
+  { path: 'dangnhap', component: DangnhapComponent },
   {
     path: 'layout',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'banhang', pathMatch: 'full' }, // Route mặc định
-      { path: 'banhang', component: BanhangComponent }, // Bán hàng
-      { path: 'hoadon', component: HoaDonComponent }, // Hóa đơn
-      { path: 'sanpham', component: SanphamComponent }, // Sản phẩm
-      { path: 'voucher', component: VoucherComponent }, // Voucher
-      { path: 'khuyenmai', component: KhuyenmaiComponent }, // Khuyến mãi
-      { path: 'khachhang', component: KhachhangComponent }, // Khách hàng
-      { path: 'nhanvien', component: NhanvienComponent }, // Nhân viên
-      { path: 'thongke', component: ThongkeComponent }, // Thống kê
-      { path: 'donhang', component: DonhangComponent }, // Thống kê
+      { path: '', redirectTo: 'banhang', pathMatch: 'full' },
+      { 
+        path: 'banhang', 
+        component: BanhangComponent,
+        canActivate: [NhanVienGuard]
+      },
+      { 
+        path: 'hoadon', 
+        component: HoaDonComponent,
+        canActivate: [NhanVienGuard]
+      },
+      { 
+        path: 'sanpham', 
+        component: SanphamComponent,
+        canActivate: [NhanVienGuard]
+      },
+      { 
+        path: 'voucher', 
+        component: VoucherComponent,
+        canActivate: [QuanLyGuard]
+      },
+      { 
+        path: 'khuyenmai', 
+        component: KhuyenmaiComponent,
+        canActivate: [QuanLyGuard]
+      },
+      { 
+        path: 'khachhang', 
+        component: KhachhangComponent,
+        canActivate: [KhachHangGuard]
+      },
+      { 
+        path: 'nhanvien', 
+        component: NhanvienComponent,
+        canActivate: [QuanLyGuard]
+      },
+      { 
+        path: 'thongke', 
+        component: ThongkeComponent,
+        canActivate: [QuanLyGuard]
+      },
+      { 
+        path: 'donhang', 
+        component: DonhangComponent,
+        canActivate: [NhanVienGuard]
+      },
     ],
   },
-  { path: '**', redirectTo: '' }, // Redirect tất cả các đường dẫn không hợp lệ
+  { path: '**', redirectTo: 'dangnhap' },
 ];

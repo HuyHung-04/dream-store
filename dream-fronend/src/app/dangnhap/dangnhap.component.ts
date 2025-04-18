@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DangnhapService } from './dangnhap.service'; 
 import { FormsModule, NgForm } from '@angular/forms';
+import { JwtService } from '../services/jwt.service';
 
 @Component({
   selector: 'app-dangnhap',
@@ -18,12 +19,17 @@ export class DangnhapComponent {
   loading: boolean = false;
   submitted: boolean = false;
   errors: { taiKhoan: string; matKhau: string } = { taiKhoan: '', matKhau: '' };
-  storedUserData: any = {};
 
   constructor(
     private dangnhapService: DangnhapService,
+    private jwtService: JwtService,
     private router: Router
-  ) {}
+  ) {
+    // Nếu đã đăng nhập, chuyển hướng theo role
+    if (this.dangnhapService.isLoggedIn()) {
+      this.navigateByRole();
+    }
+  }
 
   // Kiểm tra định dạng email
   isValidEmail(email: string): boolean {
@@ -66,8 +72,12 @@ export class DangnhapComponent {
     this.dangnhapService.login(this.loginData.taiKhoan, this.loginData.matKhau).subscribe({
       next: (response) => {
         this.loading = false;
+        // Lưu token và thông tin user
+        this.jwtService.saveToken(response.token);
+        this.jwtService.saveUser(response.user);
         alert('Đăng nhập thành công!');
-        this.router.navigate(['/layout/banhang']);
+        // Chuyển hướng dựa trên role
+        this.navigateByRole();
       },
       error: (err) => {
         this.loading = false;
@@ -81,5 +91,15 @@ export class DangnhapComponent {
         }
       }
     });
+  }
+
+  private navigateByRole() {
+    if (this.jwtService.hasRole('Quản lý')) {
+      this.router.navigate(['/thongke']);
+    } else if (this.jwtService.hasRole('Nhân viên')) {
+      this.router.navigate(['/banhang']);
+    } else if (this.jwtService.hasRole('Khách hàng')) {
+      this.router.navigate(['/khachhang']);
+    }
   }
 }

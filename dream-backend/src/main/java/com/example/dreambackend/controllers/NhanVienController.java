@@ -1,6 +1,7 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.entities.NhanVien;
+import com.example.dreambackend.security.IsQuanLy;
 import com.example.dreambackend.services.nhanvien.NhanVienService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -30,6 +31,7 @@ public class NhanVienController {
     @Autowired
     private NhanVienService nhanVienService;
     // Hiển thị danh sách nhân viên có phân trang
+    @IsQuanLy
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<NhanVien>> hienThiPaged(
             @RequestParam(defaultValue = "0") int page,
@@ -39,6 +41,7 @@ public class NhanVienController {
     }
 
     // API thêm nhân viên
+    @IsQuanLy
     @PostMapping("/add")
     public ResponseEntity<NhanVien> addNhanVien(@RequestBody NhanVien nhanVien) {
         NhanVien createdNhanVien = nhanVienService.addNhanVien(nhanVien);
@@ -46,6 +49,7 @@ public class NhanVienController {
     }
 
     // API thêm ảnh cho nhân viên
+    @IsQuanLy
     @PostMapping(value = "/add-image/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<NhanVien> addImageForNhanVien(@PathVariable Integer id, @RequestParam("file") MultipartFile file) throws IOException {
         NhanVien updatedNhanVien = nhanVienService.addImageForNhanVien(id, file);
@@ -53,6 +57,7 @@ public class NhanVienController {
     }
 
     // Cập nhật nhân viên
+    @IsQuanLy
     @PostMapping("/update")
     public ResponseEntity<NhanVien> updateNhanVien(@RequestBody NhanVien nhanVien) {
         NhanVien updatedNhanVien = nhanVienService.updateNhanVien(nhanVien);
@@ -60,11 +65,13 @@ public class NhanVienController {
     }
 
     // Tìm kiếm nhân viên theo tên
+    @IsQuanLy
     @GetMapping("/search")
     public List<NhanVien> searchNhanVienByName(@RequestParam("ten") String ten) {
         return nhanVienService.searchNhanVienByName(ten);
     }
     // Lấy chi tiết nhân viên theo id
+    @IsQuanLy
     @GetMapping("/{id}")
     public ResponseEntity<NhanVien> getNhanVienDetail(@PathVariable Integer id) {
         try {
@@ -103,6 +110,7 @@ public class NhanVienController {
         }
     }
     // Lấy nhân viên theo trạng thái
+    @IsQuanLy
     @GetMapping("/trang-thai/{trangThai}")
     public ResponseEntity<Page<NhanVien>> getNhanVienByTrangThai(
             @PathVariable Integer trangThai,

@@ -7,6 +7,8 @@ import com.example.dreambackend.services.coao.CoAoService;
 import com.example.dreambackend.services.sanpham.SanPhamService;
 import com.example.dreambackend.services.thuonghieu.ThuongHieuService;
 import com.example.dreambackend.services.xuatxu.XuatXuService;
+import com.example.dreambackend.security.IsQuanLy;
+import com.example.dreambackend.security.IsReadOnly;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,7 @@ public class SanPhamController {
     @Autowired
     XuatXuService xuatXuService;
 
+    @IsReadOnly
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<SanPhamRespone>> hienThi(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -47,6 +50,7 @@ public class SanPhamController {
         return ResponseEntity.ok(listSanPham);
     }
 
+    @IsQuanLy
     @PostMapping("/add")
     public ResponseEntity<Map<String, String>> addSanPham(@Valid @RequestBody SanPhamRequest sanPhamRequest, BindingResult result) {
         if (result.hasErrors()) {
@@ -67,6 +71,7 @@ public class SanPhamController {
         return ResponseEntity.ok(sanPhamService.existsTenSanPham(ten));
     }
 
+    @IsQuanLy
     @PutMapping("/update")
     public ResponseEntity<Map<String, String>> updateSanPham(@Valid @RequestBody SanPhamRequest sanPhamRequest, BindingResult result) {
         if (result.hasErrors()) {
