@@ -78,7 +78,7 @@ export class DangkyComponent implements OnInit {
           // Nếu email chưa tồn tại, tiến hành thêm khách hàng
           this.dangKyService.addKhachHang(this.khachhang).subscribe(
             (response) => {
-              alert('Thêm khách hàng thành công!');
+              alert('Đăng ký tài khoản thành công!');
               this.router.navigate(['']);
               this.resetForm();
             },

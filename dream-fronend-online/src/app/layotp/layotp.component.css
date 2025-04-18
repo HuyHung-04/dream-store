@@ -13,13 +13,13 @@
 /* Title styling */
 h2 {
   text-align: center;
-  color: #333;
+  color: #294764;
   margin-bottom: 20px;
 }
 
 h3 {
   text-align: center;
-  color: #333;
+  color: #294764;
   margin-bottom: 10px;
 }
 
@@ -48,27 +48,27 @@ button {
 
 /* Send OTP button style */
 .send-otp {
-  background-color: black;
+  background-color: #294764;
   color: white;
   
 }
 
 /* OTP section button styles */
 .verify-otp {
-  background-color: black ;
+  background-color: #294764 ;
   color: white;
   margin-bottom: 10px;
 }
 
 .resend-otp {
-  background-color: black;
+  background-color: #294764;
   color: white;
   
 }
 
 /* Change password button */
 .change-password {
-  background-color: black;
+  background-color: #294764;
   color: white;
 }
 

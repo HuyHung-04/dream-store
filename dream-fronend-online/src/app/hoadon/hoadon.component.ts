@@ -238,9 +238,9 @@ export class HoadonComponent {
   // @param index Vị trí địa chỉ trong danh sách
 
   selectDiaChi(index: number): void {
-    this.chonDiaChiCuThe = this.chonDiaChi.diaChiCuThe
     this.selectedIndex = index;
     this.chonDiaChi = this.diaChiList[index];
+    this.chonDiaChiCuThe = this.chonDiaChi.diaChiCuThe
     this.chonTinh = this.chonDiaChi.tinhThanhPho
     this.chonQuan = this.chonDiaChi.quanHuyen;
     this.chonPhuongXa = this.chonDiaChi.phuongXa;

@@ -48,11 +48,11 @@ otpVerified: boolean = false;
           (data) => {
                 this.khachhang=data;
                 if(this.khachhang.trangThaiOtp===1){
-                  alert('So sanh thành công!');
+                  alert('Xác thực otp thành công!');
                   this.otpVerified=true;
                   this.layOtpService.deleteOtp(this.email);
                 }else{
-                  alert('Mã Otp không chính xác');
+                  alert('Mã otp không chính xác');
                 }
           },
           (error) => {
@@ -77,6 +77,7 @@ otpVerified: boolean = false;
             this.layOtpService.updateKhachHang(this.khachhang).subscribe(
               (response) => {
                 alert('Cập nhật mật khẩu thành công!');
+                window.location.href = '/dangnhap';
               },
               (error) => {
                 console.error('Error:', error);

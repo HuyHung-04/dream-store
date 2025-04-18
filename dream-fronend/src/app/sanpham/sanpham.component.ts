@@ -674,6 +674,7 @@ export class SanphamComponent implements OnInit {
         this.validationErrors = {}; // Reset lỗi trước khi kiểm tra
         let hasErrors = false; // Biến kiểm tra có lỗi không
     
+        // Kiểm tra các lỗi cơ bản trước
         if (!this.sanPhamChiTietRequest.gia || this.sanPhamChiTietRequest.gia.toString().trim() === "") {
           this.validationErrors["gia"] = "Giá không được để trống";
           hasErrors = true;
@@ -681,10 +682,12 @@ export class SanphamComponent implements OnInit {
           this.validationErrors["gia"] = "Giá phải lớn hơn 0";
           hasErrors = true;
         }
+        
         if (this.sanPhamChiTietRequest.gia > 20000000) {
           this.validationErrors["gia"] = "Giá tối đa là 20,000,000";
           hasErrors = true;
         }
+        
         if (!this.sanPhamChiTietRequest.soLuong || this.sanPhamChiTietRequest.soLuong.toString().trim() === "") {
           this.validationErrors["soLuong"] = "Số lượng không được để trống";
           hasErrors = true;
@@ -692,35 +695,57 @@ export class SanphamComponent implements OnInit {
           this.validationErrors["soLuong"] = "Số lượng phải lớn hơn 0";
           hasErrors = true;
         }
-        if (!this.sanPhamChiTietRequest.sizes || this.sanPhamChiTietRequest.sizes.length === 0) {
-          this.validationErrors["sizes"] = "Hãy chọn ít nhất một size";
-          hasErrors = true;
-        }
-        if (!this.sanPhamChiTietRequest.mauSacs || this.sanPhamChiTietRequest.mauSacs.length === 0) {
-          this.validationErrors["mauSacs"] = "Hãy chọn ít nhất một màu sắc";
-          hasErrors = true;
-        }        
+        
         if (this.sanPhamChiTietRequest.trangThai === '') {
           this.validationErrors["trangThai"] = "Hãy chọn trạng thái";
           hasErrors = true;
         }
-          // **Chỉ kiểm tra trùng nếu đang thêm mới hoặc nếu có thay đổi size/màu**
-        if (!this.sanPhamChiTietRequest.id || this.isSanPhamChiTietThayDoi()) {
-          if (this.isSanPhamChiTietTrung()) {
-            this.validationErrors["sanPhamChiTiet"] = "Sản phẩm chi tiết với màu sắc và size này đã tồn tại.";
+    
+        // Kiểm tra lỗi chọn size/màu (ưu tiên kiểm tra trước)
+        if (this.sanPhamChiTietRequest.id) { // Chỉ kiểm tra khi sửa
+          if (!this.sanPhamChiTietRequest.sizes || this.sanPhamChiTietRequest.sizes.length === 0) {
+            this.validationErrors["sizes"] = "Hãy chọn 1 size";
             hasErrors = true;
-          }
-        }
-        if (this.sanPhamChiTietRequest.id) { // Kiểm tra nếu đang sửa (có ID)
-          if (this.sanPhamChiTietRequest.sizes.length > 1) {
+          } else if (this.sanPhamChiTietRequest.sizes.length > 1) {
             this.validationErrors["sizes"] = "Chỉ được chọn 1 size khi sửa";
             hasErrors = true;
           }
-          if (this.sanPhamChiTietRequest.mauSacs.length > 1) {
+          
+          if (!this.sanPhamChiTietRequest.mauSacs || this.sanPhamChiTietRequest.mauSacs.length === 0) {
+            this.validationErrors["mauSacs"] = "Hãy chọn 1 màu sắc";
+            hasErrors = true;
+          } else if (this.sanPhamChiTietRequest.mauSacs.length > 1) {
             this.validationErrors["mauSacs"] = "Chỉ được chọn 1 màu khi sửa";
             hasErrors = true;
           }
+        } else { 
+          // Kiểm tra khi thêm mới
+          if (!this.sanPhamChiTietRequest.sizes || this.sanPhamChiTietRequest.sizes.length === 0) {
+            this.validationErrors["sizes"] = "Hãy chọn ít nhất một size";
+            hasErrors = true;
+          }
+          if (!this.sanPhamChiTietRequest.mauSacs || this.sanPhamChiTietRequest.mauSacs.length === 0) {
+            this.validationErrors["mauSacs"] = "Hãy chọn ít nhất một màu sắc";
+            hasErrors = true;
+          }
         }
+    
+        // Chỉ kiểm tra trùng nếu không có lỗi nào ở trên
+        if (!hasErrors) {
+          // Chỉ kiểm tra trùng nếu đang thêm mới hoặc nếu có thay đổi size/màu
+          if (!this.sanPhamChiTietRequest.id || this.isSanPhamChiTietThayDoi()) {
+            if (this.isSanPhamChiTietTrung()) {
+              // Nếu đang sửa và đã chọn đúng 1 màu + 1 size thì mới hiển thị lỗi trùng
+              if (!this.sanPhamChiTietRequest.id || 
+                  (this.sanPhamChiTietRequest.sizes.length === 1 && 
+                   this.sanPhamChiTietRequest.mauSacs.length === 1)) {
+                this.validationErrors["sanPhamChiTiet"] = "Sản phẩm chi tiết với màu sắc và size này đã tồn tại.";
+                hasErrors = true;
+              }
+            }
+          }
+        }
+    
         resolve(!hasErrors); // Trả về true nếu không có lỗi
       });
     }   
