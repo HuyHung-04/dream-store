@@ -125,7 +125,7 @@
       </form>
     </div>
   </div>
-  <!-- Modal hiển thị chi tiết khuyến mãi khi sửa -->
+  <!-- Modal sửa khuyến mãi -->
   <div class="modal-overlay" *ngIf="showModalEdit" (click)="closeModalEdit()">
     <div class="modal-box" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="closeModalEdit()">×</button>
@@ -147,7 +147,7 @@
             </div>
           </div>
           <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.ten" name="ten" required
+            <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.ten" name="ten" [readonly]="checkNgay" required (click)="showCannotEditMessage('ten')"
               (input)="clearError('ten')" />
             <label for="ten">Tên khuyến mãi</label>
             <div class="tooltip-error" *ngIf="errors.ten">
@@ -160,7 +160,7 @@
 
           <div class="input-field">
             <div style="display: flex; align-items: center;">
-              <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.giaTriGiam" name="giaTriGiam" required
+              <input type="text" class="input" [(ngModel)]="khuyenmaiEdit.giaTriGiam" [readonly]="checkNgay" name="giaTriGiam" required (click)="showCannotEditMessage('giaTriGiam')"
                 (input)="clearError('giaTriGiam')" />
             </div>
             <label for="giaTriGiam">Giá trị giảm</label>
@@ -198,7 +198,6 @@
               {{ errors.ngayKetThuc}}
             </div>
           </div>
-
         </div>
 
 

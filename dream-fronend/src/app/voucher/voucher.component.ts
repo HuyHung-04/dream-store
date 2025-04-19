@@ -26,6 +26,7 @@ export class VoucherComponent implements OnInit {
   searchText: string = '';
   numberPages: number[] = [];
   voucherUsed: boolean = false;
+  checkNgay: boolean = false;
   tenVouchers: any[] = [];
   errors: any = {};
   voucher: any = {
@@ -66,32 +67,42 @@ export class VoucherComponent implements OnInit {
     this.voucherService.checkVoucherUsed(voucherId).subscribe((isUsed) => {
       this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
         this.voucherEdit = { ...voucher };
-        this.voucherUsed = isUsed; // Dùng để disable các trường
-  
+        this.voucherUsed = isUsed;
+        // Kiểm tra nếu voucher đã hết hạn
+        const today = new Date();
+        today.setHours(23, 59, 59, 999); 
+        const endDate = new Date(this.voucherEdit.ngayKetThuc);
+        endDate.setHours(23, 59, 59, 999)
+        const isExpired = endDate < today;
+
+        // Nếu voucher đã hết hạn, không cho phép sửa
+        if (isExpired) {
+          this.checkNgay = true; // Vô hiệu hóa các trường khi voucher hết hạn
+        }
         this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
         this.showModalEdit = true;
       });
     });
   }
-  
+
   onHinhThucGiamChange2() {
     console.log(this.voucherEdit.hinhThucGiam);
     this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
     if (this.isGiamToiDaDisabled) {
-      this.voucherEdit.giamToiDa = null; 
+      this.voucherEdit.giamToiDa = null;
     }
   }
-  
+
   onHinhThucGiamChange() {
-    if (this.voucher.hinhThucGiam === true) { 
-      this.voucher.giamToiDa = null; 
+    if (this.voucher.hinhThucGiam === true) {
+      this.voucher.giamToiDa = null;
     }
   }
-  
+
   addVoucher() {
 
     if (!this.validateForm()) {
-      return; 
+      return;
     }
 
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn thêm voucher này?');
@@ -113,7 +124,7 @@ export class VoucherComponent implements OnInit {
       }
     );
   }
-  
+
 
   clearError(field: string): void {
     if (this.errors[field]) {
@@ -139,7 +150,7 @@ export class VoucherComponent implements OnInit {
       this.errors.ten = 'Tên voucher không được để trống!';
     }
 
-    if (!this.voucher.soLuong==null) {
+    if (!this.voucher.soLuong == null) {
       this.errors.soLuong = 'Số lượng không được để trống!';
     }
 
@@ -157,15 +168,15 @@ export class VoucherComponent implements OnInit {
         this.errors.soLuong = 'Số lượng phải lớn hơn 0!';
       }
     }
-    
-    
+
+
     if (
       this.voucher.donToiThieu === null ||
       this.voucher.donToiThieu === undefined ||
       this.voucher.donToiThieu === ''
     ) {
       this.errors.donToiThieu = 'Đơn tối thiểu không được để trống!';
-    }    
+    }
     else {
       // Ép về kiểu number để check
       const checkSo = Number(this.voucher.donToiThieu);
@@ -185,14 +196,14 @@ export class VoucherComponent implements OnInit {
     } else {
       const checkPhanTram = Number(this.voucher.giaTriGiam);
 
-      if (this.voucher.hinhThucGiam === true) {  
+      if (this.voucher.hinhThucGiam === true) {
         // Nếu hình thức giảm là theo số tiền
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
         } else if (checkPhanTram <= 0) {
           this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
         }
-      } else {  
+      } else {
         // Nếu hình thức giảm là theo phần trăm
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
@@ -210,7 +221,7 @@ export class VoucherComponent implements OnInit {
     } else if (this.voucher.hinhThucGiam == false) {
       if (this.voucher.giamToiDa === null || this.voucher.giamToiDa === undefined || this.voucher.giamToiDa === '') {
         this.errors.giamToiDa = 'Giảm tối đa không được để trống khi giảm theo %!';
-      } else { 
+      } else {
         const checkSo = Number(this.voucher.giamToiDa);
         if (isNaN(checkSo)) {
           this.errors.giamToiDa = 'Giảm tối đa phải là số!';
@@ -219,9 +230,9 @@ export class VoucherComponent implements OnInit {
         }
       }
     }
-    
 
-    if (this.voucher.hinhThucGiam === false) { 
+
+    if (this.voucher.hinhThucGiam === false) {
       if (this.voucher.giamToiDa === null || this.voucher.giamToiDa === undefined || this.voucher.giamToiDa === '') {
         this.errors.giamToiDa = 'Giảm tối đa không được để trống!';
       } else {
@@ -233,7 +244,7 @@ export class VoucherComponent implements OnInit {
           this.errors.giamToiDa = 'Giảm tối đa không được âm!';
         }
       }
-    }    
+    }
 
     if (!this.voucher.ngayBatDau) {
       this.errors.ngayBatDau = 'Ngày bắt đầu không được để trống!';
@@ -272,7 +283,7 @@ export class VoucherComponent implements OnInit {
     this.voucherService.searchVoucherTheoTen(this.searchText).subscribe(
       (data) => {
         if (data.length > 0) {
-          this.selectedVoucher = data[0]; 
+          this.selectedVoucher = data[0];
           this.showModalSearch = true;
         } else {
           alert('Không tìm thấy voucher phù hợp.');
@@ -313,20 +324,20 @@ export class VoucherComponent implements OnInit {
         this.errors.soLuong = 'Số lượng phải lớn hơn 0!';
       }
     }
- 
+
     if (this.voucherEdit.giaTriGiam === null || this.voucherEdit.giaTriGiam === undefined || this.voucherEdit.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
       const checkPhanTram = Number(this.voucherEdit.giaTriGiam);
 
-      if (this.voucherEdit.hinhThucGiam === true) { 
+      if (this.voucherEdit.hinhThucGiam === true) {
         // Nếu hình thức giảm là theo số tiền
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
         } else if (checkPhanTram <= 0) {
           this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
         }
-      } else {  
+      } else {
         // Nếu hình thức giảm là theo phần trăm
         if (isNaN(checkPhanTram)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
@@ -356,7 +367,7 @@ export class VoucherComponent implements OnInit {
     } else if (this.voucherEdit.hinhThucGiam == false) {
       if (this.voucherEdit.giamToiDa === null || this.voucherEdit.giamToiDa === undefined || this.voucherEdit.giamToiDa === '') {
         this.errors.giamToiDa = 'Giảm tối đa không được để trống khi giảm theo %!';
-      } else { 
+      } else {
         const checkSo = Number(this.voucherEdit.giamToiDa);
         if (isNaN(checkSo)) {
           this.errors.giamToiDa = 'Giảm tối đa phải là số!';
@@ -365,7 +376,7 @@ export class VoucherComponent implements OnInit {
         }
       }
     }
-    
+
 
 
     if (!this.voucherEdit.ngayBatDau) {
@@ -380,7 +391,7 @@ export class VoucherComponent implements OnInit {
       const startDate = new Date(this.voucherEdit.ngayBatDau);
       const endDate = new Date(`${this.voucherEdit.ngayKetThuc}T23:59:59.999`);
 
-   
+
       startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
 
@@ -408,7 +419,7 @@ export class VoucherComponent implements OnInit {
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn cập nhật voucher này?');
 
     if (!isConfirmed) {
-      return; 
+      return;
     }
 
     if (this.voucherEdit.id) {
@@ -441,7 +452,7 @@ export class VoucherComponent implements OnInit {
       this.searchTenVoucher();
     });
   }
-  
+
   loadData(): void {
     if (this.selectedTrangThai !== 3) {
       this.locTrangThai(this.selectedTrangThai, 0);
@@ -452,9 +463,9 @@ export class VoucherComponent implements OnInit {
 
   loadPage(page: number): void {
     this.voucherService.getVoucher(page, 8).subscribe((response) => {
-      this.vouchers = response.content; 
-      this.totalPages = response.totalPages; 
-      this.currentPage = page; 
+      this.vouchers = response.content;
+      this.totalPages = response.totalPages;
+      this.currentPage = page;
       this.tinhSoTrang();
       this.searchTenVoucher();
     });
@@ -466,9 +477,9 @@ export class VoucherComponent implements OnInit {
       } else {
         this.loadPage(page);
       }
-      
+
     } else {
-     
+
     }
   }
   searchTenVoucher() {
@@ -481,9 +492,9 @@ export class VoucherComponent implements OnInit {
     }
   }
 
-  
-  
-  
+
+
+
   tinhSoTrang(): void {
     const startPage = Math.floor(this.currentPage / this.maxPages) * this.maxPages;
     const endPage = Math.min(startPage + this.maxPages, this.totalPages);
@@ -498,7 +509,7 @@ export class VoucherComponent implements OnInit {
       } else {
         this.loadPage(this.currentPage - 1);
       }
-    
+
     }
   }
 
@@ -509,7 +520,7 @@ export class VoucherComponent implements OnInit {
       } else {
         this.loadPage(this.currentPage + 1);
       }
-      
+
     }
   }
 
@@ -550,10 +561,41 @@ export class VoucherComponent implements OnInit {
     this.showModalSearch = false;
   }
 
-  showCannotEditMessage(message: string) {
-    if (this.voucherUsed) {
-      alert(message);
+  showCannotEditMessage(fieldName: string): void {
+    const currentDate = new Date();
+    currentDate.setHours(23, 59, 59, 999);
+    const ngayKetThuc = new Date(this.voucherEdit.ngayKetThuc); // Lấy ngày kết thúc của voucher
+    ngayKetThuc.setHours(23, 59, 59, 999)
+    // Kiểm tra trạng thái voucher đã được áp dụng hay chưa và đã hết hạn chưa
+    const isVoucherExpired = ngayKetThuc < currentDate;
+    const isVoucherUsed = this.voucherUsed;
+
+    switch (fieldName) {
+      case 'ma':
+        if (isVoucherUsed) {
+          alert('Voucher đã được áp dụng, không thể sửa mã!');
+        } else if (isVoucherExpired) {
+          alert('Voucher đã hết hạn, không thể sửa mã!');
+        }
+        break;
+      case 'ten':
+        if (isVoucherUsed) {
+          alert('Voucher đã được áp dụng, không thể sửa tên voucher!');
+        } else if (isVoucherExpired) {
+          alert('Voucher đã hết hạn, không thể sửa tên voucher!');
+        }
+        break;
+      case 'giaTriGiam':
+        if (isVoucherUsed) {
+          alert('Voucher đã được áp dụng, không thể sửa giá trị giảm!');
+        } else if (isVoucherExpired) {
+          alert('Voucher đã hết hạn, không thể sửa giá trị giảm!');
+        }
+        break;
+      default:
+        break;
     }
   }
-  
+
+
 }

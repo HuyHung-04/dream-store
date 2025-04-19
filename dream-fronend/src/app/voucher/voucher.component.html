@@ -168,7 +168,7 @@
         <form (ngSubmit)="updateVoucher()" #voucherForm="ngForm">
           <div class="input-row">
             <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucherEdit.ma" name="ma" required readonly  [readonly]="voucherUsed" (click)="showCannotEditMessage('Voucher đã được áp dụng, không thể sửa mã!')" />
+              <input type="text" class="input" [(ngModel)]="voucherEdit.ma" name="ma" required readonly   />
               <label for="ma">Mã voucher</label>
               <div class="tooltip-error" *ngIf="errors.ma">
               {{errors.ma}}
@@ -176,7 +176,7 @@
             </div>
             <div class="input-field">
               <input type="text" class="input" [(ngModel)]="voucherEdit.ten" name="ten" required
-                (input)="clearError('ten')" [readonly]="voucherUsed" (click)="showCannotEditMessage('Voucher đã được áp dụng, không thể sửa tên voucher!')" />
+                (input)="clearError('ten')" [readonly]="voucherUsed || checkNgay" (click)="showCannotEditMessage('ten')"  />
               <label for="ten">Tên voucher</label>
               <div class="tooltip-error" *ngIf="errors.ten">
                 {{ errors.ten}}
@@ -186,7 +186,7 @@
   
           <div class="input-row">
             <div class="input-field">
-              <input type="number" class="input" [(ngModel)]="voucherEdit.soLuong" name="soLuong" required [readonly]="voucherUsed" (click)="showCannotEditMessage('Voucher đã được áp dụng, không thể sửa số lượng!')"/>
+              <input type="number" class="input" [(ngModel)]="voucherEdit.soLuong" name="soLuong" required [readonly]="voucherUsed || checkNgay" (click)="showCannotEditMessage('soLuong')" />
               <label for="soLuong">Số lượng</label>
               <div class="tooltip-error" *ngIf="errors.soLuong">
                {{errors.soLuong}}
@@ -194,7 +194,7 @@
             </div>
             <div class="input-field">
               <select class="input" [(ngModel)]="voucherEdit.hinhThucGiam" name="hinhThucGiam" required 
-                (change)="onHinhThucGiamChange2(); clearError('hinhThucGiam')"  [disabled]="voucherUsed"   (click)="voucherUsed && showCannotEditMessage('Voucher đã được áp dụng, không thể sửa hình thức giảm!')">
+                (change)="onHinhThucGiamChange2(); clearError('hinhThucGiam')"  (click)="showCannotEditMessage('hinhThucGiam')">
                 <option [ngValue]="true">Giảm tiền</option>
                 <option [ngValue]="false">Giảm %</option>
               </select>
@@ -209,7 +209,7 @@
             <div class="input-field">
               <div style="display: flex; align-items: center;">
                 <input type="text" class="input" [(ngModel)]="voucherEdit.giaTriGiam" name="giaTriGiam" required 
-                  (input)="clearError('giaTriGiam')" [readonly]="voucherUsed" (click)="showCannotEditMessage('Voucher đã được áp dụng, không thể sửa mã!')" />
+                  (input)="clearError('giaTriGiam')"  [readonly]="voucherUsed || checkNgay" (click)="showCannotEditMessage('giaTriGiam')" />
                 <span *ngIf="voucherEdit.hinhThucGiam === true"   class="unit">VND</span>
                 <span *ngIf="voucherEdit.hinhThucGiam === false" class="unit">%</span>
               </div>
@@ -219,7 +219,7 @@
               </div>
             </div>
             <div class="input-field">
-              <input type="text" class="input" [(ngModel)]="voucherEdit.donToiThieu" name="donToiThieu" required [readonly]="voucherUsed" (click)="showCannotEditMessage('Voucher đã được áp dụng, không thể sửa mã!')" />
+              <input type="text" class="input" [(ngModel)]="voucherEdit.donToiThieu" name="donToiThieu" required  [readonly]="voucherUsed || checkNgay" (click)="showCannotEditMessage('donToiThieu')" />
               <label for="donToiThieu">Đơn tối thiểu</label>
               <div class="tooltip-error" *ngIf="errors.donToiThieu">
                {{errors.donToiThieu}}
@@ -230,7 +230,7 @@
   
           <div class="input-row">
             <div class="input-field" *ngIf="!voucherEdit.hinhThucGiam">
-              <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required [readonly]="voucherUsed" (click)="showCannotEditMessage('Voucher đã được áp dụng, không thể sửa mã!')" />
+              <input type="text" class="input" [(ngModel)]="voucherEdit.giamToiDa" name="giamToiDa" required  [readonly]="voucherUsed || checkNgay" (click)="showCannotEditMessage('giamToiDa')"/>
               <label for="giamToiDa">Giảm tối đa</label>
               <div class="tooltip-error" *ngIf="errors.giamToiDa">
                 {{ errors.giamToiDa }}
