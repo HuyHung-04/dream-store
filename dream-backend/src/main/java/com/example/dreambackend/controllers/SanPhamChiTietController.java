@@ -1,6 +1,7 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.entities.SanPhamChiTiet;
+import com.example.dreambackend.repositories.HoaDonChiTietRepository;
 import com.example.dreambackend.requests.SanPhamChiTietRequest;
 import com.example.dreambackend.responses.GetSanPhamToBanHangRespone;
 import com.example.dreambackend.responses.SanPhamChiTietRespone;
@@ -42,6 +43,9 @@ public class SanPhamChiTietController {
 
     @Autowired
     private SanPhamChiTietRepository sanPhamChiTietRepository;
+
+    @Autowired
+    private HoaDonChiTietRepository hoaDonChiTietRepository;
 
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<SanPhamChiTietRespone>> hienThi(
@@ -153,5 +157,11 @@ public class SanPhamChiTietController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Lỗi khi cập nhật số lượng: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/ckeck-spct/{id}")
+    public ResponseEntity<Boolean> checkSpct(@PathVariable Integer id) {
+        boolean isUsed = hoaDonChiTietRepository.existsBySanPhamChiTiet_Id(id);
+        return ResponseEntity.ok(isUsed);
     }
 }

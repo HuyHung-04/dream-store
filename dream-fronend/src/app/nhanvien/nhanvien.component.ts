@@ -439,8 +439,7 @@ export class NhanvienComponent implements OnInit {
     if (password) {
       if (password.length < 6) {
         this.errors.matKhau = 'Mật khẩu phải có ít nhất 6 ký tự!';
-      } else if (password.length > 10) {
-        this.errors.matKhau = 'Mật khẩu không được quá 10 ký tự!';
+      } 
       } else {
         const isDuplicatePassword = this.nhanViens.some(
           nv => nv.matKhau === password && nv.id !== this.nhanVienEdit.id
@@ -448,7 +447,6 @@ export class NhanvienComponent implements OnInit {
         if (isDuplicatePassword) {
           this.errors.matKhau = 'Mật khẩu đã tồn tại!';
         }
-      }
     }
   
     // Validate trạng thái
@@ -464,7 +462,7 @@ export class NhanvienComponent implements OnInit {
     }
     if (this.nhanVienEdit.id) {
       // Nếu vai trò là Admin, giữ nguyên
-      if (this.nhanVienEdit.vaiTro.ten !== 'Admin') {
+      if (this.nhanVienEdit.vaiTro.ten !== 'Quản lý') {
         this.nhanVienEdit.vaiTro = { id: 2, ten: 'Nhân viên' };
       }
       this.nhanVienService.updateNhanVien(this.nhanVienEdit).subscribe(

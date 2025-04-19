@@ -72,9 +72,12 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/api/nhan-vien/**").authenticated()
                 .requestMatchers("/api/san-pham/**").authenticated()
+                .requestMatchers("/api/san-pham-chi-tiet/**").permitAll()
                 .requestMatchers("/api/hoa-don/**").authenticated()
                 .requestMatchers("/api/thong-ke/**").authenticated()
                 .requestMatchers("/api/ban-hang-online/**").authenticated()
+                .requestMatchers("/uploads/images/**").permitAll()
+                .requestMatchers("/api/nhan-vien/image/**").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());

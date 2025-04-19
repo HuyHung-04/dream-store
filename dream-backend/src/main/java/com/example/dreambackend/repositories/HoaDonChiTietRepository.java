@@ -259,4 +259,6 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "JOIN FETCH sp.xuatXu " +         // Xuất xứ thuộc sp
             "WHERE hd.id = :idHoaDon")
     List<HoaDonChiTiet> getHoaDonChiTietByHoaDonId(@Param("idHoaDon") Integer idHoaDon);
+
+    boolean existsBySanPhamChiTiet_Id(Integer idSanPhamChiTiet);
 }

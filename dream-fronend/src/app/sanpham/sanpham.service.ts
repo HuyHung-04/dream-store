@@ -11,6 +11,10 @@ export class SanphamService {
 
   constructor(private http: HttpClient) {}
   // Lấy danh sách sản phẩm từ backend
+  // Trong service Angular
+  checkSpct(id: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/san-pham-chi-tiet/ckeck-spct/${id}`);
+  }
   // hàm sản phẩm
   getSanPham(page: number, size: number): Observable<ApiResponseSanPham> {
     return this.http.get<ApiResponseSanPham>(`${this.apiUrl}/san-pham/hien-thi?page=${page}&size=${size}`);
