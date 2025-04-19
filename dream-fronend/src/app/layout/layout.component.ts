@@ -26,6 +26,7 @@ export class LayoutComponent {
   confirmLogout() {
     const confirmResult = confirm("Bạn có chắc chắn muốn đăng xuất không?");
     if (confirmResult) {
+      localStorage.removeItem('access_token');
       this.router.navigate(['/layout/dangnhap']);
     }
   }

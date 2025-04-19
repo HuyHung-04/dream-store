@@ -3,6 +3,8 @@ package com.example.dreambackend.controllers;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.entities.ThuongHieu;
 import com.example.dreambackend.entities.Voucher;
+import com.example.dreambackend.repositories.HoaDonRepository;
+import com.example.dreambackend.security.IsQuanLy;
 import com.example.dreambackend.services.sanphamchitiet.SanPhamChiTietService;
 import com.example.dreambackend.services.voucher.VoucherService;
 
@@ -23,6 +25,8 @@ public class VoucherController {
     @Autowired
     VoucherService voucherService;
 
+    @Autowired
+    HoaDonRepository hoaDonRepository;
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<Voucher>> hienThiPaged(
             @RequestParam(defaultValue = "0") int page,
@@ -71,4 +75,12 @@ public class VoucherController {
             return ResponseEntity.ok(pagedVouchers);
         }
     }
+
+
+    @GetMapping("/voucher/{id}/check-used")
+    public ResponseEntity<Boolean> checkIfVoucherUsed(@PathVariable Integer id) {
+        boolean isUsed = hoaDonRepository.existsByVoucher_Id(id);
+        return ResponseEntity.ok(isUsed);
+    }
+
 }

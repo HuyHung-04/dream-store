@@ -25,6 +25,7 @@ export class VoucherComponent implements OnInit {
   voucherEdit: any = {};
   searchText: string = '';
   numberPages: number[] = [];
+  voucherUsed: boolean = false;
   tenVouchers: any[] = [];
   errors: any = {};
   voucher: any = {
@@ -62,12 +63,17 @@ export class VoucherComponent implements OnInit {
 
   }
   editVoucher(voucherId: number) {
-    this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
-      this.voucherEdit = { ...voucher };
-      this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
-      this.showModalEdit = true;
+    this.voucherService.checkVoucherUsed(voucherId).subscribe((isUsed) => {
+      this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
+        this.voucherEdit = { ...voucher };
+        this.voucherUsed = isUsed; // Dùng để disable các trường
+  
+        this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
+        this.showModalEdit = true;
+      });
     });
   }
+  
   onHinhThucGiamChange2() {
     console.log(this.voucherEdit.hinhThucGiam);
     this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
@@ -544,4 +550,10 @@ export class VoucherComponent implements OnInit {
     this.showModalSearch = false;
   }
 
+  showCannotEditMessage(message: string) {
+    if (this.voucherUsed) {
+      alert(message);
+    }
+  }
+  
 }

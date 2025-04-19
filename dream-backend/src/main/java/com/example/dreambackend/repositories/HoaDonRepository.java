@@ -216,4 +216,6 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
     List<HoaDon> findByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon);
 
     List<HoaDon> findByTrangThai(Integer trangThai);
+
+    boolean existsByVoucher_Id(Integer voucherId);
 }

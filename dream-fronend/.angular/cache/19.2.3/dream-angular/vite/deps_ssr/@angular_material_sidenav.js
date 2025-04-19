@@ -1,5 +1,11 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
+  CdkScrollable,
+  CdkScrollableModule,
+  ScrollDispatcher,
+  ViewportRuler
+} from "./chunk-SJIJAAA7.js";
+import {
   ESCAPE,
   FocusMonitor,
   FocusTrapFactory,
@@ -7,12 +13,6 @@ import {
   MatCommonModule,
   hasModifierKey
 } from "./chunk-TJHAGJYU.js";
-import {
-  CdkScrollable,
-  CdkScrollableModule,
-  ScrollDispatcher,
-  ViewportRuler
-} from "./chunk-SJIJAAA7.js";
 import {
   Platform,
   coerceBooleanProperty,
