@@ -67,7 +67,6 @@ export class KhuyenmaiComponent implements OnInit {
         const endDate = new Date(this.khuyenmaiEdit.ngayKetThuc);
         endDate.setHours(23, 59, 59, 999)
         const isExpired = endDate < today;
-
         // Nếu khuyến mãi đã hết hạn, không cho phép sửa
         if (isExpired) {
           this.checkNgay = true; // Vô hiệu hóa các trường khi khuyến mãi hết hạn
@@ -494,29 +493,9 @@ export class KhuyenmaiComponent implements OnInit {
           alert('Voucher đã hết hạn, không thể sửa tên voucher!');
         }
         break;
-      case 'soLuong':
-         if (isVoucherExpired) {
-          alert('Voucher đã hết hạn, không thể sửa số lượng!');
-        }
-        break;
-      case 'hinhThucGiam':
-        if (isVoucherExpired) {
-          alert('Voucher đã hết hạn, không thể sửa hình thức giảm!');
-        }
-        break;
       case 'giaTriGiam':
         if (isVoucherExpired) {
           alert('Voucher đã hết hạn, không thể sửa giá trị giảm!');
-        }
-        break;
-      case 'donToiThieu':
-        if (isVoucherExpired) {
-          alert('Voucher đã hết hạn, không thể sửa đơn tối thiểu!');
-        }
-        break;
-      case 'giamToiDa':
-        if (isVoucherExpired) {
-          alert('Voucher đã hết hạn, không thể sửa giảm tối đa!');
         }
         break;
       default:

@@ -78,6 +78,7 @@ public class NhanVienController {
     }
     private static final String UPLOAD_DIR = "D:/dream-store/dream-backend/uploads/images/";
 
+    @IsQuanLy
     @GetMapping("/image/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {

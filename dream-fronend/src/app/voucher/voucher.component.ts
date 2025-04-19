@@ -79,6 +79,7 @@ export class VoucherComponent implements OnInit {
         if (isExpired) {
           this.checkNgay = true; // Vô hiệu hóa các trường khi voucher hết hạn
         }
+
         this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
         this.showModalEdit = true;
       });
@@ -592,8 +593,37 @@ export class VoucherComponent implements OnInit {
           alert('Voucher đã hết hạn, không thể sửa giá trị giảm!');
         }
         break;
-      default:
-        break;
+        case 'soLuong':
+          if (isVoucherUsed) {
+            alert('Voucher đã được áp dụng, không thể sửa số lượng!');
+          } else if (isVoucherExpired) {
+            alert('Voucher đã hết hạn, không thể sửa số lượng!');
+          }
+          break;
+          case 'hinhThucGiam':
+            if (isVoucherUsed) {
+              alert('Voucher đã được áp dụng, không thể sửa hình thức giảm!');
+            } else if (isVoucherExpired) {
+              alert('Voucher đã hết hạn, không thể sửa hình thức giảm!');
+            }
+            break;
+        case 'donToiThieu':
+          if (isVoucherUsed) {
+            alert('Voucher đã được áp dụng, không thể sửa đơn tối thiểu!');
+          } else if (isVoucherExpired) {
+            alert('Voucher đã hết hạn, không thể sửa đơn tối thiểu!');
+          }
+          break;
+        case 'giamToiDa':
+          if (isVoucherUsed) {
+            alert('Voucher đã được áp dụng, không thể sửa giảm tối đa!');
+          } else if (isVoucherExpired) {
+            alert('Voucher đã hết hạn, không thể sửa giảm tối đa!');
+          }
+          break;
+        default:
+          break;
+      
     }
   }
 

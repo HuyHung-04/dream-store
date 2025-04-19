@@ -15,10 +15,10 @@ import {
   getRtlScrollAxisType,
   hasModifierKey,
   supportsScrollBehavior
-} from "./chunk-VFMFOQPO.js";
+} from "./chunk-4G7RPPEY.js";
 import {
   DOCUMENT
-} from "./chunk-LPG5ARC6.js";
+} from "./chunk-LWORY74U.js";
 import {
   ANIMATION_MODULE_TYPE,
   ChangeDetectionStrategy,
@@ -81,7 +81,7 @@ import {
   ɵɵstyleProp,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-EY5NDTR5.js";
+} from "./chunk-GAKRZWTD.js";
 import {
   require_cjs
 } from "./chunk-AQYIT73X.js";
