@@ -31,7 +31,7 @@ public class NhanVienController {
     @Autowired
     private NhanVienService nhanVienService;
     // Hiển thị danh sách nhân viên có phân trang
-    @IsQuanLy
+
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<NhanVien>> hienThiPaged(
             @RequestParam(defaultValue = "0") int page,
@@ -48,7 +48,7 @@ public class NhanVienController {
     }
 
     // API thêm ảnh cho nhân viên
-    @IsQuanLy
+
     @PostMapping(value = "/add-image/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<NhanVien> addImageForNhanVien(@PathVariable Integer id, @RequestParam("file") MultipartFile file) throws IOException {
         NhanVien updatedNhanVien = nhanVienService.addImageForNhanVien(id, file);
@@ -56,7 +56,7 @@ public class NhanVienController {
     }
 
     // Cập nhật nhân viên
-    @IsQuanLy
+
     @PostMapping("/update")
     public ResponseEntity<NhanVien> updateNhanVien(@RequestBody NhanVien nhanVien) {
         NhanVien updatedNhanVien = nhanVienService.updateNhanVien(nhanVien);
@@ -79,7 +79,6 @@ public class NhanVienController {
         }
     }
     private static final String UPLOAD_DIR = "D:/dream-store/dream-backend/uploads/images/";
-    @IsQuanLy
     @GetMapping("/image/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {

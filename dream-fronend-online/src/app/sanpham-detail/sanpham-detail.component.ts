@@ -146,19 +146,19 @@ import { CookieService } from 'ngx-cookie-service';
     if (!this.selectedMauSac) return;
   
     // Lọc danh sách size tương ứng với màu sắc đã chọn
-    this.filteredDanhSachSize = this.sanPhamList
+    const availableSizes = this.sanPhamList
       .filter(sp => sp.tenMauSac === this.selectedMauSac)
       .map(sp => sp.tenSize)
       .filter((value, index, self) => self.indexOf(value) === index);
   
-    // Nếu danh sách size có giá trị, chọn giá trị đầu tiên làm mặc định
-    if (this.filteredDanhSachSize.length > 0) {
-      this.selectedSize = this.filteredDanhSachSize[0];
-    } else {
-      this.selectedSize = ""; // Không có size phù hợp
+    // Chỉ cập nhật filteredDanhSachSize, không reset selectedSize nếu nó vẫn hợp lệ
+    this.filteredDanhSachSize = availableSizes;
+  
+    // Nếu size hiện tại không có trong danh sách size mới, thì mới chọn size đầu tiên
+    if (!this.selectedSize || !availableSizes.includes(this.selectedSize)) {
+      this.selectedSize = availableSizes.length > 0 ? availableSizes[0] : "";
     }
   
-    // Tìm sản phẩm theo màu và size đã chọn
     this.updateSelectedSanPham();
   }
   
@@ -178,19 +178,21 @@ import { CookieService } from 'ngx-cookie-service';
 
   onSizeChange() {
     if (!this.selectedSize) return;
+  
     // Lọc danh sách màu tương ứng với size đã chọn
-    this.filteredDanhSachMauSac = this.sanPhamList
+    const availableColors = this.sanPhamList
       .filter(sp => sp.tenSize === this.selectedSize)
       .map(sp => sp.tenMauSac)
       .filter((value, index, self) => self.indexOf(value) === index);
-    // Nếu danh sách màu có giá trị, chọn giá trị đầu tiên làm mặc định
-    if (this.filteredDanhSachMauSac.length > 0) {
-      this.selectedMauSac = this.filteredDanhSachMauSac[0];
-    } else {
-      this.selectedMauSac = ""; // Không có màu phù hợp
+  
+    // Chỉ cập nhật filteredDanhSachMauSac, không reset selectedMauSac nếu nó vẫn hợp lệ
+    this.filteredDanhSachMauSac = availableColors;
+  
+    // Nếu màu hiện tại không có trong danh sách màu mới, thì mới chọn màu đầu tiên
+    if (!this.selectedMauSac || !availableColors.includes(this.selectedMauSac)) {
+      this.selectedMauSac = availableColors.length > 0 ? availableColors[0] : "";
     }
   
-    // Tìm sản phẩm theo màu và size đã chọn
     this.updateSelectedSanPham();
   }
 

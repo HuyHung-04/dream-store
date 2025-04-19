@@ -80,13 +80,13 @@ import {
   ɵɵtextInterpolate1,
   ɵɵviewQuery
 } from "./chunk-SMKOUPRW.js";
+import "./chunk-PEBH6BBU.js";
 import {
   animationFrameScheduler,
   asapScheduler,
   fromEvent,
   merge
 } from "./chunk-WPM5VTLQ.js";
-import "./chunk-PEBH6BBU.js";
 import {
   Subject,
   auditTime,

@@ -12,7 +12,7 @@
               <input type="text" class="input" id="taiKhoan" name="taiKhoan" required
                      [(ngModel)]="loginData.taiKhoan" #taiKhoan="ngModel"
                      (input)="onInputChange('taiKhoan')">
-              <label for="taiKhoan">Tài khoản hoặc Email</label>
+              <label for="taiKhoan">Tài khoản</label>
 
               <!-- Hiển thị lỗi tài khoản sau khi nhấn submit -->
               <div *ngIf="submitted && errors.taiKhoan" class="error">

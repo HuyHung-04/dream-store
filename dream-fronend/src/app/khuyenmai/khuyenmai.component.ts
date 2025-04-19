@@ -60,6 +60,7 @@ export class KhuyenmaiComponent implements OnInit {
 
   }
   editKhuyenMai(khuyenmaiId: number) {
+    this.checkNgay = false;
     this.khuyenmaiService.chiTietKhuyenMai(khuyenmaiId).subscribe((khuyenmai) => {
       this.khuyenmaiEdit = { ...khuyenmai };
       const today = new Date();

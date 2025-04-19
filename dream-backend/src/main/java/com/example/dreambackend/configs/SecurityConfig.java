@@ -70,12 +70,20 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/test/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/nhan-vien/image/**").permitAll()
                 .requestMatchers("/api/nhan-vien/**").authenticated()
                 .requestMatchers("/api/ban-hang-online/**").permitAll()
                 .requestMatchers("/api/khach-hang/**").permitAll()
-                .requestMatchers("/api/hoa-don/**").authenticated()
-                .requestMatchers("/api/thong-ke/**").authenticated()
-                .requestMatchers("/api/ban-hang-online/**").authenticated()
+                .requestMatchers("/api/hoa-don/**").permitAll()
+                .requestMatchers("/api/thong-ke/**").permitAll()
+                .requestMatchers("/api/ban-hang-online/**").permitAll()
+                .requestMatchers("/api/thuong-hieu/**").permitAll()
+                .requestMatchers("/api/gio-hang/**").permitAll()
+                .requestMatchers("/api/hoa-don-online/**").permitAll()
+                .requestMatchers("/uploads/images/**").permitAll()
+                .requestMatchers("/api/dia-chi-khach-hang/**").permitAll()
+                .requestMatchers("/api/phuong-thuc-thanh-toan/**").permitAll()
+                .requestMatchers("/vnpay/**").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());

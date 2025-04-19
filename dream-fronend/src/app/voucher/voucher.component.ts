@@ -64,6 +64,7 @@ export class VoucherComponent implements OnInit {
 
   }
   editVoucher(voucherId: number) {
+    this.checkNgay = false;
     this.voucherService.checkVoucherUsed(voucherId).subscribe((isUsed) => {
       this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
         this.voucherEdit = { ...voucher };
