@@ -749,7 +749,7 @@ export class SanphamComponent implements OnInit {
         resolve(!hasErrors); // Trả về true nếu không có lỗi
       });
     }   
-    
+
     // check trùng màu size
     isSanPhamChiTietTrung(): boolean {
       if (!this.sanPhamChiTiets || this.sanPhamChiTiets.length === 0) {

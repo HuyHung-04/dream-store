@@ -3,6 +3,8 @@ package com.example.dreambackend.services.jwt;
 import com.example.dreambackend.entities.NhanVien;
 import com.example.dreambackend.repositories.NhanVienRepository;
 import com.example.dreambackend.security.UserDetailsImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,10 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Autowired
     private NhanVienRepository nhanVienRepository;
@@ -28,11 +30,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseGet(() -> nhanVienRepository.findByEmail(login)
                         .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username/email: " + login)));
 
-        // Tạo danh sách authorities từ vai trò của nhân viên
         String roleName = nhanVien.getVaiTro().getTen();
-        // Chuyển đổi tên vai trò thành định dạng ROLE_XXX
-        String authority = "ROLE_" + roleName.toUpperCase().replace(" ", "_");
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority));
+        logger.debug("Role name from database: '{}'", roleName);
+
+        // Sử dụng role name gốc từ database
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roleName));
+        logger.debug("Authorities: {}", authorities);
 
         return new UserDetailsImpl(
                 nhanVien.getId(),

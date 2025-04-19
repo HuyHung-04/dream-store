@@ -67,6 +67,8 @@ export class DangnhapComponent {
       next: (response) => {
         this.loading = false;
         alert('Đăng nhập thành công!');
+         // this.jwtService.saveToken(response.token);
+         localStorage.setItem('access_token', response.token);
         this.router.navigate(['/layout/banhang']);
       },
       error: (err) => {

@@ -1,7 +1,10 @@
 package com.example.dreambackend.security.jwt;
 
 import com.example.dreambackend.security.UserDetailsImpl;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -24,21 +26,21 @@ public class JwtUtils {
 
     public JwtUtils(@Value("${dream.app.jwtSecret}") String jwtSecretString,
                    @Value("${dream.app.jwtExpirationMs}") int jwtExpirationMs) {
-        // Tạo khóa bí mật an toàn cho HS512
-        this.jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        this.jwtSecret = Keys.hmacShaKeyFor(jwtSecretString.getBytes(StandardCharsets.UTF_8));
         this.jwtExpirationMs = jwtExpirationMs;
     }
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
-        List<String> roles = userPrincipal.getAuthorities().stream()
+        String role = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .findFirst()
+                .orElse("");
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .claim("roles", roles)
+                .setSubject(userPrincipal.getUsername())
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(jwtSecret)

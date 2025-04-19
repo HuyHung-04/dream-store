@@ -1,11 +1,5 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
-  CdkScrollable,
-  ScrollDispatcher,
-  ScrollingModule,
-  ViewportRuler
-} from "./chunk-V23C73Z3.js";
-import {
   A11yModule,
   ESCAPE,
   FocusMonitor,
@@ -15,7 +9,13 @@ import {
   _CdkPrivateStyleLoader,
   _IdGenerator,
   hasModifierKey
-} from "./chunk-WX6HU2LQ.js";
+} from "./chunk-TJHAGJYU.js";
+import {
+  CdkScrollable,
+  ScrollDispatcher,
+  ScrollingModule,
+  ViewportRuler
+} from "./chunk-SJIJAAA7.js";
 import {
   Platform,
   _bindEventWithOptions,
@@ -26,15 +26,15 @@ import {
   coerceCssPixelValue,
   coerceNumberProperty,
   supportsScrollBehavior
-} from "./chunk-SIC35DDL.js";
+} from "./chunk-E6JZBMG3.js";
 import {
   BidiModule,
   Directionality
-} from "./chunk-QQ6VAJOM.js";
+} from "./chunk-5YFUU3PU.js";
 import {
   DOCUMENT,
   Location
-} from "./chunk-X2QD4OKX.js";
+} from "./chunk-XC2MICBO.js";
 import {
   ANIMATION_MODULE_TYPE,
   ApplicationRef,
@@ -64,7 +64,6 @@ import {
   booleanAttribute,
   createComponent,
   inject,
-  require_cjs,
   setClassMetadata,
   untracked,
   ɵɵHostDirectivesFeature,
@@ -87,10 +86,14 @@ import {
   ɵɵqueryRefresh,
   ɵɵtemplate,
   ɵɵviewQuery
-} from "./chunk-ZFIIE6XS.js";
+} from "./chunk-GDXSILLB.js";
 import {
   require_operators
-} from "./chunk-XYTSZ5VX.js";
+} from "./chunk-HGVHWTGE.js";
+import {
+  require_cjs
+} from "./chunk-EXQLYBKH.js";
+import "./chunk-IUOK4BIQ.js";
 import {
   __spreadProps,
   __spreadValues,

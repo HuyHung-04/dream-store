@@ -11,7 +11,8 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { routes } from './app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import {  HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';  
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -29,6 +30,11 @@ export const appConfig: ApplicationConfig = {
       HttpClientModule,
       FormsModule,
       ReactiveFormsModule 
-    )
+    ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,  
+      multi: true 
+    }
   ]
 };
