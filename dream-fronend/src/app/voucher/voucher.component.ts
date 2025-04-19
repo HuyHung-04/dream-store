@@ -70,7 +70,7 @@ export class VoucherComponent implements OnInit {
         this.voucherUsed = isUsed;
         // Kiểm tra nếu voucher đã hết hạn
         const today = new Date();
-        today.setHours(23, 59, 59, 999); 
+        today.setHours(23, 59, 59, 999);
         const endDate = new Date(this.voucherEdit.ngayKetThuc);
         endDate.setHours(23, 59, 59, 999)
         const isExpired = endDate < today;
@@ -79,6 +79,7 @@ export class VoucherComponent implements OnInit {
         if (isExpired) {
           this.checkNgay = true; // Vô hiệu hóa các trường khi voucher hết hạn
         }
+
         this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
         this.showModalEdit = true;
       });
@@ -564,7 +565,7 @@ export class VoucherComponent implements OnInit {
   showCannotEditMessage(fieldName: string): void {
     const currentDate = new Date();
     currentDate.setHours(23, 59, 59, 999);
-    const ngayKetThuc = new Date(this.voucherEdit.ngayKetThuc); // Lấy ngày kết thúc của voucher
+    const ngayKetThuc = new Date(this.voucherEdit.ngayKetThuc); 
     ngayKetThuc.setHours(23, 59, 59, 999)
     // Kiểm tra trạng thái voucher đã được áp dụng hay chưa và đã hết hạn chưa
     const isVoucherExpired = ngayKetThuc < currentDate;
@@ -592,8 +593,37 @@ export class VoucherComponent implements OnInit {
           alert('Voucher đã hết hạn, không thể sửa giá trị giảm!');
         }
         break;
+      case 'soLuong':
+        if (isVoucherUsed) {
+          alert('Voucher đã được áp dụng, không thể sửa số lượng!');
+        } else if (isVoucherExpired) {
+          alert('Voucher đã hết hạn, không thể sửa số lượng!');
+        }
+        break;
+      case 'hinhThucGiam':
+        if (isVoucherUsed) {
+          alert('Voucher đã được áp dụng, không thể sửa hình thức giảm!');
+        } else if (isVoucherExpired) {
+          alert('Voucher đã hết hạn, không thể sửa hình thức giảm!');
+        }
+        break;
+      case 'donToiThieu':
+        if (isVoucherUsed) {
+          alert('Voucher đã được áp dụng, không thể sửa đơn tối thiểu!');
+        } else if (isVoucherExpired) {
+          alert('Voucher đã hết hạn, không thể sửa đơn tối thiểu!');
+        }
+        break;
+      case 'giamToiDa':
+        if (isVoucherUsed) {
+          alert('Voucher đã được áp dụng, không thể sửa giảm tối đa!');
+        } else if (isVoucherExpired) {
+          alert('Voucher đã hết hạn, không thể sửa giảm tối đa!');
+        }
+        break;
       default:
         break;
+
     }
   }
 
