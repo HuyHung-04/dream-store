@@ -111,6 +111,12 @@ export class BanhangComponent implements OnInit {
   searchKhachHang: string = '';
   filteredKhachHang: KhachHang[] = [];
 
+  // Thêm biến để theo dõi trạng thái thông báo
+  private isShowingAlert = false;
+
+  // Thêm biến để lưu giá trị số lượng trước khi sửa
+  private previousQuantity: number = 0;
+
   constructor(private banhangService: BanhangService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -506,8 +512,36 @@ export class BanhangComponent implements OnInit {
     );
   }
 
-  filterSanPham() {
-    this.loadSanPhamToBanHang();
+  filterSanPham(): void {
+    let params = new HttpParams().set('page', this.page.toString()).set('sizePage', '4');
+
+    if (this.tenSanPham) {
+      params = params.set('tenSanPham', this.tenSanPham);
+    }
+    if (this.mauSac) {
+      params = params.set('mauSac', this.mauSac);
+    }
+    if (this.sizeSearch) {
+      params = params.set('size', this.sizeSearch);
+    }
+    // console.log("Request gửi lên API:", params.toString());
+
+    this.banhangService.locSanPham(params).subscribe(response => {
+      // console.log("Dữ liệu trả về từ API:", response);
+
+      if (response && response.content) {
+        this.sanPhams = response.content.map((sp: any) => ({
+          ...sp,
+          anhUrl: sp.anhUrl ? `http://localhost:8080${sp.anhUrl}` : 'assets/images/no-image.png'
+        }));
+        this.totalPages = response.totalPages;
+      } else {
+        this.sanPhams = [];
+        this.totalPages = 0;
+      }
+    }, error => {
+      // console.error("Lỗi API lọc sản phẩm:", error);
+    });
   }
 
   // Cập nhật số lượng sản phẩm trong giỏ hàng
@@ -519,145 +553,101 @@ export class BanhangComponent implements OnInit {
     const oldQuantity = item.soLuong;
     
     if (isNaN(newQuantity) || newQuantity < 1) {
-      item.soLuong = 1;
+      item.soLuong = oldQuantity;
+      this.cdr.detectChanges();
       alert('Số lượng phải lớn hơn 0!');
       return;
     }
 
-    // Kiểm tra số lượng ban đầu nếu có
-    if (item.soLuongBanDau !== undefined) {
-      if (newQuantity > item.soLuongBanDau) {
-        alert(`Số lượng không thể vượt quá số lượng ban đầu (${item.soLuongBanDau})!`);
-        // Tự động trả về số lượng ban đầu
-        item.soLuong = item.soLuongBanDau;
-        this.cdr.detectChanges();
-        return;
-      }
-    }
-
-    // Load all products and wait for the response before continuing
+    // Load lại toàn bộ danh sách sản phẩm để có thông tin mới nhất
     this.banhangService.getAllSanPham().subscribe(
       response => {
-        console.log('Response from getAllSanPham:', response);
         if (response && response.content) {
           this.allSanPhams = response.content.map((sp: any) => ({
             ...sp,
             anhUrl: sp.anhUrl ? `http://localhost:8080${sp.anhUrl}` : 'assets/images/no-image.png'
           }));
-          
-          console.log('Searching for product...');
-          console.log('Item details:', {
-            id: item.idSanPhamChiTiet,
-            code: item.maSanPhamChiTiet
-          });
 
-          let product = this.allSanPhams.find(p => p.id === item.idSanPhamChiTiet);
+          // Tìm sản phẩm trong danh sách tất cả sản phẩm
+          const product = this.allSanPhams.find((p: SanPham) => p.id === item.idSanPhamChiTiet);
           
           if (!product) {
-            console.log('Product not found by ID, trying by code:', item.maSanPhamChiTiet);
-            product = this.allSanPhams.find(p => p.maSanPhamChiTiet === item.maSanPhamChiTiet);
-          }
-          
-          if (!product) {
-            console.error('Product not found in inventory. Details:', {
-              searchedId: item.idSanPhamChiTiet,
-              searchedCode: item.maSanPhamChiTiet,
-              availableProducts: this.allSanPhams.length
-            });
-            alert('Không tìm thấy sản phẩm trong kho! Vui lòng thử lại.');
-            // Trả về số lượng ban đầu thay vì số lượng cũ
-            item.soLuong = item.soLuongBanDau || oldQuantity;
+            item.soLuong = oldQuantity;
             this.cdr.detectChanges();
+            alert('Không tìm thấy thông tin sản phẩm!');
             return;
           }
 
-          console.log('Found product:', product);
-          const difference = newQuantity - oldQuantity;
-          console.log('Calculated difference:', difference, 'oldQuantity:', oldQuantity, 'newQuantity:', newQuantity);
-          
-          const availableQuantity = product.soLuong + oldQuantity;
-          console.log('Available quantity:', availableQuantity, 'Product stock:', product.soLuong);
-
-          if (newQuantity > availableQuantity) {
-            alert('Số lượng sản phẩm trong kho không đủ!');
-            // Trả về số lượng ban đầu thay vì số lượng cũ
-            item.soLuong = item.soLuongBanDau || oldQuantity;
+          // Kiểm tra số lượng tồn kho
+          if (newQuantity > product.soLuong) {
+            item.soLuong = oldQuantity;
             this.cdr.detectChanges();
+            alert(`Số lượng vượt quá số lượng trong kho`);
             return;
           }
 
+          // Cập nhật số lượng trong hóa đơn chi tiết
           this.banhangService.updateHoaDonChiTiet(item.id, newQuantity).subscribe(
             response => {
-              console.log('updateHoaDonChiTiet response:', response);
-              if (response.error) {
-                alert(response.error);
-                // Trả về số lượng ban đầu thay vì số lượng cũ
-                item.soLuong = item.soLuongBanDau || oldQuantity;
-                this.cdr.detectChanges();
-                return;
+              console.log('Cập nhật số lượng thành công:', response);
+              
+              // Cập nhật số lượng tồn kho
+              const difference = newQuantity - oldQuantity;
+              
+              // Cập nhật số lượng trong danh sách sản phẩm hiện tại
+              const productInList = this.sanPhams.find(p => p.id === item.idSanPhamChiTiet);
+              if (productInList) {
+                productInList.soLuong = product.soLuong - difference;
               }
 
-              // Always update the UI regardless of quantity change
-              this.banhangService.updateSoLuongSanPham(product.id, Math.abs(difference), difference < 0).subscribe(
-                () => {
-                  console.log('updateSoLuongSanPham success');
-                  
-                  // Update both lists and force refresh
-                  this.loadSanPhamToBanHang();
-                  
-                  // Update cart item
-                  item.soLuong = newQuantity;
-                  this.cart = [...this.cart];
-                  
-                  // Update totals
-                  this.updateInvoiceTotal();
-                  this.updateVoucher();
-                  
-                  // Force change detection
-                  this.cdr.detectChanges();
-                  
-                  // Verify updates
-                  setTimeout(() => {
-                    console.log('Verifying updates...');
+              // Cập nhật số lượng trong allSanPhams
+              const productInAll = this.allSanPhams.find(p => p.id === item.idSanPhamChiTiet);
+              if (productInAll) {
+                productInAll.soLuong = product.soLuong - difference;
+              }
+
+              if (difference !== 0) {
+                this.banhangService.updateSoLuongSanPham(item.idSanPhamChiTiet, Math.abs(difference), difference < 0).subscribe(
+                  () => {
+                    console.log('Cập nhật số lượng tồn thành công');
                     this.loadSanPhamToBanHang();
-                  }, 100);
-                },
-                error => {
-                  console.error('Lỗi khi cập nhật số lượng tồn:', error);
-                  // Trả về số lượng ban đầu thay vì số lượng cũ
-                  item.soLuong = item.soLuongBanDau || oldQuantity;
-                  this.cart = [...this.cart];
-                  this.cdr.detectChanges();
-                }
-              );
+                    this.loadAllSanPham();
+                    this.layChiTietHoaDon();
+                  },
+                  error => {
+                    console.error('Lỗi khi cập nhật số lượng tồn:', error);
+                    item.soLuong = oldQuantity;
+                    if (productInList) productInList.soLuong = product.soLuong;
+                    if (productInAll) productInAll.soLuong = product.soLuong;
+                    this.cdr.detectChanges();
+                    alert('Lỗi khi cập nhật số lượng tồn kho!');
+                  }
+                );
+              }
+
+              this.updateInvoiceTotal();
+              this.updateVoucher();
+              this.cdr.detectChanges();
             },
             error => {
               console.error('Lỗi khi cập nhật số lượng:', error);
-              if (error.error && error.error.message) {
-                alert(error.error.message);
-              } else {
-                alert('Cập nhật số lượng thất bại!');
-              }
-              // Trả về số lượng ban đầu thay vì số lượng cũ
-              item.soLuong = item.soLuongBanDau || oldQuantity;
-              this.cart = [...this.cart];
+              item.soLuong = oldQuantity;
               this.cdr.detectChanges();
+              alert('Lỗi khi cập nhật số lượng!');
             }
           );
         } else {
           console.error('Invalid response format:', response);
-          alert('Không thể tải thông tin sản phẩm. Vui lòng thử lại.');
-          // Trả về số lượng ban đầu thay vì số lượng cũ
-          item.soLuong = item.soLuongBanDau || oldQuantity;
+          item.soLuong = oldQuantity;
           this.cdr.detectChanges();
+          alert('Không thể tải thông tin sản phẩm. Vui lòng thử lại.');
         }
       },
       error => {
         console.error('Error loading products:', error);
-        alert('Không thể tải thông tin sản phẩm. Vui lòng thử lại.');
-        // Trả về số lượng ban đầu thay vì số lượng cũ
-        item.soLuong = item.soLuongBanDau || oldQuantity;
+        item.soLuong = oldQuantity;
         this.cdr.detectChanges();
+        alert('Không thể tải thông tin sản phẩm. Vui lòng thử lại.');
       }
     );
   }
@@ -1265,14 +1255,12 @@ export class BanhangComponent implements OnInit {
             this.banhangService.updateSoLuongSanPham(item.id, Math.abs(difference), difference < 0).subscribe(
               () => {
                 console.log('Cập nhật số lượng tồn thành công');
-                // Load lại danh sách sản phẩm để đảm bảo số lượng chính xác
                 this.loadSanPhamToBanHang();
-                // Load lại chi tiết hóa đơn để cập nhật giỏ hàng
+                this.loadAllSanPham();
                 this.layChiTietHoaDon();
               },
               error => {
                 console.error('Lỗi khi cập nhật số lượng tồn:', error);
-                // Khôi phục lại số lượng cũ nếu cập nhật thất bại
                 item.soLuong = oldQuantity;
                 this.cdr.detectChanges();
               }
@@ -1284,7 +1272,6 @@ export class BanhangComponent implements OnInit {
         },
         error => {
           console.error('Lỗi khi cập nhật số lượng:', error);
-          // Khôi phục lại số lượng cũ nếu cập nhật thất bại
           item.soLuong = oldQuantity;
           this.cdr.detectChanges();
         }
@@ -1343,6 +1330,132 @@ export class BanhangComponent implements OnInit {
       (error: any) => {
         console.error('Lỗi khi lấy danh sách nhân viên:', error);
         alert('Không thể tải danh sách nhân viên. Vui lòng thử lại.');
+      }
+    );
+  }
+
+  // Handle customer payment input change
+  onTienKhachDuaChange(value: string) {
+    // Remove non-numeric characters
+    const numericValue = value.replace(/[^0-9]/g, '');
+    this.tienKhachDua = numericValue ? parseInt(numericValue) : 0;
+    this.tinhTienThua();
+  }
+
+  // Clear customer payment input
+  clearTienKhachDua() {
+    if (this.tienKhachDua === 0) {
+      this.tienKhachDua = 0;
+    }
+  }
+
+  // Thêm phương thức xử lý khi focus vào input
+  onQuantityFocus(item: any) {
+    // Lưu lại giá trị số lượng trước khi sửa
+    this.previousQuantity = item.soLuong;
+  }
+
+  // Thêm phương thức xử lý khi blur khỏi input
+  onQuantityBlur(item: any, event: any) {
+    const newQuantity = item.soLuong;
+    
+    // Load lại toàn bộ danh sách sản phẩm để có thông tin mới nhất
+    this.banhangService.getAllSanPham().subscribe(
+      response => {
+        if (response && response.content) {
+          this.allSanPhams = response.content.map((sp: any) => ({
+            ...sp,
+            anhUrl: sp.anhUrl ? `http://localhost:8080${sp.anhUrl}` : 'assets/images/no-image.png'
+          }));
+
+          // Tìm sản phẩm trong danh sách tất cả sản phẩm
+          const product = this.allSanPhams.find((p: SanPham) => p.id === item.idSanPhamChiTiet);
+          
+          if (!product) {
+            item.soLuong = this.previousQuantity;
+            this.cdr.detectChanges();
+            alert('Không tìm thấy thông tin sản phẩm!');
+            return;
+          }
+
+          // Kiểm tra các điều kiện
+          if (isNaN(newQuantity) || newQuantity < 1) {
+            item.soLuong = this.previousQuantity;
+            this.cdr.detectChanges();
+            alert('Số lượng phải lớn hơn 0!');
+            return;
+          }
+
+          // Kiểm tra số lượng tồn kho
+          if (newQuantity > product.soLuong) {
+            item.soLuong = this.previousQuantity;
+            this.cdr.detectChanges();
+            alert(`Số lượng vượt quá số lượng trong kho!`);
+            return;
+          }
+
+          // Nếu số lượng hợp lệ, tiến hành cập nhật
+          this.banhangService.updateHoaDonChiTiet(item.id, newQuantity).subscribe(
+            response => {
+              console.log('Cập nhật số lượng thành công:', response);
+              
+              // Cập nhật số lượng tồn kho
+              const difference = newQuantity - this.previousQuantity;
+              
+              // Cập nhật số lượng trong danh sách sản phẩm hiện tại
+              const productInList = this.sanPhams.find(p => p.id === item.idSanPhamChiTiet);
+              if (productInList) {
+                productInList.soLuong = product.soLuong - difference;
+              }
+
+              // Cập nhật số lượng trong allSanPhams
+              const productInAll = this.allSanPhams.find(p => p.id === item.idSanPhamChiTiet);
+              if (productInAll) {
+                productInAll.soLuong = product.soLuong - difference;
+              }
+
+              if (difference !== 0) {
+                this.banhangService.updateSoLuongSanPham(item.idSanPhamChiTiet, Math.abs(difference), difference < 0).subscribe(
+                  () => {
+                    console.log('Cập nhật số lượng tồn thành công');
+                    this.loadSanPhamToBanHang();
+                    this.loadAllSanPham();
+                    this.layChiTietHoaDon();
+                  },
+                  error => {
+                    console.error('Lỗi khi cập nhật số lượng tồn:', error);
+                    item.soLuong = this.previousQuantity;
+                    if (productInList) productInList.soLuong = product.soLuong;
+                    if (productInAll) productInAll.soLuong = product.soLuong;
+                    this.cdr.detectChanges();
+                    alert('Lỗi khi cập nhật số lượng tồn kho!');
+                  }
+                );
+              }
+
+              this.updateInvoiceTotal();
+              this.updateVoucher();
+              this.cdr.detectChanges();
+            },
+            error => {
+              console.error('Lỗi khi cập nhật số lượng:', error);
+              item.soLuong = this.previousQuantity;
+              this.cdr.detectChanges();
+              alert('Lỗi khi cập nhật số lượng!');
+            }
+          );
+        } else {
+          console.error('Invalid response format:', response);
+          item.soLuong = this.previousQuantity;
+          this.cdr.detectChanges();
+          alert('Không thể tải thông tin sản phẩm. Vui lòng thử lại.');
+        }
+      },
+      error => {
+        console.error('Error loading products:', error);
+        item.soLuong = this.previousQuantity;
+        this.cdr.detectChanges();
+        alert('Không thể tải thông tin sản phẩm. Vui lòng thử lại.');
       }
     );
   }

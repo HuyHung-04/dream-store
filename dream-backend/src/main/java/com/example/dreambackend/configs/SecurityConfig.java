@@ -83,6 +83,10 @@ public class SecurityConfig {
                 .requestMatchers("/uploads/images/**").permitAll()
                 .requestMatchers("/api/dia-chi-khach-hang/**").permitAll()
                 .requestMatchers("/api/phuong-thuc-thanh-toan/**").permitAll()
+                .requestMatchers("api/san-pham-chi-tiet/**").permitAll()
+                .requestMatchers("api/mau-sac/**").permitAll()
+                .requestMatchers("api/size/**").permitAll()
+                .requestMatchers("api/san-pham/**").permitAll()
                 .requestMatchers("/vnpay/**").permitAll()
                 .anyRequest().authenticated();
 

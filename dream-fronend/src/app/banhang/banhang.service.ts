@@ -9,6 +9,7 @@ import {map} from 'rxjs/operators';
 export class BanhangService {
 
   private apiUrl = 'http://localhost:8080/api/san-pham-chi-tiet/ban-hang';
+  private apiUrl1 = 'http://localhost:8080/api/san-pham-chi-tiet/check-ban-hang';
   private apiUrlHD = 'http://localhost:8080/api/hoa-don';
   private apiUrlKH = 'http://localhost:8080/api/khach-hang';
   private apiUrlNV = 'http://localhost:8080/api';
@@ -23,7 +24,7 @@ export class BanhangService {
   }
 
   getAllSanPham(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?page=0&size=10000`);
+    return this.http.get<any>(`${this.apiUrl1}?page=0&size=10000`);
   }
 
   getDanhSachHD(request: any): Observable<any> {

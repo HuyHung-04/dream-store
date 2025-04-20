@@ -33,7 +33,7 @@
 .cart-total,
 .payment-container {
   width: 35%;
-  float: right; /* Đẩy phần này sang phải */
+  float: ghtri; /* Đẩy phần này sang phải */
   margin-left: 2%;
 }
 
@@ -78,10 +78,17 @@ button:hover {
 
 /*css text bên phải*/
 .right-container {
-  margin-top: -677px; /* Dịch phần khách hàng lên */
-  width: 30%;
-  float: right;
-  margin-right: 20px;
+  position: absolute;
+  top: 5px;
+  width: 32%;
+  right: 15px;
+  border: 1px solid #e0e0e0; /* Màu border nhạt hơn */
+  border-radius: 8px; /* Bo tròn góc */
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.1); 
+  padding: 5px; /* Padding rộng hơn */
+  background-color: white;
+  
+  z-index: 10;
 }
 
 .khach-hang, .cart-total, .payment-container {
@@ -118,6 +125,7 @@ button {
 
 /*css thanh input*/
 .custom-input {
+
   border: none;
   border-bottom: 0.5px solid #294764; /* Định dạng gạch ngang */
   outline: none; /* Loại bỏ viền khi focus */

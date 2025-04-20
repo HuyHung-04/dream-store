@@ -1,7 +1,6 @@
 package com.example.dreambackend.services.sanphamchitiet;
 
 import com.example.dreambackend.entities.MauSac;
-import com.example.dreambackend.entities.SanPham;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.entities.Size;
 import com.example.dreambackend.repositories.MauSacRepository;
@@ -25,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -186,6 +184,11 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
     public Page<GetSanPhamToBanHangRespone> locSanPham(String tenSanPham, String mauSac, String size, int page, int sizePage) {
         Pageable pageable = PageRequest.of(page, sizePage);
         return sanPhamChiTietRepository.searchSanPhamForBanHang(tenSanPham, mauSac, size, pageable);
+    }
+
+    @Override
+    public Page<GetSanPhamToBanHangRespone> laySanPhamChoCheckBanHang(Pageable pageable) {
+        return sanPhamChiTietRepository.getSanPhamForCheckBanHang(pageable);
     }
 
     @Override

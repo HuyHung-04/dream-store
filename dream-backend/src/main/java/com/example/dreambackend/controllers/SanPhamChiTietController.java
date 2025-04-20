@@ -144,6 +144,15 @@ public class SanPhamChiTietController {
         return ResponseEntity.ok(sanPhams);
     }
 
+    @GetMapping("/check-ban-hang")
+    public ResponseEntity<Page<GetSanPhamToBanHangRespone>> getCheckBanHang(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GetSanPhamToBanHangRespone> danhSachSanPham = sanPhamChiTietService.laySanPhamChoCheckBanHang(pageable);
+        return ResponseEntity.ok(danhSachSanPham);
+    }
+
     @PutMapping("/ban-hang/update-so-luong/{id}")
     public ResponseEntity<?> updateSoLuong(
             @PathVariable Integer id,

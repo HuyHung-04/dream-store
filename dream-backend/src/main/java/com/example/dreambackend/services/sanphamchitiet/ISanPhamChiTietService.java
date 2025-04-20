@@ -25,5 +25,7 @@ public interface ISanPhamChiTietService {
 
     Page<GetSanPhamToBanHangRespone> laySanPhamChoBanHang(Pageable pageable);
 
+    Page<GetSanPhamToBanHangRespone> laySanPhamChoCheckBanHang(Pageable pageable);
+
     SanPhamChiTiet updateSoLuongBanHang(Integer id, Integer soLuong, Boolean isIncrease);
 }
