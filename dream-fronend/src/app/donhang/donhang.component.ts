@@ -13,7 +13,7 @@ export class DonhangComponent {
 
   errorMessage: string = '';
   page: number = 0;
-  size: number = 5;
+  size: number = 6;
   totalPages: number = 0;
   chiTietHoaDonData: any[] = [];
   hoaDonData: any = null;
@@ -113,7 +113,7 @@ export class DonhangComponent {
       this.loading = true;
       this.donHangService.capNhatTrangThai(id).subscribe(
         (response) => {
-          alert("cập nhật trạng thái thành công")
+          alert("Cập nhật trạng thái thành công")
           this.loadHoaDons();
         },
         (error) => {

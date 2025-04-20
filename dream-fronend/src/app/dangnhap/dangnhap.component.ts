@@ -69,7 +69,7 @@ export class DangnhapComponent {
         alert('Đăng nhập thành công!');
          // this.jwtService.saveToken(response.token);
          localStorage.setItem('access_token', response.token);
-        this.router.navigate(['/layout/banhang']);
+        this.router.navigate(['/layout/thongke']);
       },
       error: (err) => {
         this.loading = false;

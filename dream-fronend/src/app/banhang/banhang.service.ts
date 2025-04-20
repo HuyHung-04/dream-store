@@ -147,4 +147,8 @@ export class BanhangService {
     };
     return this.http.put(url, null, { params: params });
   }
+    // Gọi API để lấy danh sách voucher hợp lệ theo ID khách hàng
+    getVouchers(tongTien: number): Observable<any> {
+      return this.http.get<any>(`http://localhost:8080/api/hoa-don-online/vouchers/${tongTien}`);
+    }
 }

@@ -189,7 +189,7 @@
         <div class="invoice-info">
           <h3 style="color: #294764; font-weight: bold; padding-top: 35px;">Thông tin hóa đơn</h3>
           <p style="color: #294764;">Tạm tính: {{ selectedInvoice?.tongTienTruocVoucher | number:'1.0-0' }} VND</p>
-          <p style="color: #294764;">Giảm giá: {{ discountAmount | number:'1.0-0' }} VND</p>
+          <p style="color: #294764;">Giảm giá: {{ getDiscountDisplay() }}</p>
           <p style="color: #294764;">Tổng cộng: {{ (selectedInvoice?.tongTienThanhToan) | number:'1.0-0' }} VND</p>
         </div>
         <div *ngIf="selectedInvoice">
@@ -218,7 +218,7 @@
           </option>
         </select>
       </div>
-      <div style="padding-top: 22px;">
+      <div style="padding-top: 45px;">
         <button 
           class="checkout-btn" 
           (click)="checkout()" 

@@ -79,20 +79,6 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
         HoaDonChiTiet hdct = hdctRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chi tiết hóa đơn không tồn tại"));
 
-        SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
-        int soLuongThayDoi = soLuong - hdct.getSoLuong();
-
-        if (soLuongThayDoi > 0) {
-            if ((spct.getSoLuong()+soLuongThayDoi) < soLuongThayDoi) {
-                throw new RuntimeException("Số lượng vượt quá tồn kho");
-            }
-            spct.setSoLuong(spct.getSoLuong() - soLuongThayDoi);
-        } else if (soLuongThayDoi < 0) {
-            spct.setSoLuong(spct.getSoLuong() - soLuongThayDoi);
-        }
-
-        spctRepository.save(spct);
-
         hdct.setSoLuong(soLuong);
         hdct.setNgaySua(LocalDate.now());
 

@@ -17,7 +17,7 @@ export const routes: Routes = [
     path: 'layout',
     component: LayoutComponent,
     children: [
-      { path: '', redirectTo: 'banhang', pathMatch: 'full' }, // Route mặc định
+      { path: '', redirectTo: 'thongke', pathMatch: 'full' }, // Route mặc định
       { path: 'banhang', component: BanhangComponent }, // Bán hàng
       { path: 'hoadon', component: HoaDonComponent }, // Hóa đơn
       { path: 'sanpham', component: SanphamComponent }, // Sản phẩm
