@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -40,13 +41,20 @@ public class AuthController {
     @Autowired
     NhanVienRepository nhanVienRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @PostMapping({"/signin", "/login"})
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
             // Tìm user bằng username hoặc email
             NhanVien nhanVien = nhanVienRepository.findByTaiKhoan(loginRequest.getUsername())
                     .orElseGet(() -> nhanVienRepository.findByEmail(loginRequest.getUsername())
-                            .orElseThrow(() -> new RuntimeException("User not found")));
+                            .orElseThrow(() -> new RuntimeException("Tài khoản hoặc mật khẩu không đúng")));
+
+            if (!passwordEncoder.matches(loginRequest.getPassword(), nhanVien.getMatKhau())) {
+                throw new RuntimeException("Tài khoản hoặc mật khẩu không đúng");
+            }
 
             // Xác thực với username là tài khoản của user
             Authentication authentication = authenticationManager.authenticate(

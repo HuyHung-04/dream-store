@@ -1,7 +1,6 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.entities.NhanVien;
-import com.example.dreambackend.security.IsQuanLy;
 import com.example.dreambackend.services.nhanvien.NhanVienService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

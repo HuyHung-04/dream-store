@@ -1,11 +1,7 @@
 package com.example.dreambackend.controllers;
 
-import com.example.dreambackend.entities.SanPhamChiTiet;
-import com.example.dreambackend.entities.ThuongHieu;
 import com.example.dreambackend.entities.Voucher;
 import com.example.dreambackend.repositories.HoaDonRepository;
-import com.example.dreambackend.security.IsQuanLy;
-import com.example.dreambackend.services.sanphamchitiet.SanPhamChiTietService;
 import com.example.dreambackend.services.voucher.VoucherService;
 
 import org.springframework.beans.factory.annotation.Autowired;

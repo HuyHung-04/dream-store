@@ -2,11 +2,13 @@ package com.example.dreambackend.configs;
 
 import com.example.dreambackend.security.AuthTokenFilter;
 import com.example.dreambackend.security.AuthEntryPointJwt;
+import com.example.dreambackend.security.CustomAccessDeniedHandler;
 import com.example.dreambackend.security.jwt.JwtUtils;
 import com.example.dreambackend.services.jwt.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -62,32 +65,49 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AccessDeniedHandler accessDeniedHandler, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).accessDeniedHandler(customAccessDeniedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/test/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/api/nhan-vien/image/**").permitAll()
-                .requestMatchers("/api/nhan-vien/**").authenticated()
-                .requestMatchers("/api/ban-hang-online/**").permitAll()
-                .requestMatchers("/api/khach-hang/**").permitAll()
-                .requestMatchers("/api/hoa-don/**").permitAll()
-                .requestMatchers("/api/thong-ke/**").permitAll()
-                .requestMatchers("/api/ban-hang-online/**").permitAll()
-                .requestMatchers("/api/thuong-hieu/**").permitAll()
-                .requestMatchers("/api/gio-hang/**").permitAll()
-                .requestMatchers("/api/hoa-don-online/**").permitAll()
                 .requestMatchers("/uploads/images/**").permitAll()
-                .requestMatchers("/api/dia-chi-khach-hang/**").permitAll()
-                .requestMatchers("/api/phuong-thuc-thanh-toan/**").permitAll()
-                .requestMatchers("api/san-pham-chi-tiet/**").permitAll()
-                .requestMatchers("api/mau-sac/**").permitAll()
-                .requestMatchers("api/size/**").permitAll()
-                .requestMatchers("api/san-pham/**").permitAll()
-                .requestMatchers("/vnpay/**").permitAll()
+
+                .requestMatchers("/api/ban-hang-online/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/hoa-don/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/hoa-don-online/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/khach-hang/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/gio-hang/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/dia-chi-khach-hang/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/phuong-thuc-thanh-toan/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/vnpay/**").hasAnyRole("Quản lý", "Nhân viên")
+
+                // Nhân viên chỉ được xem sản phẩm, không được thêm/sửa
+                .requestMatchers(HttpMethod.GET, "/api/thuong-hieu/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers(HttpMethod.GET, "/api/san-pham/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers(HttpMethod.GET, "/api/san-pham-chi-tiet/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers(HttpMethod.GET, "/api/khuyen-mai/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers(HttpMethod.GET, "/api/voucher/**").hasAnyRole("Quản lý", "Nhân viên")
+
+                // Các phương thức thêm/sửa/xóa sản phẩm chỉ cho phép Quản lý
+                .requestMatchers(HttpMethod.POST, "/api/san-pham/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/san-pham/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.DELETE, "/api/san-pham/**").hasRole("Quản lý")
+
+                // Nhân viên không được truy cập thống kê
+                .requestMatchers("/api/thong-ke/**").hasRole("Quản lý")
+
+                // Nhân viên không được quản lý nhân viên
+                .requestMatchers("/api/nhan-vien/**").hasRole("Quản lý")
+
+                // Thuộc tính (ví dụ loại sản phẩm, màu sắc) chỉ Quản lý mới thêm
+                .requestMatchers(HttpMethod.POST, "/api/thuoc-tinh/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/thuoc-tinh/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.DELETE, "/api/thuoc-tinh/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.GET, "/api/thuoc-tinh/**").hasAnyRole("Quản lý", "Nhân viên")
+
+                // Các API còn lại phải authenticated
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
