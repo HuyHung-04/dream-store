@@ -1,4 +1,5 @@
 package com.example.dreambackend.services.hoadononline;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import com.example.dreambackend.dtos.HoaDonChiTietDto;
@@ -92,19 +93,28 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return totalPrice;
     }
 
-
     @Override
     public List<VoucherDto> getVoucherIdAndTen(Double tongTien) {
         // Lấy tất cả voucher từ database
         List<VoucherDto> allVouchers = voucherRepository.findIdAndTen();
-        // Lọc danh sách voucher dựa trên đơn tối thiểu
+
+        // Lọc danh sách voucher dựa trên đơn tối thiểu và ngày kết thúc
         return allVouchers.stream()
-                .filter(v -> {
-                    Voucher voucher = voucherRepository.findById(v.getId()).orElse(null);
-                    return voucher != null && tongTien >= voucher.getDonToiThieu().doubleValue();
+                .filter(voucher -> {
+                    // Lấy voucher chi tiết từ database để kiểm tra ngày kết thúc
+                    Voucher voucherEntity = voucherRepository.findById(voucher.getId()).orElse(null);
+                    if (voucherEntity != null) {
+                        // Chuyển ngày kết thúc thành LocalDateTime 23:59:59 để so sánh
+                        LocalDateTime endOfDay = voucherEntity.getNgayKetThuc().atTime(23, 59, 59);
+                        // Kiểm tra điều kiện đơn tối thiểu và ngày kết thúc
+                        return tongTien >= voucherEntity.getDonToiThieu().doubleValue() &&
+                                !LocalDateTime.now().isAfter(endOfDay);
+                    }
+                    return false;
                 })
                 .collect(Collectors.toList());
     }
+
 
 
     @Override

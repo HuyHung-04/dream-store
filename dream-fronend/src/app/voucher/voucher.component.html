@@ -260,7 +260,7 @@
               </div>
             </div>
             <div class="input-field">
-              <input type="date" class="input" [(ngModel)]="voucherEdit.ngayKetThuc" name="ngayKetThuc" required
+              <input type="date" class="input" [(ngModel)]="voucherEdit.ngayKetThuc" name="ngayKetThuc" required (change)="onNgayKetThucChange()"
                 (input)="clearError('ngayKetThuc')" />
               <label for="ngayKetThuc">Ngày kết thúc</label>
               <div class="tooltip-error" *ngIf="errors.ngayKetThuc">

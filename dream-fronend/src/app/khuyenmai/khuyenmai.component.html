@@ -191,7 +191,7 @@
             </div>
           </div>
           <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="khuyenmaiEdit.ngayKetThuc" name="ngayKetThuc" required
+            <input type="date" class="input" [(ngModel)]="khuyenmaiEdit.ngayKetThuc" name="ngayKetThuc" required (change)="onNgayKetThucChange()"
               (input)="clearError('ngayKetThuc')" />
             <label for="ngayKetThuc">Ngày kết thúc</label>
             <div class="tooltip-error" *ngIf="errors.ngayKetThuc">
@@ -281,7 +281,7 @@
     </div>
   </div>
 
-  <!-- Modal for Product Selection -->
+
   <div class="modal-overlay" *ngIf="showChonSanPham" (click)="closeChonSanPham()">
     <div class="modal-box-select" (click)="$event.stopPropagation()">
       <p class="title">Chọn Sản Phẩm</p>

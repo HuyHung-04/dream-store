@@ -60,22 +60,40 @@ export class KhuyenmaiComponent implements OnInit {
 
   }
   editKhuyenMai(khuyenmaiId: number) {
-    this.checkNgay = false;
     this.khuyenmaiService.chiTietKhuyenMai(khuyenmaiId).subscribe((khuyenmai) => {
       this.khuyenmaiEdit = { ...khuyenmai };
       const today = new Date();
-        today.setHours(23, 59, 59, 999); 
-        const endDate = new Date(this.khuyenmaiEdit.ngayKetThuc);
-        endDate.setHours(23, 59, 59, 999)
-        const isExpired = endDate < today;
-        // Nếu khuyến mãi đã hết hạn, không cho phép sửa
-        if (isExpired) {
-          this.checkNgay = true;
-        }
+      today.setHours(0, 0, 0, 0);
+      const endDate = new Date(this.khuyenmaiEdit.ngayKetThuc);
+      endDate.setHours(23, 59, 59, 999)
+      const isExpired = endDate < today;
+      // Nếu khuyến mãi đã hết hạn, không cho phép sửa
+      if (isExpired) {
+        this.checkNgay = true;
+      }
+      else {
+        // Nếu voucher không hết hạn, cho phép sửa lại
+        this.checkNgay = false;
+      }
       this.showModalEdit = true;
     });
   }
 
+  onNgayKetThucChange() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Chốt giờ hôm nay
+
+    const endDate = new Date(this.khuyenmaiEdit.ngayKetThuc);
+    endDate.setHours(23, 59, 59, 999);
+
+    if (endDate > today) {
+      // Nếu đã gia hạn: cho phép sửa các trường
+      this.checkNgay = false;
+    } else {
+      // Nếu vẫn hết hạn: giữ readonly
+      this.checkNgay = true;
+    }
+  }
 
   addKhuyenMai() {
 
@@ -128,7 +146,8 @@ export class KhuyenmaiComponent implements OnInit {
     // Kiểm tra xem ngày bắt đầu có lớn hơn ngày hiện tại không
     const currentDate = new Date();
     const startDate = new Date(selectedKhuyenMai.ngayBatDau);
-
+    currentDate.setHours(23, 59, 59, 999)
+    startDate.setHours(0, 0, 0, 0)
     if (startDate > currentDate) {
       alert('Ngày bắt đầu khuyến mãi chưa đến, không thể chọn sản phẩm!');
       return;
@@ -478,25 +497,25 @@ export class KhuyenmaiComponent implements OnInit {
 
   showCannotEditMessage(fieldName: string): void {
     const currentDate = new Date();
-    currentDate.setHours(23, 59, 59, 999);
-    const ngayKetThuc = new Date(this.khuyenmaiEdit.ngayKetThuc); 
+    currentDate.setHours(0, 0, 0, 0);
+    const ngayKetThuc = new Date(this.khuyenmaiEdit.ngayKetThuc);
     ngayKetThuc.setHours(23, 59, 59, 999)
     // Kiểm tra trạng thái voucher đã được áp dụng hay chưa và đã hết hạn chưa
     const isVoucherExpired = ngayKetThuc < currentDate;
     switch (fieldName) {
       case 'ma':
         if (isVoucherExpired) {
-          alert('Voucher đã hết hạn, không thể sửa mã!');
+          alert('Khuyến mãi đã hết hạn, không thể sửa mã!');
         }
         break;
       case 'ten':
-       if (isVoucherExpired) {
-          alert('Voucher đã hết hạn, không thể sửa tên voucher!');
+        if (isVoucherExpired) {
+          alert('Khuyến mãi đã hết hạn, không thể sửa tên voucher!');
         }
         break;
       case 'giaTriGiam':
         if (isVoucherExpired) {
-          alert('Voucher đã hết hạn, không thể sửa giá trị giảm!');
+          alert('Khuyến mãi đã hết hạn, không thể sửa giá trị giảm!');
         }
         break;
       default:
