@@ -405,9 +405,32 @@ export class SanphamComponent implements OnInit {
     /*Mở modal và tải ảnh theo id sản phẩm */
     openModalQuanLyAnh(idSanPham: number) {
       this.idSanPham = idSanPham;
-      this.showModalQuanLyAnh = true;
-      this.loadAnhCuaSanPham();
+    
+      // Gọi API trước khi cho phép mở modal
+      this.sanphamService.getAllAnh(this.idSanPham).subscribe({
+        next: (response) => {
+          if (Array.isArray(response)) {
+            this.anhHienCo = response.map(anh => ({
+              ...anh,
+              anhUrl: `http://localhost:8080${anh.anhUrl}`
+            }));
+          } else {
+            this.anhHienCo = [];
+          }
+          this.showModalQuanLyAnh = true; // chỉ mở modal nếu gọi API thành công
+          this.cdRef.markForCheck();
+        },
+        error: (error) => {
+          if (error.status === 403) {
+            alert('Bạn không có quyền truy cập chức năng này.');
+          } else {
+            alert('Có lỗi xảy ra khi tải ảnh sản phẩm.');
+          }
+          console.error('Lỗi khi tải ảnh:', error);
+        }
+      });
     }
+    
 
     /* Đóng modal quản lý ảnh */
     closeQuanLyAnh() {
@@ -648,6 +671,11 @@ export class SanphamComponent implements OnInit {
             this.listSanPham(); // Reload danh sách sản phẩm
           },
           error: (error) => {
+            if (error.status === 403) {
+              alert('Bạn không có quyền truy cập chức năng này.');
+            } else {
+              alert('Có lỗi xảy ra khi thêm sản phẩm.');
+            }
             console.error("Lỗi khi thêm sản phẩm:", error);
           }
         });
@@ -671,7 +699,12 @@ export class SanphamComponent implements OnInit {
             this.listSanPham(); // Reload danh sách sản phẩm
           },
           error: (error) => {
-            console.error("Lỗi khi cập nhật sản phẩm:", error);
+            if (error.status === 403) {
+              alert('Bạn không có quyền truy cập chức năng này.');
+            } else {
+              alert('Có lỗi xảy ra khi sửa sản phẩm.');
+            }
+            console.error("Lỗi khi sửa sản phẩm:", error);
           }
         });
       });
@@ -823,7 +856,12 @@ export class SanphamComponent implements OnInit {
             this.loadData();
           },
           error: (error) => {
-            console.error("Lỗi khi thêm sản phẩm chi tiết:", error);
+            if (error.status === 403) {
+              alert('Bạn không có quyền truy cập chức năng này.');
+            } else {
+              alert('Có lỗi xảy ra khi thêm chi tiết sản phẩm.');
+            }
+            console.error("Lỗi khi thêm chi tiết sản phẩm:", error);
           }
         });
       });
@@ -989,7 +1027,12 @@ export class SanphamComponent implements OnInit {
           this.closeModalSanPhamChiTietThem();
         },
         error: (error) => {
-          console.error("Lỗi khi cập nhật sản phẩm chi tiết:", error);
+          if (error.status === 403) {
+            alert('Bạn không có quyền truy cập chức năng này.');
+          } else {
+            alert('Có lỗi xảy ra khi sửa chi tiết sản phẩm.');
+          }
+          console.error("Lỗi khi sửa chi tiết sản phẩm:", error);
         }
       });
     });
@@ -1041,12 +1084,14 @@ export class SanphamComponent implements OnInit {
       this.validateThuocTinh().then((isValid) => {
         if (!isValid) {
           let errorMessages = Object.values(this.validationErrors).join('\n');
-          return; // Dừng lại nếu có lỗi
+          return;
         }
+    
         const ngayTao = new Date().toISOString().split('T')[0];
         const ngaySua = ngayTao;
         let request;
         let apiCall;
+    
         switch (this.selectedThuocTinh) {
           case 'thuongHieu':
             this.thuongHieuRequest.ngayTao = ngayTao;
@@ -1095,15 +1140,24 @@ export class SanphamComponent implements OnInit {
             return;
         }
     
-        apiCall.subscribe(response => {
-          alert('Thêm thành công!');
-          this.loadData(); // Load lại danh sách
-          this.resetForm();
-        }, error => {
-          alert('Thêm thất bại! Vui lòng thử lại.');
+        apiCall.subscribe({
+          next: (response) => {
+            alert('Thêm thành công!');
+            this.loadData();
+            this.resetForm();
+          },
+          error: (error) => {
+            if (error.status === 403) {
+              alert('Bạn không có quyền truy cập chức năng này.');
+            } else {
+              alert('Thêm thất bại! Vui lòng thử lại.');
+            }
+            console.error("Lỗi khi thêm thuộc tính:", error);
+          }
         });
       });
-    } 
+    }
+    
     // load lại input khi thêm xong thuộc tính
     resetForm() {
       switch (this.selectedThuocTinh) {
@@ -1158,7 +1212,7 @@ export class SanphamComponent implements OnInit {
         : 'Bạn chắc chắn muốn đổi trạng thái sang *Hoạt động*?';
     
       if (!confirm(message)) {
-        return; // người dùng không đồng ý => thoát
+        return;
       }
     
       const request = {
@@ -1192,18 +1246,23 @@ export class SanphamComponent implements OnInit {
           return;
       }
     
-      apiCall.subscribe(
-        () => {
+      apiCall.subscribe({
+        next: () => {
           item.trangThai = newTrangThai;
           this.loadData();
           alert("Cập nhật trạng thái thành công!");
         },
-        error => {
+        error: (error) => {
+          if (error.status === 403) {
+            alert("Bạn không có quyền truy cập chức năng này.");
+          } else {
+            alert("Lỗi khi cập nhật trạng thái!");
+          }
           console.error("Lỗi khi cập nhật trạng thái", error);
-          alert("Lỗi khi cập nhật trạng thái!");
         }
-      );
+      });
     }
+    
 
     listSizeStatus() {
       this.sanphamService.getSize().subscribe(data => {

@@ -165,7 +165,7 @@ button {
   height: 100px;
 }
 .cart-items {
-  max-height: 180px; /* Điều chỉnh độ cao phù hợp (3 hàng) */
+  max-height: 200px; /* Điều chỉnh độ cao phù hợp (3 hàng) */
   overflow-y: auto;  /* Hiển thị thanh cuộn khi vượt quá */
 }
 .cart-table {

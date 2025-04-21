@@ -267,8 +267,9 @@
       </div> -->
       <div class="input-row">
         <!-- Trạng thái -->
-        <div class="input-field">
-          <select class="input" [(ngModel)]="nhanVienEdit.trangThai" name="trangThai" required (change)="clearError('trangThai')">
+        <div class="input-field" *ngIf="nhanVienEdit.vaiTro.id !== 1">
+          <select class="input" [(ngModel)]="nhanVienEdit.trangThai" name="trangThai" required
+            (change)="clearError('trangThai')">
             <option [value]="1">Hoạt động</option>
             <option [value]="0">Không hoạt động</option>
           </select>

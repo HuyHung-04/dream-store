@@ -50,10 +50,10 @@ public class AuthController {
             // Tìm user bằng username hoặc email
             NhanVien nhanVien = nhanVienRepository.findByTaiKhoan(loginRequest.getUsername())
                     .orElseGet(() -> nhanVienRepository.findByEmail(loginRequest.getUsername())
-                            .orElseThrow(() -> new RuntimeException("Tài khoản hoặc mật khẩu không đúng")));
+                            .orElseThrow(() -> new RuntimeException("Tài khoản không đúng")));
 
             if (!passwordEncoder.matches(loginRequest.getPassword(), nhanVien.getMatKhau())) {
-                throw new RuntimeException("Tài khoản hoặc mật khẩu không đúng");
+                throw new RuntimeException("Mật khẩu không đúng");
             }
 
             // Xác thực với username là tài khoản của user

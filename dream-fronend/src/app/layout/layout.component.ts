@@ -27,8 +27,26 @@ export class LayoutComponent {
     const confirmResult = confirm("Bạn có chắc chắn muốn đăng xuất không?");
     if (confirmResult) {
       localStorage.removeItem('access_token');
+      localStorage.removeItem('idNhanVien');
       this.router.navigate(['/layout/dangnhap']);
     }
   }
+  accessNhanVien() {
+    const role = localStorage.getItem('role');
+    if (role === 'ROLE_Quản lý') {
+      this.router.navigate(['/layout/nhanvien']);
+    } else {
+      alert('Bạn không có quyền truy cập chức năng quản lý Nhân viên.');
+    }    
+  }
+ // Xử lý khi nhân viên click vào Thống Kê
+ accessThongKe() {
+  const role = localStorage.getItem('role');
+  if (role === 'ROLE_Quản lý') {
+    this.router.navigate(['/layout/thongke']);
+  } else {
+    alert('Bạn không có quyền truy cập chức năng thống kê.');
+  }
+}
 }
 

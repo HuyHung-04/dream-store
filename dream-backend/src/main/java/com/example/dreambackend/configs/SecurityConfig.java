@@ -73,40 +73,58 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/uploads/images/**").permitAll()
+                .requestMatchers("/api/nhan-vien/image/**").permitAll()
 
-                .requestMatchers("/api/ban-hang-online/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/ban-hang-online/**").permitAll()
                 .requestMatchers("/api/hoa-don/**").hasAnyRole("Quản lý", "Nhân viên")
-                .requestMatchers("/api/hoa-don-online/**").hasAnyRole("Quản lý", "Nhân viên")
-                .requestMatchers("/api/khach-hang/**").hasAnyRole("Quản lý", "Nhân viên")
-                .requestMatchers("/api/gio-hang/**").hasAnyRole("Quản lý", "Nhân viên")
-                .requestMatchers("/api/dia-chi-khach-hang/**").hasAnyRole("Quản lý", "Nhân viên")
-                .requestMatchers("/api/phuong-thuc-thanh-toan/**").hasAnyRole("Quản lý", "Nhân viên")
-                .requestMatchers("/vnpay/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers("/api/hoa-don-online/**").permitAll()
+                .requestMatchers("/api/khach-hang/**").permitAll()
+                .requestMatchers("/api/gio-hang/**").permitAll()
+                .requestMatchers("/api/dia-chi-khach-hang/**").permitAll()
+                .requestMatchers("/api/phuong-thuc-thanh-toan/**").permitAll()
+                .requestMatchers("/vnpay/**").permitAll()
 
                 // Nhân viên chỉ được xem sản phẩm, không được thêm/sửa
-                .requestMatchers(HttpMethod.GET, "/api/thuong-hieu/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers(HttpMethod.GET, "/api/thuong-hieu/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/mau-sac/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/size/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/xuat-xu/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/chat-lieu/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/co-ao/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/thuong-hieu/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.POST, "/api/mau-sac/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.POST, "/api/size/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.POST, "/api/xuat-xu/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.POST, "/api/chat-lieu/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.POST, "/api/co-ao/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/thuong-hieu/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/mau-sac/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/size/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/xuat-xu/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/chat-lieu/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/co-ao/**").hasRole("Quản lý")
                 .requestMatchers(HttpMethod.GET, "/api/san-pham/**").hasAnyRole("Quản lý", "Nhân viên")
                 .requestMatchers(HttpMethod.GET, "/api/san-pham-chi-tiet/**").hasAnyRole("Quản lý", "Nhân viên")
-                .requestMatchers(HttpMethod.GET, "/api/khuyen-mai/**").hasAnyRole("Quản lý", "Nhân viên")
+                .requestMatchers(HttpMethod.GET, "/api/khuyenmai/{khuyenMaiId}/select-products").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.GET, "/api/khuyenmai/**").hasAnyRole("Quản lý", "Nhân viên")
                 .requestMatchers(HttpMethod.GET, "/api/voucher/**").hasAnyRole("Quản lý", "Nhân viên")
 
-                // Các phương thức thêm/sửa/xóa sản phẩm chỉ cho phép Quản lý
+                .requestMatchers(HttpMethod.POST, "/api/voucher/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.POST, "/api/khuyenmai/**").hasRole("Quản lý")
+
+                // Các phương thức thêm/sửa sản phẩm chỉ cho phép Quản lý
                 .requestMatchers(HttpMethod.POST, "/api/san-pham/**").hasRole("Quản lý")
                 .requestMatchers(HttpMethod.PUT, "/api/san-pham/**").hasRole("Quản lý")
-                .requestMatchers(HttpMethod.DELETE, "/api/san-pham/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.POST, "/api/san-pham-chi-tiet/**").hasRole("Quản lý")
+                .requestMatchers(HttpMethod.PUT, "/api/san-pham-chi-tiet/**").hasRole("Quản lý")
+
+                .requestMatchers(HttpMethod.GET, "/api/anh/**").hasRole("Quản lý")
 
                 // Nhân viên không được truy cập thống kê
                 .requestMatchers("/api/thong-ke/**").hasRole("Quản lý")
 
                 // Nhân viên không được quản lý nhân viên
                 .requestMatchers("/api/nhan-vien/**").hasRole("Quản lý")
-
-                // Thuộc tính (ví dụ loại sản phẩm, màu sắc) chỉ Quản lý mới thêm
-                .requestMatchers(HttpMethod.POST, "/api/thuoc-tinh/**").hasRole("Quản lý")
-                .requestMatchers(HttpMethod.PUT, "/api/thuoc-tinh/**").hasRole("Quản lý")
-                .requestMatchers(HttpMethod.DELETE, "/api/thuoc-tinh/**").hasRole("Quản lý")
-                .requestMatchers(HttpMethod.GET, "/api/thuoc-tinh/**").hasAnyRole("Quản lý", "Nhân viên")
-
                 // Các API còn lại phải authenticated
                 .anyRequest().authenticated();
 

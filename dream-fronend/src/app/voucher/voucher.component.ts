@@ -141,8 +141,11 @@ export class VoucherComponent implements OnInit {
         this.resetForm();
       },
       (error) => {
-        console.error('Error:', error);
-        alert('Có lỗi xảy ra khi thêm voucher.');
+        if (error.status === 403) {
+          alert('Bạn không có quyền truy cập chức năng này.');
+        } else {
+          alert('Có lỗi xảy ra khi cập nhật voucher.');
+        }
       }
     );
   }
@@ -453,7 +456,11 @@ export class VoucherComponent implements OnInit {
 
         },
         (error) => {
-          alert('Có lỗi xảy ra khi cập nhật voucher.');
+          if (error.status === 403) {
+            alert('Bạn không có quyền truy cập chức năng này.');
+          } else {
+            alert('Có lỗi xảy ra khi cập nhật voucher.');
+          }
         }
       );
     } else {

@@ -17,7 +17,8 @@ public interface SanPhamOnlineRepository extends JpaRepository<SanPham, Integer>
             "FROM SanPham sp " +
             "WHERE sp.trangThai = 1 " +
             "AND EXISTS (SELECT 1 FROM Anh a WHERE a.sanPham.id = sp.id) " +
-            "AND EXISTS (SELECT 1 FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id)")
+            "AND EXISTS (SELECT 1 FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id) " +
+            "AND (SELECT SUM(spct.soLuong) FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id) > 0")
     Page<SanPhamDto> getSanPhamChiTietOnline(Pageable pageable);
     @Query("SELECT new com.example.dreambackend.dtos.SanPhamDto(sp.id, sp.ten, " +
             "(SELECT MIN(spct.gia) FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id), " +

@@ -83,19 +83,7 @@ export class BanhangService {
   }
 
   getDanhSachNhanVien(): Observable<any> {
-    const page = 0;
-    const size = 1000;
-
-    return this.http.get<any>(`${this.apiUrlNV}/nhan-vien/hien-thi?page=${page}&size=${size}`).pipe(
-      map(response => {
-        response.content.forEach((nhanVien: any) => {
-          if (nhanVien.anh) {
-            nhanVien.anh = `${this.apiUrl}/nhan-vien/image/${nhanVien.anh}`;
-          }
-        });
-        return response.content;
-      })
-    );
+    return this.http.get<any[]>(`${this.apiUrlNV}/hoa-don/hien-thi-ban-hang`);
   }
 
   getHoaDonById(id: number): Observable<any> {

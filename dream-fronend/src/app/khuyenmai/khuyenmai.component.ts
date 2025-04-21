@@ -116,8 +116,11 @@ export class KhuyenmaiComponent implements OnInit {
         this.resetForm();
       },
       (error) => {
-        console.error('Error:', error);
-        alert('Có lỗi xảy ra khi thêm khuyến mãi.');
+        if (error.status === 403) {
+          alert('Bạn không có quyền truy cập chức năng này.');
+        } else {
+          alert('Có lỗi xảy ra khi cập nhật voucher.');
+        }
       }
     );
   }
@@ -160,8 +163,11 @@ export class KhuyenmaiComponent implements OnInit {
         this.showChonSanPham = true;
       },
       (error) => {
-        console.error('Error fetching available products:', error);
-        alert('Có lỗi xảy ra khi lấy danh sách sản phẩm.');
+        if (error.status === 403) {
+          alert('Bạn không có quyền truy cập chức năng này.');
+        } else {
+          alert('Có lỗi xảy ra khi cập nhật voucher.');
+        }
       }
     );
   }
@@ -350,8 +356,11 @@ export class KhuyenmaiComponent implements OnInit {
           this.closeModalEdit();
         },
         (error) => {
-          console.error('Error:', error);
-          alert('Có lỗi xảy ra khi cập nhật khuyến mãi.');
+          if (error.status === 403) {
+            alert('Bạn không có quyền truy cập chức năng này.');
+          } else {
+            alert('Có lỗi xảy ra khi cập nhật voucher.');
+          }
         }
       );
     } else {

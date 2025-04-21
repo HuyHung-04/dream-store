@@ -2,6 +2,8 @@ package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.dtos.DataTableResults;
 import com.example.dreambackend.entities.HoaDon;
+import com.example.dreambackend.entities.NhanVien;
+import com.example.dreambackend.repositories.NhanVienRepository;
 import com.example.dreambackend.requests.HoaDonRequest;
 import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
@@ -28,6 +30,14 @@ public class HoaDonController {
     private IHoaDonService hoaDonService;
     @Autowired
     private PdfService pdfService;
+
+    @Autowired
+    NhanVienRepository nhanVienRepository;
+
+    @GetMapping("/hien-thi-ban-hang")
+    public List<NhanVien> getAllNhanVien() {
+        return nhanVienRepository.findAll();
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> createHoaDon(@RequestBody HoaDonRequest request) {

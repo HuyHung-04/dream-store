@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { DangnhapService } from './dangnhap.service'; 
+import { DangnhapService } from './dangnhap.service';
 import { FormsModule, NgForm } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-dangnhap',
@@ -23,7 +24,7 @@ export class DangnhapComponent {
   constructor(
     private dangnhapService: DangnhapService,
     private router: Router
-  ) {}
+  ) { }
 
   // Kiểm tra định dạng email
   isValidEmail(email: string): boolean {
@@ -44,7 +45,7 @@ export class DangnhapComponent {
       }
     }
   }
-  
+
   onSubmit(form: NgForm) {
     this.submitted = true;
     this.errors = { taiKhoan: '', matKhau: '' };
@@ -67,21 +68,42 @@ export class DangnhapComponent {
       next: (response) => {
         this.loading = false;
         alert('Đăng nhập thành công!');
-         // this.jwtService.saveToken(response.token);
-         localStorage.setItem('access_token', response.token);
-        this.router.navigate(['/layout/thongke']);
-      },
-      error: (err) => {
-        this.loading = false;
-        console.error("Lỗi hệ thống: ", err);
-        if (err.status === 401) {
-          this.errors.matKhau = 'Sai mật khẩu';
-        } else if (err.status === 404) {
-          this.errors.taiKhoan = 'Tài khoản hoặc email không tồn tại';
+        console.log("id",response.user.id)
+        console.log(response)
+        localStorage.setItem('idNhanVien', response.user.id);
+        localStorage.setItem('access_token', response.token);
+        const role = response.user.role;
+        localStorage.setItem('role', role);
+        if (role === 'ROLE_Quản lý') {
+          this.router.navigate(['/layout/thongke']);
+        } else if (role === 'ROLE_Nhân viên') {
+          this.router.navigate(['/layout/banhang']);
         } else {
-          this.errors.taiKhoan = 'Lỗi hệ thống. Vui lòng thử lại!';
+          alert('Vai trò không xác định. Vui lòng liên hệ quản trị viên.');
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.loading = false;
+        if (error.status === 400 && error.error && typeof error.error.message === 'string') {
+          const message = error.error.message;
+
+          if (message.includes('Tài khoản không đúng')) {
+            this.errors.taiKhoan = 'Tài khoản không chính xác';
+          } else if (message.includes('Mật khẩu không đúng')) {
+            this.errors.matKhau = 'Mật khẩu không chính xác';
+          }
+          else if (message.includes('Error: Nhân viên không hoạt động')) {
+            alert("Tài khoản nhân viên không hoạt động")
+          }
+          else {
+            this.errors.taiKhoan = 'Lỗi hệ thống. Vui lòng thử lại!';
+          }
+
+        } else {
+          this.errors.taiKhoan = 'Đã xảy ra lỗi. Vui lòng thử lại!';
         }
       }
     });
   }
+
 }

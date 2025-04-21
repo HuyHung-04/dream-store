@@ -165,12 +165,7 @@
 
        <!-- Chọn nhân viên -->
        <div class="input-group">
-        <label style="color: #294764; font-weight: bold;" for="">Nhân viên</label>
-          <select class="custom-input" [(ngModel)]="selectedNhanVien" style="width: 215px;"disabled>
-            <option *ngFor="let nv of danhSachNhanVien" [ngValue]="nv.id">
-              {{ nv.ten }}
-            </option>
-          </select>
+        <label style="color: #294764" for="" ><strong style="color: #294764">Nhân viên</strong> : {{tenNhanVien}}</label>
        </div>
        <div class="input-group">
           <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;" [disabled]="!selectedInvoice || cart.length === 0">

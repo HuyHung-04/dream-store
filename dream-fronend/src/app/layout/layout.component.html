@@ -33,11 +33,11 @@
         <mat-icon>people</mat-icon>
         Khách Hàng
       </a>
-      <a mat-button routerLink="/layout/nhanvien" routerLinkActive="active-link">
+      <a mat-button (click)="accessNhanVien()">
         <mat-icon>person</mat-icon>
         Nhân Viên
-      </a>
-      <a mat-button routerLink="/layout/thongke" routerLinkActive="active-link">
+      </a>      
+      <a mat-button (click)="accessThongKe()">
         <mat-icon>bar_chart</mat-icon>
         Thống Kê
       </a>

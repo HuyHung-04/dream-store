@@ -105,7 +105,8 @@ export class BanhangComponent implements OnInit {
   addInfo = 'thanh toan hoa don';
   accountName = 'HOANG HUY HUNG';
   selectedVoucher: any; // hoặc khai báo theo đúng kiểu nếu bạn có interface
-
+  tenNhanVien: String = ''
+  idNhanVien: number=0;
   // Thêm mảng số tiền nhanh
   quickAmounts: number[] = [100000, 200000, 500000, 1000000];
 
@@ -1340,13 +1341,15 @@ export class BanhangComponent implements OnInit {
     this.banhangService.getDanhSachNhanVien().subscribe(
       (data: any[]) => {
         this.danhSachNhanVien = data;
-        // Luôn set nhân viên mặc định là người đầu tiên trong danh sách
-        if (data && data.length > 0) {
-          this.selectedNhanVien = data[0].id;
-          console.log('Đã chọn nhân viên mặc định:', this.selectedNhanVien);
-        } else {
-          console.error('Không có nhân viên nào trong danh sách');
-          alert('Không thể tải danh sách nhân viên. Vui lòng kiểm tra lại.');
+        console.log("danhsach", data)
+        const idNhanVienDangNhap = localStorage.getItem('idNhanVien');
+        const nhanVienDangNhap = data.find(nv => nv.id.toString() === idNhanVienDangNhap);
+        if (nhanVienDangNhap) {
+          // Gán tên vào biến
+          this.tenNhanVien = nhanVienDangNhap.ten;
+          console.log("tên nhân viên", this.tenNhanVien)
+          this.selectedNhanVien = nhanVienDangNhap.id;
+          console.log('Tên nhân viên đăng nhập:', this.tenNhanVien);
         }
       },
       (error: any) => {
@@ -1356,15 +1359,13 @@ export class BanhangComponent implements OnInit {
     );
   }
 
-  // Handle customer payment input change
   onTienKhachDuaChange(value: string) {
-    // Remove non-numeric characters
     const numericValue = value.replace(/[^0-9]/g, '');
     this.tienKhachDua = numericValue ? parseInt(numericValue) : 0;
     this.tinhTienThua();
   }
 
-  // Clear customer payment input
+
   clearTienKhachDua() {
     if (this.tienKhachDua === 0) {
       this.tienKhachDua = 0;
