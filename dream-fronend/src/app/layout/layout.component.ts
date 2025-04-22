@@ -10,7 +10,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
   selector: 'app-layout',
   standalone: true,
   imports: [
-    MatToolbarModule, 
+    MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
@@ -21,7 +21,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent {
-  constructor(private dialog: MatDialog, private router: Router) {}
+  constructor(private dialog: MatDialog, private router: Router) { }
 
   confirmLogout() {
     const confirmResult = confirm("Bạn có chắc chắn muốn đăng xuất không?");
@@ -37,16 +37,16 @@ export class LayoutComponent {
       this.router.navigate(['/layout/nhanvien']);
     } else {
       alert('Bạn không có quyền truy cập chức năng quản lý Nhân viên.');
-    }    
+    }
   }
- // Xử lý khi nhân viên click vào Thống Kê
- accessThongKe() {
-  const role = localStorage.getItem('role');
-  if (role === 'ROLE_Quản lý') {
-    this.router.navigate(['/layout/thongke']);
-  } else {
-    alert('Bạn không có quyền truy cập chức năng thống kê.');
+  // Xử lý khi nhân viên click vào Thống Kê
+  accessThongKe() {
+    const role = localStorage.getItem('role');
+    if (role === 'ROLE_Quản lý') {
+      this.router.navigate(['/layout/thongke']);
+    } else {
+      alert('Bạn không có quyền truy cập chức năng thống kê.');
+    }
   }
-}
 }
 

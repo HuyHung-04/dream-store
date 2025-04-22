@@ -7,6 +7,7 @@ import com.example.dreambackend.repositories.VaiTroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -33,9 +35,26 @@ public class NhanVienService implements INhanVienService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Transactional
+
     @Override
-    public Page<NhanVien> getAllNhanVienPaged(int page, int size) {
-        return nhanVienRepository.findAll(PageRequest.of(page, size));
+    public Page<NhanVien> getAllNhanVienPaged(int page, int size, Integer idNhanVien) {
+        Optional<NhanVien> nhanVienDangNhapOpt = nhanVienRepository.findById(idNhanVien);
+
+        if (nhanVienDangNhapOpt.isPresent()) {
+            NhanVien nhanVienDangNhap = nhanVienDangNhapOpt.get();
+            String vaiTroDangNhap = nhanVienDangNhap.getVaiTro().getTen();
+
+            if (vaiTroDangNhap.equalsIgnoreCase("Quản lý")) {
+                // Trả về tất cả nhân viên (không phải quản lý) + chính quản lý đang đăng nhập
+                return nhanVienRepository.findAllByVaiTro_TenNotOrId(
+                        PageRequest.of(page, size), "Quản lý", idNhanVien
+                );
+            } else {
+                return  null;
+            }
+        } else {
+            return Page.empty(); // Không tìm thấy người dùng
+        }
     }
     @Transactional
     @Override
@@ -172,8 +191,37 @@ public class NhanVienService implements INhanVienService {
         }
     }
     @Override
-    public Page<NhanVien> getNhanVienByTrangThai(Integer trangThai, int page, int size) {
-        return nhanVienRepository.findByTrangThai(trangThai, PageRequest.of(page, size));
+    public Page<NhanVien> getNhanVienByTrangThai(Integer trangThai, int page, int size, Integer idNhanVien) {
+        Optional<NhanVien> nhanVienOpt = nhanVienRepository.findById(idNhanVien);
+
+        if (nhanVienOpt.isEmpty()) {
+            return Page.empty();
+        }
+
+        NhanVien nhanVienDangNhap = nhanVienOpt.get();
+        String vaiTro = nhanVienDangNhap.getVaiTro().getTen();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        if (vaiTro.equalsIgnoreCase("Quản lý")) {
+            // Lấy danh sách nhân viên thường có trạng thái phù hợp
+            Page<NhanVien> nhanVienThuong = nhanVienRepository.findByTrangThaiAndVaiTro_Ten(trangThai, "Nhân viên", pageable);
+
+            // Trang đầu tiên thì mới thêm quản lý đăng nhập (nếu đúng trạng thái)
+            if (page == 0 && nhanVienDangNhap.getTrangThai().equals(trangThai)) {
+                List<NhanVien> ketQua = new ArrayList<>();
+                ketQua.add(nhanVienDangNhap);
+                ketQua.addAll(nhanVienThuong.getContent());
+
+                return new PageImpl<>(ketQua, pageable, nhanVienThuong.getTotalElements() + 1);
+            }
+
+            // Các trang khác chỉ trả về nhân viên thường
+            return nhanVienThuong;
+
+        } else {
+          return null;
+        }
     }
     @Override
     public Page<NhanVien> getAllNhanVien(int page, int size) {

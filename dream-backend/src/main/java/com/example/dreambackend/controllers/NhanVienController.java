@@ -34,8 +34,11 @@ public class NhanVienController {
     @GetMapping("/hien-thi")
     public ResponseEntity<Page<NhanVien>> hienThiPaged(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
-        Page<NhanVien> pagedNhanViens = nhanVienService.getAllNhanVienPaged(page, size);
+            @RequestParam(defaultValue = "8") int size,
+            @RequestParam(required = false) Integer idNhanVien) { // Thêm idNhanVien vào tham số
+
+        Page<NhanVien> pagedNhanViens = nhanVienService.getAllNhanVienPaged(page, size,idNhanVien);
+
         return ResponseEntity.ok(pagedNhanViens);
     }
 
@@ -104,21 +107,28 @@ public class NhanVienController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    // Lấy nhân viên theo trạng thái
     @GetMapping("/trang-thai/{trangThai}")
     public ResponseEntity<Page<NhanVien>> getNhanVienByTrangThai(
             @PathVariable Integer trangThai,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
+            @RequestParam(defaultValue = "8") int size,
+            @RequestParam(required = false) Integer idNhanVien) { // Thêm idNhanVien vào tham số
 
         Page<NhanVien> pagedNhanVien;
+
         if (trangThai == 2) {
-            pagedNhanVien = nhanVienService.getAllNhanVien(page, size);
+            pagedNhanVien = nhanVienService.getAllNhanVienPaged(page, size,idNhanVien);
         } else {
-            pagedNhanVien = nhanVienService.getNhanVienByTrangThai(trangThai, page, size);
+            pagedNhanVien = nhanVienService.getNhanVienByTrangThai(trangThai, page, size,idNhanVien);
+        }
+
+        // Nếu có idNhanVien thì có thể lọc hoặc xử lý tùy vào yêu cầu
+        if (idNhanVien != null) {
+            // Bạn có thể xử lý dữ liệu với idNhanVien ở đây nếu cần
         }
 
         return ResponseEntity.ok(pagedNhanVien);
     }
+
 
 }

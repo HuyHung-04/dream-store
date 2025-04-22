@@ -14,7 +14,8 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Integer> {
     Optional<NhanVien> findByEmail(String email);
     Page<NhanVien> findByTrangThai(Integer trangThai, Pageable pageable);
     boolean existsByMa(String ma);
-
+    Page<NhanVien> findByTrangThaiAndVaiTro_Ten(Integer trangThai, String vaiTro, Pageable pageable);
+    Page<NhanVien> findAllByVaiTro_TenNotOrId(Pageable pageable, String tenVaiTro, Integer id);
     Optional<NhanVien> findByTaiKhoan(String taiKhoan);
     Boolean existsByTaiKhoan(String taiKhoan);
     Boolean existsByEmail(String email);

@@ -520,10 +520,11 @@ getNhanVienDetail(id: number): void {
 }
 trangThaiFilter: number | null = 2;
 loadPage(page: number): void {
-  // Nếu trangThaiFilter là 2, thì không gửi tham số trạng thái lên API
+  // Nếu trangThaiFilter là 2, thì không gửi tham số trạng thái lên APIz
   let trangThai: number | undefined = this.trangThaiFilter !== null ? this.trangThaiFilter : undefined;
-
-  this.nhanVienService.getNhanVien(page, this.pageSize, trangThai).subscribe(
+  const idNhanVienDangNhap = localStorage.getItem('idNhanVien');
+  const idDangNhap = idNhanVienDangNhap ? parseInt(idNhanVienDangNhap, 10) : undefined;
+  this.nhanVienService.getNhanVien(page, this.pageSize, trangThai,idDangNhap).subscribe(
     (response) => {
       console.log("📌 Dữ liệu nhân viên nhận được:", response); // Debug dữ liệu
       this.nhanViens = response.content;

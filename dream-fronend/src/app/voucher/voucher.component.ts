@@ -64,7 +64,9 @@ export class VoucherComponent implements OnInit {
 
   }
   editVoucher(voucherId: number) {
-    this.voucherService.checkVoucherUsed(voucherId).subscribe((isUsed) => {
+    const role = localStorage.getItem('role');
+    if (role === 'ROLE_Quản lý') {
+     this.voucherService.checkVoucherUsed(voucherId).subscribe((isUsed) => {
       this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
         this.voucherEdit = { ...voucher };
         this.voucherUsed = isUsed;
@@ -89,6 +91,10 @@ export class VoucherComponent implements OnInit {
         
       });
     });
+    } else {
+      alert('Bạn không có quyền truy cập chức năng này.');
+    }
+   
   }
 
   onNgayKetThucChange() {
@@ -554,8 +560,13 @@ export class VoucherComponent implements OnInit {
   }
 
   openModal() {
-    this.resetForm();
-    this.showModal = true;
+    const role = localStorage.getItem('role');
+    if (role === 'ROLE_Quản lý') {
+      this.showModal = true;
+      this.resetForm();
+    } else {
+      alert('Bạn không có quyền truy cập chức năng này.');
+    }
   }
 
   // Hàm đóng modal

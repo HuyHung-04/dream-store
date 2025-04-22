@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface INhanVienService {
-    Page<NhanVien> getAllNhanVienPaged(int page, int size);
+    Page<NhanVien> getAllNhanVienPaged(int page, int size, Integer idNhanVien);
     NhanVien addNhanVien(NhanVien nhanVien);
     NhanVien updateNhanVien(NhanVien nhanVien);
     NhanVien getNhanVienById(Integer id);
@@ -17,6 +17,6 @@ public interface INhanVienService {
     NhanVien addImageForNhanVien(Integer nhanVienId, MultipartFile file) throws IOException;
     // Phương thức đăng nhập (trả về boolean)
     ResponseEntity<?> login(String email, String password);
-    Page<NhanVien> getNhanVienByTrangThai(Integer trangThai, int page, int size);
+    Page<NhanVien> getNhanVienByTrangThai(Integer trangThai, int page, int size, Integer idNhanVien);
     Page<NhanVien> getAllNhanVien(int page, int size);
 }
