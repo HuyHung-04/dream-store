@@ -1,4 +1,4 @@
-CREATE DATABASE dream_store
+﻿CREATE DATABASE dream_store
 GO
 USE dream_store
 GO
@@ -12,7 +12,7 @@ CREATE TABLE mau_sac (
 	trang_thai INT DEFAULT 1
 )
 
-GO
+GO 
 
 CREATE TABLE size (
 	id INT IDENTITY(1,1) PRIMARY KEY,
@@ -22,7 +22,6 @@ CREATE TABLE size (
 	ngay_tao DATETIME,
 	trang_thai INT DEFAULT 1
 )
-
 
 CREATE TABLE thuong_hieu (
 	id INT IDENTITY(1,1) PRIMARY KEY,
@@ -67,7 +66,7 @@ CREATE TABLE co_ao (
 )
 
 GO
-select * from khuyen_mai
+
 CREATE TABLE san_pham (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	id_thuong_hieu INT,
@@ -102,7 +101,6 @@ CREATE TABLE khuyen_mai (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	ma VARCHAR(10) NOT NULL,
 	ten NVARCHAR(30) DEFAULT '',
-	hinh_thuc_giam BIT DEFAULT 1,
 	gia_tri_giam FLOAT DEFAULT '',
 	ngay_bat_dau DATETIME,
 	ngay_ket_thuc DATETIME,
@@ -137,6 +135,7 @@ CREATE TABLE voucher (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	ma VARCHAR(10) NOT NULL,
 	ten NVARCHAR(30) DEFAULT '',
+	so_luong INT,
 	hinh_thuc_giam BIT DEFAULT 1,
 	gia_tri_giam FLOAT DEFAULT '',
 	don_toi_thieu FLOAT DEFAULT '',
@@ -147,8 +146,6 @@ CREATE TABLE voucher (
 	ngay_tao DATETIME,
 	trang_thai INT DEFAULT 1
 )
-
-GO 
 
 CREATE TABLE vai_tro (
 	id INT IDENTITY(1,1) PRIMARY KEY,
@@ -168,7 +165,7 @@ CREATE TABLE nhan_vien (
 	email NVARCHAR(50),
 	so_dien_thoai VARCHAR(15),
 	tai_khoan VARCHAR(30),
-	mat_khau VARCHAR(30),
+	mat_khau VARCHAR(100),
 	anh VARCHAR(50),
 	ngay_sua DATETIME,
 	ngay_tao DATETIME,
@@ -242,7 +239,7 @@ CREATE TABLE hoa_don (
 	id_nhan_vien INT,
 	id_voucher INT,
 	id_phuong_thuc_thanh_toan INT,
-	ma VARCHAR(10) NOT NULL,
+	ma VARCHAR(50) NOT NULL,
 	ten_nguoi_nhan NVARCHAR(50) DEFAULT '',
 	sdt_nguoi_nhan VARCHAR(15) DEFAULT'',
 	dia_chi_nhan_hang NVARCHAR(255) DEFAULT'',
@@ -254,7 +251,11 @@ CREATE TABLE hoa_don (
 	ngay_sua DATETIME,
 	ngay_tao DATETIME,
 	trang_thai INT DEFAULT 1,
-	ghi_chu NVARCHAR(255)
+	ghi_chu NVARCHAR(255),
+	FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id),
+	FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien(id),
+	FOREIGN KEY (id_voucher) REFERENCES voucher(id),
+	FOREIGN KEY (id_phuong_thuc_thanh_toan) REFERENCES phuong_thuc_thanh_toan(id)
 )
 
 GO
@@ -263,7 +264,7 @@ CREATE TABLE hoa_don_chi_tiet (
 	id INT IDENTITY(1,1) PRIMARY KEY,
 	id_hoa_don INT,
 	id_san_pham_chi_tiet INT,
-	ma VARCHAR(10) NOT NULL,
+	ma VARCHAR(50) NOT NULL,
 	so_luong INT DEFAULT '',
 	don_gia FLOAT DEFAULT '',
 	ngay_sua DATETIME,
