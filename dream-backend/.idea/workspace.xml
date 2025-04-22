@@ -6,15 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/NhanVienController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/NhanVienController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/NhanVienRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/NhanVienRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/INhanVienService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/INhanVienService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/NhanVienService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/NhanVienService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/khuyenmai/khuyenmai.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/layout/layout.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/layout/layout.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/sanpham/sanpham.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/voucher/voucher.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/voucher/voucher.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/configs/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/configs/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/pdf/PdfService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/pdf/PdfService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/configs/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/configs/SecurityConfig.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,6 +247,7 @@
       <workItem from="1745227624252" duration="1226000" />
       <workItem from="1745241168695" duration="12674000" />
       <workItem from="1745299252102" duration="1958000" />
+      <workItem from="1745330178026" duration="1262000" />
     </task>
     <servers />
   </component>

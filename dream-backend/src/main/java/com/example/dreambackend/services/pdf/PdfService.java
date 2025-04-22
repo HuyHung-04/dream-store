@@ -67,27 +67,32 @@ public class PdfService {
         document.add(new Paragraph("Voucher sử dụng: " + (hoaDon.getVoucher() != null ? hoaDon.getVoucher().getTen() : "Không có")).setFont(vietnameseFont));
         document.add(new Paragraph("\n"));
 
-        // **Bảng sản phẩm**
-        Table table = new Table(new float[]{1, 3, 2, 2, 3, 2});
+        // Thêm cột "Giá sau giảm"
+        Table table = new Table(new float[]{1, 3, 2, 2, 3, 3, 2});
         table.setWidth(UnitValue.createPercentValue(100));
 
-        // **Tiêu đề cột**
-        String[] headers = {"STT", "Tên SP", "Màu sắc", "Size", "Đơn giá", "Số lượng"};
+        String[] headers = {"STT", "Tên SP", "Màu sắc", "Size", "Đơn giá", "Giá sau giảm", "Số lượng"};
         for (String header : headers) {
             table.addHeaderCell(new Cell().add(new Paragraph(header).setFont(vietnameseFont).setBold()));
         }
 
-        // **Thêm dữ liệu sản phẩm**
         int index = 1;
         for (HoaDonChiTiet hdct : chiTietList) {
             SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
             SanPham sp = spct.getSanPham();
 
-            table.addCell(new Cell().add(new Paragraph(String.valueOf(index++)).setFont(vietnameseFont))); // Fix lỗi số thứ tự
+            double giaGoc = spct.getGia() != null ? spct.getGia() : 0.0;
+            double phanTramGiam = (spct.getKhuyenMai() != null && spct.getKhuyenMai().getGiaTriGiam() != null)
+                    ? spct.getKhuyenMai().getGiaTriGiam()
+                    : 0.0;
+            double giaSauGiam = giaGoc * (1 - phanTramGiam / 100);
+
+            table.addCell(new Cell().add(new Paragraph(String.valueOf(index++)).setFont(vietnameseFont)));
             table.addCell(new Cell().add(new Paragraph(sp != null ? sp.getTen() : "N/A").setFont(vietnameseFont)));
             table.addCell(new Cell().add(new Paragraph(spct.getMauSac() != null ? spct.getMauSac().getTen() : "N/A").setFont(vietnameseFont)));
             table.addCell(new Cell().add(new Paragraph(spct.getSize() != null ? spct.getSize().getTen() : "N/A").setFont(vietnameseFont)));
-            table.addCell(new Cell().add(new Paragraph(formatter.format(spct.getGia() != null ? spct.getGia() : 0.0)).setFont(vietnameseFont))); // Fix lỗi formatter
+            table.addCell(new Cell().add(new Paragraph(formatter.format(giaGoc)).setFont(vietnameseFont)));
+            table.addCell(new Cell().add(new Paragraph(formatter.format(giaSauGiam)).setFont(vietnameseFont)));
             table.addCell(new Cell().add(new Paragraph(String.valueOf(hdct.getSoLuong())).setFont(vietnameseFont)));
         }
 
