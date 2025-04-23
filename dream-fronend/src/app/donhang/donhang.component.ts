@@ -176,11 +176,11 @@ export class DonhangComponent {
   cancelHoaDon(idHoaDon: number): void {
 
     if (!this.ghiChu.trim()) {
-      alert('Vui lòng nhập lý do hủy hóa đơn.');
+      alert('Vui lòng nhập lý do hủy đơn hàng.');
       return;
     }
 
-    const xacNhanHuy = window.confirm("Bạn có chắc chắn muốn hủy hóa đơn này?");
+    const xacNhanHuy = window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này?");
     if (!xacNhanHuy) return;
 
     this.donHangService.huyHoaDon(idHoaDon, this.ghiChu).subscribe(

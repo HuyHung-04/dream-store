@@ -204,14 +204,14 @@
           <!-- Nút Hủy và Nút Quay Về Trang Chủ -->
           <div class="btn">
             <button *ngIf="!([5,2,3,4].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn-danger">
-              Hủy Hóa Đơn
+              Hủy đơn hàng
             </button>
             <button (click)="goHome()" class="btn-primary">Đóng</button>
           </div>
           <!-- Modal nhập lý do hủy -->
           <div class="modal-overlay-huy" *ngIf="showCancelModal">
             <div class="modal-huy">
-              <h4>Nhập lý do hủy hóa đơn</h4>
+              <h4>Nhập lý do hủy đơn hàng</h4>
               <textarea [(ngModel)]="ghiChu" rows="4" placeholder="Nhập lý do..."></textarea>
               <div class="modal-buttons">
                 <button class="btn btn-danger" (click)="cancelHoaDon(hoaDonData.id)">Xác nhận hủy</button>
