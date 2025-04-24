@@ -243,11 +243,9 @@ CREATE TABLE hoa_don (
 	ten_nguoi_nhan NVARCHAR(50) DEFAULT '',
 	sdt_nguoi_nhan VARCHAR(15) DEFAULT'',
 	dia_chi_nhan_hang NVARCHAR(255) DEFAULT'',
-	hinh_thuc_thanh_toan NVARCHAR(50) DEFAULT '',
 	phi_van_chuyen FLOAT DEFAULT'',
 	tong_tien_truoc_voucher FLOAT DEFAULT'',
 	tong_tien_thanh_toan FLOAT DEFAULT'',
-	ngay_nhan_du_kien DATETIME,
 	ngay_sua DATETIME,
 	ngay_tao DATETIME,
 	trang_thai INT DEFAULT 1,
@@ -273,3 +271,5 @@ CREATE TABLE hoa_don_chi_tiet (
 	FOREIGN KEY (id_hoa_don) REFERENCES hoa_don(id),
 	FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet(id)
 )
+
+

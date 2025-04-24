@@ -33,8 +33,6 @@ public class HoaDon {
     @Column(name = "dia_chi_nhan_hang")
     private String diaChiNhanHang;
 
-    @Column(name = "hinh_thuc_thanh_toan")
-    private String hinhThucThanhToan;
 
     @Column(name= "phi_van_chuyen")
     private Double phiVanChuyen;
@@ -45,8 +43,6 @@ public class HoaDon {
     @Column(name = "tong_tien_thanh_toan")
     private Double tongTienThanhToan;
 
-    @Column(name = "ngay_nhan_du_kien")
-    private LocalDate ngayNhanDuKien;
 
     @Column(name = "ngay_tao")
     private LocalDate ngayTao;

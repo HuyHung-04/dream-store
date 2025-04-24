@@ -684,9 +684,9 @@ export class SanphamComponent implements OnInit {
         return; // Dừng lại nếu có lỗi
       }
       // Nếu không có lỗi, thực hiện thêm sản phẩm
-      this.sanPhamRequest.ngayTao = new Date().toISOString().split('T')[0];
-      this.sanPhamRequest.ngaySua = new Date().toISOString().split('T')[0];
-      console.log("SanPham Request:", this.sanPhamRequest);
+      // this.sanPhamRequest.ngayTao = new Date().toISOString().split('T')[0];
+      // this.sanPhamRequest.ngaySua = new Date().toISOString().split('T')[0];
+      // console.log("SanPham Request:", this.sanPhamRequest);
 
       this.sanphamService.addSanPham(this.sanPhamRequest).subscribe({
         next: (response) => {
@@ -713,8 +713,8 @@ export class SanphamComponent implements OnInit {
         let errorMessages = Object.values(this.validationErrors).join('\n');
         return;
       }
-      this.sanPhamRequest.ngaySua = new Date().toISOString().split('T')[0]; // Ngày sửa hiện tại
-      console.log("Update SanPham Request:", this.sanPhamRequest);
+      // this.sanPhamRequest.ngaySua = new Date().toISOString().split('T')[0]; 
+      // console.log("Update SanPham Request:", this.sanPhamRequest);
 
       this.sanphamService.updateSanPham(this.sanPhamRequest).subscribe({
         next: (response) => {
@@ -866,13 +866,16 @@ export class SanphamComponent implements OnInit {
         // console.log("Validate thất bại", this.validationErrors);
         return;
       }
-      this.sanPhamChiTietRequest.sizes = this.sanPhamChiTietRequest.sizes.map((size: any) => size.id || size);
-      this.sanPhamChiTietRequest.mauSacs = this.sanPhamChiTietRequest.mauSacs.map((mau: any) => mau.id || mau);
+      const requestToSend = {
+        ...this.sanPhamChiTietRequest,
+        sizes: this.sanPhamChiTietRequest.sizes.map((size: any) => size.id || size),
+        mauSacs: this.sanPhamChiTietRequest.mauSacs.map((mau: any) => mau.id || mau),
+      };
 
-      this.sanPhamChiTietRequest.ngayTao = new Date().toISOString().split('T')[0];
-      this.sanPhamChiTietRequest.ngaySua = new Date().toISOString().split('T')[0];
+      // this.sanPhamChiTietRequest.ngayTao = new Date().toISOString().split('T')[0];
+      // this.sanPhamChiTietRequest.ngaySua = new Date().toISOString().split('T')[0];
 
-      this.sanphamService.addSanPhamChiTiet(this.sanPhamChiTietRequest).subscribe({
+      this.sanphamService.addSanPhamChiTiet(requestToSend).subscribe({
         next: (response) => {
           // console.log("Thêm sản phẩm chi tiết thành công:", response);
           alert("Thêm sản phẩm chi tiết thành công");
@@ -1025,7 +1028,7 @@ export class SanphamComponent implements OnInit {
         return;
       }
       // Chuyển đổi ngày sửa về định dạng YYYY-MM-DD
-      this.sanPhamChiTietRequest.ngaySua = new Date().toISOString().split('T')[0];
+      // this.sanPhamChiTietRequest.ngaySua = new Date().toISOString().split('T')[0];
       // Định nghĩa kiểu dữ liệu cho size và mau
       interface Size {
         id: number;

@@ -76,7 +76,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/nhan-vien/image/**").permitAll()
 
                 .requestMatchers("/api/ban-hang-online/**").permitAll()
-                .requestMatchers("/api/hoa-don/**").permitAll()
+                .requestMatchers("/api/hoa-don/**").hasAnyRole("Quản lý", "Nhân viên")
                 .requestMatchers("/api/hoa-don-online/**").permitAll()
                 .requestMatchers("/api/khach-hang/**").permitAll()
                 .requestMatchers("/api/gio-hang/**").permitAll()

@@ -44,7 +44,7 @@ public class SanPhamService implements ISanPhamService {
         sanPham.setMa(taoMaSanPham());
         // Set ngày tạo và ngày sửa
         sanPham.setNgayTao(LocalDate.now());
-        sanPham.setNgaySua(LocalDate.now());
+
         // Lưu sản phẩm
         return sanPhamRepository.save(sanPham);
     }

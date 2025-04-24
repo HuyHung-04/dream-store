@@ -86,7 +86,6 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
                 SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
                 sanPhamChiTiet.setMa(taoMaSanPhamChiTiet());
                 sanPhamChiTiet.setNgayTao(LocalDate.now());
-                sanPhamChiTiet.setNgaySua(LocalDate.now());
                 sanPhamChiTiet.setGia(sanPhamChiTietRequest.getGia());
                 sanPhamChiTiet.setSoLuong(sanPhamChiTietRequest.getSoLuong());
                 sanPhamChiTiet.setTrangThai(sanPhamChiTietRequest.getTrangThai());

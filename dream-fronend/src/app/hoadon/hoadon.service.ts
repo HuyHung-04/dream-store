@@ -18,11 +18,9 @@ export interface HoaDonResponse {
   tenNguoiNhan: string;
   sdtNguoiNhan: string;
   diaChiNhanHang: string;
-  hinhThucThanhToan: string;
   phiVanChuyen: number;
   tongTienTruocVoucher: number;
   tongTienThanhToan: number;
-  ngayNhanDuKien: string;
   ngayTao: string;
   ngaySua: string;
   trangThai: number;

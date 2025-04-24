@@ -20,11 +20,9 @@ public class HoaDonRequest {
     private String tenNguoiNhan;
     private String sdtNguoiNhan;
     private String diaChiNhanHang;
-    private String hinhThucThanhToan;
     private Double phiVanChuyen;
     private Double tongTienTruocVoucher;
     private Double tongTienThanhToan;
-    private LocalDate ngayNhanDuKien;
     private LocalDate ngayTao;
     private LocalDate ngaySua;
     private Integer trangThai;
