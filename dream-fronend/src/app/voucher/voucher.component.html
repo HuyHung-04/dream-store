@@ -21,7 +21,6 @@
       <table class="product-table">
         <thead>
           <tr>
-            <th>STT</th>
             <th>Mã Voucher</th>
             <th>Tên Voucher</th>
             <th>Số lượng</th>
@@ -38,8 +37,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let voucher of tenVouchers,">
-            <td>{{voucher.id}}</td>
+          <tr *ngFor="let voucher of tenVouchers">
             <td>{{ voucher.ma }}</td>
             <td>{{ voucher.ten }}</td>
             <td>{{ voucher.soLuong }}</td>

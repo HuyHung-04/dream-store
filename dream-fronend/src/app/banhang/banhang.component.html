@@ -85,7 +85,7 @@
 
       <!-- Dropdown chọn size -->
       <div class="input-group" style="padding-left: 150px;">
-        <select class="custom-input" style="width: 185px;" [(ngModel)]="sizeSearch" (ngModelChange)="filterSanPham()">
+        <select class="custom-input" style="width: 170px;" [(ngModel)]="sizeSearch" (ngModelChange)="filterSanPham()">
           <option value="">Tất cả size</option>
           <option *ngFor="let size of danhSachSize" [value]="size">{{ size }}</option>
         </select>
@@ -93,7 +93,7 @@
 
       <!-- Dropdown chọn màu sắc -->
       <div class="input-group">
-        <select class="custom-input" style="width: 185px;" [(ngModel)]="mauSac" (ngModelChange)="filterSanPham()">
+        <select class="custom-input" style="width: 170px;" [(ngModel)]="mauSac" (ngModelChange)="filterSanPham()">
           <option value="">Tất cả màu</option>
           <option *ngFor="let mau of danhSachMau" [value]="mau">{{ mau }}</option>
         </select>

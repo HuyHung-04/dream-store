@@ -6,10 +6,7 @@ import com.example.dreambackend.repositories.NhanVienRepository;
 import com.example.dreambackend.repositories.VaiTroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,11 +40,12 @@ public class NhanVienService implements INhanVienService {
         if (nhanVienDangNhapOpt.isPresent()) {
             NhanVien nhanVienDangNhap = nhanVienDangNhapOpt.get();
             String vaiTroDangNhap = nhanVienDangNhap.getVaiTro().getTen();
-
+            Sort sort = Sort.by(Sort.Direction.DESC, "id"); // Sắp xếp id giảm dần
+            Pageable pageable = PageRequest.of(page, size, sort);
             if (vaiTroDangNhap.equalsIgnoreCase("Quản lý")) {
                 // Trả về tất cả nhân viên (không phải quản lý) + chính quản lý đang đăng nhập
                 return nhanVienRepository.findAllByVaiTro_TenNotOrId(
-                        PageRequest.of(page, size), "Quản lý", idNhanVien
+                        pageable, "Quản lý", idNhanVien
                 );
             } else {
                 return  null;
@@ -133,13 +131,13 @@ public class NhanVienService implements INhanVienService {
     @Override
     @Transactional
     public NhanVien updateNhanVien(NhanVien nhanVien) {
-        // 🔹 Kiểm tra nhân viên có tồn tại không
+        //  Kiểm tra nhân viên có tồn tại không
         NhanVien existingNhanVien = nhanVienRepository.findById(nhanVien.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Nhân viên không tồn tại!"));
-        // 🔹 Kiểm tra vai trò có tồn tại không
+        //  Kiểm tra vai trò có tồn tại không
         VaiTro vaiTro = vaiTroRepository.findById(nhanVien.getVaiTro().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Vai trò không tồn tại!"));
-        // 🔹 Cập nhật thông tin nhân viên
+        //  Cập nhật thông tin nhân viên
         existingNhanVien.setTen(nhanVien.getTen());
         existingNhanVien.setGioiTinh(nhanVien.getGioiTinh());
         existingNhanVien.setNgaySinh(nhanVien.getNgaySinh());
@@ -152,7 +150,7 @@ public class NhanVienService implements INhanVienService {
         }
         existingNhanVien.setTrangThai(nhanVien.getTrangThai());
         existingNhanVien.setNgaySua(LocalDate.now());
-        // 🔹 Gán vai trò mới
+        //  Gán vai trò mới
         existingNhanVien.setVaiTro(vaiTro);
 
         return nhanVienRepository.save(existingNhanVien);
@@ -201,28 +199,15 @@ public class NhanVienService implements INhanVienService {
         NhanVien nhanVienDangNhap = nhanVienOpt.get();
         String vaiTro = nhanVienDangNhap.getVaiTro().getTen();
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
         if (vaiTro.equalsIgnoreCase("Quản lý")) {
-            // Lấy danh sách nhân viên thường có trạng thái phù hợp
-            Page<NhanVien> nhanVienThuong = nhanVienRepository.findByTrangThaiAndVaiTro_Ten(trangThai, "Nhân viên", pageable);
-
-            // Trang đầu tiên thì mới thêm quản lý đăng nhập (nếu đúng trạng thái)
-            if (page == 0 && nhanVienDangNhap.getTrangThai().equals(trangThai)) {
-                List<NhanVien> ketQua = new ArrayList<>();
-                ketQua.add(nhanVienDangNhap);
-                ketQua.addAll(nhanVienThuong.getContent());
-
-                return new PageImpl<>(ketQua, pageable, nhanVienThuong.getTotalElements() + 1);
-            }
-
-            // Các trang khác chỉ trả về nhân viên thường
-            return nhanVienThuong;
-
+            return nhanVienRepository.findNhanVienAndCurrentQuanLy(trangThai, idNhanVien, pageable);
         } else {
-          return null;
+            return Page.empty();
         }
     }
+
     @Override
     public Page<NhanVien> getAllNhanVien(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

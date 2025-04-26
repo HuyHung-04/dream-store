@@ -21,7 +21,6 @@
     <table class="product-table">
       <thead>
         <tr>
-          <th>STT</th>
           <th>Mã khuyến mãi</th>
           <th>Tên khuyến mãi</th>
           <th>Giá trị giảm</th>
@@ -35,7 +34,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let khuyenmai of filteredKhuyenMais">
-          <td>{{khuyenmai.id}}</td>
           <td>{{ khuyenmai.ma }}</td>
           <td>{{ khuyenmai.ten }}</td>
           <td>{{ khuyenmai.giaTriGiam }} {{ khuyenmai.hinhThucGiam ? 'VND' : '%' }} </td>

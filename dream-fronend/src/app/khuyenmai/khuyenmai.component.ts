@@ -249,11 +249,15 @@ export class KhuyenmaiComponent implements OnInit {
     }
     else {
       const currentDate = new Date();
-      const startDate = new Date(this.khuyenmai.ngayBatDau);
+      const startDate = new Date(`${this.khuyenmai.ngayBatDau}T23:58:59.999`);
       const endDate = new Date(`${this.khuyenmai.ngayKetThuc}T23:59:59.999`);
 
       if (startDate > endDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc phải sau ngày bắt đầu!';
+      }
+
+      if (startDate < currentDate) {
+        this.errors.ngayBatDau = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!';
       }
 
       if (endDate < currentDate) {
@@ -323,15 +327,21 @@ export class KhuyenmaiComponent implements OnInit {
     }
     else {
       const currentDate = new Date();
-      const startDate = new Date(this.khuyenmaiEdit.ngayBatDau);
+      const startDate = new Date(`${this.khuyenmaiEdit.ngayBatDau}T23:58:59.999`);
       const endDate = new Date(`${this.khuyenmaiEdit.ngayKetThuc}T23:59:59.999`);
-      startDate.setHours(0, 0, 0, 0);
+    
       endDate.setHours(23, 59, 59, 999);
       if (startDate > endDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc phải sau ngày bắt đầu!';
       }
       else if (endDate < currentDate && this.khuyenmaiEdit.trangThai == true) {
         this.errors.trangThai = 'Khuyến mãi đã hết hạn, trạng thái phải là "Không hoạt động".';
+      }
+      else if (startDate < currentDate) {
+        this.errors.ngayBatDau = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!';
+      }
+      else if (endDate < currentDate) {
+        this.errors.ngayKetThuc = 'Ngày kết thúc phải lớn hơn ngày hiện tại!';
       }
 
     }

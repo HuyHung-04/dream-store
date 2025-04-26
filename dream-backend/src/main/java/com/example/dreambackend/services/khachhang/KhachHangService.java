@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,7 +34,7 @@ public class KhachHangService implements IKhachHangService{
 
     @Override
     public Page<KhachHang> getAllKhachHangPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<KhachHang> khachhangs = khachHangRepository.findKhachHang(pageable);
 
         return khachhangs;
@@ -61,19 +62,6 @@ public class KhachHangService implements IKhachHangService{
                 .ngayTao(LocalDate.now())
                 .trangThai(1)
                 .build();
-
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(khachHangDto.getEmail());
-            message.setSubject("Bạn đã đăng ký tài khoản thành công");
-            message.setText("Cảm ơn bạn đã đăng ký tài khoản tại hệ thống của chúng tôi!");
-
-            mailSender.send(message);
-        } catch (MailException e) {
-            System.err.println("Lỗi gửi email: " + e.getMessage());
-            // Không throw lỗi để tránh làm hỏng quá trình đăng ký
-        }
-
         return  khachHangRepository.save(newKhachHang);
     }
     @Override

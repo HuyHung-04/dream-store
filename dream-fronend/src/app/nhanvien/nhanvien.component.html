@@ -21,7 +21,6 @@
     <table class="product-table">
       <thead>
         <tr>
-          <th>STT</th>
           <th>Mã Nhân Viên</th>
           <th>Tên Nhân Viên</th>
           <th>Giới Tính</th>
@@ -39,7 +38,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let nhanVien of filteredNhanViens">
-          <td>{{ nhanVien.id }}</td>
           <td>{{ nhanVien.ma }}</td>
           <td>{{ nhanVien.ten }}</td>
           <td>{{ nhanVien.gioiTinh ? 'Nam' : 'Nữ' }}</td>

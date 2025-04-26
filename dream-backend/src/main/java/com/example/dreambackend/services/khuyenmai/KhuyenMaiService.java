@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,12 +22,19 @@ public class KhuyenMaiService implements IKhuyenMaiService{
     SanPhamChiTietRepository sanPhamChiTietRepository;
     @Override
     public Page<KhuyenMai> getAllKhuyenMaiPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<KhuyenMai> khuyenMais = khuyenMaiRepository.findAll(pageable);
         // Kiểm tra và cập nhật trạng thái khuyến mãi nếu cần
         khuyenMais.getContent().forEach(this::checkAndUpdateStatus);
         return khuyenMais;
     }
+
+//    khuyenMais.getContent().forEach(khuyenMai -> {
+//        checkAndUpdateStatus(khuyenMai);
+//        if (khuyenMai.getTrangThai() == 0) { // Nếu khuyến mãi không hoạt động
+//            sanPhamChiTietRepository.removeKhuyenMaiFromSanPhamChiTiet(khuyenMai.getId());
+//        }
+
     @Override
     public KhuyenMai addKhuyenMai(KhuyenMai khuyenMai) {
         khuyenMai.setNgayTao(LocalDate.now());

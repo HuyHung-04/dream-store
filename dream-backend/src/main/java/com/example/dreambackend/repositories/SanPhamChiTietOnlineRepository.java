@@ -14,7 +14,7 @@ public interface SanPhamChiTietOnlineRepository extends JpaRepository<SanPhamChi
     @Query("SELECT new com.example.dreambackend.dtos.SanPhamChiTietOnlineDto( " +
             "spct.id, sp.ten, a.anhUrl, spct.gia, cl.ten, ca.ten, th.ten, xx.ten, " +
             "ms.ten, s.ten, spct.soLuong, COALESCE(ghct.soLuong, 0), " +
-            "CAST(COALESCE(km.giaTriGiam, 0.0) AS double)) " +  // Chuyển thành Double
+            "CAST(COALESCE(CASE WHEN km.trangThai = 1 AND km.ngayKetThuc >= CURRENT_DATE THEN km.giaTriGiam ELSE 0.0 END, 0.0) AS double)) " +  // Chuyển thành Double
             "FROM SanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
             "JOIN Anh a ON sp.id = a.sanPham.id " +
@@ -29,7 +29,7 @@ public interface SanPhamChiTietOnlineRepository extends JpaRepository<SanPhamChi
             "WHERE sp.trangThai = 1 " +
             "AND spct.soLuong > 0 " +
             "AND sp.id = :idSanPham " +
-            "AND (km.trangThai = 1 OR km IS NULL) " +
+            "AND (spct.khuyenMai IS NULL OR km.trangThai = 1 OR km.trangThai = 0) " +
             "ORDER BY a.id ASC")
     List<SanPhamChiTietOnlineDto> getSanPhamChiTiet(@Param("idSanPham") Integer idSanPham);
 }

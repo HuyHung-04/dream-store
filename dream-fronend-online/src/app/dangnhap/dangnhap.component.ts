@@ -42,20 +42,26 @@ export class DangnhapComponent implements OnInit {
   }
 
   validateForm(khachhang: any): boolean {
-    this.errors = {};
     if (!this.tentaikhoan.trim()) {
-      this.errors.email = 'Email không được để trống!';
+      alert('Email không được để trống!');
+      return false;
     }
-    if (this.khachhang === null) {
-      this.errors.email = 'Email không tồn tại!';
+  
+    if (khachhang === null) {
+      alert('Email không tồn tại!');
+      return false;
     }
+  
     if (!this.matkhau.trim()) {
-      this.errors.matKhau = 'Mật khẩu không được để trống!';
+      alert('Mật khẩu không được để trống!');
+      return false;
     }
-    if (this.khachhang?.matKhau !== this.matkhau) {
-      this.errors.matKhau = 'Mật khẩu không đúng!';
+  
+    if (khachhang?.matKhau !== this.matkhau) {
+      alert('Mật khẩu không đúng!');
+      return false;
     }
-
-    return Object.keys(this.errors).length === 0;
+  
+    return true;
   }
 }

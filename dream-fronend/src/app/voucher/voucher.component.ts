@@ -66,44 +66,44 @@ export class VoucherComponent implements OnInit {
   editVoucher(voucherId: number) {
     const role = localStorage.getItem('role');
     if (role === 'ROLE_Quản lý') {
-     this.voucherService.checkVoucherUsed(voucherId).subscribe((isUsed) => {
-      this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
-        this.voucherEdit = { ...voucher };
-        this.voucherUsed = isUsed;
-        // Kiểm tra nếu voucher đã hết hạn
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const endDate = new Date(this.voucherEdit.ngayKetThuc);
-        endDate.setHours(23, 59, 59, 999)
-        const isExpired = endDate < today;
-        // Nếu voucher đã hết hạn, không cho phép sửa
-        if (isExpired) {
-          this.checkNgay = true;
-        }
-        else {
-          // Nếu voucher không hết hạn, cho phép sửa lại
-          this.checkNgay = false;
-        }
-        this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
-        this.showModalEdit = true;
-        // Cập nhật lại readonly cho các trường khi gia hạn
-       
-        
+      this.voucherService.checkVoucherUsed(voucherId).subscribe((isUsed) => {
+        this.voucherService.getVoucherDetail(voucherId).subscribe((voucher) => {
+          this.voucherEdit = { ...voucher };
+          this.voucherUsed = isUsed;
+          // Kiểm tra nếu voucher đã hết hạn
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const endDate = new Date(this.voucherEdit.ngayKetThuc);
+          endDate.setHours(23, 59, 59, 999)
+          const isExpired = endDate < today;
+          // Nếu voucher đã hết hạn, không cho phép sửa
+          if (isExpired) {
+            this.checkNgay = true;
+          }
+          else {
+            // Nếu voucher không hết hạn, cho phép sửa lại
+            this.checkNgay = false;
+          }
+          this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
+          this.showModalEdit = true;
+          // Cập nhật lại readonly cho các trường khi gia hạn
+
+
+        });
       });
-    });
     } else {
       alert('Bạn không có quyền truy cập chức năng này.');
     }
-   
+
   }
 
   onNgayKetThucChange() {
     const today = new Date();
-    today.setHours(0, 0, 0,0); // Chốt giờ hôm nay
-  
+    today.setHours(0, 0, 0, 0); // Chốt giờ hôm nay
+
     const endDate = new Date(this.voucherEdit.ngayKetThuc);
     endDate.setHours(23, 59, 59, 999);
-  
+
     if (endDate > today) {
       // Nếu đã gia hạn: cho phép sửa các trường
       this.checkNgay = false;
@@ -112,7 +112,7 @@ export class VoucherComponent implements OnInit {
       this.checkNgay = true;
     }
   }
-  
+
   onHinhThucGiamChange2() {
     console.log(this.voucherEdit.hinhThucGiam);
     this.isGiamToiDaDisabled = this.voucherEdit.hinhThucGiam === true;
@@ -286,11 +286,15 @@ export class VoucherComponent implements OnInit {
     }
     else {
       const currentDate = new Date();
-      const startDate = new Date(this.voucher.ngayBatDau);
+      const startDate = new Date(`${this.voucher.ngayBatDau}T23:58:59.999`);
       const endDate = new Date(`${this.voucher.ngayKetThuc}T23:59:59.999`);
 
       if (startDate > endDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc phải sau ngày bắt đầu!';
+      }
+
+      if (startDate < currentDate) {
+        this.errors.ngayBatDau = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!';
       }
 
       if (endDate < currentDate) {
@@ -419,11 +423,8 @@ export class VoucherComponent implements OnInit {
     }
     else {
       const currentDate = new Date();
-      const startDate = new Date(this.voucherEdit.ngayBatDau);
+      const startDate = new Date(`${this.voucherEdit.ngayBatDau}T23:58:59.999`);
       const endDate = new Date(`${this.voucherEdit.ngayKetThuc}T23:59:59.999`);
-
-
-      startDate.setHours(0, 0, 0, 0);
       endDate.setHours(23, 59, 59, 999);
 
       if (startDate > endDate) {
@@ -432,6 +433,14 @@ export class VoucherComponent implements OnInit {
 
       else if (endDate < currentDate && this.voucherEdit.trangThai == true) {
         this.errors.trangThai = 'Khuyến mãi đã hết hạn, trạng thái phải là "Không hoạt động".';
+      }
+
+      else if (startDate < currentDate) {
+        this.errors.ngayBatDau = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!';
+      }
+
+      else if (endDate < currentDate) {
+        this.errors.ngayKetThuc = 'Ngày kết thúc phải lớn hơn ngày hiện tại!';
       }
     }
     if (this.voucherEdit.trangThai === null || this.voucherEdit.trangThai === undefined) {

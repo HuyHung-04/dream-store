@@ -34,13 +34,21 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
         spct.size.ten,
         spct.mauSac.id,
         spct.mauSac.ten,
-        khuyenMai.ten, 
         CASE
-            WHEN khuyenMai IS NOT NULL
-            THEN CAST(spct.gia - (spct.gia * khuyenMai.giaTriGiam / 100) AS double)
-            ELSE CAST(spct.gia AS double)
-        END
-        ) 
+              WHEN khuyenMai IS NOT NULL
+                   AND khuyenMai.trangThai = 1
+                   AND khuyenMai.ngayKetThuc >= CURRENT_DATE
+              THEN khuyenMai.ten
+              ELSE NULL
+          END,
+          CASE
+              WHEN khuyenMai IS NOT NULL
+                   AND khuyenMai.trangThai = 1
+                   AND khuyenMai.ngayKetThuc >= CURRENT_DATE
+              THEN CAST(spct.gia - (spct.gia * khuyenMai.giaTriGiam / 100) AS double)
+              ELSE CAST(spct.gia AS double)
+          END
+          )
     from SanPhamChiTiet spct 
     LEFT JOIN spct.khuyenMai khuyenMai
     WHERE spct.sanPham.id = :idSanPham 
@@ -108,7 +116,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     JOIN spct.sanPham sp
     JOIN spct.mauSac ms
     JOIN spct.size sz
-    WHERE spct.trangThai = 1
+    WHERE spct.trangThai = 1 AND spct.soLuong > 0
     AND (:tenSanPham IS NULL OR LOWER(sp.ten) LIKE LOWER(CONCAT('%', :tenSanPham, '%')))
     ORDER BY spct.id DESC """)
     List<SanPhamChiTietDto> findAvailableProducts(@Param("tenSanPham") String tenSanPham, @Param("khuyenMaiId") Integer khuyenMaiId);
@@ -170,4 +178,9 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
     //     check trùng spct khi thêm cùng màu và size
     Optional<SanPhamChiTiet> findBySanPhamAndSizeAndMauSac(SanPham sanPham, Size size, MauSac mauSac);
+
+//    @Modifying
+//    @Transactional
+//    @Query("UPDATE SanPhamChiTiet spct SET spct.khuyenMai = null WHERE spct.khuyenMai.id = :khuyenMaiId")
+//    void removeKhuyenMaiFromSanPhamChiTiet(@Param("khuyenMaiId") Integer khuyenMaiId);
 }

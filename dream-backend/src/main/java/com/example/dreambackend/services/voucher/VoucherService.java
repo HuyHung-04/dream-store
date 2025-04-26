@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class VoucherService implements IVoucherService {
     VoucherRepository voucherRepository;
     @Override
     public Page<Voucher> getAllVoucherPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<Voucher> vouchers = voucherRepository.findAll(pageable);
         // Cập nhật trạng thái nếu ngày kết thúc đã qua
         vouchers.getContent().forEach(this::checkAndUpdateStatus);

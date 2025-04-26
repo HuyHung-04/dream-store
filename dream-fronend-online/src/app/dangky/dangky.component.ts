@@ -72,14 +72,14 @@ export class DangkyComponent implements OnInit {
     this.dangKyService.getKhachHangByEmail(this.khachhang.email).subscribe(
       (existingKhachHang) => {
         if (existingKhachHang) {
-          this.errors.email ='Email đã tồn tại, vui lòng chọn email khác!';
+          alert('Email đã tồn tại, vui lòng chọn email khác!');
           return;
         } else {
           // Nếu email chưa tồn tại, tiến hành thêm khách hàng
           this.dangKyService.addKhachHang(this.khachhang).subscribe(
             (response) => {
               alert('Đăng ký tài khoản thành công!');
-              this.router.navigate(['']);
+              this.router.navigate(['/dangnhap']);
               this.resetForm();
             },
             (error) => {
@@ -104,42 +104,74 @@ export class DangkyComponent implements OnInit {
   }
 
   validateForm(): boolean {
-    this.errors = {};
-  
+    // Kiểm tra tên khách hàng
+    const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/u;
     if (!this.khachhang.ten.trim()) {
-      this.errors.ten = 'Tên khách hàng không được để trống!';
+      alert('Tên khách hàng không được để trống!');
+      return false;
     }
+    if (!nameRegex.test(this.khachhang.ten)) {
+      alert('Tên khách hàng không được chứa số hoặc ký tự đặc biệt!');
+      return false;
+    }
+    if (this.khachhang.ten.length > 30) {
+      alert('Tên khách hàng phải có độ dài không quá 30 ký tự!');
+      return false;
+    }
+
   
-    // Validate số điện thoại
+    // Kiểm tra số điện thoại
     const phoneRegex = /^(\+?\d{1,3}[- ]?)?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/;
+    const phone = /^\d{10}$/;
     if (!this.khachhang.soDienThoai.trim()) {
-      this.errors.soDienThoai = 'Số điện thoại khách hàng không được để trống!';
-    } else if (!phoneRegex.test(this.khachhang.soDienThoai)) {
-      this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
+      alert('Số điện thoại khách hàng không được để trống!');
+      return false;
+    }
+    if (!phone.test(this.khachhang.soDienThoai)) {
+      alert('Số điện thoại phải đúng 10 chữ số!');
+      return false;
+    }
+    if (!phoneRegex.test(this.khachhang.soDienThoai)) {
+      alert('Số điện thoại không hợp lệ!');
+      return false;
     }
   
-    // Kiểm tra email không trống và đúng định dạng @gmail.com
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-  if (!this.khachhang.email.trim()) {
-    this.errors.email = 'Email không được để trống!';
-  } else if (!emailRegex.test(this.khachhang.email)) {
-    this.errors.email = 'Email phải có định dạng @gmail.com!';
-  }
+    // Kiểm tra email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!this.khachhang.email.trim()) {
+      alert('Email không được để trống!');
+      return false;
+    }
+    if (!emailRegex.test(this.khachhang.email)) {
+      alert('Email phải có định dạng @gmail.com!');
+      return false;
+    }
+    if (this.khachhang.email.length > 255) {
+      alert('Email phải có độ dài từ không quá 255 ký tự!');
+      return false;
+    }
   
-    // Kiểm tra mật khẩu và xác nhận mật khẩu
+    // Kiểm tra mật khẩu
     if (!this.khachhang.matKhau.trim()) {
-      this.errors.matKhau = 'Mật khẩu không được để trống!';
+      alert('Mật khẩu không được để trống!');
+      return false;
     }
+    if (this.khachhang.matKhau.length < 6 || this.khachhang.matKhau.length > 30) {
+      alert('Mật khẩu phải có độ dài từ 6 đến 30 ký tự!');
+      return false;
+    }
+  
+    // Kiểm tra xác nhận mật khẩu
     if (!this.xacNhanMatKhau.trim()) {
-      this.errors.xacNhanMatKhau = 'Xác nhận mật khẩu không được để trống!';
+      alert('Xác nhận mật khẩu không được để trống!');
+      return false;
     }
     if (this.xacNhanMatKhau !== this.khachhang.matKhau) {
-      this.errors.xacNhanMatKhau = 'Xác nhận mật khẩu không đúng!';
+      alert('Xác nhận mật khẩu không đúng!');
+      return false;
     }
   
-
-  console.log(this.errors)
-    return Object.keys(this.errors).length === 0;
+    return true;
   }
    
   

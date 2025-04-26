@@ -23,7 +23,6 @@
     <table class="product-table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Mã</th>
           <th>Tên</th>
           <th>Giới tính</th>
@@ -37,8 +36,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let khachhang of filteredKhachHangs,">
-          <td>{{ khachhang.id }}</td>
+        <tr *ngFor="let khachhang of filteredKhachHangs">
           <td>{{ khachhang.ma }}</td>
           <td>{{ khachhang.ten }}</td>
           <td>{{ khachhang.gioiTinh ? 'Nam' : 'Nữ' }}</td>

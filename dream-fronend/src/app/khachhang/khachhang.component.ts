@@ -102,16 +102,26 @@ export class KhachhangComponent implements OnInit {
   validateForm(): boolean {
     this.errors = {};
 
-    
-
+    const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/u;
     if (!this.khachhang.ten.trim()) {
       this.errors.ten = 'Tên khách hàng không được để trống!';
+    }else 
+    if (!nameRegex.test(this.khachhang.ten)) {
+      this.errors.ten = 'Tên khách hàng không được chứa số hoặc ký tự đặc biệt!';
+    }else
+    if (this.khachhang.ten.length > 30) {
+      this.errors.ten = 'Tên khách hàng phải có độ dài không quá 30 ký tự!';
     }
       // Validate số điện thoại
   const phoneRegex = /^(\+?\d{1,3}[- ]?)?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/;
+  const phone = /^\d{10}$/;
   if (!this.khachhang.soDienThoai.trim()) {
     this.errors.soDienThoai = 'Số điện thoại khách hàng không được để trống!';
-  } else if (!phoneRegex.test(this.khachhang.soDienThoai)) {
+  }else
+  if (!phone.test(this.khachhang.soDienThoai)) {
+    this.errors.soDienThoai = 'Số điện thoại phải đúng 10 chữ số!';
+  }else
+   if (!phoneRegex.test(this.khachhang.soDienThoai)) {
     this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
   }
 
@@ -120,6 +130,8 @@ export class KhachhangComponent implements OnInit {
     this.errors.email = 'Email không được để trống!';
   } else if (!emailRegex.test(this.khachhang.email)) {
     this.errors.email = 'Email phải có định dạng @gmail.com!';
+  }else if (this.khachhang.email.length > 255) {
+    this.errors.email = 'Email phải có độ dài từ không quá 255 ký tự!';
   }else {
     const isDuplicate = this.khachhangs.some(khachhang => khachhang.email == this.khachhang.email);
     if (isDuplicate) {
@@ -128,8 +140,10 @@ export class KhachhangComponent implements OnInit {
   }
     if (!this.khachhang.matKhau.trim()) {
       this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
-    }
-
+    }else
+    if (this.khachhang.matKhau.length < 6 || this.khachhang.matKhau.length > 30) {
+      this.errors.matKhau = 'Mật khẩu phải có độ dài từ 6 đến 30 ký tự!';
+    }else
     
     if (this.khachhang.trangThai === null || this.khachhang.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';
@@ -174,15 +188,26 @@ export class KhachhangComponent implements OnInit {
     this.errors = {};
 
     
-
+    const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/u;
     if (!this.khachHangEdit.ten.trim()) {
       this.errors.ten = 'Tên khách hàng không được để trống!';
+    }else
+    if (!nameRegex.test(this.khachHangEdit.ten)) {
+      this.errors.ten = 'Tên khách hàng không được chứa số hoặc ký tự đặc biệt!';
+    }else
+    if (this.khachHangEdit.ten.length > 30) {
+      this.errors.ten = 'Tên khách hàng phải có độ dài không quá 30 ký tự!';
     }
       // Validate số điện thoại
   const phoneRegex = /^(\+?\d{1,3}[- ]?)?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$/;
+  const phone = /^\d{10}$/;
   if (!this.khachHangEdit.soDienThoai.trim()) {
     this.errors.soDienThoai = 'Số điện thoại khách hàng không được để trống!';
-  } else if (!phoneRegex.test(this.khachHangEdit.soDienThoai)) {
+  } else
+  if (!phone.test(this.khachHangEdit.soDienThoai)) {
+    this.errors.soDienThoai = 'Số điện thoại phải đúng 10 chữ số!';
+  }else
+  if (!phoneRegex.test(this.khachHangEdit.soDienThoai)) {
     this.errors.soDienThoai = 'Số điện thoại không hợp lệ!';
   }else {
     const isDuplicate = this.khachhangs.some(khachhang => khachhang.email == this.khachhang.email);
@@ -194,11 +219,16 @@ export class KhachhangComponent implements OnInit {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
   if (!this.khachHangEdit.email.trim()) {
     this.errors.email = 'Email không được để trống!';
-  } else if (!emailRegex.test(this.khachHangEdit.email)) {
+  } else if (this.khachHangEdit.email.length > 255) {
+    this.errors.email = 'Email phải có độ dài từ không quá 255 ký tự!';
+  }else if (!emailRegex.test(this.khachHangEdit.email)) {
     this.errors.email = 'Email phải có định dạng @gmail.com!';
   }
     if (!this.khachHangEdit.matKhau.trim()) {
       this.errors.matKhau = 'Mật khẩu khách hàng không được để trống!';
+    }else
+    if (this.khachHangEdit.matKhau.length < 6 || this.khachHangEdit.matKhau.length > 30) {
+      this.errors.matKhau = 'Mật khẩu phải có độ dài từ 6 đến 30 ký tự!';
     }
 
     

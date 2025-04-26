@@ -163,7 +163,7 @@ export class NhanvienComponent implements OnInit {
       }
     );
   }
-   // 🟢 Xóa lỗi của form khi nhập lại
+   //  Xóa lỗi của form khi nhập lại
   clearError(field: string): void {
     if (this.errors[field]) {
       delete this.errors[field];
