@@ -311,22 +311,15 @@ export class VoucherComponent implements OnInit {
 
   searchVoucherTheoTen(): void {
     if (this.searchText.trim() === '') {
-      alert('Vui lòng nhập tên voucher để tìm kiếm.');
-      return;
+      this.loadPage(0)
+      return
     }
-
-    this.voucherService.searchVoucherTheoTen(this.searchText).subscribe(
+    this.voucherService.searchVoucherByTen(this.searchText).subscribe(
       (data) => {
-        if (data.length > 0) {
-          this.selectedVoucher = data[0];
-          this.showModalSearch = true;
-        } else {
-          alert('Không tìm thấy voucher phù hợp.');
-        }
+        this.vouchers = data
       },
       (error) => {
-        console.error('Lỗi khi tìm kiếm voucher:', error);
-        alert('Đã xảy ra lỗi khi tìm kiếm.');
+
       }
     );
   }
@@ -493,7 +486,6 @@ export class VoucherComponent implements OnInit {
       this.totalPages = response.totalPages;
       this.currentPage = page;
       this.tinhSoTrang();
-      this.searchTenVoucher();
     });
   }
 
@@ -511,7 +503,6 @@ export class VoucherComponent implements OnInit {
       this.totalPages = response.totalPages;
       this.currentPage = page;
       this.tinhSoTrang();
-      this.searchTenVoucher();
     });
   }
   Page(page: number): void {
@@ -526,17 +517,6 @@ export class VoucherComponent implements OnInit {
 
     }
   }
-  searchTenVoucher() {
-    if (this.searchText.trim()) {
-      this.tenVouchers = this.vouchers.filter((voucher) =>
-        voucher.ten.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    } else {
-      this.tenVouchers = [...this.vouchers]; // Hiển thị tất cả nếu không tìm kiếm
-    }
-  }
-
-
 
 
   tinhSoTrang(): void {

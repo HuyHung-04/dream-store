@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 @Injectable({
@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 export class NhanVienService {
   private apiUrl = 'http://localhost:8080/api'; // URL backend
   constructor(private http: HttpClient) {}
-  // 🟢 Nhân viên API
+ 
   // Lấy danh sách nhân viên có phân trang
   getNhanVien(page: number, size: number, trangThai?: number, idNhanVien?: number): Observable<any> {
     let url = `${this.apiUrl}/nhan-vien/hien-thi?page=${page}&size=${size}`;
@@ -60,27 +60,29 @@ export class NhanVienService {
     return this.http.post<any>(`${this.apiUrl}/nhan-vien/update`, nhanVien);
   }
 
-  // 🔎 Tìm kiếm nhân viên theo tên
-  searchNhanVienByName(name: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/nhan-vien/search?ten=${name}`);
+  //  Tìm kiếm nhân viên theo tên
+  searchNhanVienByTen(ten: string): Observable<any> {
+    const params = new HttpParams().set('ten', ten);
+    return this.http.get<any>(`${this.apiUrl}/nhan-vien/search`, { params });
   }
-  // 🟢 Vai trò API
+ 
+  //  Vai trò API
 
   // Lấy danh sách tất cả vai trò
   getVaiTros(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/vai-tro/hien-thi`);
   }
-  // ✅ Thêm vai trò
+  //  Thêm vai trò
   addVaiTro(vaiTro: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/vai-tro/add`, vaiTro);
   }
 
-  // ✅ Cập nhật vai trò
+  //  Cập nhật vai trò
   updateVaiTro(vaiTro: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/vai-tro/update`, vaiTro);
   }
 
-  // 🖼 API lấy ảnh nhân viên
+  //  API lấy ảnh nhân viên
   getNhanVienImage(filename: string): string {
   return `${this.apiUrl}/nhan-vien/image/${filename}`;
   }

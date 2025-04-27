@@ -306,27 +306,7 @@ export class NhanvienComponent implements OnInit {
   
     return Object.keys(this.errors).length === 0;
   }  
-  searchAndShowSearch(): void {
-    if (this.searchText.trim() === '') {
-      alert('Vui lòng nhập tên nhân viên để tìm kiếm.');
-      return;
-    }
-    // Gọi API tìm kiếm nhân viên theo tên
-    this.nhanVienService.searchNhanVienByName(this.searchText).subscribe(
-      (data) => {
-        if (data.length > 0) {
-          this.selectedNhanVien = data[0]; // Hiển thị nhân viên đầu tiên trong kết quả
-          this.showModalSearch = true; // Mở modal chi tiết nhân viên
-        } else {
-          alert('Không tìm thấy nhân viên phù hợp.');
-        }
-      },
-      (error) => {
-        console.error('Lỗi khi tìm kiếm nhân viên:', error);
-        alert('Đã xảy ra lỗi khi tìm kiếm.');
-      }
-    );
-  }
+
   validateEditForm(): boolean {
     this.errors = {};
   
@@ -531,7 +511,7 @@ loadPage(page: number): void {
       this.totalPages = response.totalPages;
       this.currentPage = page;
       this.updateVisiblePages();
-      this.filterNhanViens();
+
     },
     (error) => {
       console.error('❌ Lỗi khi tải danh sách nhân viên:', error);
@@ -549,36 +529,21 @@ filterByTrangThai(trangThai: number | null): void {
     this.loadPage(page);
   }
 }
-  filterNhanViens() {
-    if (this.searchText.trim()) {
-      this.filteredNhanViens = this.nhanViens.filter((nhanVien) =>
-        nhanVien.ten.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    } else {
-      this.filteredNhanViens = [...this.nhanViens]; // Hiển thị tất cả nếu không có tìm kiếm
-    }
-  }
-  //  Tìm kiếm nhân viên
-  searchNhanVien(): void {
-    if (this.searchText.trim() === '') {
-      alert('Vui lòng nhập tên nhân viên để tìm kiếm.');
-      return;
-    }
 
-    this.nhanVienService.searchNhanVienByName(this.searchText).subscribe(
-      (data) => {
-        if (data.length > 0) {
-          this.selectedNhanVien = data[0];
-          this.showModalSearch = true;
-        } else {
-          alert('Không tìm thấy nhân viên phù hợp.');
-        }
-      },
-      (error) => {
-        console.error('Lỗi khi tìm kiếm nhân viên:', error);
-      }
-    );
+searchNhanVienTheoTen(): void {
+  if (this.searchText.trim() === '') {
+    this.loadPage(0)
+    return
   }
+  this.nhanVienService.searchNhanVienByTen(this.searchText).subscribe(
+    (data) => {
+      this.nhanViens = data
+    },
+    (error) => {
+
+    }
+  );
+}
   goToPreviousPage(): void {
     if (this.currentPage > 0) {
       this.loadPage(this.currentPage - 1);

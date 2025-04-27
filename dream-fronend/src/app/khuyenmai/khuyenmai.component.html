@@ -11,7 +11,7 @@
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm khuyến mãi</button>
   <div class="search-container">
     <p>Tìm Kiếm:</p>
-    <input type="text" (input)="searchTenVoucher()" class="input search-input"
+    <input type="text" (input)="searchKhuyenMaiTheoTen()" class="input search-input"
       placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
   </div>
 </div>
@@ -33,7 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let khuyenmai of filteredKhuyenMais">
+        <tr *ngFor="let khuyenmai of khuyenmais">
           <td>{{ khuyenmai.ma }}</td>
           <td>{{ khuyenmai.ten }}</td>
           <td>{{ khuyenmai.giaTriGiam }} {{ khuyenmai.hinhThucGiam ? 'VND' : '%' }} </td>

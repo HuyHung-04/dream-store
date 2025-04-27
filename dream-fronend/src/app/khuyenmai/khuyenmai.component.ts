@@ -272,25 +272,21 @@ export class KhuyenmaiComponent implements OnInit {
     return Object.keys(this.errors).length === 0;
   }
 
-  searchVoucherTheoTen(): void {
+  searchKhuyenMaiTheoTen(): void {
     if (this.searchText.trim() === '') {
-      alert('Vui lòng nhập tên khuyến mãi để tìm kiếm.');
-      return;
+      this.loadPage(0)
+      return
     }
-
-
-    this.khuyenmaiService.timKhuyenMaiTheoTen(this.searchText).subscribe(
+    if (this.searchText.trim() === '') {
+      this.loadPage(0)
+      return
+    }
+    this.khuyenmaiService.searchKhuyenMaiByTen(this.searchText).subscribe(
       (data) => {
-        if (data.length > 0) {
-          this.selectedKhuyenMai = data[0];
-          this.showModalSearch = true;
-        } else {
-          alert('Không tìm thấy khuyến mãi phù hợp.');
-        }
+        this.khuyenmais = data
       },
       (error) => {
-        console.error('Lỗi khi tìm kiếm khuyến mãi:', error);
-        alert('Đã xảy ra lỗi khi tìm kiếm.');
+
       }
     );
   }
@@ -396,7 +392,6 @@ export class KhuyenmaiComponent implements OnInit {
       this.totalPages = response.totalPages;
       this.currentPage = page;
       this.tinhSoTrang();
-      this.searchTenVoucher();
     });
   }
   loadData(): void {
@@ -413,19 +408,9 @@ export class KhuyenmaiComponent implements OnInit {
       this.totalPages = response.totalPages;
       this.currentPage = page;
       this.tinhSoTrang();
-      this.searchTenVoucher();
     });
   }
 
-  searchTenVoucher() {
-    if (this.searchText.trim()) {
-      this.filteredKhuyenMais = this.khuyenmais.filter((khuyenmai) =>
-        khuyenmai.ten.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    } else {
-      this.filteredKhuyenMais = [...this.khuyenmais];
-    }
-  }
 
   Page(page: number): void {
     if (page >= 0 && page < this.totalPages) {

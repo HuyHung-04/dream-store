@@ -151,35 +151,20 @@ export class KhachhangComponent implements OnInit {
 
     return Object.keys(this.errors).length === 0;
   }
-  filterKhachHangs() {
-    if (this.searchText.trim()) {
-      this.filteredKhachHangs = this.khachhangs.filter((khachhang) =>
-        khachhang.ten.toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    } else {
-      this.filteredKhachHangs = [...this.khachhangs]; // Hiển thị tất cả nếu không tìm kiếm
-    }
-  }
 
-  searchAndShowSearch(): void {
+
+  searchKhachHangtheoTen(): void {
     if (this.searchText.trim() === '') {
-      alert('Vui lòng nhập tên khách hàng để tìm kiếm.');
-      return;
+      this.loadPage(0)
+      return
     }
-
-    
-    this.khachHangService.searchKhachHangByName(this.searchText).subscribe(
+    this.khachHangService.searchKhachHangByTen(this.searchText).subscribe(
       (data) => {
-        if (data.length > 0) {
-          this.selectedKhachHang = data[0]; 
-          this.showModalSearch = true; // Mở modal chi tiết
-        } else {
-          alert('Không tìm thấy khách hàng phù hợp.');
-        }
+        this.khachhangs = data
+
       },
       (error) => {
-        console.error('Lỗi khi tìm kiếm khách hàng:', error);
-        alert('Đã xảy ra lỗi khi tìm kiếm.');
+
       }
     );
   }
@@ -269,7 +254,7 @@ export class KhachhangComponent implements OnInit {
       this.totalPages = response.totalPages;
       this.currentPage = page;
       this.updateVisiblePages();
-      this.filterKhachHangs();
+
     });
   }
   loadPage(page: number): void {
@@ -278,12 +263,12 @@ export class KhachhangComponent implements OnInit {
       this.totalPages = response.totalPages; // Tổng số trang
       this.currentPage = page; // Cập nhật trang hiện tại
       this.updateVisiblePages();
-      this.filterKhachHangs();
+
     });
   }
   loadData(): void {
     console.log(this.selectedTrangThai);
-    console.log(this.filterKhachHangs());
+ 
     if (this.selectedTrangThai !== 3) {
       this.loadKhachHangByTrangThai(this.selectedTrangThai, 0);
     } else {

@@ -11,7 +11,7 @@
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Nhân Viên</button>
   <div class="search-container">
     <p>Tìm Kiếm:</p>
-    <input type="text" (input)="filterNhanViens()" class="input search-input"
+    <input type="text" (input)="searchNhanVienTheoTen()" class="input search-input"
       placeholder="Nhập tên nhân viên cần tìm..." [(ngModel)]="searchText" />
   </div>
 </div>
@@ -37,7 +37,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let nhanVien of filteredNhanViens">
+        <tr *ngFor="let nhanVien of nhanViens">
           <td>{{ nhanVien.ma }}</td>
           <td>{{ nhanVien.ten }}</td>
           <td>{{ nhanVien.gioiTinh ? 'Nam' : 'Nữ' }}</td>

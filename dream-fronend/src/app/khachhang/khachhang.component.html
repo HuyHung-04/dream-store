@@ -12,8 +12,8 @@
   <button (click)="openModal()" class="btn btn-primary add-product-button">Thêm Khách Hàng</button>
   <div class="search-container">
     <p>Tìm Kiếm:</p>
-    <input type="text" (input)="filterKhachHangs()" class="input search-input"
-      placeholder="Nhập tên khuyến mãi cần tìm..." [(ngModel)]="searchText" />
+    <input type="text" (input)="searchKhachHangtheoTen()" class="input search-input"
+      placeholder="Nhập tên khách hàng cần tìm..." [(ngModel)]="searchText" />
   </div>
   
 </div>
@@ -36,7 +36,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let khachhang of filteredKhachHangs">
+        <tr *ngFor="let khachhang of khachhangs">
           <td>{{ khachhang.ma }}</td>
           <td>{{ khachhang.ten }}</td>
           <td>{{ khachhang.gioiTinh ? 'Nam' : 'Nữ' }}</td>
