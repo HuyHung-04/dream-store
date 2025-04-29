@@ -526,7 +526,7 @@ export class KhuyenmaiComponent implements OnInit {
         break;
       case 'ten':
         if (isVoucherExpired) {
-          alert('Khuyến mãi đã hết hạn, không thể sửa tên voucher!');
+          alert('Khuyến mãi đã hết hạn, không thể sửa tên khuyến mãi!');
         }
         break;
       case 'giaTriGiam':
