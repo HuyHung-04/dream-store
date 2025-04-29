@@ -171,7 +171,7 @@
 
   <div class="form-group">
     <label class="input-label" for="voucher">Chọn voucher:</label>
-    <select id="voucher" [(ngModel)]="chonVoucher" (change)="updatedTamTinh()" class="selectoption">
+    <select id="voucher" [(ngModel)]="chonVoucher" (change)="getTongTienThanhToan()" class="selectoption">
       <option *ngFor="let voucher of vouchers" [ngValue]="voucher">
         {{ voucher.ten }} VND
       </option>

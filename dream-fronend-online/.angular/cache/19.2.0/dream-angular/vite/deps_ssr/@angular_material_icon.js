@@ -1,13 +1,13 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
+  MatCommonModule
+} from "./chunk-3OF4YA7J.js";
+import {
   DomSanitizer
 } from "./chunk-XGZAUTB4.js";
 import {
   HttpClient
 } from "./chunk-2J6S3R7I.js";
-import {
-  MatCommonModule
-} from "./chunk-4G7RPPEY.js";
 import {
   DOCUMENT
 } from "./chunk-LWORY74U.js";

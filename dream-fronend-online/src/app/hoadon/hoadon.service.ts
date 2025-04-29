@@ -114,28 +114,29 @@ export class HoadonService {
     return this.http.get<any>(`${this.apiHoaDon}/gio-hang-hoa-don/${idKhachHang}`);
   }
 
-  // Gọi API tính tổng tiền cho giỏ hàng của khách hàng
-  getTamTinh(idKhachHang: number): Observable<number> {
-    return this.http.get<number>(`${this.apiHoaDon}/tinh-tong-tien?idKhachHang=${idKhachHang}`);
-  }
+  // // Gọi API tính tổng tiền cho giỏ hàng của khách hàng
+  // getTamTinh(idKhachHang: number): Observable<number> {
+  //   return this.http.get<number>(`${this.apiHoaDon}/tinh-tong-tien?idKhachHang=${idKhachHang}`);
+  // }
+
   // Gọi API để lấy danh sách voucher hợp lệ theo ID khách hàng
   getVouchers(tongTien: number): Observable<any> {
     return this.http.get<any>(`${this.apiHoaDon}/vouchers/${tongTien}`);
   }
 
-  // Phương thức gọi API để tính tổng tiền thanh toán sau khi áp dụng voucher
-  getTongTienThanhToan(idKhachHang: number, idVoucher: number, shippingFee: number | null): Observable<number> {
-    let params = new HttpParams()
-      .set('idKhachHang', idKhachHang.toString())  // ✅ Đúng: Đảm bảo gửi trong URL
-      .set('voucherId', idVoucher.toString())
-      .set('shippingFee', (shippingFee ?? 0).toString());
+  // // Phương thức gọi API để tính tổng tiền thanh toán sau khi áp dụng voucher
+  // getTongTienThanhToan(idKhachHang: number, idVoucher: number, shippingFee: number | null): Observable<number> {
+  //   let params = new HttpParams()
+  //     .set('idKhachHang', idKhachHang.toString())  // ✅ Đúng: Đảm bảo gửi trong URL
+  //     .set('voucherId', idVoucher.toString())
+  //     .set('shippingFee', (shippingFee ?? 0).toString());
 
-    return this.http.post<number>(
-      `${this.apiHoaDon}/tong-tien-thanh-toan`,
-      {},
-      { params }
-    );
-  }
+  //   return this.http.post<number>(
+  //     `${this.apiHoaDon}/tong-tien-thanh-toan`,
+  //     {},
+  //     { params }
+  //   );
+  // }
 
   //phương thức tính tiền ship
   tinhTienShip(

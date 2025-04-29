@@ -56,7 +56,7 @@ export class HoadonComponent {
   TongTienTamTinh: number = 0;
   chonVoucher: Voucher | null = null;
   errorMessage: string = '';
-  shippingFee: number | null = null;
+  shippingFee: number = 0;
   chonPhuongThucThanhToan: number | null = null;
   phuongThucThanhToan: any[] = [];
   vouchers: any[] = []; // Danh sách voucher
@@ -94,7 +94,7 @@ export class HoadonComponent {
       this.getDiaChiKhachHang();
       this.loadTinhThanh();
       this.getChiTietGioHangSauThanhToan();
-      this.getTamTinh();
+      // this.getTamTinh();
       this.getVoucherIdAndTen();
     } else {
       alert("Bạn chưa đăng nhập!");
@@ -202,6 +202,11 @@ export class HoadonComponent {
           alert('Giỏ hàng của bạn đang trống. Vui lòng chọn sản phẩm trước khi thanh toán!');
           this.router.navigate(['/banhang']);
         }
+        // Tính tổng tạm tính: số lượng × đơn giá
+        this.chiTietGioHang.forEach((item: any) => {
+          this.TongTienTamTinh += item.soLuong * item.donGia;
+        });
+        this.getVoucherIdAndTen()
         this.cdRef.detectChanges();
       },
       (error) => {
@@ -322,36 +327,36 @@ export class HoadonComponent {
   }
 
 
-  // Lấy tổng tiền tạm tính từ giỏ hàng
-  getTamTinh() {
-    this.hoadonService.getTamTinh(this.idKhachHang).subscribe(
-      (response: number) => {
-        this.TongTienTamTinh = response;
-        this.getVoucherIdAndTen();
-        this.tongTienKhongCoVoucher()
-      },
-      (error) => {
-        console.error("Lỗi khi lấy tổng tiền giỏ hàng", error);
-      }
-    );
-  }
+  // // Lấy tổng tiền tạm tính từ giỏ hàng
+  // getTamTinh() {
+  //   this.hoadonService.getTamTinh(this.idKhachHang).subscribe(
+  //     (response: number) => {
+  //       this.TongTienTamTinh = response;
+  //       this.getVoucherIdAndTen();
+  //       this.tongTienKhongCoVoucher()
+  //     },
+  //     (error) => {
+  //       console.error("Lỗi khi lấy tổng tiền giỏ hàng", error);
+  //     }
+  //   );
+  // }
 
-  // Cập nhật tổng tiền thanh toán sau khi áp dụng voucher
-  updatedTamTinh(): void {
-    if (this.chonVoucher) {
-      this.hoadonService.getTongTienThanhToan(this.idKhachHang, this.chonVoucher.id, this.shippingFee ?? 0).subscribe(
-        (response: number) => {
-          this.tongTienThanhToan = response;
-        },
-        (error) => {
-          console.error("Lỗi khi tính tổng tiền", error);
-        }
-      );
-    } else {
-      console.warn("Không có voucher nào được chọn!");
-      this.tongTienThanhToan = this.TongTienTamTinh;
-    }
-  }
+  // // Cập nhật tổng tiền thanh toán sau khi áp dụng voucher
+  // updatedTamTinh(): void {
+  //   if (this.chonVoucher) {
+  //     this.hoadonService.getTongTienThanhToan(this.idKhachHang, this.chonVoucher.id, this.shippingFee ?? 0).subscribe(
+  //       (response: number) => {
+  //         this.tongTienThanhToan = response;
+  //       },
+  //       (error) => {
+  //         console.error("Lỗi khi tính tổng tiền", error);
+  //       }
+  //     );
+  //   } else {
+  //     console.warn("Không có voucher nào được chọn!");
+  //     this.tongTienThanhToan = this.TongTienTamTinh;
+  //   }
+  // }
 
   // Phương thức gửi yêu cầu tạo thanh toán
   createThanhToan(): void {
@@ -364,7 +369,7 @@ export class HoadonComponent {
       chonSdtNguoiNhan: this.chonSdtNguoiNhan,
       chonTenNguoiNhan: this.chonTenNguoiNhan,
       fullDiaChi: this.fullDiaChi,
-      shippingFee: this.shippingFee ?? 0
+      shippingFee: this.shippingFee
     };
     localStorage.setItem('paymentData', JSON.stringify(paymentData));
     if (this.chonPhuongThucThanhToan == 4) {
@@ -622,7 +627,7 @@ export class HoadonComponent {
       this.chonSdtNguoiNhan,
       this.chonTenNguoiNhan,
       this.fullDiaChi,
-      this.shippingFee ?? 0
+      this.shippingFee
     ).subscribe(
       (response) => {
         alert('Đơn hàng đã được tạo thành công!');
@@ -701,6 +706,44 @@ export class HoadonComponent {
       return `Giảm ${v.giaTriGiam}% - ${giaTriGiam.toLocaleString()} VND`;
     }
   }
+
+  // Tính tổng tiền thanh toán
+  getTongTienThanhToan(): void {
+
+    let giaTriGiam = 0;
+
+    // Nếu có voucher
+    if (this.chonVoucher) {
+      const v = this.chonVoucher;
+
+      if (v.hinhThucGiam) {
+        // Giảm trực tiếp tiền
+        giaTriGiam = v.giaTriGiam;
+      } else {
+        // Giảm theo %
+        giaTriGiam = (this.TongTienTamTinh * v.giaTriGiam) / 100;
+
+        // Kiểm tra giảm tối đa
+        if (v.giamToiDa && giaTriGiam > v.giamToiDa) {
+          giaTriGiam = v.giamToiDa;
+        }
+      }
+    }
+
+    // Tổng tiền = tạm tính - giảm + phí ship
+    this.tongTienThanhToan = this.TongTienTamTinh - giaTriGiam + this.shippingFee;
+
+    // Làm tròn tổng tiền thanh toán
+    this.tongTienThanhToan = Math.round(this.tongTienThanhToan);
+
+    // Nếu lỡ giảm quá lớn (âm) thì set = phí ship thôi
+    if (this.TongTienTamTinh < this.shippingFee) {
+      this.TongTienTamTinh = this.shippingFee;
+    }
+
+
+  }
+
 
   tongTienKhongCoVoucher(): void {
     const shipping = this.shippingFee ?? 0;

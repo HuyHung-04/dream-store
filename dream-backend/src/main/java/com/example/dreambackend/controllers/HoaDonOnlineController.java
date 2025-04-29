@@ -36,15 +36,15 @@ public class HoaDonOnlineController {
         return ResponseEntity.ok(gioHangChiTietList);
     }
 
-    //phương thức tính tổng tiền trước voucher
-    @GetMapping("/tinh-tong-tien")
-    public ResponseEntity<Double> getTotalPrice(@RequestParam Integer idKhachHang) {
-        Double totalPrice = hoaDonOnlineService.getTamTinh(idKhachHang);
-        if (totalPrice == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0.0);
-        }
-        return ResponseEntity.ok(totalPrice);
-    }
+//    //phương thức tính tổng tiền trước voucher
+//    @GetMapping("/tinh-tong-tien")
+//    public ResponseEntity<Double> getTotalPrice(@RequestParam Integer idKhachHang) {
+//        Double totalPrice = hoaDonOnlineService.getTamTinh(idKhachHang);
+//        if (totalPrice == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0.0);
+//        }
+//        return ResponseEntity.ok(totalPrice);
+//    }
 
     //phương thức load voucher
     @GetMapping("/vouchers/{tongTien}")
@@ -53,15 +53,15 @@ public class HoaDonOnlineController {
         return ResponseEntity.ok(vouchers);
     }
 
-    // Phương thức để tính tổng tiền thanh toán sau khi áp dụng voucher
-    @PostMapping("/tong-tien-thanh-toan")
-    public ResponseEntity<Double> getTotalPrice(
-            @RequestParam Integer idKhachHang,
-            @RequestParam Integer voucherId,
-            @RequestParam Double shippingFee) {
-        Double totalPrice = hoaDonOnlineService.getTongTienThanhToan(idKhachHang, voucherId, shippingFee);
-        return ResponseEntity.ok(totalPrice);
-    }
+//    // Phương thức để tính tổng tiền thanh toán sau khi áp dụng voucher
+//    @PostMapping("/tong-tien-thanh-toan")
+//    public ResponseEntity<Double> getTotalPrice(
+//            @RequestParam Integer idKhachHang,
+//            @RequestParam Integer voucherId,
+//            @RequestParam Double shippingFee) {
+//        Double totalPrice = hoaDonOnlineService.getTongTienThanhToan(idKhachHang, voucherId, shippingFee);
+//        return ResponseEntity.ok(totalPrice);
+//    }
 
     // Tạo hóa đơn
     @PostMapping("/create")

@@ -76,22 +76,22 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return gioHangChiTietRepository.findGioHangChiTietByStatus(idKhachHang);
     }
 
-    @Override
-    public Double getTamTinh(Integer idKhachHang) {
-        // Lấy danh sách giỏ hàng chi tiết theo trạng thái và khách hàng
-        List<GioHangChiTietResponse> gioHangChiTietResponses = gioHangChiTietRepository.findGioHangChiTietByStatus(idKhachHang);
-
-        Double totalPrice = 0.0;
-
-        // Duyệt qua danh sách và tính tổng tiền nếu trạng thái giỏ hàng là 0 hoặc 2
-        for (GioHangChiTietResponse item : gioHangChiTietResponses) {
-            if (item.getTrangThai() == 0 || item.getTrangThai() == 2) {
-                totalPrice += item.getDonGia() * item.getSoLuong(); // Tính tổng theo số lượng và đơn giá
-            }
-        }
-
-        return totalPrice;
-    }
+//    @Override
+//    public Double getTamTinh(Integer idKhachHang) {
+//        // Lấy danh sách giỏ hàng chi tiết theo trạng thái và khách hàng
+//        List<GioHangChiTietResponse> gioHangChiTietResponses = gioHangChiTietRepository.findGioHangChiTietByStatus(idKhachHang);
+//
+//        Double totalPrice = 0.0;
+//
+//        // Duyệt qua danh sách và tính tổng tiền nếu trạng thái giỏ hàng là 0 hoặc 2
+//        for (GioHangChiTietResponse item : gioHangChiTietResponses) {
+//            if (item.getTrangThai() == 0 || item.getTrangThai() == 2) {
+//                totalPrice += item.getDonGia() * item.getSoLuong(); // Tính tổng theo số lượng và đơn giá
+//            }
+//        }
+//
+//        return totalPrice;
+//    }
 
     @Override
     public List<VoucherDto> getVoucherIdAndTen(Double tongTien) {
@@ -117,43 +117,43 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
 
 
-    @Override
-    public Double getTongTienThanhToan(Integer idKhachHang, Integer voucherId, Double shippingFee) {
-        // Lấy chi tiết giỏ hàng của khách hàng
-        List<GioHangChiTietResponse> gioHangChiTietResponses = gioHangChiTietRepository.findGioHangChiTietByStatus(idKhachHang);
-
-        // Tính tổng tiền giỏ hàng
-        Double tamTinh = 0.0;
-        for (GioHangChiTietResponse item : gioHangChiTietResponses) {
-            tamTinh += item.getDonGia() * item.getSoLuong();
-        }
-
-        Double giamGia = 0.0;
-
-        // Nếu có voucherId thì mới xử lý giảm giá
-        if (voucherId != null) {
-            Voucher voucher = voucherRepository.findById(voucherId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voucher không tồn tại"));
-
-            if (voucher.isHinhThucGiam()) {
-                // Giảm theo số tiền cố định
-                giamGia = voucher.getGiaTriGiam().doubleValue();
-            } else {
-                // Giảm theo phần trăm
-                giamGia = tamTinh * voucher.getGiaTriGiam().doubleValue() / 100;
-
-                // Giảm tối đa chỉ áp dụng cho giảm theo phần trăm
-                if (voucher.getGiamToiDa() != null && giamGia > voucher.getGiamToiDa().doubleValue()) {
-                    giamGia = voucher.getGiamToiDa().doubleValue();
-                }
-            }
-        }
-
-        // Tổng tiền sau giảm = tổng - giảm + ship
-        Double tongTienThanhToan = (tamTinh - giamGia) + shippingFee;
-
-        return tongTienThanhToan;
-    }
+//    @Override
+//    public Double getTongTienThanhToan(Integer idKhachHang, Integer voucherId, Double shippingFee) {
+//        // Lấy chi tiết giỏ hàng của khách hàng
+//        List<GioHangChiTietResponse> gioHangChiTietResponses = gioHangChiTietRepository.findGioHangChiTietByStatus(idKhachHang);
+//
+//        // Tính tổng tiền giỏ hàng
+//        Double tamTinh = 0.0;
+//        for (GioHangChiTietResponse item : gioHangChiTietResponses) {
+//            tamTinh += item.getDonGia() * item.getSoLuong();
+//        }
+//
+//        Double giamGia = 0.0;
+//
+//        // Nếu có voucherId thì mới xử lý giảm giá
+//        if (voucherId != null) {
+//            Voucher voucher = voucherRepository.findById(voucherId)
+//                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voucher không tồn tại"));
+//
+//            if (voucher.isHinhThucGiam()) {
+//                // Giảm theo số tiền cố định
+//                giamGia = voucher.getGiaTriGiam().doubleValue();
+//            } else {
+//                // Giảm theo phần trăm
+//                giamGia = tamTinh * voucher.getGiaTriGiam().doubleValue() / 100;
+//
+//                // Giảm tối đa chỉ áp dụng cho giảm theo phần trăm
+//                if (voucher.getGiamToiDa() != null && giamGia > voucher.getGiamToiDa().doubleValue()) {
+//                    giamGia = voucher.getGiamToiDa().doubleValue();
+//                }
+//            }
+//        }
+//
+//        // Tổng tiền sau giảm = tổng - giảm + ship
+//        Double tongTienThanhToan = (tamTinh - giamGia) + shippingFee;
+//
+//        return tongTienThanhToan;
+//    }
 
 
     @Override
