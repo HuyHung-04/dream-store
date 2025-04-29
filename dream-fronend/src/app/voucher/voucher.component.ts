@@ -314,9 +314,13 @@ export class VoucherComponent implements OnInit {
       this.loadPage(0)
       return
     }
-    this.voucherService.searchVoucherByTen(this.searchText).subscribe(
+ 
+    this.voucherService.searchVoucherByTen(this.searchText,0,8).subscribe(
       (data) => {
-        this.vouchers = data
+        this.vouchers = data.content
+         this.totalPages = data.totalPages || 0; 
+         this.currentPage = 0; 
+         this.tinhSoTrang(); 
       },
       (error) => {
 

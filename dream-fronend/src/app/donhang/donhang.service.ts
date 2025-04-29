@@ -9,17 +9,26 @@ export class DonhangService {
   private apiHoaDonOnline = 'http://localhost:8080/api/hoa-don-online';
   constructor(private http: HttpClient) { }
 
-  // Phương thức gọi API để lấy hóa đơn theo các tiêu chí lọc
-  getHoaDonsByTrangThaiAndNguoiNhanAndMa(trangThai: number, tenNguoiNhan: string, sdtNguoiNhan: string, maHoaDon: string): Observable<any> {
-    let params = new HttpParams()
-      .set('trangThai', trangThai.toString())
-      .set('tenNguoiNhan', tenNguoiNhan)
-      .set('sdtNguoiNhan', sdtNguoiNhan)
-      .set('maHoaDon', maHoaDon)
+  // Phương thức gọi API để lấy hóa đơn theo các tiêu chí lọc + thêm phân trang
+ getHoaDonsByTrangThaiAndNguoiNhanAndMa(
+  trangThai: number,
+  tenNguoiNhan: string,
+  sdtNguoiNhan: string,
+  maHoaDon: string,
+  page: number,
+  size: number
+): Observable<any> {
+  let params = new HttpParams()
+    .set('trangThai', trangThai.toString())
+    .set('tenNguoiNhan', tenNguoiNhan)
+    .set('sdtNguoiNhan', sdtNguoiNhan)
+    .set('maHoaDon', maHoaDon)
+    .set('page', page.toString())
+    .set('size', size.toString());
 
     return this.http.get<any>(this.apiUrl, { params });
   }
-
+  
   //phương thức cập nhật trạng thái cho đơn hàng
   capNhatTrangThai(id: number): Observable<any> {
     return this.http.post<any>(`${this.apiHoaDonOnline}/${id}/tang-trang-thai`, null);

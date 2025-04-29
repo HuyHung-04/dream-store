@@ -54,11 +54,10 @@ export class DonhangComponent {
   // Phương thức để tải hóa đơn từ API với phân trang và lọc trạng thái
   loadHoaDons(): void {
     const status = this.chonTrangThai === 0 ? 0 : this.chonTrangThai;
-    this.donHangService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(status, this.tenNguoiNhan, this.sdtNguoiNhan, this.maHoaDon).subscribe(
+    this.donHangService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(status, this.tenNguoiNhan, this.sdtNguoiNhan, this.maHoaDon, this.page, 6).subscribe(
       (data) => {
-        this.fullHoaDonList = data;
-        this.totalPages = Math.ceil(data.length / this.size);
-        this.setPage(this.page);
+        this.fullHoaDonList = data.content;
+        this.totalPages = data.totalPages
       },
       (error) => {
         this.errorMessage = 'Lỗi khi lấy dữ liệu hóa đơn!';
@@ -67,16 +66,11 @@ export class DonhangComponent {
     );
   }
 
-  //phương thức phân trang
-  setPage(page: number): void {
-    if (page < 0 || page >= this.totalPages) return;
-    this.page = page;
-    const start = this.page * this.size;
-    const end = start + this.size;
-    this.hoaDons = this.fullHoaDonList.slice(start, end);
+  // Hàm này được gọi mỗi khi người dùng thay đổi trường tìm kiếm
+  onSearchChange(): void {
+    this.page = 0;
+    this.loadHoaDons();
   }
-
-
 
   /**
    * Thay đổi trang và tải lại dữ liệu

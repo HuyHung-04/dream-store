@@ -30,8 +30,12 @@ export class VoucherService {
   checkVoucherUsed(voucherId: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/voucher/voucher/${voucherId}/check-used`);
   }
-    searchVoucherByTen(ten: string): Observable<any> {
-      const params = new HttpParams().set('ten', ten);
-      return this.http.get<any>(`${this.apiUrl}/voucher/search`, { params });
-    }
+  searchVoucherByTen(ten: string, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+      .set('ten', ten)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<any>(`${this.apiUrl}/voucher/search`, { params });
+  }
+  
 }

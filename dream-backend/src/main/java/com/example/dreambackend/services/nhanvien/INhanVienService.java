@@ -13,7 +13,7 @@ public interface INhanVienService {
     NhanVien addNhanVien(NhanVien nhanVien);
     NhanVien updateNhanVien(NhanVien nhanVien);
     NhanVien getNhanVienById(Integer id);
-    List<NhanVien> searchNhanVienByName(String ten);
+    Page<NhanVien> searchNhanVienByName(String ten,int page, int size);
     NhanVien addImageForNhanVien(Integer nhanVienId, MultipartFile file) throws IOException;
     // Phương thức đăng nhập (trả về boolean)
     ResponseEntity<?> login(String email, String password);

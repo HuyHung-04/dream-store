@@ -160,10 +160,11 @@ public class NhanVienService implements INhanVienService {
         return nhanVienRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Nhân viên không tồn tại với id: " + id));
     }
-    @Override
-    public List<NhanVien> searchNhanVienByName(String ten) {
-        return nhanVienRepository.findByTenContainingIgnoreCase(ten);
+    public Page<NhanVien> searchNhanVienByName(String ten, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return nhanVienRepository.findByTenContainingIgnoreCase(ten, pageable);
     }
+
 
     @Override
     public ResponseEntity<?> login(String email, String password) {

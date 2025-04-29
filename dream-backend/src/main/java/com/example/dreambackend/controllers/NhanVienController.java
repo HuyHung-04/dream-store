@@ -65,11 +65,14 @@ public class NhanVienController {
         return ResponseEntity.ok(updatedNhanVien);
     }
 
-    // Tìm kiếm nhân viên theo tên
     @GetMapping("/search")
-    public List<NhanVien> searchNhanVienByName(@RequestParam("ten") String ten) {
-        return nhanVienService.searchNhanVienByName(ten);
+    public Page<NhanVien> searchNhanVienByName(
+            @RequestParam("ten") String ten,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        return nhanVienService.searchNhanVienByName(ten, page, size);
     }
+
     // Lấy chi tiết nhân viên theo id
     @GetMapping("/{id}")
     public ResponseEntity<NhanVien> getNhanVienDetail(@PathVariable Integer id) {

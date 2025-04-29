@@ -54,8 +54,11 @@ public class KhuyenMaiController {
     }
 
     @GetMapping("/search")
-    public List<KhuyenMai> searchKhuyenMaiByName(@RequestParam("ten") String ten) {
-        return khuyenMaiService.searchKhuyenMaiByName(ten);
+    public Page<KhuyenMai> searchKhuyenMaiByName(
+            @RequestParam("ten") String ten,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return khuyenMaiService.searchKhuyenMaiByName(ten, page, size);
     }
 
     @GetMapping("/{khuyenMaiId}/select-products")

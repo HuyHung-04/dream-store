@@ -15,5 +15,5 @@ public interface IHoaDonService {
     HoaDonResponse findById(Integer id);
     DataTableResults<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request);
     void cancelHoaDon(Integer id, String ghiChu);
-    List<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon);
+    Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon,int page,int size);
 }

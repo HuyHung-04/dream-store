@@ -206,12 +206,17 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
 
 
     @Query("SELECT h FROM HoaDon h WHERE h.trangThai IN (1, 2, 3, 4, 5) " +
-            "AND (h.trangThai = ?1 OR ?1 = 0) " +  // Lọc trạng thái
-            "AND (LOWER(h.tenNguoiNhan) LIKE LOWER(CONCAT('%', ?2, '%')) OR ?2 IS NULL) " +  // Lọc tên người nhận
-            "AND (h.sdtNguoiNhan LIKE CONCAT('%', ?3, '%') OR ?3 IS NULL) " +  // Lọc số điện thoại người nhận
-            "AND (h.ma LIKE CONCAT('%', ?4, '%') OR ?4 IS NULL)"+
-            "ORDER BY h.id DESC")  // Lọc mã hóa đơn
-    List<HoaDon> findByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon);
+            "AND (:trangThai = 0 OR h.trangThai = :trangThai) " +
+            "AND (:tenNguoiNhan = '' OR LOWER(h.tenNguoiNhan) LIKE LOWER(CONCAT('%', :tenNguoiNhan, '%'))) " +
+            "AND (:sdtNguoiNhan = '' OR h.sdtNguoiNhan LIKE CONCAT('%', :sdtNguoiNhan, '%')) " +
+            "AND (:maHoaDon = '' OR h.ma LIKE CONCAT('%', :maHoaDon, '%')) " +
+            "ORDER BY h.id DESC")
+    Page<HoaDon> findByTrangThaiAndNguoiNhanAndMa(
+            @Param("trangThai") Integer trangThai,
+            @Param("tenNguoiNhan") String tenNguoiNhan,
+            @Param("sdtNguoiNhan") String sdtNguoiNhan,
+            @Param("maHoaDon") String maHoaDon,
+            Pageable pageable);
 
     List<HoaDon> findByTrangThai(Integer trangThai);
 

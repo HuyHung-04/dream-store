@@ -80,10 +80,11 @@ public class KhachHangService implements IKhachHangService{
         return khachHangRepository.save(khachHang);
     }
 
-    @Override
-    public List<KhachHang> searchKhachHangByName(String ten) {
-        return khachHangRepository.findByTenContainingIgnoreCase(ten);
+    public Page<KhachHang> searchKhachHangByName(String ten, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return khachHangRepository.findByTenContainingIgnoreCase(ten, pageable);
     }
+
 
     @Override
     public KhachHang getKhachHangByEmail(String email) {

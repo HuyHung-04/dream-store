@@ -16,21 +16,21 @@
   <div class="input-field-container">
     <div class="input-field">
       <label for="customerPhone">Số điện thoại khách hàng</label>
-      <input type="text" id="customerPhone" [(ngModel)]="sdtNguoiNhan" (input)="loadHoaDons()" class="input"
+      <input type="text" id="customerPhone" [(ngModel)]="sdtNguoiNhan" (ngModelChange)="onSearchChange()" class="input"
         placeholder="Nhập số điện thoại..." style="width: 250px;">
     </div>
 
     <!-- tìm kiếm mã hóa đơn -->
     <div class="input-field">
       <label for="invoiceCode">Mã hóa đơn</label>
-      <input style="width: 250px;" type="text" id="invoiceCode" [(ngModel)]="maHoaDon" (input)="loadHoaDons()"
+      <input style="width: 250px;" type="text" id="invoiceCode" [(ngModel)]="maHoaDon" (ngModelChange)="onSearchChange()"
         class="input" placeholder="Nhập mã hóa đơn...">
     </div>
 
     <!-- tìm kiếm tên khách hàng -->
     <div class="input-field">
       <label for="tenKhachHang">Tên khách hàng</label>
-      <input style="width: 250px;" type="text" id="tenKhachHang" [(ngModel)]="tenNguoiNhan" (input)="loadHoaDons()"
+      <input style="width: 250px;" type="text" id="tenKhachHang" [(ngModel)]="tenNguoiNhan" (ngModelChange)="onSearchChange()"
         class="input" placeholder="Nhập tên khách hàng...">
     </div>
   </div>
@@ -50,7 +50,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let hoaDon of hoaDons">
+      <tr *ngFor="let hoaDon of fullHoaDonList">
         <td>{{ hoaDon.ma }}</td>
         <td>{{ hoaDon.tenNguoiNhan }}</td>
         <td>{{hoaDon.sdtNguoiNhan}}</td>

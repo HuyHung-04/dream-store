@@ -100,14 +100,16 @@ public class HoaDonController {
     }
 
     @GetMapping("/filter")
-    public List<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(
-            @RequestParam(defaultValue = "0") Integer trangThai,  // Trạng thái mặc định là 0 (Tất cả)
-            @RequestParam(defaultValue = "") String tenNguoiNhan, // Tìm kiếm tên người nhận
-            @RequestParam(defaultValue = "") String sdtNguoiNhan, // Tìm kiếm số điện thoại người nhận
-            @RequestParam(defaultValue = "") String maHoaDon // Tìm kiếm mã hóa đơn
-           ) {
-        return hoaDonService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon);
+    public Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(
+            @RequestParam(defaultValue = "0") Integer trangThai,
+            @RequestParam(defaultValue = "") String tenNguoiNhan,
+            @RequestParam(defaultValue = "") String sdtNguoiNhan,
+            @RequestParam(defaultValue = "") String maHoaDon,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        return hoaDonService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon, page, size);
     }
+
 
 
 }

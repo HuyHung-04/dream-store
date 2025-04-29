@@ -40,9 +40,14 @@ public class KhachHangController {
     }
 
     @GetMapping("/search")
-    public List<KhachHang> searchKhachHangByName(@RequestParam("ten") String ten) {
-        return khachHangService.searchKhachHangByName(ten);
+    public Page<KhachHang> searchKhachHangByName(
+            @RequestParam("ten") String ten,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        return khachHangService.searchKhachHangByName(ten, page, size);
     }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<KhachHang> getKhachHangDetail(@PathVariable Integer id) {
         KhachHang khachHang= khachHangService.getKhachHangById(id);

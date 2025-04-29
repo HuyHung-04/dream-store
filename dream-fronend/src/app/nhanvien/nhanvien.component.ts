@@ -535,15 +535,20 @@ searchNhanVienTheoTen(): void {
     this.loadPage(0)
     return
   }
-  this.nhanVienService.searchNhanVienByTen(this.searchText).subscribe(
+
+  this.nhanVienService.searchNhanVienByTen(this.searchText,0,8).subscribe(
     (data) => {
-      this.nhanViens = data
+      this.nhanViens = data.content
+       this.totalPages = data.totalPages || 0; 
+       this.currentPage = 0; 
+       this.updateVisiblePages(); 
     },
     (error) => {
 
     }
   );
 }
+
   goToPreviousPage(): void {
     if (this.currentPage > 0) {
       this.loadPage(this.currentPage - 1);

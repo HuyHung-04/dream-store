@@ -45,9 +45,13 @@ public class VoucherController {
     }
 
     @GetMapping("/search")
-    public List<Voucher> searchVoucherByName(@RequestParam("ten") String ten) {
-        return voucherService.searchVoucherByName(ten);
+    public Page<Voucher> searchVoucherByName(
+            @RequestParam("ten") String ten,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        return voucherService.searchVoucherByName(ten, page, size);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Voucher> getVoucherDetail(@PathVariable Integer id) {

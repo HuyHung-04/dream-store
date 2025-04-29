@@ -153,15 +153,18 @@ export class KhachhangComponent implements OnInit {
   }
 
 
-  searchKhachHangtheoTen(): void {
+  searchKhachHangTheoTen(): void {
     if (this.searchText.trim() === '') {
       this.loadPage(0)
       return
     }
-    this.khachHangService.searchKhachHangByTen(this.searchText).subscribe(
+ 
+    this.khachHangService.searchKhachHangByTen(this.searchText,0,8).subscribe(
       (data) => {
-        this.khachhangs = data
-
+        this.khachhangs = data.content
+         this.totalPages = data.totalPages || 0; 
+         this.currentPage = 0; 
+         this.updateVisiblePages()
       },
       (error) => {
 

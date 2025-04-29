@@ -51,8 +51,9 @@ public class KhuyenMaiService implements IKhuyenMaiService{
                 .orElseThrow(() -> new IllegalArgumentException("Khuyến mãi không tồn tại với id: " + id));
     }
     @Override
-    public List<KhuyenMai> searchKhuyenMaiByName(String ten) {
-        return khuyenMaiRepository.findByTenContainingIgnoreCase(ten);
+    public Page<KhuyenMai> searchKhuyenMaiByName(String ten, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return khuyenMaiRepository.findByTenContainingIgnoreCase(ten, pageable);
     }
 
     @Override

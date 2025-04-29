@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface KhuyenMaiRepository extends JpaRepository<KhuyenMai, Integer> {
-    List<KhuyenMai> findByTenContainingIgnoreCase(String ten);
+    Page<KhuyenMai> findByTenContainingIgnoreCase(String ten, Pageable pageable);
     @Query("SELECT k FROM KhuyenMai k WHERE k.trangThai = :trangThai")
     Page<KhuyenMai> findKhuyenMaiByTrangThai(@Param("trangThai") int trangThai, Pageable pageable);
 }

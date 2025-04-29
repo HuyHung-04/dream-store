@@ -277,13 +277,13 @@ export class KhuyenmaiComponent implements OnInit {
       this.loadPage(0)
       return
     }
-    if (this.searchText.trim() === '') {
-      this.loadPage(0)
-      return
-    }
-    this.khuyenmaiService.searchKhuyenMaiByTen(this.searchText).subscribe(
+ 
+    this.khuyenmaiService.searchKhuyenMaiByTen(this.searchText,0,8).subscribe(
       (data) => {
-        this.khuyenmais = data
+        this.khuyenmais = data.content
+         this.totalPages = data.totalPages || 0; 
+         this.currentPage = 0; 
+         this.tinhSoTrang(); 
       },
       (error) => {
 

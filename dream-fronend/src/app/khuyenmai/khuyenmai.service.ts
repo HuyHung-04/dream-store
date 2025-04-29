@@ -35,8 +35,12 @@ export class KhuyenmaiService {
     return this.http.post<any>(`${this.apiUrl}/khuyenmai/update`, khuyenmai);
   }
 
-  searchKhuyenMaiByTen(ten: string): Observable<any> {
-    const params = new HttpParams().set('ten', ten);
+  searchKhuyenMaiByTen(ten: string, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+      .set('ten', ten)
+      .set('page', page.toString())
+      .set('size', size.toString());
+  
     return this.http.get<any>(`${this.apiUrl}/khuyenmai/search`, { params });
   }
  

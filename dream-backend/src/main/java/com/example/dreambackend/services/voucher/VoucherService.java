@@ -34,6 +34,7 @@ public class VoucherService implements IVoucherService {
         return vouchers;
     }
 
+
     @Override
     public Voucher addVoucher(Voucher voucher) {
 
@@ -50,8 +51,10 @@ public class VoucherService implements IVoucherService {
         return voucherRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Voucher không tồn tại với id: " + id));
     }
-    public List<Voucher> searchVoucherByName(String ten) {
-        return voucherRepository.findByTenContainingIgnoreCase(ten);
+
+    public Page<Voucher> searchVoucherByName(String ten, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return voucherRepository.findByTenContainingIgnoreCase(ten, pageable);
     }
 
     private void checkAndUpdateStatus(Voucher voucher) {
