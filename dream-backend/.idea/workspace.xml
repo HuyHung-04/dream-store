@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/NhanVienService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/NhanVienService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/dangnhap/dangnhap.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/dangnhap/dangnhap.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/nhanvien/nhanvien.component.ts" afterDir="false" />
-    </list>
+    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
