@@ -145,8 +145,10 @@ public class NhanVienService implements INhanVienService {
         existingNhanVien.setSoDienThoai(nhanVien.getSoDienThoai());
         existingNhanVien.setTaiKhoan(nhanVien.getTaiKhoan());
         // Mã hóa mật khẩu mới nếu có thay đổi
-        if (nhanVien.getMatKhau() != null && !nhanVien.getMatKhau().isEmpty()) {
-            existingNhanVien.setMatKhau(passwordEncoder.encode(nhanVien.getMatKhau()));
+        String newPassword = nhanVien.getMatKhau();
+        if (newPassword != null && !newPassword.isEmpty() &&
+                !passwordEncoder.matches(newPassword, existingNhanVien.getMatKhau())) {
+            existingNhanVien.setMatKhau(passwordEncoder.encode(newPassword));
         }
         existingNhanVien.setTrangThai(nhanVien.getTrangThai());
         existingNhanVien.setNgaySua(LocalDate.now());

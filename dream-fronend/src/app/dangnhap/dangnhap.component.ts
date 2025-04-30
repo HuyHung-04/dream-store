@@ -72,6 +72,7 @@ export class DangnhapComponent {
         console.log(response)
         localStorage.setItem('idNhanVien', response.user.id);
         localStorage.setItem('access_token', response.token);
+        localStorage.setItem('username', response.user.username);
         const role = response.user.role;
         localStorage.setItem('role', role);
         if (role === 'ROLE_Quản lý') {

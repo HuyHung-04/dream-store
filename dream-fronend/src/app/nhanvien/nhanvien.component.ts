@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NhanVienService } from './nhanvien.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-nhanvien',
   imports: [CommonModule, FormsModule],
@@ -13,17 +14,17 @@ export class NhanvienComponent implements OnInit {
   danhSachNhanVien: any[] = [];
   danhSachVaiTro: any[] = [];
   vaiTros: any[] = [];
-  
+
   showModal: boolean = false;
   showModalDetail: boolean = false;
   showModalSearch: boolean = false;
   showModalEdit: boolean = false;
-  
+
   maxVisiblePages = 8;
   totalPages: number = 0;
   currentPage: number = 0;
   pageSize: number = 5;
-  
+
   selectedNhanVien: any = null;
   nhanVienEdit: any = {};
   searchText: string = '';
@@ -36,7 +37,7 @@ export class NhanvienComponent implements OnInit {
     id: '',
     ma: '',
     ten: '',
-    anh:null,
+    anh: null,
     gioiTinh: null,
     ngaySinh: '',
     email: '',
@@ -46,12 +47,14 @@ export class NhanvienComponent implements OnInit {
     trangThai: 1,
     vaiTro: {
       id: 2,  // Đây là phần liên kết với vai trò. Bạn sẽ cần phải cập nhật ID vai trò khi chọn vai trò cho nhân viên.
-         // Nếu cần, bạn có thể thêm tên vai trò hoặc các thuộc tính khác của vai trò ở đây
+      // Nếu cần, bạn có thể thêm tên vai trò hoặc các thuộc tính khác của vai trò ở đây
     },
     ngayTao: '',
     ngaySua: ''
   };
-  constructor(private nhanVienService: NhanVienService) { }
+  taiKhoan: String = ''
+  matKhauGoc: String = ''
+  constructor(private nhanVienService: NhanVienService, private router: Router) { }
   ngOnInit(): void {
     this.loadData();
     this.getVaiTros();
@@ -62,7 +65,7 @@ export class NhanvienComponent implements OnInit {
       id: '',
       ma: '',
       ten: '',
-      anh:null,
+      anh: null,
       gioiTinh: null,
       ngaySinh: '',
       email: '',
@@ -77,25 +80,26 @@ export class NhanvienComponent implements OnInit {
       ngaySua: ''
     };
   }
- editNhanVien(nhanVienId: number) {
-  this.nhanVienService.getNhanVienDetail(nhanVienId).subscribe((nhanVien) => {
-    this.nhanVienEdit = { ...nhanVien };  // Gán dữ liệu vào biến chỉnh sửa
-    console.log("Dữ liệu nhân viên:", this.nhanVienEdit);
-    
-    // Kiểm tra nếu nhân viên có ảnh thì lấy đường dẫn từ API
-    if (this.nhanVienEdit.anh) {
-      this.imagePreview = this.nhanVienService.getNhanVienImage(this.nhanVienEdit.anh);
-      console.log("Đường dẫn ảnh:", this.imagePreview);
-    } else {
-      this.imagePreview = null;
-    }
-    
-    this.showModalEdit = true;  // Hiển thị modal chỉnh sửa
-  }, (error) => {
-    console.error("Lỗi khi lấy thông tin nhân viên:", error);
-    alert("Không tìm thấy nhân viên!");
-  });
-}
+  editNhanVien(nhanVienId: number) {
+    this.nhanVienService.getNhanVienDetail(nhanVienId).subscribe((nhanVien) => {
+      this.nhanVienEdit = { ...nhanVien };  // Gán dữ liệu vào biến chỉnh sửa
+      console.log("Dữ liệu nhân viên:", this.nhanVienEdit);
+      this.matKhauGoc = nhanVien.matKhau
+      this.taiKhoan = nhanVien.taiKhoan
+      // Kiểm tra nếu nhân viên có ảnh thì lấy đường dẫn từ API
+      if (this.nhanVienEdit.anh) {
+        this.imagePreview = this.nhanVienService.getNhanVienImage(this.nhanVienEdit.anh);
+        console.log("Đường dẫn ảnh:", this.imagePreview);
+      } else {
+        this.imagePreview = null;
+      }
+
+      this.showModalEdit = true;  // Hiển thị modal chỉnh sửa
+    }, (error) => {
+      console.error("Lỗi khi lấy thông tin nhân viên:", error);
+      alert("Không tìm thấy nhân viên!");
+    });
+  }
   // Method to handle file selection and preview the image
   onFileSelected(event: any): void {
     const file = event.target.files[0];
@@ -113,7 +117,7 @@ export class NhanvienComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
-  
+
       // Tạo một FileReader để xem trước ảnh
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -146,7 +150,7 @@ export class NhanvienComponent implements OnInit {
         alert('Có lỗi xảy ra khi thêm nhân viên.');
       }
     );
-  } 
+  }
   addImageForNhanVien(nhanVienId: number) {
     if (!this.selectedFile) {
       console.error('No file selected.');
@@ -154,7 +158,7 @@ export class NhanvienComponent implements OnInit {
     }
     // Gọi API để gửi file ảnh (File) trực tiếp
     this.nhanVienService.addImageForNhanVien(nhanVienId, this.selectedFile).subscribe(
-      (response) => { 
+      (response) => {
         this.loadData(); // Tải lại dữ liệu nhân viên
       },
       (error) => {
@@ -163,7 +167,7 @@ export class NhanvienComponent implements OnInit {
       }
     );
   }
-   //  Xóa lỗi của form khi nhập lại
+  //  Xóa lỗi của form khi nhập lại
   clearError(field: string): void {
     if (this.errors[field]) {
       delete this.errors[field];
@@ -171,7 +175,7 @@ export class NhanvienComponent implements OnInit {
   }
   validateForm(): boolean {
     this.errors = {};
-  
+
     // Validate tên nhân viên
     if (!this.nhanVien.ten || this.nhanVien.ten.trim() === '') {
       this.errors.ten = 'Tên nhân viên không được để trống!';
@@ -186,12 +190,12 @@ export class NhanvienComponent implements OnInit {
         this.errors.ten = 'Tên không được chứa số hoặc ký tự đặc biệt!';
       }
     }
-  
+
     // Validate giới tính
     if (this.nhanVien.gioiTinh === null || this.nhanVien.gioiTinh === undefined) {
       this.errors.gioiTinh = 'Vui lòng chọn giới tính!';
     }
-  
+
     // Validate ngày sinh và tuổi
     if (!this.nhanVien.ngaySinh) {
       this.errors.ngaySinh = 'Ngày sinh không được để trống!';
@@ -199,7 +203,7 @@ export class NhanvienComponent implements OnInit {
       const birthDate = new Date(this.nhanVien.ngaySinh);
       const currentDate = new Date();
       const age = currentDate.getFullYear() - birthDate.getFullYear();
-  
+
       if (birthDate > currentDate) {
         this.errors.ngaySinh = 'Ngày sinh không hợp lệ!';
       } else if (
@@ -212,7 +216,7 @@ export class NhanvienComponent implements OnInit {
         this.errors.ngaySinh = 'Nhân viên phải đủ 18 tuổi!';
       }
     }
-  
+
     // Validate email
     if (!this.nhanVien.email || this.nhanVien.email.trim() === '') {
       this.errors.email = 'Email không được để trống!';
@@ -237,7 +241,7 @@ export class NhanvienComponent implements OnInit {
         }
       }
     }
-  
+
     // Validate số điện thoại
     if (!this.nhanVien.soDienThoai || this.nhanVien.soDienThoai.trim() === '') {
       this.errors.soDienThoai = 'Số điện thoại không được để trống!';
@@ -261,7 +265,7 @@ export class NhanvienComponent implements OnInit {
         }
       }
     }
-  
+
     // Validate tài khoản
     if (!this.nhanVien.taiKhoan || this.nhanVien.taiKhoan.trim() === '') {
       this.errors.taiKhoan = 'Tài khoản không được để trống!';
@@ -282,7 +286,7 @@ export class NhanvienComponent implements OnInit {
         }
       }
     }
-  
+
     // Validate mật khẩu
     if (!this.nhanVien.matKhau || this.nhanVien.matKhau.trim() === '') {
       this.errors.matKhau = 'Mật khẩu không được để trống!';
@@ -298,23 +302,23 @@ export class NhanvienComponent implements OnInit {
         this.errors.matKhau = 'Mật khẩu đã tồn tại!';
       }
     }
-  
+
     // Validate trạng thái
     if (this.nhanVien.trangThai === null || this.nhanVien.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';
     }
-  
+
     return Object.keys(this.errors).length === 0;
-  }  
+  }
 
   validateEditForm(): boolean {
     this.errors = {};
-  
+
     // Validate mã nhân viên
     if (!this.nhanVienEdit.ma || !this.nhanVienEdit.ma.trim()) {
       this.errors.ma = 'Mã nhân viên không được để trống!';
     }
-  
+
     // Validate tên nhân viên
     const name = this.nhanVienEdit.ten?.trim();
     const specialCharPattern = /[!@#$%^&*(),.?":{}|<>0-9]/;
@@ -327,12 +331,12 @@ export class NhanvienComponent implements OnInit {
     } else if (specialCharPattern.test(name)) {
       this.errors.ten = 'Tên không được chứa số hoặc ký tự đặc biệt!';
     }
-  
+
     // Validate giới tính
     if (this.nhanVienEdit.gioiTinh === null || this.nhanVienEdit.gioiTinh === undefined) {
       this.errors.gioiTinh = 'Vui lòng chọn giới tính!';
     }
-  
+
     // Validate ngày sinh
     if (!this.nhanVienEdit.ngaySinh) {
       this.errors.ngaySinh = 'Ngày sinh không được để trống!';
@@ -352,7 +356,7 @@ export class NhanvienComponent implements OnInit {
         this.errors.ngaySinh = 'Nhân viên phải đủ 18 tuổi!';
       }
     }
-  
+
     // Validate email
     const email = this.nhanVienEdit.email?.trim();
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -374,7 +378,7 @@ export class NhanvienComponent implements OnInit {
         this.errors.email = 'Email đã tồn tại!';
       }
     }
-  
+
     // Validate số điện thoại
     const phone = this.nhanVienEdit.soDienThoai?.trim();
     const phonePattern = /^0[1-9][0-9]{8}$/;
@@ -394,7 +398,7 @@ export class NhanvienComponent implements OnInit {
         this.errors.soDienThoai = 'Số điện thoại đã tồn tại!';
       }
     }
-  
+
     // Validate tài khoản
     const username = this.nhanVienEdit.taiKhoan?.trim();
     if (!username) {
@@ -413,27 +417,27 @@ export class NhanvienComponent implements OnInit {
         this.errors.taiKhoan = 'Tài khoản đã tồn tại!';
       }
     }
-  
+
     // Validate mật khẩu (nếu sửa)
     const password = this.nhanVienEdit.matKhau?.trim();
     if (password) {
       if (password.length < 6) {
         this.errors.matKhau = 'Mật khẩu phải có ít nhất 6 ký tự!';
-      } 
-      } else {
-        const isDuplicatePassword = this.nhanViens.some(
-          nv => nv.matKhau === password && nv.id !== this.nhanVienEdit.id
-        );
-        if (isDuplicatePassword) {
-          this.errors.matKhau = 'Mật khẩu đã tồn tại!';
-        }
+      }
+    } else {
+      const isDuplicatePassword = this.nhanViens.some(
+        nv => nv.matKhau === password && nv.id !== this.nhanVienEdit.id
+      );
+      if (isDuplicatePassword) {
+        this.errors.matKhau = 'Mật khẩu đã tồn tại!';
+      }
     }
-  
+
     // Validate trạng thái
     if (this.nhanVienEdit.trangThai === null || this.nhanVienEdit.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';
     }
-  
+
     return Object.keys(this.errors).length === 0;
   }
   updateNhanVien() {
@@ -445,12 +449,27 @@ export class NhanvienComponent implements OnInit {
       if (this.nhanVienEdit.vaiTro.ten !== 'Quản lý') {
         this.nhanVienEdit.vaiTro = { id: 2, ten: 'Nhân viên' };
       }
+
+      if (this.matKhauGoc === this.nhanVienEdit.matKhau) {
+        delete this.nhanVienEdit.matKhau;
+      }
+      const idDangNhap = localStorage.getItem('idNhanVien');
+      const username = localStorage.getItem('username');
       this.nhanVienService.updateNhanVien(this.nhanVienEdit).subscribe(
         (response) => {
           alert('Cập nhật nhân viên thành công!');
           this.loadData();
-          console.log('Updated NhanVien:', this.nhanVienEdit.ngaySua);
           this.closeModalEdit();
+
+          // Nếu là người dùng hiện tại thì chuyển về trang đăng nhập
+          if (idDangNhap && parseInt(idDangNhap, 10) === this.nhanVienEdit.id &&
+            this.taiKhoan !== this.nhanVienEdit.taiKhoan) {
+            localStorage.clear(); // hoặc xóa từng mục cần thiết
+            alert('Bạn vừa cập nhật tài khoản của chính mình. Vui lòng đăng nhập lại.');
+            this.router.navigate(['/layout/dangnhap']);
+            return;
+          }
+
           // Cập nhật ảnh nếu có file mới
           if (this.selectedFile) {
             this.addImageForNhanVien(this.nhanVienEdit.id);
@@ -465,10 +484,10 @@ export class NhanvienComponent implements OnInit {
       alert('ID nhân viên không hợp lệ!');
     }
   }
-showDetail(nhanVienId: number) {
-  this.selectedNhanVien = this.nhanViens.find(nhanVien => nhanVien.id === nhanVienId);
-  this.showModalDetail = true; // Hiển thị modal chi tiết
-}
+  showDetail(nhanVienId: number) {
+    this.selectedNhanVien = this.nhanViens.find(nhanVien => nhanVien.id === nhanVienId);
+    this.showModalDetail = true; // Hiển thị modal chi tiết
+  }
   //  Lấy danh sách nhân viên
   loadData(): void {
     this.loadPage(0);
@@ -485,69 +504,69 @@ showDetail(nhanVienId: number) {
       }
     );
   }
-//  Method to get employee detail
-getNhanVienDetail(id: number): void {
-  this.nhanVienService.getNhanVienDetail(id).subscribe(
-    (data) => {
-      this.nhanVien = data; // Gán dữ liệu nhân viên vào biến nhanVien
-      this.showModalDetail = true; // Hiển thị modal chi tiết
-    },
-    (error) => {
-      console.error('Lỗi khi lấy chi tiết nhân viên:', error);
-      alert('Không tìm thấy thông tin nhân viên!');
-    }
-  );
-}
-trangThaiFilter: number | null = 2;
-loadPage(page: number): void {
-  // Nếu trangThaiFilter là 2, thì không gửi tham số trạng thái lên APIz
-  let trangThai: number | undefined = this.trangThaiFilter !== null ? this.trangThaiFilter : undefined;
-  const idNhanVienDangNhap = localStorage.getItem('idNhanVien');
-  const idDangNhap = idNhanVienDangNhap ? parseInt(idNhanVienDangNhap, 10) : undefined;
-  this.nhanVienService.getNhanVien(page, this.pageSize, trangThai,idDangNhap).subscribe(
-    (response) => {
-      console.log("📌 Dữ liệu nhân viên nhận được:", response); // Debug dữ liệu
-      this.nhanViens = response.content;
-      this.totalPages = response.totalPages;
-      this.currentPage = page;
-      this.updateVisiblePages();
-
-    },
-    (error) => {
-      console.error('❌ Lỗi khi tải danh sách nhân viên:', error);
-    }
-  );
-}
-// Hàm cập nhật trạng thái lọc và load lại danh sách
-filterByTrangThai(trangThai: number | null): void {
-  this.trangThaiFilter = trangThai; // Lưu trạng thái vào biến
-  this.loadPage(0); // Load lại từ trang đầu
-}
- // Giữ trạng thái khi chuyển trang
- goToPage(page: number): void {
-  if (page >= 0 && page < this.totalPages) {
-    this.loadPage(page);
+  //  Method to get employee detail
+  getNhanVienDetail(id: number): void {
+    this.nhanVienService.getNhanVienDetail(id).subscribe(
+      (data) => {
+        this.nhanVien = data; // Gán dữ liệu nhân viên vào biến nhanVien
+        this.showModalDetail = true; // Hiển thị modal chi tiết
+      },
+      (error) => {
+        console.error('Lỗi khi lấy chi tiết nhân viên:', error);
+        alert('Không tìm thấy thông tin nhân viên!');
+      }
+    );
   }
-}
+  trangThaiFilter: number | null = 2;
+  loadPage(page: number): void {
+    // Nếu trangThaiFilter là 2, thì không gửi tham số trạng thái lên APIz
+    let trangThai: number | undefined = this.trangThaiFilter !== null ? this.trangThaiFilter : undefined;
+    const idNhanVienDangNhap = localStorage.getItem('idNhanVien');
+    const idDangNhap = idNhanVienDangNhap ? parseInt(idNhanVienDangNhap, 10) : undefined;
+    this.nhanVienService.getNhanVien(page, this.pageSize, trangThai, idDangNhap).subscribe(
+      (response) => {
+        console.log("📌 Dữ liệu nhân viên nhận được:", response); // Debug dữ liệu
+        this.nhanViens = response.content;
+        this.totalPages = response.totalPages;
+        this.currentPage = page;
+        this.updateVisiblePages();
 
-searchNhanVienTheoTen(): void {
-  if (this.searchText.trim() === '') {
-    this.loadPage(0)
-    return
+      },
+      (error) => {
+        console.error('❌ Lỗi khi tải danh sách nhân viên:', error);
+      }
+    );
+  }
+  // Hàm cập nhật trạng thái lọc và load lại danh sách
+  filterByTrangThai(trangThai: number | null): void {
+    this.trangThaiFilter = trangThai; // Lưu trạng thái vào biến
+    this.loadPage(0); // Load lại từ trang đầu
+  }
+  // Giữ trạng thái khi chuyển trang
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.loadPage(page);
+    }
   }
 
-  this.nhanVienService.searchNhanVienByTen(this.searchText,0,8).subscribe(
-    (data) => {
-      this.nhanViens = data.content
-       this.totalPages = data.totalPages || 0; 
-       this.currentPage = 0; 
-       this.updateVisiblePages(); 
-    },
-    (error) => {
-
+  searchNhanVienTheoTen(): void {
+    if (this.searchText.trim() === '') {
+      this.loadPage(0)
+      return
     }
-  );
-}
+
+    this.nhanVienService.searchNhanVienByTen(this.searchText, 0, 8).subscribe(
+      (data) => {
+        this.nhanViens = data.content
+        this.totalPages = data.totalPages || 0;
+        this.currentPage = 0;
+        this.updateVisiblePages();
+      },
+      (error) => {
+
+      }
+    );
+  }
 
   goToPreviousPage(): void {
     if (this.currentPage > 0) {
