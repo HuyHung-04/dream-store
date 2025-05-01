@@ -13,19 +13,20 @@ import java.util.Optional;
 
 @Repository
 public interface KhachHangRepository extends JpaRepository<KhachHang, Integer> {
-    Page<KhachHang> findByTenContainingIgnoreCase(String ten, Pageable pageable);
 
     KhachHang findKhachHangByEmail(String email);
 
     Optional<KhachHang> findBySoDienThoai(String soDienThoai);// tìm khách hàng theo số điện thoại
     @Query("SELECT k FROM KhachHang k " +
             "WHERE (:trangThai = 3 OR k.trangThai = :trangThai) " +
-            "AND (:ten IS NULL OR :ten = '' OR LOWER(k.ten) LIKE LOWER(CONCAT('%', :ten, '%')))")
+            "AND (:ten IS NULL OR :ten = '' OR LOWER(k.ten) LIKE LOWER(CONCAT('%', :ten, '%'))) " +
+            "AND k.id >= 2")
     Page<KhachHang> findByTrangThaiAndTenContainingIgnoreCase(
             @Param("trangThai") int trangThai,
             @Param("ten") String ten,
             Pageable pageable
     );
+
 
     @Query("SELECT k FROM KhachHang k WHERE k.soDienThoai != '' ")
     Page<KhachHang> findKhachHang(Pageable pageable);

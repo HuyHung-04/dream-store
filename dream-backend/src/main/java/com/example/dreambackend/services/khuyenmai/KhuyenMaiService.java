@@ -24,6 +24,8 @@ public class KhuyenMaiService implements IKhuyenMaiService{
     public Page<KhuyenMai> getAllKhuyenMaiPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<KhuyenMai> khuyenMais = khuyenMaiRepository.findAll(pageable);
+        // Đảm bảo các sản phẩm của khuyến mãi hết hạn có idKhuyenMai = null trước khi chọn sản phẩm mới
+        resetExpiredKhuyenMaiProducts();
         // Kiểm tra và cập nhật trạng thái khuyến mãi nếu cần
         khuyenMais.getContent().forEach(this::checkAndUpdateStatus);
         return khuyenMais;
@@ -50,16 +52,11 @@ public class KhuyenMaiService implements IKhuyenMaiService{
         return khuyenMaiRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Khuyến mãi không tồn tại với id: " + id));
     }
-    @Override
-    public Page<KhuyenMai> searchKhuyenMaiByName(String ten, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return khuyenMaiRepository.findByTenContainingIgnoreCase(ten, pageable);
-    }
+
 
     @Override
     public List<SanPhamChiTietDto> findAvailableProducts(String tenSanPham, Integer khuyenMaiId) {
-        // Đảm bảo các sản phẩm của khuyến mãi hết hạn có idKhuyenMai = null trước khi chọn sản phẩm mới
-        resetExpiredKhuyenMaiProducts();
+
 
         // Gọi phương thức với tham số tìm kiếm theo tên (nếu có)
         return sanPhamChiTietRepository.findAvailableProducts(tenSanPham, khuyenMaiId);
@@ -107,7 +104,7 @@ public class KhuyenMaiService implements IKhuyenMaiService{
     }
     @Override
     public Page<KhuyenMai> getAllKhuyenMaiByTenAndTrangThai(int trangThai, String ten, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         return khuyenMaiRepository.findByTrangThaiAndTenContainingIgnoreCase(trangThai,ten, pageable);
     }
 
