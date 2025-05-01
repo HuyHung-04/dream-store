@@ -14,6 +14,6 @@ public interface IKhuyenMaiService {
     Page<KhuyenMai> searchKhuyenMaiByName(String ten,int page, int size);
     List<SanPhamChiTietDto> findAvailableProducts(String tenSanPham, Integer khuyenMaiId);
     void updateKhuyenMaiProducts(Integer khuyenMaiId, List<Integer> productIds);
-    Page<KhuyenMai> getAllKhuyenMaiByTrangThai(int trangThai, int page, int size);
+    Page<KhuyenMai> getAllKhuyenMaiByTenAndTrangThai(int trangThai, String ten, int page, int size);
 
 }

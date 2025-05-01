@@ -278,7 +278,7 @@ export class KhuyenmaiComponent implements OnInit {
       return
     }
  
-    this.khuyenmaiService.searchKhuyenMaiByTen(this.searchText,0,8).subscribe(
+    this.khuyenmaiService.searchKhuyenMaiByTenAndTrangThai(this.selectedTrangThai,this.searchText,0,8).subscribe(
       (data) => {
         this.khuyenmais = data.content
          this.totalPages = data.totalPages || 0; 
@@ -387,7 +387,7 @@ export class KhuyenmaiComponent implements OnInit {
   }
 
   locTheoTrangThai(trangThai: number, page: number): void {
-    this.khuyenmaiService.locTrangThai(trangThai, page, 8).subscribe((response) => {
+    this.khuyenmaiService.searchKhuyenMaiByTenAndTrangThai(trangThai,this.searchText, page, 8).subscribe((response) => {
       this.khuyenmais = response.content;
       this.totalPages = response.totalPages;
       this.currentPage = page;

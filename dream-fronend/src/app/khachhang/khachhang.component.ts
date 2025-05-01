@@ -159,7 +159,7 @@ export class KhachhangComponent implements OnInit {
       return
     }
  
-    this.khachHangService.searchKhachHangByTen(this.searchText,0,8).subscribe(
+    this.khachHangService.searchKhachHangByTenAndTrangThai(this.selectedTrangThai,this.searchText,0,8).subscribe(
       (data) => {
         this.khachhangs = data.content
          this.totalPages = data.totalPages || 0; 
@@ -252,7 +252,7 @@ export class KhachhangComponent implements OnInit {
 
   
   loadKhachHangByTrangThai(trangThai: number, page: number): void {
-    this.khachHangService.getKhachHangByTrangThai(trangThai, page, 8).subscribe((response) => {
+    this.khachHangService.searchKhachHangByTenAndTrangThai(trangThai,this.searchText, page, 8).subscribe((response) => {
       this.khachhangs = response.content;
       this.totalPages = response.totalPages;
       this.currentPage = page;

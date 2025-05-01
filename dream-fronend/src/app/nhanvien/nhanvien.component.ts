@@ -14,6 +14,7 @@ export class NhanvienComponent implements OnInit {
   danhSachNhanVien: any[] = [];
   danhSachVaiTro: any[] = [];
   vaiTros: any[] = [];
+  isSearching: boolean = false;
 
   showModal: boolean = false;
   showModalDetail: boolean = false;
@@ -519,23 +520,39 @@ export class NhanvienComponent implements OnInit {
   }
   trangThaiFilter: number | null = 2;
   loadPage(page: number): void {
-    // Nếu trangThaiFilter là 2, thì không gửi tham số trạng thái lên APIz
-    let trangThai: number | undefined = this.trangThaiFilter !== null ? this.trangThaiFilter : undefined;
+    // Kiểm tra nếu trangThaiFilter không phải là undefined hoặc null, và kiểm tra nếu nó có giá trị hợp lệ
+    const trangThai: number | undefined = this.trangThaiFilter !== null && this.trangThaiFilter !== undefined ? this.trangThaiFilter : undefined;
+  
     const idNhanVienDangNhap = localStorage.getItem('idNhanVien');
     const idDangNhap = idNhanVienDangNhap ? parseInt(idNhanVienDangNhap, 10) : undefined;
-    this.nhanVienService.getNhanVien(page, this.pageSize, trangThai, idDangNhap).subscribe(
-      (response) => {
-        console.log("📌 Dữ liệu nhân viên nhận được:", response); // Debug dữ liệu
-        this.nhanViens = response.content;
-        this.totalPages = response.totalPages;
-        this.currentPage = page;
-        this.updateVisiblePages();
-
-      },
-      (error) => {
-        console.error('❌ Lỗi khi tải danh sách nhân viên:', error);
-      }
-    );
+  
+    if (this.searchText.trim() !== '') {
+      // Tìm kiếm theo tên và lọc trạng thái
+      this.nhanVienService.searchNhanVienByNamePaged(this.searchText, page, this.pageSize, trangThai).subscribe(
+        (response) => {
+          this.nhanViens = response.content;
+          this.totalPages = response.totalPages;
+          this.currentPage = page;
+          this.updateVisiblePages();
+        },
+        (error) => {
+          console.error('❌ Lỗi khi tìm kiếm nhân viên:', error);
+        }
+      );
+    } else {
+      // Nếu không tìm kiếm theo tên, tải danh sách nhân viên với lọc trạng thái
+      this.nhanVienService.getNhanVien(page, this.pageSize, trangThai, idDangNhap).subscribe(
+        (response) => {
+          this.nhanViens = response.content;
+          this.totalPages = response.totalPages;
+          this.currentPage = page;
+          this.updateVisiblePages();
+        },
+        (error) => {
+          console.error('❌ Lỗi khi tải danh sách nhân viên:', error);
+        }
+      );
+    }
   }
   // Hàm cập nhật trạng thái lọc và load lại danh sách
   filterByTrangThai(trangThai: number | null): void {
@@ -551,21 +568,12 @@ export class NhanvienComponent implements OnInit {
 
   searchNhanVienTheoTen(): void {
     if (this.searchText.trim() === '') {
-      this.loadPage(0)
-      return
+      this.isSearching = false;
+      this.loadPage(0); // Quay về danh sách thường
+    } else {
+      this.isSearching = true;
+      this.loadPage(0); // Tìm kiếm từ trang đầu tiên
     }
-
-    this.nhanVienService.searchNhanVienByTen(this.searchText, 0, 8).subscribe(
-      (data) => {
-        this.nhanViens = data.content
-        this.totalPages = data.totalPages || 0;
-        this.currentPage = 0;
-        this.updateVisiblePages();
-      },
-      (error) => {
-
-      }
-    );
   }
 
   goToPreviousPage(): void {

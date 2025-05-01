@@ -315,7 +315,7 @@ export class VoucherComponent implements OnInit {
       return
     }
  
-    this.voucherService.searchVoucherByTen(this.searchText,0,8).subscribe(
+    this.voucherService.searchVoucherByTenAndTrangThai(this.selectedTrangThai,this.searchText,0,8).subscribe(
       (data) => {
         this.vouchers = data.content
          this.totalPages = data.totalPages || 0; 
@@ -485,7 +485,7 @@ export class VoucherComponent implements OnInit {
     this.showModalDetail = true;
   }
   locTrangThai(trangThai: number, page: number): void {
-    this.voucherService.locTrangThai(trangThai, page, 8).subscribe((response) => {
+    this.voucherService.searchVoucherByTenAndTrangThai(trangThai,this.searchText, page, 8).subscribe((response) => {
       this.vouchers = response.content;
       this.totalPages = response.totalPages;
       this.currentPage = page;

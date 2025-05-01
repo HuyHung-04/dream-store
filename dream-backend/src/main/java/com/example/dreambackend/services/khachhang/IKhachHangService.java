@@ -18,5 +18,5 @@ public interface IKhachHangService {
     KhachHang updateOtpKhachHang(String email);
     KhachHang deleteOtpKhachHang(String email);
     KhachHang compareOtp(String email,String otp);
-    Page<KhachHang> getAllKhachHangByTrangThai(int trangThai, int page, int size);
+    Page<KhachHang> getAllKhachHangByTenAndTrangThai(int trangThai,String ten, int page, int size);
 }

@@ -77,10 +77,9 @@ public class VoucherService implements IVoucherService {
         }
     }
     @Override
-    public Page<Voucher> getAllVoucherByTrangThai(int trangThai, int page, int size) {
+    public Page<Voucher> getAllVoucherByTenAndTrangThai(int trangThai, String ten, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
-        return voucherRepository.findVoucherByTrangThai(trangThai, pageable);
+        return voucherRepository.findByTrangThaiAndTenContainingIgnoreCase(trangThai,ten, pageable);
     }
 
 }

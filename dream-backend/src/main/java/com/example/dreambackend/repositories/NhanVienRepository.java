@@ -15,6 +15,7 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Integer> {
     Page<NhanVien> findByTenContainingIgnoreCase(String ten, Pageable pageable);
     Optional<NhanVien> findByEmail(String email);
     Page<NhanVien> findByTrangThai(Integer trangThai, Pageable pageable);
+    Page<NhanVien> findByTenContainingIgnoreCaseAndTrangThai(String ten, Integer trangThai, Pageable pageable);
     boolean existsByMa(String ma);
     @Query("""
     SELECT nv 

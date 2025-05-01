@@ -60,13 +60,25 @@ export class NhanVienService {
     return this.http.post<any>(`${this.apiUrl}/nhan-vien/update`, nhanVien);
   }
 
-  searchNhanVienByTen(ten: string, page: number, size: number): Observable<any> {
-    const params = new HttpParams()
-      .set('ten', ten)
-      .set('page', page.toString())
-      .set('size', size.toString());
+  //  Tìm kiếm nhân viên theo tên
+  searchNhanVienByNamePaged(ten: string, page: number, size: number, trangThai?: number): Observable<any> {
+    let url = `${this.apiUrl}/nhan-vien/search?ten=${ten}&page=${page}&size=${size}`;
   
-    return this.http.get<any>(`${this.apiUrl}/nhan-vien/search`, { params });
+    // Thêm tham số trạng thái vào URL nếu có
+    if (trangThai !== undefined && trangThai !== null) {
+      url += `&trangThai=${trangThai}`;
+    }
+  
+    return this.http.get<any>(url).pipe(
+      map(response => {
+        response.content.forEach((nhanVien: any) => {
+          if (nhanVien.anh) {
+            nhanVien.anh = `${this.apiUrl}/nhan-vien/image/${nhanVien.anh}`;
+          }
+        });
+        return response;
+      })
+    );
   }
   
 

@@ -216,4 +216,15 @@ public class NhanVienService implements INhanVienService {
         Pageable pageable = PageRequest.of(page, size);
         return nhanVienRepository.findAll(pageable);
     }
+    public Page<NhanVien> searchNhanVienByNameAndTrangThai(String ten, Integer trangThai, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        if (trangThai == 2) {
+            // Không lọc trạng thái
+            return nhanVienRepository.findByTenContainingIgnoreCase(ten, pageable);
+        } else {
+            // Lọc theo trạng thái
+            return nhanVienRepository.findByTenContainingIgnoreCaseAndTrangThai(ten, trangThai, pageable);
+        }
+    }
 }

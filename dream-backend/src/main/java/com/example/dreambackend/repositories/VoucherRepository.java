@@ -21,7 +21,13 @@ public interface VoucherRepository extends JpaRepository<Voucher,Integer> {
     List<VoucherDto> findIdAndTen();
 
 
-    @Query("SELECT v FROM Voucher v WHERE v.trangThai = :trangThai")
-    Page<Voucher> findVoucherByTrangThai(@Param("trangThai") int trangThai, Pageable pageable);
+    @Query("SELECT v FROM Voucher v " +
+            "WHERE (:trangThai = 3 OR v.trangThai = :trangThai) " +
+            "AND (:ten IS NULL OR :ten = '' OR LOWER(v.ten) LIKE LOWER(CONCAT('%', :ten, '%')))")
+    Page<Voucher> findByTrangThaiAndTenContainingIgnoreCase(
+            @Param("trangThai") int trangThai,
+            @Param("ten") String ten,
+            Pageable pageable
+    );
 }
 

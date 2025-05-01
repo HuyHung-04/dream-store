@@ -12,6 +12,12 @@ import java.util.List;
 
 public interface KhuyenMaiRepository extends JpaRepository<KhuyenMai, Integer> {
     Page<KhuyenMai> findByTenContainingIgnoreCase(String ten, Pageable pageable);
-    @Query("SELECT k FROM KhuyenMai k WHERE k.trangThai = :trangThai")
-    Page<KhuyenMai> findKhuyenMaiByTrangThai(@Param("trangThai") int trangThai, Pageable pageable);
+    @Query("SELECT k FROM KhuyenMai k " +
+            "WHERE (:trangThai = 3 OR k.trangThai = :trangThai) " +
+            "AND (:ten IS NULL OR :ten = '' OR LOWER(k.ten) LIKE LOWER(CONCAT('%', :ten, '%')))")
+    Page<KhuyenMai> findByTrangThaiAndTenContainingIgnoreCase(
+            @Param("trangThai") int trangThai,
+            @Param("ten") String ten,
+            Pageable pageable
+    );
 }

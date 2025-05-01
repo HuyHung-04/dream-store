@@ -106,10 +106,9 @@ public class KhuyenMaiService implements IKhuyenMaiService{
         }
     }
     @Override
-    public Page<KhuyenMai> getAllKhuyenMaiByTrangThai(int trangThai, int page, int size) {
+    public Page<KhuyenMai> getAllKhuyenMaiByTenAndTrangThai(int trangThai, String ten, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
-        return khuyenMaiRepository.findKhuyenMaiByTrangThai(trangThai, pageable);
+        return khuyenMaiRepository.findByTrangThaiAndTenContainingIgnoreCase(trangThai,ten, pageable);
     }
 
     private void checkAndUpdateStatus(KhuyenMai khuyenMai) {

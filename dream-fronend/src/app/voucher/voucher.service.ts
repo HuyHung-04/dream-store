@@ -24,14 +24,13 @@ export class VoucherService {
   updateVoucher(voucher: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/voucher/update`, voucher);
   }
-  locTrangThai(trangThai:number,page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/voucher/loc-trang-thai?trangThai=${trangThai}&page=${page}&size=${size}`);
-  }
+  
   checkVoucherUsed(voucherId: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/voucher/voucher/${voucherId}/check-used`);
   }
-  searchVoucherByTen(ten: string, page: number, size: number): Observable<any> {
+  searchVoucherByTenAndTrangThai(trangThai: number,ten: string, page: number, size: number): Observable<any> {
     const params = new HttpParams()
+    .set('trangThai', trangThai)
       .set('ten', ten)
       .set('page', page.toString())
       .set('size', size.toString());

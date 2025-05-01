@@ -13,5 +13,5 @@ public interface IVoucherService {
     Voucher updateVoucher(Voucher voucher);
     Voucher getVoucherById(Integer id);
     Page<Voucher> searchVoucherByName(String ten, int page, int size);
-    Page<Voucher> getAllVoucherByTrangThai(int trangThai, int page, int size);
+    Page<Voucher> getAllVoucherByTenAndTrangThai(int trangThai, String ten, int page, int size);
 }

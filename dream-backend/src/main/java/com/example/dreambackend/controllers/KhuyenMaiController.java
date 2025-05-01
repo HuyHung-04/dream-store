@@ -54,11 +54,12 @@ public class KhuyenMaiController {
     }
 
     @GetMapping("/search")
-    public Page<KhuyenMai> searchKhuyenMaiByName(
+    public ResponseEntity<Page<KhuyenMai>> searchKhuyenMai(
+            @RequestParam int trangThai,
             @RequestParam("ten") String ten,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        return khuyenMaiService.searchKhuyenMaiByName(ten, page, size);
+            @RequestParam(defaultValue = "8") int size) {
+        return ResponseEntity.ok(khuyenMaiService.getAllKhuyenMaiByTenAndTrangThai(trangThai,ten, page, size));
     }
 
     @GetMapping("/{khuyenMaiId}/select-products")
@@ -86,16 +87,5 @@ public class KhuyenMaiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
-    @GetMapping("/loc-trang-thai")
-    public ResponseEntity<Page<KhuyenMai>> findByTrangThai(@RequestParam int trangThai,
-                                                           @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "8") int size){
-        if(trangThai==3){
-            Page<KhuyenMai> pagedKhuyenMais = khuyenMaiService.getAllKhuyenMaiPaged(page, size);
-            return ResponseEntity.ok(pagedKhuyenMais);
-        }else {
-            Page<KhuyenMai> pagedKhuyenMais = khuyenMaiService.getAllKhuyenMaiByTrangThai(trangThai,page, size);
-            return ResponseEntity.ok(pagedKhuyenMais);
-        }
-    }
+
 }

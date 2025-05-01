@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface INhanVienService {
     Page<NhanVien> getAllNhanVienPaged(int page, int size, Integer idNhanVien);
+    Page<NhanVien> searchNhanVienByNameAndTrangThai(String ten, Integer trangThai, int page, int size);
     NhanVien addNhanVien(NhanVien nhanVien);
     NhanVien updateNhanVien(NhanVien nhanVien);
     NhanVien getNhanVienById(Integer id);

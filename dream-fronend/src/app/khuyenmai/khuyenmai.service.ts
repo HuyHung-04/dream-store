@@ -35,8 +35,9 @@ export class KhuyenmaiService {
     return this.http.post<any>(`${this.apiUrl}/khuyenmai/update`, khuyenmai);
   }
 
-  searchKhuyenMaiByTen(ten: string, page: number, size: number): Observable<any> {
+  searchKhuyenMaiByTenAndTrangThai(trangThai: number,ten: string, page: number, size: number): Observable<any> {
     const params = new HttpParams()
+    .set('trangThai', trangThai)
       .set('ten', ten)
       .set('page', page.toString())
       .set('size', size.toString());
@@ -57,7 +58,5 @@ export class KhuyenmaiService {
       responseType: 'text', // Expect a plain text response
     });
   }
-  locTrangThai(trangThai:number,page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/khuyenmai/loc-trang-thai?trangThai=${trangThai}&page=${page}&size=${size}`);
-  }
+ 
 }
