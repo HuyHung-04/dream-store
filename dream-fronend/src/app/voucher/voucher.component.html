@@ -43,8 +43,8 @@
             <td>{{ voucher.soLuong }}</td>
             <td>{{ voucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %' }}</td>
             <td>{{ voucher.giaTriGiam }} {{ voucher.hinhThucGiam ? 'VND' : '%' }} </td>
-            <td>{{ voucher.donToiThieu}}</td>
-            <td>{{ voucher.giamToiDa != null && voucher.giamToiDa !== '' ? voucher.giamToiDa : 'Không áp dụng' }}</td>
+            <td>{{ voucher.donToiThieu}} VND</td>
+            <td>{{ voucher.giamToiDa != null && voucher.giamToiDa !== '' ? voucher.giamToiDa + ' VND' : 'Không áp dụng' }}</td>
             <td>{{ voucher.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
             <td>{{ voucher.ngayTao }}</td>
             <td>{{ voucher.ngaySua }}</td>

@@ -44,7 +44,6 @@ export class VoucherComponent implements OnInit {
     ngayKetThuc: '',
     trangThai: null,
   };
-
   constructor(private voucherService: VoucherService) { }
   ngOnInit(): void {
     this.loadData()
@@ -225,22 +224,28 @@ export class VoucherComponent implements OnInit {
     if (this.voucher.giaTriGiam === null || this.voucher.giaTriGiam === undefined || this.voucher.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
-      const checkPhanTram = Number(this.voucher.giaTriGiam);
+      const checkGiaTriGiam = Number(this.voucher.giaTriGiam);
 
       if (this.voucher.hinhThucGiam === true) {
         // Nếu hình thức giảm là theo số tiền
-        if (isNaN(checkPhanTram)) {
+        if (isNaN(checkGiaTriGiam)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-        } else if (checkPhanTram <= 0) {
-          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+        } else if (checkGiaTriGiam <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải lớn hơn 0!';
+        }
+        else {
+          const donToiThieu = Number(this.voucher.donToiThieu);
+          if (checkGiaTriGiam >= donToiThieu) {
+            this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn hoặc bằng đơn tối thiểu!';
+          }
         }
       } else {
         // Nếu hình thức giảm là theo phần trăm
-        if (isNaN(checkPhanTram)) {
+        if (isNaN(checkGiaTriGiam)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-        } else if (checkPhanTram <= 0) {
-          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
-        } else if (checkPhanTram > 100) {
+        } else if (checkGiaTriGiam <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải lớn hơn 0!';
+        } else if (checkGiaTriGiam > 100) {
           this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn 100%!';
         }
       }
@@ -249,17 +254,6 @@ export class VoucherComponent implements OnInit {
     if (this.voucher.hinhThucGiam == true) {
       // Nếu giảm theo tiền, phải để trống giảm tối đa
       this.voucher.giamToiDa = null;
-    } else if (this.voucher.hinhThucGiam == false) {
-      if (this.voucher.giamToiDa === null || this.voucher.giamToiDa === undefined || this.voucher.giamToiDa === '') {
-        this.errors.giamToiDa = 'Giảm tối đa không được để trống khi giảm theo %!';
-      } else {
-        const checkSo = Number(this.voucher.giamToiDa);
-        if (isNaN(checkSo)) {
-          this.errors.giamToiDa = 'Giảm tối đa phải là số!';
-        } else if (checkSo < 1) {
-          this.errors.giamToiDa = 'Giảm tối đa không được nhỏ hơn 1!';
-        }
-      }
     }
 
 
@@ -360,22 +354,28 @@ export class VoucherComponent implements OnInit {
     if (this.voucherEdit.giaTriGiam === null || this.voucherEdit.giaTriGiam === undefined || this.voucherEdit.giaTriGiam === '') {
       this.errors.giaTriGiam = 'Giá trị giảm không được để trống!';
     } else {
-      const checkPhanTram = Number(this.voucherEdit.giaTriGiam);
+      const checkGiaTriGiam = Number(this.voucherEdit.giaTriGiam);
 
       if (this.voucherEdit.hinhThucGiam === true) {
         // Nếu hình thức giảm là theo số tiền
-        if (isNaN(checkPhanTram)) {
+        if (isNaN(checkGiaTriGiam)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-        } else if (checkPhanTram <= 0) {
-          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+        } else if (checkGiaTriGiam <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải lớn hơn 0!';
+        }
+        else {
+          const donToiThieu = Number(this.voucherEdit.donToiThieu);
+          if (checkGiaTriGiam >= donToiThieu) {
+            this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn hoặc bằng đơn tối thiểu!';
+          }
         }
       } else {
         // Nếu hình thức giảm là theo phần trăm
-        if (isNaN(checkPhanTram)) {
+        if (isNaN(checkGiaTriGiam)) {
           this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
-        } else if (checkPhanTram <= 0) {
-          this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
-        } else if (checkPhanTram > 100) {
+        } else if (checkGiaTriGiam <= 0) {
+          this.errors.giaTriGiam = 'Giá trị giảm phải lớn hơn 0!';
+        } else if (checkGiaTriGiam > 100) {
           this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn 100%!';
         }
       }
@@ -396,19 +396,7 @@ export class VoucherComponent implements OnInit {
     if (this.voucherEdit.hinhThucGiam == true) {
       // Nếu giảm theo tiền, phải để trống giảm tối đa
       this.voucherEdit.giamToiDa = null;
-    } else if (this.voucherEdit.hinhThucGiam == false) {
-      if (this.voucherEdit.giamToiDa === null || this.voucherEdit.giamToiDa === undefined || this.voucherEdit.giamToiDa === '') {
-        this.errors.giamToiDa = 'Giảm tối đa không được để trống khi giảm theo %!';
-      } else {
-        const checkSo = Number(this.voucherEdit.giamToiDa);
-        if (isNaN(checkSo)) {
-          this.errors.giamToiDa = 'Giảm tối đa phải là số!';
-        } else if (checkSo < 1) {
-          this.errors.giamToiDa = 'Giảm tối đa không được nhỏ hơn 1!';
-        }
-      }
-    }
-
+    } 
 
 
     if (!this.voucherEdit.ngayBatDau) {
@@ -432,13 +420,10 @@ export class VoucherComponent implements OnInit {
         this.errors.trangThai = 'Khuyến mãi đã hết hạn, trạng thái phải là "Không hoạt động".';
       }
 
-      else if (startDate < currentDate) {
-        this.errors.ngayBatDau = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!';
-      }
-
       else if (endDate < currentDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc phải lớn hơn ngày hiện tại!';
       }
+
     }
     if (this.voucherEdit.trangThai === null || this.voucherEdit.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';

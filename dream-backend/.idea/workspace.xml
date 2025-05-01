@@ -7,22 +7,20 @@
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhachHangController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhachHangController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/NhanVienController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/NhanVienController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/VoucherController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/VoucherController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/KhachHangRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/KhachHangRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/KhuyenMaiRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/KhuyenMaiRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/NhanVienRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/NhanVienRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/VoucherRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/VoucherRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khachhang/IKhachHangService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khachhang/IKhachHangService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khachhang/KhachHangService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khachhang/KhachHangService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/INhanVienService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/INhanVienService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/NhanVienService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/nhanvien/NhanVienService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/voucher/IVoucherService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/voucher/IVoucherService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/voucher/VoucherService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/voucher/VoucherService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_cdk_scrolling.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_cdk_scrolling.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_button.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_button.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_dialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_icon.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_icon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_sidenav.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_sidenav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_toolbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_toolbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-4ZSYFFUB.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-4ZSYFFUB.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-4ZSYFFUB.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-4ZSYFFUB.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-DLPC2AAF.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-DLPC2AAF.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-DLPC2AAF.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-DLPC2AAF.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-QIKCFWUZ.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-QIKCFWUZ.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-QIKCFWUZ.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/chunk-QIKCFWUZ.js.map" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +76,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.DreamBackendApplication.executor": "Run",
     "Spring Boot.Unnamed.executor": "Run",
-    "git-widget-placeholder": "huy-hung",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/dream-store/dream-backend",
