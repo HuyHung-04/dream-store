@@ -184,7 +184,7 @@
   
           <div class="input-row">
             <div class="input-field">
-              <input type="number" class="input" [(ngModel)]="voucherEdit.soLuong" name="soLuong" required [readonly]="voucherUsed || checkNgay" (click)="showCannotEditMessage('soLuong')" />
+              <input type="number" class="input" [(ngModel)]="voucherEdit.soLuong" name="soLuong" required [readonly]="checkNgay" (click)="showCannotEditMessage('soLuong')" />
               <label for="soLuong">Số lượng</label>
               <div class="tooltip-error" *ngIf="errors.soLuong">
                {{errors.soLuong}}

@@ -611,9 +611,7 @@ export class VoucherComponent implements OnInit {
         }
         break;
       case 'soLuong':
-        if (isVoucherUsed) {
-          alert('Voucher đã được áp dụng, không thể sửa số lượng!');
-        } else if (isVoucherExpired) {
+       if (isVoucherExpired) {
           alert('Voucher đã hết hạn, không thể sửa số lượng!');
         }
         break;
