@@ -217,6 +217,7 @@ export class HoadonComponent {
 
   openModal(): void {
     this.isModalOpen = true;
+    this.activeTab = 'select'
   }
 
 
