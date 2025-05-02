@@ -131,13 +131,11 @@ export class HoadonComponent {
   //  @param paymentData Dữ liệu thanh toán từ localStorage
 
   createHoaDonFromVnPay(paymentData: any): void {
-    const phuongThucThanhToanId = paymentData.chonPhuongThucThanhToan;
-    const voucherId = paymentData.selectedVoucherId || null;
     this.hoadonService.createHoaDon(
       this.idKhachHang,
-      voucherId,
+      paymentData.chonVoucherId,
       paymentData.tamTinh,
-      phuongThucThanhToanId,
+      paymentData.chonPhuongThucThanhToan,
       paymentData.tongTienThanhToan,
       paymentData.chonSdtNguoiNhan,
       paymentData.chonTenNguoiNhan,
