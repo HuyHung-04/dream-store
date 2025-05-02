@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher,Integer> {
     @Query("SELECT new com.example.dreambackend.dtos.VoucherDto(v.id, v.ten, v.giamToiDa, v.hinhThucGiam, v.giaTriGiam) " +
-            "FROM Voucher v WHERE v.trangThai = 1 AND v.soLuong > 0 AND v.ngayBatDau <= CURRENT_TIMESTAMP "
+            "FROM Voucher v WHERE v.trangThai = 1 AND v.soLuong > 0 AND v.ngayBatDau <= CURRENT_TIMESTAMP "+ "ORDER BY v.id DESC"
     )
     List<VoucherDto> findIdAndTen();
 

@@ -179,6 +179,17 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         // Nếu id phương thức thanh toán là 4, thì trạng thái hóa đơn là 2
         if (paymentMethodId == 4) {
             hoaDon.setTrangThai(2); // Trạng thái hóa đơn là 2
+
+            // Trừ số lượng của voucher nếu có
+            if (voucher != null) {
+                int soLuongConLai = voucher.getSoLuong() - 1;
+                if (soLuongConLai < 0) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Voucher đã hết lượt sử dụng");
+                }
+                voucher.setSoLuong(soLuongConLai);
+                voucherRepository.save(voucher);
+            }
+
         } else {
             hoaDon.setTrangThai(1); // Đánh dấu hóa đơn là hoạt động
         }
@@ -193,9 +204,19 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
         for (GioHangChiTietResponse item : gioHangChiTietResponses) {
             if (item.getTrangThai() == 0 || item.getTrangThai() == 2) {
-
                 SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(item.getIdSanPhamChiTiet())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sản phẩm chi tiết không tồn tại"));
+
+                // Trừ số lượng sản phẩm chi tiết nếu phương thức thanh toán là 4
+                if (paymentMethodId == 4) {
+                    int soLuongConLai = sanPhamChiTiet.getSoLuong() - item.getSoLuong();
+                    if (soLuongConLai < 0) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sản phẩm không đủ số lượng tồn");
+                    }
+                    sanPhamChiTiet.setSoLuong(soLuongConLai);
+                    sanPhamChiTietRepository.save(sanPhamChiTiet);
+                }
+
                 HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
                 hoaDonChiTiet.setMa("HDCT" + System.currentTimeMillis());
                 hoaDonChiTiet.setHoaDon(hoaDon1);
