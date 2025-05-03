@@ -59,3 +59,7 @@ mat-sidenav-content {
   border: 3px solid white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+mat-sidenav a i {
+  font-size: 20px;
+}
