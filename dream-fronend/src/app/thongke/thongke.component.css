@@ -197,3 +197,12 @@
   color: #999;
   margin-top: 20px;
 }
+
+.radio-button select {
+  width: 100px;       /* Độ rộng mong muốn */
+  height: 45px;       /* Chiều cao */
+  font-size: 16px;    /* Cỡ chữ */
+  padding: 10px 20px;   /* Khoảng cách giữa nội dung và viền */
+  border-radius: 20px; /* Bo góc */
+  border: 1px solid #ccc;
+}

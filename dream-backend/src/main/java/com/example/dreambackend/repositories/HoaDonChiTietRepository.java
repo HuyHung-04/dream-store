@@ -32,25 +32,39 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "ORDER BY SUM(hdct.soLuong) DESC")
     Page<TopSanPhamResponse> getTopSanPhamHomNay(Pageable pageable);
 
-    // Top sản phẩm bán chạy nhất trong tháng này
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
             "FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.hoaDon hd " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
-            "WHERE hdct.ngayTao BETWEEN :startDate AND :endDate " +
+            "WHERE (hd.trangThai = 4 AND hd.ngaySua BETWEEN :startDate AND :endDate) " +
+            "   OR (hd.trangThai = 7 AND hd.ngayTao BETWEEN :startDate AND :endDate) " +
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
-    Page<TopSanPhamResponse> getTopSanPhamThangNay(Pageable pageable, LocalDate startDate, LocalDate endDate);
+    Page<TopSanPhamResponse> getTopSanPhamTheoThangVaNam(Pageable pageable,
+                                                         @Param("startDate") LocalDate startDate,
+                                                         @Param("endDate") LocalDate endDate);
 
-    // Top sản phẩm bán chạy nhất trong năm nay
+
+
+
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
             "FROM HoaDonChiTiet hdct " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
-            "WHERE YEAR(hdct.ngayTao) = YEAR(CURRENT_DATE) " +
+            "JOIN hdct.hoaDon hd " +
+            "WHERE ( " +
+            "   (hd.trangThai = 4 AND hd.ngaySua BETWEEN :startDate AND :endDate) " +
+            "   OR " +
+            "   (hd.trangThai = 7 AND hd.ngayTao BETWEEN :startDate AND :endDate) " +
+            ") " +
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
-    Page<TopSanPhamResponse> getTopSanPhamNamNay(Pageable pageable);
+    Page<TopSanPhamResponse> getTopSanPhamTheoNam(Pageable pageable,
+                                                  @Param("startDate") LocalDate startDate,
+                                                  @Param("endDate") LocalDate endDate);
+
+
 
     // Top sản phẩm bán chạy nhất tất cả thời gian
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +

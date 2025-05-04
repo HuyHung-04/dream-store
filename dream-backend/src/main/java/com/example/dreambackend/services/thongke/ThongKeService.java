@@ -4,12 +4,15 @@ import com.example.dreambackend.repositories.HoaDonChiTietRepository;
 import com.example.dreambackend.repositories.HoaDonRepository;
 import com.example.dreambackend.responses.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,16 +33,6 @@ public class ThongKeService {
                 startDate = LocalDate.now();
                 endDate = LocalDate.now();
                 break;
-            case "Tháng này":
-                YearMonth currentMonth = YearMonth.now();
-                startDate = currentMonth.atDay(1);  // Ngày đầu tháng
-                endDate = currentMonth.atEndOfMonth();  // Ngày cuối tháng
-                break;
-            case "Năm nay":
-                int currentYear = LocalDate.now().getYear();
-                startDate = LocalDate.of(currentYear, 1, 1);
-                endDate = LocalDate.of(currentYear, 12, 31);
-                break;
             case "Tất cả":
                 // Không thiết lập startDate và endDate
                 break;
@@ -50,9 +43,19 @@ public class ThongKeService {
         return hoaDonRepository.getTongQuan(startDate, endDate);
     }
 
-    public List<ThongKeThangResponse> thongKeTungThang() {
-        return hoaDonRepository.getDoanhThuTungThang();
+    // Phương thức để lấy tổng quan theo tháng và năm
+    public ThongKeResponse getTongQuanTheoThangVaNam(int month, int year) {
+        ThongKeResponse response = hoaDonRepository.getTongQuanTheoThangVaNam(month, year);
+        if (response == null) {
+            return new ThongKeResponse(0, 0, 0);
+        }
+        return response;
     }
+
+    public List<ThongKeThangResponse> thongKeTungThang(int year) {
+        return hoaDonRepository.getDoanhThuTungThangTheoNam(year);
+    }
+
     public List<ThongKeThangResponse> thongKeTungNam() {
         List<Object[]> results = hoaDonRepository.getDoanhThuTungNam();
         return results.stream()
@@ -61,9 +64,10 @@ public class ThongKeService {
                 .collect(Collectors.toList());
     }
     // Thống kê doanh thu từng ngày trong tháng
-    public List<ThongKeThangNayResponse> thongKeTungNgayTrongThang() {
-        return hoaDonRepository.getDoanhThuTungNgayTrongThang();
+    public List<ThongKeThangNayResponse> thongKeTungNgayTrongThang(int month, int year) {
+        return hoaDonRepository.getDoanhThuTheoNgayTheoThang(month, year);
     }
+
     // Thống kê doanh thu ngày hôm nay
     public ThongKeHomNayResponse thongKeHomNay() {
         return hoaDonRepository.getDoanhThuHomNay();
@@ -73,17 +77,36 @@ public class ThongKeService {
         return hoaDonChiTietRepository.getTopSanPhamHomNay(PageRequest.of(0, 5)).getContent();
     }
 
-    // Thống kê sản phẩm bán chạy nhất trong tháng này
-    public List<TopSanPhamResponse> topSanPhamThangNay() {
-        LocalDate startDate = LocalDate.now().withDayOfMonth(1); // Ngày đầu tháng
-        LocalDate endDate = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()); // Ngày cuối tháng
-        return hoaDonChiTietRepository.getTopSanPhamThangNay(PageRequest.of(0, 5), startDate, endDate).getContent();
+    public List<TopSanPhamResponse> topSanPhamTheoThangVaNam(int thang, int nam) {
+        // Xác định ngày bắt đầu và kết thúc của tháng
+        LocalDate startDate = LocalDate.of(nam, thang, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        Page<TopSanPhamResponse> pageResult = hoaDonChiTietRepository
+                .getTopSanPhamTheoThangVaNam(PageRequest.of(0, 5), startDate, endDate);
+
+        // Trả về danh sách sản phẩm (dù ít hơn 5 vẫn trả về đầy đủ)
+        return pageResult != null ? pageResult.getContent() : new ArrayList<>();
     }
 
-    // Thống kê sản phẩm bán chạy nhất trong năm nay
-    public List<TopSanPhamResponse> topSanPhamNamNay() {
-        return hoaDonChiTietRepository.getTopSanPhamNamNay(PageRequest.of(0, 5)).getContent();
+
+
+    public List<TopSanPhamResponse> topSanPhamTheoNam(int nam) {
+        LocalDate startDate = LocalDate.of(nam, 1, 1);
+        LocalDate endDate = LocalDate.of(nam, 12, 31);
+
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<TopSanPhamResponse> topSanPhamPage = hoaDonChiTietRepository.getTopSanPhamTheoNam(pageable, startDate, endDate);
+
+        // Kiểm tra xem có ít hơn 5 sản phẩm không và trả về tất cả nếu ít hơn 5
+        if (topSanPhamPage.getTotalElements() < 5) {
+            return topSanPhamPage.getContent(); // Trả về tất cả sản phẩm có trong năm
+        }
+
+        // Nếu có đủ 5 sản phẩm, trả về top 5
+        return topSanPhamPage.getContent();
     }
+
 
     // Thống kê sản phẩm bán chạy nhất tất cả thời gian
     public List<TopSanPhamResponse> topSanPhamTatCa() {

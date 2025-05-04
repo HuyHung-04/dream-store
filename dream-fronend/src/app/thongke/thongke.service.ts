@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface TopSanPhamResponse {
@@ -44,20 +44,24 @@ export class ThongKeService {
     return this.http.get<ThongKeResponse>(`${this.apiUrl}/${type}`);
   }
 
-  // Lấy dữ liệu thống kê doanh thu từng tháng trong năm nay
-  thongKeTungThangNam(): Observable<ThongKeThangResponse[]> {
-    return this.http.get<ThongKeThangResponse[]>(`${this.apiUrl}/nam-nay/thang`);
-  }
+// Lấy dữ liệu thống kê doanh thu từng tháng trong năm được chọn
+thongKeTungThangNam(year: number): Observable<ThongKeThangResponse[]> {
+  return this.http.get<ThongKeThangResponse[]>(`${this.apiUrl}/nam-nay/thang`, {
+    params: { year: year.toString() }
+  });
+}
 
   // Lấy dữ liệu thống kê doanh thu theo từng năm
   thongKeTungNam(): Observable<ThongKeThangResponse[]> {
     return this.http.get<ThongKeThangResponse[]>(`${this.apiUrl}/tat-ca/nam`);
   }
 
-  // Lấy dữ liệu thống kê doanh thu theo từng ngày trong tháng
-  thongKeTungNgayTrongThang(): Observable<ThongKeThangNayResponse[]> {
-    return this.http.get<ThongKeThangNayResponse[]>(`${this.apiUrl}/thang-nay/ngay`);
+  thongKeTungNgayTrongThang(month: number, year: number): Observable<ThongKeThangNayResponse[]> {
+    return this.http.get<ThongKeThangNayResponse[]>(
+      `${this.apiUrl}/thang-nay/ngay?month=${month}&year=${year}`
+    );
   }
+  
   // Lấy dữ liệu thống kê doanh thu ngày hôm nay
   thongKeHomNay(): Observable<ThongKeHomNayResponse> {
     return this.http.get<ThongKeHomNayResponse>(`${this.apiUrl}/hom-nay`);
@@ -68,18 +72,32 @@ export class ThongKeService {
     return this.http.get<TopSanPhamResponse[]>(`${this.apiUrl}/hom-nay/top-san-pham?page=${page}&size=${size}`);
   }
 
-  // Lấy top sản phẩm bán chạy trong tháng này
-  topSanPhamThangNay(page: number, size: number): Observable<TopSanPhamResponse[]> {
-    return this.http.get<TopSanPhamResponse[]>(`${this.apiUrl}/thang-nay/top-san-pham?page=${page}&size=${size}`);
-  }
+  // Lấy top sản phẩm bán chạy theo tháng và năm truyền vào
+topSanPhamTheoThangVaNam(thang: number, nam: number, page: number, size: number): Observable<TopSanPhamResponse[]> {
+  return this.http.get<TopSanPhamResponse[]>(
+    `${this.apiUrl}/top-san-pham?thang=${thang}&nam=${nam}&page=${page}&size=${size}`
+  );
+}
 
-  // Lấy top sản phẩm bán chạy trong năm nay
-  topSanPhamNamNay(page: number, size: number): Observable<TopSanPhamResponse[]> {
-    return this.http.get<TopSanPhamResponse[]>(`${this.apiUrl}/nam-nay/top-san-pham?page=${page}&size=${size}`);
-  }
+  // Lấy top sản phẩm bán chạy theo năm được chọn
+topSanPhamTheoNam(nam: number, page: number, size: number): Observable<TopSanPhamResponse[]> {
+  return this.http.get<TopSanPhamResponse[]>(
+    `${this.apiUrl}/top-san-pham-nam?nam=${nam}&page=${page}&size=${size}`
+  );
+}
+
 
   // Lấy top sản phẩm bán chạy tất cả thời gian
   topSanPhamTatCa(page: number, size: number): Observable<TopSanPhamResponse[]> {
     return this.http.get<TopSanPhamResponse[]>(`${this.apiUrl}/tat-ca/top-san-pham?page=${page}&size=${size}`);
+  }
+
+   // Phương thức để gọi API lấy tổng quan theo tháng và năm
+   getThongKeTongQuan(month: number, year: number): Observable<ThongKeResponse> {
+    const params = new HttpParams()
+      .set('month', month.toString())
+      .set('year', year.toString());
+
+    return this.http.get<ThongKeResponse>(`${this.apiUrl}/thongke/tongquan`, { params });
   }
 }

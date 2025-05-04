@@ -136,15 +136,12 @@ otpVerified: boolean = false;
     
     this.errorPass = {};
     
-      if (!this.newPassword.trim()) {
-        this.errorPass.pass = 'Mật khẩu mới không được để trống!';
-      }
-      if (!this.confirmPassword.trim()) {
-        this.errorPass.pass = 'Xác nhận mật khẩu không được để trống!';
-      }
-      if (this.confirmPassword!==this.newPassword) {
-        this.errorPass.pass = 'Mật khẩu mới và mật khẩu xác nhận không giống nhau!';
-      }
+    if (this.newPassword.length < 6 || this.newPassword.length > 30) {
+      this.errorPass.pass ='Mật khẩu phải có độ dài từ 6 đến 30 ký tự!';
+    }
+    if (this.confirmPassword!==this.newPassword) {
+      this.errorPass.pass = 'Mật khẩu mới và mật khẩu xác nhận không giống nhau!';
+    }
     
     return Object.keys(this.errorPass).length === 0;
   }

@@ -24,40 +24,62 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
 
     @Query("SELECT new com.example.dreambackend.responses.ThongKeResponse(COUNT(h.id), SUM(h.tongTienThanhToan), COUNT(DISTINCT h.khachHang.id)) " +
             "FROM HoaDon h " +
-            "WHERE h.trangThai IN (4, 7) " +
-            "AND (:startDate IS NULL OR ((h.trangThai = 7 AND h.ngayTao >= :startDate) OR (h.trangThai = 4 AND h.ngaySua >= :startDate))) " +
-            "AND (:endDate IS NULL OR ((h.trangThai = 7 AND h.ngayTao <= :endDate) OR (h.trangThai = 4 AND h.ngaySua <= :endDate)))")
+            "WHERE (:startDate IS NULL OR h.ngayTao >= :startDate) " +
+            "AND (:endDate IS NULL OR h.ngayTao <= :endDate) " +
+            "AND h.trangThai IN (4, 7)")
     ThongKeResponse getTongQuan(LocalDate startDate, LocalDate endDate);
 
-    @Query("SELECT new com.example.dreambackend.responses.ThongKeThangResponse(MONTH(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END), SUM(h.tongTienThanhToan)) " +
+    @Query("SELECT new com.example.dreambackend.responses.ThongKeResponse(" +
+            "COALESCE(COUNT(h.id), 0), " +
+            "COALESCE(SUM(h.tongTienThanhToan), 0.0), " +
+            "COALESCE(COUNT(DISTINCT h.khachHang.id), 0)) " +
             "FROM HoaDon h " +
-            "WHERE YEAR(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END) = YEAR(CURRENT_DATE) " +
-            "AND h.trangThai IN (4, 7) " +
-            "GROUP BY MONTH(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END) " +
-            "ORDER BY MONTH(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END)")
-    List<ThongKeThangResponse> getDoanhThuTungThang();
+            "WHERE (" +
+            "(:month = 0 OR (h.trangThai = 4 AND MONTH(h.ngaySua) = :month) OR (h.trangThai = 7 AND MONTH(h.ngayTao) = :month))" +
+            ") " +
+            "AND (" +
+            "(h.trangThai = 4 AND YEAR(h.ngaySua) = :year) OR (h.trangThai = 7 AND YEAR(h.ngayTao) = :year)" +
+            ") " +
+            "AND h.trangThai IN (4, 7)")
+    ThongKeResponse getTongQuanTheoThangVaNam(@Param("month") int month, @Param("year") int year);
 
-    @Query("SELECT YEAR(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END) AS year, SUM(h.tongTienThanhToan) AS totalRevenue " +
+
+
+    @Query("SELECT new com.example.dreambackend.responses.ThongKeThangResponse(MONTH(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END), SUM(h.tongTienThanhToan)) " +
+            "FROM HoaDon h " +
+            "WHERE YEAR(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END) = :year " +
+            "AND h.trangThai IN (4, 7) " +
+            "GROUP BY MONTH(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END) " +
+            "ORDER BY MONTH(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END)")
+    List<ThongKeThangResponse> getDoanhThuTungThangTheoNam(@Param("year") int year);
+
+    @Query("SELECT YEAR(h.ngayTao) AS year, SUM(h.tongTienThanhToan) AS totalRevenue " +
             "FROM HoaDon h " +
             "WHERE h.trangThai IN (4, 7) " +
-            "GROUP BY YEAR(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END) " +
-            "ORDER BY YEAR(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END)")
+            "GROUP BY YEAR(h.ngayTao) " +
+            "ORDER BY YEAR(h.ngayTao)")
     List<Object[]> getDoanhThuTungNam();
 
     @Query("SELECT new com.example.dreambackend.responses.ThongKeThangNayResponse(" +
-            "DAY(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END), SUM(h.tongTienThanhToan)) " +
+            "DAY(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END), " +
+            "SUM(h.tongTienThanhToan)) " +
             "FROM HoaDon h " +
-            "WHERE MONTH(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END) = MONTH(CURRENT_DATE) " +
-            "AND YEAR(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END) = YEAR(CURRENT_DATE) " +
+            "WHERE MONTH(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END) = :month " +
+            "AND YEAR(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END) = :year " +
             "AND h.trangThai IN (4, 7) " +
-            "GROUP BY DAY(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END) " +
-            "ORDER BY DAY(CASE WHEN h.trangThai = 7 THEN h.ngayTao ELSE h.ngaySua END)")
-    List<ThongKeThangNayResponse> getDoanhThuTungNgayTrongThang();
+            "GROUP BY DAY(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END) " +
+            "ORDER BY DAY(CASE WHEN h.trangThai = 4 THEN h.ngaySua ELSE h.ngayTao END)")
+    List<ThongKeThangNayResponse> getDoanhThuTheoNgayTheoThang(
+            @Param("month") int month,
+            @Param("year") int year
+    );
+
+    // Truy vấn doanh thu hôm nay
 
     @Query("SELECT new com.example.dreambackend.responses.ThongKeHomNayResponse(" +
             "COUNT(h.id), SUM(h.tongTienThanhToan), COUNT(DISTINCT h.khachHang.id)) " +
             "FROM HoaDon h " +
-            "WHERE ((h.trangThai = 7 AND h.ngayTao = CURRENT_DATE) OR (h.trangThai = 4 AND h.ngaySua = CURRENT_DATE)) " +
+            "WHERE h.ngayTao = CURRENT_DATE " +
             "AND h.trangThai IN (4, 7)")
     ThongKeHomNayResponse getDoanhThuHomNay();
 

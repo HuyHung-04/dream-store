@@ -23,10 +23,11 @@ public class ThongKeController {
     }
 
     @GetMapping("/nam-nay/thang")
-    public ResponseEntity<List<ThongKeThangResponse>> thongKeTungThang() {
-        List<ThongKeThangResponse> response = thongKeService.thongKeTungThang();
+    public ResponseEntity<List<ThongKeThangResponse>> thongKeTungThang(@RequestParam("year") int year) {
+        List<ThongKeThangResponse> response = thongKeService.thongKeTungThang(year);
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/tat-ca/nam")
     public ResponseEntity<List<ThongKeThangResponse>> thongKeTungNam() {
         List<ThongKeThangResponse> response = thongKeService.thongKeTungNam();
@@ -34,10 +35,24 @@ public class ThongKeController {
     }
     // Endpoint lấy doanh thu từng ngày trong tháng này
     @GetMapping("/thang-nay/ngay")
-    public ResponseEntity<List<ThongKeThangNayResponse>> thongKeTungNgayTrongThang() {
-        List<ThongKeThangNayResponse> response = thongKeService.thongKeTungNgayTrongThang();
+    public ResponseEntity<List<ThongKeThangNayResponse>> thongKeTungNgayTrongThang(
+            @RequestParam("month") int month,
+            @RequestParam("year") int year) {
+
+        List<ThongKeThangNayResponse> response = thongKeService.thongKeTungNgayTrongThang(month, year);
         return ResponseEntity.ok(response);
     }
+
+    // API để lấy tổng quan theo tháng và năm
+    @GetMapping("/thongke/tongquan")
+    public ResponseEntity<ThongKeResponse> getThongKeTongQuan(
+            @RequestParam(value = "month") int month,
+            @RequestParam(value = "year") int year) {
+
+        ThongKeResponse thongKeResponse = thongKeService.getTongQuanTheoThangVaNam(month, year);
+        return ResponseEntity.ok(thongKeResponse);
+    }
+
     // Endpoint lấy doanh thu ngày hôm nay
     @GetMapping("/hom-nay")
     public ResponseEntity<ThongKeHomNayResponse> thongKeHomNay() {
@@ -51,19 +66,24 @@ public class ThongKeController {
         return ResponseEntity.ok(response);
     }
 
-    // Endpoint lấy top sản phẩm bán chạy nhất trong tháng này
-    @GetMapping("/thang-nay/top-san-pham")
-    public ResponseEntity<List<TopSanPhamResponse>> topSanPhamThangNay() {
-        List<TopSanPhamResponse> response = thongKeService.topSanPhamThangNay();
+    // Endpoint lấy top sản phẩm bán chạy theo tháng và năm
+    @GetMapping("/top-san-pham")
+    public ResponseEntity<List<TopSanPhamResponse>> topSanPhamTheoThangVaNam(
+            @RequestParam("thang") int thang,
+            @RequestParam("nam") int nam) {
+
+        List<TopSanPhamResponse> response = thongKeService.topSanPhamTheoThangVaNam(thang, nam);
         return ResponseEntity.ok(response);
     }
 
-    // Endpoint lấy top sản phẩm bán chạy nhất trong năm nay
-    @GetMapping("/nam-nay/top-san-pham")
-    public ResponseEntity<List<TopSanPhamResponse>> topSanPhamNamNay() {
-        List<TopSanPhamResponse> response = thongKeService.topSanPhamNamNay();
+
+    // Endpoint lấy top sản phẩm bán chạy theo năm truyền vào
+    @GetMapping("/top-san-pham-nam")
+    public ResponseEntity<List<TopSanPhamResponse>> topSanPhamTheoNam(@RequestParam("nam") int nam) {
+        List<TopSanPhamResponse> response = thongKeService.topSanPhamTheoNam(nam);
         return ResponseEntity.ok(response);
     }
+
 
     // Endpoint lấy top sản phẩm bán chạy nhất tất cả thời gian
     @GetMapping("/tat-ca/top-san-pham")

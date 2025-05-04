@@ -102,13 +102,13 @@ import { Component, OnInit } from '@angular/core';
    }
    validateEditFormMK(){
     this.error = {};
-    if (!this.matKhauHienTai.trim()) {
-      this.error.matKhauHienTai = 'Mật khẩu không được để trống!';
+    if (this.matKhauHienTai.length < 6 || this.matKhauHienTai.length > 30) {
+      this.error.matKhauHienTai ='Mật khẩu phải có độ dài từ 6 đến 30 ký tự!';
     }
     if (!this.matKhauXacNhan.trim()) {
       this.error.matKhauXacNhan = 'Xác nhận mật khẩu không được để trống!';
     }
-    if (this.matKhauXacNhan==this.matKhauXacNhan) {
+    if (this.matKhauHienTai!==this.matKhauXacNhan) {
       this.error.matKhauXacNhan = 'Xác nhận mật khẩu phải giống mật khẩu!';
     }
     return Object.keys(this.error).length === 0;
