@@ -16,7 +16,7 @@ export class KhachhangComponent implements OnInit {
   maxVisiblePages = 3;
   totalPages: number = 0;
   currentPage: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 7;
   showModalEdit = false;
   selectedKhachHang: any = null;
   khachHangEdit: any = {};

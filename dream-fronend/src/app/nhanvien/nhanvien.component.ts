@@ -24,7 +24,7 @@ export class NhanvienComponent implements OnInit {
   maxVisiblePages = 8;
   totalPages: number = 0;
   currentPage: number = 0;
-  pageSize: number = 5;
+  pageSize: number = 6;
 
   selectedNhanVien: any = null;
   nhanVienEdit: any = {};

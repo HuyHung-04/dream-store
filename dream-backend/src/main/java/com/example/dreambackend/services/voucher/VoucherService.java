@@ -52,10 +52,6 @@ public class VoucherService implements IVoucherService {
                 .orElseThrow(() -> new IllegalArgumentException("Voucher không tồn tại với id: " + id));
     }
 
-    public Page<Voucher> searchVoucherByName(String ten, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return voucherRepository.findByTenContainingIgnoreCase(ten, pageable);
-    }
 
     private void checkAndUpdateStatus(Voucher voucher) {
         boolean updated = false;
@@ -78,7 +74,7 @@ public class VoucherService implements IVoucherService {
     }
     @Override
     public Page<Voucher> getAllVoucherByTenAndTrangThai(int trangThai, String ten, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         return voucherRepository.findByTrangThaiAndTenContainingIgnoreCase(trangThai,ten, pageable);
     }
 

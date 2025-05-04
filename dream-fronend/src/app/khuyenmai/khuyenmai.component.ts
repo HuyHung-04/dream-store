@@ -233,7 +233,7 @@ export class KhuyenmaiComponent implements OnInit {
       if (isNaN(checkSo)) {
         this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
       } else if (checkSo <= 0) {
-        this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1!';
+        this.errors.giaTriGiam = 'Giá trị giảm lớn hơn 0!';
       }
       else if (checkSo > 100) {
         this.errors.giaTriGiam = 'Giá trị giảm không được quá 100%';
@@ -263,6 +263,7 @@ export class KhuyenmaiComponent implements OnInit {
       if (endDate < currentDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc không được nhỏ hơn ngày hiện tại!';
       }
+
     }
 
     if (this.khuyenmai.trangThai === null || this.khuyenmai.trangThai === undefined) {
@@ -277,13 +278,13 @@ export class KhuyenmaiComponent implements OnInit {
       this.loadPage(0)
       return
     }
- 
-    this.khuyenmaiService.searchKhuyenMaiByTenAndTrangThai(this.selectedTrangThai,this.searchText,0,8).subscribe(
+
+    this.khuyenmaiService.searchKhuyenMaiByTenAndTrangThai(this.selectedTrangThai, this.searchText, 0, 8).subscribe(
       (data) => {
         this.khuyenmais = data.content
-         this.totalPages = data.totalPages || 0; 
-         this.currentPage = 0; 
-         this.tinhSoTrang(); 
+        this.totalPages = data.totalPages || 0;
+        this.currentPage = 0;
+        this.tinhSoTrang();
       },
       (error) => {
 
@@ -308,7 +309,7 @@ export class KhuyenmaiComponent implements OnInit {
       if (isNaN(checkSo)) {
         this.errors.giaTriGiam = 'Giá trị giảm phải là số!';
       } else if (checkSo < 1) {
-        this.errors.giaTriGiam = 'Giá trị giảm không được nhỏ hơn 1';
+        this.errors.giaTriGiam = 'Giá trị giảm phải lớn hơn 0';
       }
       else if (checkSo > 100) {
         this.errors.giaTriGiam = 'Giá trị giảm không được lớn hơn 100%';
@@ -325,7 +326,7 @@ export class KhuyenmaiComponent implements OnInit {
       const currentDate = new Date();
       const startDate = new Date(`${this.khuyenmaiEdit.ngayBatDau}T23:58:59.999`);
       const endDate = new Date(`${this.khuyenmaiEdit.ngayKetThuc}T23:59:59.999`);
-    
+
       endDate.setHours(23, 59, 59, 999);
       if (startDate > endDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc phải sau ngày bắt đầu!';
@@ -333,13 +334,9 @@ export class KhuyenmaiComponent implements OnInit {
       else if (endDate < currentDate && this.khuyenmaiEdit.trangThai == true) {
         this.errors.trangThai = 'Khuyến mãi đã hết hạn, trạng thái phải là "Không hoạt động".';
       }
-      else if (startDate < currentDate) {
-        this.errors.ngayBatDau = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại!';
-      }
       else if (endDate < currentDate) {
         this.errors.ngayKetThuc = 'Ngày kết thúc phải lớn hơn ngày hiện tại!';
       }
-
     }
     if (this.khuyenmaiEdit.trangThai === null || this.khuyenmaiEdit.trangThai === undefined) {
       this.errors.trangThai = 'Vui lòng chọn trạng thái!';
@@ -387,7 +384,7 @@ export class KhuyenmaiComponent implements OnInit {
   }
 
   locTheoTrangThai(trangThai: number, page: number): void {
-    this.khuyenmaiService.searchKhuyenMaiByTenAndTrangThai(trangThai,this.searchText, page, 8).subscribe((response) => {
+    this.khuyenmaiService.searchKhuyenMaiByTenAndTrangThai(trangThai, this.searchText, page, 8).subscribe((response) => {
       this.khuyenmais = response.content;
       this.totalPages = response.totalPages;
       this.currentPage = page;

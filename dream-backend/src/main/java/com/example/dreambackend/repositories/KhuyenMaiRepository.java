@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface KhuyenMaiRepository extends JpaRepository<KhuyenMai, Integer> {
-    Page<KhuyenMai> findByTenContainingIgnoreCase(String ten, Pageable pageable);
     @Query("SELECT k FROM KhuyenMai k " +
             "WHERE (:trangThai = 3 OR k.trangThai = :trangThai) " +
             "AND (:ten IS NULL OR :ten = '' OR LOWER(k.ten) LIKE LOWER(CONCAT('%', :ten, '%')))")

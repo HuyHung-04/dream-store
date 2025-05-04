@@ -11,7 +11,6 @@ public interface IKhuyenMaiService {
     KhuyenMai addKhuyenMai(KhuyenMai khuyenMai);
     KhuyenMai updateKhuyenMai(KhuyenMai khuyenMai);
     KhuyenMai getKhuyenMaiById(Integer id);
-    Page<KhuyenMai> searchKhuyenMaiByName(String ten,int page, int size);
     List<SanPhamChiTietDto> findAvailableProducts(String tenSanPham, Integer khuyenMaiId);
     void updateKhuyenMaiProducts(Integer khuyenMaiId, List<Integer> productIds);
     Page<KhuyenMai> getAllKhuyenMaiByTenAndTrangThai(int trangThai, String ten, int page, int size);

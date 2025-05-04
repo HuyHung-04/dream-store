@@ -176,9 +176,29 @@ export class BanhangComponent implements OnInit {
       return;
     }
 
+    // Nếu không có khách hàng được chọn, sử dụng khách vãng lai (id = 1)
+    if (!this.selectedKhachHang) {
+      this.banhangService.getKhachHangById(1).subscribe(
+        (khachVangLai) => {
+          this.selectedKhachHang = khachVangLai;
+          this.tenKhachHang = khachVangLai.ten;
+          this.sdtNguoiNhan = '';
+          this.createInvoiceWithKhachHang();
+        },
+        (error) => {
+          console.error('Lỗi khi lấy thông tin khách vãng lai:', error);
+          alert('Không thể tạo hóa đơn. Vui lòng thử lại.');
+        }
+      );
+    } else {
+      this.createInvoiceWithKhachHang();
+    }
+  }
+
+  private createInvoiceWithKhachHang() {
     const request = {
       idNhanVien: this.selectedNhanVien,
-      idKhachHang: this.selectedKhachHang?.id || null,
+      idKhachHang: this.selectedKhachHang?.id || 1, // Sử dụng ID 1 nếu không có khách hàng được chọn
       idPhuongThucThanhToan: this.selectedPaymentMethod,
       tongTienTruocVoucher: 0,
       tongTienThanhToan: 0,
@@ -198,7 +218,7 @@ export class BanhangComponent implements OnInit {
       },
       (error) => {
         console.error('Lỗi khi tạo hóa đơn:', error);
-        alert('Hãy chọn khách hàng trước khi tạo hóa đơn');
+        alert('Không thể tạo hóa đơn. Vui lòng thử lại.');
       }
     );
   }
@@ -418,19 +438,12 @@ export class BanhangComponent implements OnInit {
 
   // Chọn khách hàng vãng lai
   chonKhachHangVangLai() {
-    const khachHangVangLai = {
-      ten: 'Khách vãng lai',
-      soDienThoai: '',
-      email: '',
-      diaChi: ''
-    };
-
-    // Lưu khách hàng vãng lai vào database
-    this.banhangService.createKhachHang(khachHangVangLai).subscribe(
-      (response: any) => {
-        console.log('Tạo mới khách hàng vãng lai thành công:', response);
-        this.selectedKhachHang = response;
-        this.tenKhachHang = response.ten;
+    // Lấy thông tin khách vãng lai có id = 1 từ database
+    this.banhangService.getKhachHangById(1).subscribe(
+      (khachHangVangLai: any) => {
+        console.log('Lấy thông tin khách hàng vãng lai thành công:', khachHangVangLai);
+        this.selectedKhachHang = khachHangVangLai;
+        this.tenKhachHang = khachHangVangLai.ten;
         this.sdtNguoiNhan = '';
         this.hienThiDanhSachKhachHang = false;
 
@@ -438,8 +451,8 @@ export class BanhangComponent implements OnInit {
         if (this.selectedInvoice) {
           const updatedInvoice = {
             ...this.selectedInvoice,
-            idKhachHang: response.id,
-            tenNguoiNhan: response.ten,
+            idKhachHang: 1, // Luôn sử dụng ID 1 cho khách vãng lai
+            tenNguoiNhan: khachHangVangLai.ten,
             sdtNguoiNhan: ''
           };
 
@@ -456,8 +469,8 @@ export class BanhangComponent implements OnInit {
         }
       },
       (error: any) => {
-        console.error('Lỗi khi tạo mới khách hàng vãng lai:', error);
-        alert('Không thể tạo khách hàng vãng lai. Vui lòng thử lại.');
+        console.error('Lỗi khi lấy thông tin khách hàng vãng lai:', error);
+        alert('Không thể lấy thông tin khách hàng vãng lai. Vui lòng thử lại.');
       }
     );
   }
@@ -1279,6 +1292,8 @@ export class BanhangComponent implements OnInit {
                 this.loadSanPhamToBanHang();
                 this.loadAllSanPham();
                 this.layChiTietHoaDon();
+                this.getVoucher(this.getTotal());
+                this.updateVoucher();
               },
               error => {
                 console.error('Lỗi khi cập nhật số lượng tồn:', error);
@@ -1445,18 +1460,19 @@ export class BanhangComponent implements OnInit {
                     this.loadSanPhamToBanHang();
                     this.loadAllSanPham();
                     this.layChiTietHoaDon();
+                    // Cập nhật voucher ngay sau khi cập nhật số lượng
+                    this.getVoucher(this.getTotal());
+                    this.updateVoucher();
                   },
                   error => {
                     console.error('Lỗi khi cập nhật số lượng tồn:', error);
                     item.soLuong = this.previousQuantity;
                     this.cdr.detectChanges();
-
                   }
                 );
               }
 
               this.updateInvoiceTotal();
-              this.updateVoucher();
               this.cdr.detectChanges();
             },
             error => {

@@ -13,7 +13,6 @@ public interface IKhachHangService {
     KhachHang addKhachHang(KhachHangDto khachHangDto);
     KhachHang updateKhachHang(KhachHang khachHang);
     Page<KhachHang> getAllKhachHangPaged(int page, int size);
-    Page<KhachHang> searchKhachHangByName(String ten,int page, int size);
     KhachHang getKhachHangByEmail(String email);
     KhachHang updateOtpKhachHang(String email);
     KhachHang deleteOtpKhachHang(String email);

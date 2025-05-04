@@ -66,7 +66,7 @@ public class KhachHangService implements IKhachHangService{
     }
     @Override
     public Page<KhachHang> getAllKhachHangByTenAndTrangThai(int trangThai, String ten,int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         return khachHangRepository.findByTrangThaiAndTenContainingIgnoreCase(trangThai,ten, pageable);
     }
 
@@ -78,10 +78,6 @@ public class KhachHangService implements IKhachHangService{
         return khachHangRepository.save(khachHang);
     }
 
-    public Page<KhachHang> searchKhachHangByName(String ten, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return khachHangRepository.findByTenContainingIgnoreCase(ten, pageable);
-    }
 
 
     @Override

@@ -1141,6 +1141,7 @@ export class SanphamComponent implements OnInit {
           alert("Cập nhật sản phẩm chi tiết thành công");
           // Cập nhật dữ liệu trên table mà không cần load lại trang
           this.listSanPhamChiTiet();
+          this.listSanPham();
           this.openModalSanPhamChiTiet(this.selectedProduct.id);
           this.closeModalSanPhamChiTietThem();
         },

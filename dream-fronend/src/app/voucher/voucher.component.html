@@ -43,8 +43,8 @@
             <td>{{ voucher.soLuong }}</td>
             <td>{{ voucher.hinhThucGiam ? 'Giảm tiền' : 'Giảm %' }}</td>
             <td>{{ voucher.giaTriGiam }} {{ voucher.hinhThucGiam ? 'VND' : '%' }} </td>
-            <td>{{ voucher.donToiThieu}}</td>
-            <td>{{ voucher.giamToiDa != null && voucher.giamToiDa !== '' ? voucher.giamToiDa : 'Không áp dụng' }}</td>
+            <td>{{ voucher.donToiThieu}} VND</td>
+            <td>{{ voucher.giamToiDa != null && voucher.giamToiDa !== '' ? voucher.giamToiDa + ' VND' : 'Không áp dụng' }}</td>
             <td>{{ voucher.trangThai ? "Hoạt động" : "Không hoạt động" }}</td>
             <td>{{ voucher.ngayTao }}</td>
             <td>{{ voucher.ngaySua }}</td>
@@ -184,7 +184,7 @@
   
           <div class="input-row">
             <div class="input-field">
-              <input type="number" class="input" [(ngModel)]="voucherEdit.soLuong" name="soLuong" required [readonly]="voucherUsed || checkNgay" (click)="showCannotEditMessage('soLuong')" />
+              <input type="number" class="input" [(ngModel)]="voucherEdit.soLuong" name="soLuong" required [readonly]="checkNgay" (click)="showCannotEditMessage('soLuong')" />
               <label for="soLuong">Số lượng</label>
               <div class="tooltip-error" *ngIf="errors.soLuong">
                {{errors.soLuong}}
