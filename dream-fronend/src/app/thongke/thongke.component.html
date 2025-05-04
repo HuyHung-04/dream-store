@@ -38,7 +38,42 @@
       />
       <span>Tất cả</span>
     </label>
+
+    <label class="radio-button">
+      <input
+        type="radio"
+        name="thongkeType"
+        value="Tùy chỉnh"
+        [checked]="selectedType === 'Tùy chỉnh'"
+        (change)="handleTypeChange('Tùy chỉnh')"
+      />
+      <span>Tùy chỉnh</span>
+    </label>
   </div>
+  <!-- Phần chọn ngày tùy chỉnh -->
+<div *ngIf="selectedType === 'Tùy chỉnh'" class="custom-range-picker">
+  <div class="date-inputs">
+    <input
+      type="date"
+      [(ngModel)]="startDate"
+      placeholder="Từ ngày"
+      class="form-control"
+    >
+    <input
+      type="date"
+      [(ngModel)]="endDate"
+      placeholder="Đến ngày"
+      class="form-control"
+    >
+    <button 
+      class="btn-apply"
+      (click)="applyCustomRange()"
+      [disabled]="!isDateValid()"
+    >
+      Áp dụng
+    </button>
+  </div>
+</div>
   
   
 
@@ -84,9 +119,45 @@
           <option *ngFor="let year of years" [value]="year">{{ year }}</option>
         </select>
         <button (click)="loadTopSanPhamTatCa()">Tất cả</button>
+
+        <button 
+    (click)="chonCheDoTuyChinh()"
+    [class.selected]="selectedTopType === 'Tùy chỉnh'"
+     >Tùy chỉnh</button>
+      </div>
+      <div *ngIf="selectedTopType === 'Tùy chỉnh'" class="custom-range-picker">
+        <input
+          type="date"
+          [(ngModel)]="topStartDate"
+          class="form-control"
+          placeholder="Từ ngày"
+        />
+        <input
+          type="date"
+          [(ngModel)]="topEndDate"
+          class="form-control"
+          placeholder="Đến ngày"
+        />
+        <button
+          class="btn-apply"
+          (click)="loadTopSanPhamTheoKhoangNgay()"
+          [disabled]="!isTopDateValid()"
+        >
+          Áp dụng
+        </button>
       </div>
 
-      <!-- Hiển thị danh sách top sản phẩm bán chạy -->
+   <!-- Hiển thị cho chế độ Tùy chỉnh -->
+  <div *ngIf="selectedTopType === 'Tùy chỉnh'">
+    <div *ngIf="!daApDungTuyChinh" class="no-data-message">
+      Vui lòng chọn khoảng thời gian và ấn Áp dụng
+    </div>
+    
+    <div *ngIf="daApDungTuyChinh">
+      <div class="pie-chart-container">
+        <canvas id="pieChart"></canvas>
+      </div>
+      
       <div *ngIf="topSanPhamData.length > 0">
         <ul class="top-san-pham-list">
           <li *ngFor="let item of topSanPhamData" class="top-san-pham-item">
@@ -95,10 +166,8 @@
           </li>
         </ul>
       </div>
-
-      <!-- Nếu không có dữ liệu -->
       <div *ngIf="topSanPhamData.length === 0" class="no-data-message">
-        <p>Không có dữ liệu sản phẩm bán chạy.</p>
+        Không có dữ liệu trong khoảng thời gian này
       </div>
     </div>
   </div>

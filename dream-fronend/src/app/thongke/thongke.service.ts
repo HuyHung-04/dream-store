@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface TopSanPhamResponse {
@@ -100,4 +100,58 @@ topSanPhamTheoNam(nam: number, page: number, size: number): Observable<TopSanPha
 
     return this.http.get<ThongKeResponse>(`${this.apiUrl}/thongke/tongquan`, { params });
   }
+
+
+
+  // Trong thongke.service.ts
+  thongKeTheoKhoangThoiGian(
+    startDate: string | null, 
+    endDate: string | null
+    ): Observable<ThongKeResponse> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+    });
+  
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.append('startDate', startDate); // Format: yyyy-MM-dd
+    }
+    if (endDate) {
+      params = params.append('endDate', endDate); // Format: yyyy-MM-dd
+    }
+  
+    return this.http.get<ThongKeResponse>(
+      `${this.apiUrl}/khoang-thoi-gian`,
+      { params, headers }
+    );
+    }
+  
+  
+    // Thêm phương thức mới
+    topSanPhamTheoKhoangNgay(
+      startDate: string | null,
+      endDate: string | null,
+      page: number,
+      size: number
+    ): Observable<TopSanPhamResponse[]> {
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      });
+  
+      let params = new HttpParams()
+        .append('page', page.toString())
+        .append('size', size.toString());
+  
+      if (startDate) {
+        params = params.append('startDate', startDate);
+      }
+      if (endDate) {
+        params = params.append('endDate', endDate);
+      }
+  
+      return this.http.get<TopSanPhamResponse[]>(
+        `${this.apiUrl}/khoang-ngay/top-san-pham`,
+        { params, headers }
+      );
+    }
 }

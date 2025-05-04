@@ -37,6 +37,19 @@ export class ThongkeComponent implements OnInit {
   topProductYear: number = new Date().getFullYear();
   isMonthDisabled: boolean = true;
 
+   // Thêm các properties mới
+   startDate: string | null = null;
+   endDate: string | null = null;
+   errorMessage: string | null = null;
+
+    // Thêm các biến mới cho top sản phẩm theo khoảng ngày
+  topStartDate: string | null = null;
+  topEndDate: string | null = null;
+  topPage: number = 0;
+  topSize: number = 5;
+  selectedTopType: string = '';
+  daApDungTuyChinh: boolean = false;
+
   constructor(private thongKeService: ThongKeService) { }
 
   ngOnInit(): void {
@@ -47,9 +60,9 @@ export class ThongkeComponent implements OnInit {
   }
 
   loadThongKe(type: string): void {
-    this.loadBieuDoNam()
     this.selectedType = type;
     this.thongKeData = null;
+    this.loadBieuDoNam()
     this.destroyChart();
 
     // 👉 Đặt lại tháng và năm hiện tại
@@ -384,4 +397,139 @@ export class ThongkeComponent implements OnInit {
       },
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+  //khoang ngay
+// Thêm phương thức xử lý
+handleTypeChange(type: string): void {
+  this.selectedType = type;
+  if (type !== 'Tùy chỉnh') {
+    this.loadThongKe(type);
+  } else {
+    this.destroyChart();
+    this.thongKeData = null;
+  }
+}
+// Kiểm tra hợp lệ ngày
+isDateValid(): boolean {
+  if (!this.startDate || !this.endDate) return false;
+  return new Date(this.startDate) <= new Date(this.endDate);
+}
+applyCustomRange(): void {
+  if (!this.isDateValid()) {
+    this.errorMessage = 'Ngày bắt đầu phải trước ngày kết thúc';
+    this.thongKeData = null;
+    this.destroyChart(); // Xóa biểu đồ nếu có
+    this.loadTopSanPhamTheoKhoangNgay();
+    return;
+  }
+
+  this.errorMessage = null;
+
+  this.thongKeService
+    .thongKeTheoKhoangThoiGian(this.startDate!, this.endDate!)
+    .subscribe({
+      next: (data) => {
+        if (data && data.tongDoanhThu > 0) {
+          this.thongKeData = data;
+          this.renderCustomChart(); // Gọi vẽ biểu đồ cột tùy chỉnh
+        } else {
+          this.thongKeData = null;
+          this.destroyChart(); // Không có dữ liệu hợp lệ
+        }
+      },
+      error: (err) => {
+        this.errorMessage = 'Không có hóa đơn trong khoảng thời gian này';
+        this.thongKeData = null;
+        this.destroyChart(); // Xóa biểu đồ nếu lỗi
+        console.error(err);
+      }
+    });
+}
+
+// Thêm phương thức renderCustomChart()
+renderCustomChart(): void {
+if (!this.thongKeData) return;
+
+const labels = [`${this.startDate} đến ${this.endDate}`];
+const data = [this.thongKeData.tongDoanhThu];
+
+this.renderChart(labels, data, 'Doanh thu theo khoảng thời gian');
+}
+
+
+// Cập nhật phương thức load dữ liệu theo khoảng ngày
+loadTopSanPhamTheoKhoangNgay(): void {
+  if (!this.isTopDateValid()) {
+    this.errorMessage = 'Vui lòng chọn khoảng ngày hợp lệ (Từ ngày ≤ Đến ngày)';
+    return;
+  }
+
+  this.daApDungTuyChinh = true; // Đánh dấu đã áp dụng
+  this.resetTopSanPhamData(); // Xóa dữ liệu cũ
+
+  this.thongKeService
+    .topSanPhamTheoKhoangNgay(
+      this.topStartDate!, 
+      this.topEndDate!, 
+      this.topPage, 
+      this.topSize
+    )
+    .subscribe({
+      next: (data) => {
+        this.topSanPhamData = data;
+        this.renderPieChart();
+        this.errorMessage = null;
+      },
+      error: (err) => {
+        this.topSanPhamData = [];
+        this.errorMessage = 'Không có dữ liệu trong khoảng thời gian này';
+        console.error(err);
+      }
+    });
+}
+
+
+isTopDateValid(): boolean {
+  return this.topStartDate != null && this.topEndDate != null &&
+         new Date(this.topStartDate) <= new Date(this.topEndDate);
+}
+
+// Reset bộ lọc
+resetTopFilter(): void {
+  this.topStartDate = null;
+  this.topEndDate = null;
+  this.loadTopSanPhamTatCa(); // Hoặc load mặc định khác
+}
+// Thêm các phương thức mới
+chonCheDoTuyChinh(): void {
+this.selectedTopType = 'Tùy chỉnh';
+this.daApDungTuyChinh = false;
+this.resetTopSanPhamData();
+}
+
+// Cập nhật phương thức reset dữ liệu
+resetTopSanPhamData(): void {
+this.topSanPhamData = [];
+this.errorMessage = null;
+this.destroyPieChart();
+}
+
+// Phương thức hủy biểu đồ
+destroyPieChart(): void {
+if (this.pieChart) {
+  this.pieChart.destroy();
+  this.pieChart = null;
+}
+}
 }
