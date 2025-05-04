@@ -123,7 +123,11 @@ public class SanPhamService implements ISanPhamService {
                 row.createCell(6).setCellValue(sp.getGiaCaoNhat());
                 row.createCell(7).setCellValue(sp.getTongSoLuong());
                 row.createCell(8).setCellValue(sp.getNgayTao().toString());
-                row.createCell(9).setCellValue(sp.getNgaySua().toString());
+                if (sp.getNgaySua() != null) {
+                    row.createCell(9).setCellValue(sp.getNgaySua().toString());
+                } else {
+                    row.createCell(9).setCellValue(""); // Hoặc ghi "null" nếu bạn muốn
+                }
                 row.createCell(10).setCellValue(sp.getTrangThai() == 1 ?"Đang hoạt động":"Không hoạt động");
             }
 

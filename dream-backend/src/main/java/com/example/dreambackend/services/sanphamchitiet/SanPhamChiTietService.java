@@ -159,7 +159,11 @@ public class SanPhamChiTietService implements ISanPhamChiTietService {
                 row.createCell(2).setCellValue(sp.getGia());
                 row.createCell(3).setCellValue(sp.getSoLuong());
                 row.createCell(4).setCellValue(sp.getNgayTao().toString());
-                row.createCell(5).setCellValue(sp.getNgaySua().toString());
+                if (sp.getNgaySua() != null) {
+                    row.createCell(5).setCellValue(sp.getNgaySua().toString());
+                } else {
+                    row.createCell(5).setCellValue(""); // Hoặc ghi "null" nếu bạn muốn
+                }
                 row.createCell(6).setCellValue(sp.getTenKhuyenMai() != null ? sp.getTenKhuyenMai() : "Không áp dụng");
                 row.createCell(7).setCellValue(sp.getGiaSauGiam());
                 row.createCell(8).setCellValue(sp.getTrangThai() == 1 ?"Đang hoạt động":"Không hoạt động");
