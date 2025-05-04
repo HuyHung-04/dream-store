@@ -33,6 +33,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "ORDER BY SUM(hdct.soLuong) DESC")
     Page<TopSanPhamResponse> getTopSanPhamHomNay(Pageable pageable);
 
+
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
             "FROM HoaDonChiTiet hdct " +
             "JOIN hdct.hoaDon hd " +
@@ -108,6 +109,8 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             @Param("endDate") LocalDate endDate,
             Pageable pageable
     );
+
+
     List<HoaDonChiTiet> findByHoaDonId(int id);
 
     Optional<HoaDonChiTiet> findByHoaDonAndSanPhamChiTiet(HoaDon hoaDon, SanPhamChiTiet sanPhamChiTiet);

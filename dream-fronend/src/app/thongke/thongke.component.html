@@ -105,6 +105,20 @@
       <canvas id="pieChart"></canvas>
     </div>
 
+    <!-- Phần top sản phẩm bán chạy -->
+  <div class="flex-container">
+    <!-- Biểu đồ tròn -->
+    <div class="pie-chart-container">
+      <canvas id="pieChart"></canvas>
+    </div>
+
+   <!-- Phần top sản phẩm bán chạy -->
+   <div class="flex-container">
+    <!-- Biểu đồ tròn -->
+    <div class="pie-chart-container">
+      <canvas id="pieChart"></canvas>
+    </div>
+
     <!-- Top sản phẩm bán chạy -->
     <div class="top-san-pham-container">
       <p class="top-san-pham-title">Top 5 Sản Phẩm Bán Chạy</p>
@@ -119,45 +133,35 @@
           <option *ngFor="let year of years" [value]="year">{{ year }}</option>
         </select>
         <button (click)="loadTopSanPhamTatCa()">Tất cả</button>
-
         <button 
-    (click)="chonCheDoTuyChinh()"
-    [class.selected]="selectedTopType === 'Tùy chỉnh'"
-     >Tùy chỉnh</button>
-      </div>
-      <div *ngIf="selectedTopType === 'Tùy chỉnh'" class="custom-range-picker">
-        <input
-          type="date"
-          [(ngModel)]="topStartDate"
-          class="form-control"
-          placeholder="Từ ngày"
-        />
-        <input
-          type="date"
-          [(ngModel)]="topEndDate"
-          class="form-control"
-          placeholder="Đến ngày"
-        />
-        <button
-          class="btn-apply"
-          (click)="loadTopSanPhamTheoKhoangNgay()"
-          [disabled]="!isTopDateValid()"
-        >
-          Áp dụng
-        </button>
+        (click)="chonCheDoTuyChinh()"
+        [class.selected]="selectedTopType === 'Tùy chỉnh'"
+      >Tùy chỉnh</button>
+    
+        <div *ngIf="selectedTopType === 'Tùy chỉnh'" class="custom-range-picker">
+          <input
+            type="date"
+            [(ngModel)]="topStartDate"
+            class="form-control"
+            placeholder="Từ ngày"
+          />
+          <input
+            type="date"
+            [(ngModel)]="topEndDate"
+            class="form-control"
+            placeholder="Đến ngày"
+          />
+          <button
+            class="btn-apply"
+            (click)="loadTopSanPhamTheoKhoangNgay()"
+            [disabled]="!isTopDateValid()"
+          >
+            Áp dụng
+          </button>
+        </div>
       </div>
 
-   <!-- Hiển thị cho chế độ Tùy chỉnh -->
-  <div *ngIf="selectedTopType === 'Tùy chỉnh'">
-    <div *ngIf="!daApDungTuyChinh" class="no-data-message">
-      Vui lòng chọn khoảng thời gian và ấn Áp dụng
-    </div>
-    
-    <div *ngIf="daApDungTuyChinh">
-      <div class="pie-chart-container">
-        <canvas id="pieChart"></canvas>
-      </div>
-      
+      <!-- Hiển thị danh sách top sản phẩm bán chạy -->
       <div *ngIf="topSanPhamData.length > 0">
         <ul class="top-san-pham-list">
           <li *ngFor="let item of topSanPhamData" class="top-san-pham-item">
@@ -166,8 +170,10 @@
           </li>
         </ul>
       </div>
+
+      <!-- Nếu không có dữ liệu -->
       <div *ngIf="topSanPhamData.length === 0" class="no-data-message">
-        Không có dữ liệu trong khoảng thời gian này
+        <p>Không có dữ liệu sản phẩm bán chạy.</p>
       </div>
     </div>
   </div>
