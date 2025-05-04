@@ -1,105 +1,133 @@
 <!--<div class="thongke-container">-->
-  <!-- Phần nút chọn -->
-  <div class="buttons">
-    <!-- Hôm nay -->
-    <label class="radio-button">
-      <input
-        type="radio"
-        name="thongkeType"
-        [value]="'Hôm nay'"
-        [checked]="selectedType === 'Hôm nay'"
-        (change)="loadThongKe('Hôm nay')"
-      />
-      <span>Hôm nay</span>
-    </label>
-  
-    <!-- Tháng này (combobox tháng thay vì nút) -->
-    <label class="radio-button">
-      <select style="width: 130px;padding: 10px 10px ;" [(ngModel)]="selectedMonth" (change)="onMonthChange()">
-        <option *ngFor="let month of months" [value]="month.value" [disabled]="month.value == 0">{{ month.label }}</option>
+<!-- Phần nút chọn -->
+<div class="buttons">
+  <!-- Hôm nay -->
+  <label class="radio-button">
+    <input type="radio" name="thongkeType" [value]="'Hôm nay'" [checked]="selectedType === 'Hôm nay'"
+      (change)="loadThongKe('Hôm nay')" />
+    <span>Hôm nay</span>
+  </label>
+
+  <!-- Tháng này (combobox tháng thay vì nút) -->
+  <label class="radio-button">
+    <select style="width: 130px;padding: 10px 10px ;" [(ngModel)]="selectedMonth" (change)="onMonthChange()">
+      <option *ngFor="let month of months" [value]="month.value" [disabled]="month.value == 0">{{ month.label }}
+      </option>
+    </select>
+  </label>
+
+  <!-- Năm nay (combobox năm thay vì nút) -->
+  <label class="radio-button">
+    <select [(ngModel)]="selectedYear" (change)="onYearChange()">
+      <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+    </select>
+  </label>
+
+  <!-- Tất cả -->
+  <label class="radio-button">
+    <input type="radio" name="thongkeType" [value]="'Tất cả'" [checked]="selectedType === 'Tất cả'"
+      (change)="loadThongKe('Tất cả')" />
+    <span>Tất cả</span>
+  </label>
+
+  <label class="radio-button">
+    <input type="radio" name="thongkeType" value="Tùy chỉnh" [checked]="selectedType === 'Tùy chỉnh'"
+      (change)="handleTypeChange('Tùy chỉnh')" />
+    <span>Tùy chỉnh</span>
+  </label>
+</div>
+<!-- Phần chọn ngày tùy chỉnh -->
+<div *ngIf="selectedType === 'Tùy chỉnh'" class="custom-range-picker">
+  <div class="date-inputs">
+    <input type="date" [(ngModel)]="startDate" placeholder="Từ ngày" class="form-control">
+    <input type="date" [(ngModel)]="endDate" placeholder="Đến ngày" class="form-control">
+    <button class="btn-apply" (click)="applyCustomRange()" [disabled]="!isDateValid()">
+      Áp dụng
+    </button>
+  </div>
+</div>
+
+
+
+<!-- Phần hiển thị dữ liệu tổng quan -->
+<div class="thongke-summary" *ngIf="thongKeData">
+  <div class="summary-card">
+    <h3>Hóa đơn</h3>
+    <p>{{ thongKeData.soHoaDon }}</p>
+  </div>
+  <div class="summary-card">
+    <h3>Doanh thu</h3>
+    <p>{{ thongKeData.tongDoanhThu | number:'1.0-0' }} VND</p>
+  </div>
+  <div class="summary-card">
+    <h3>Khách hàng</h3>
+    <p>{{ thongKeData.soKhachHang }}</p>
+  </div>
+</div>
+
+<!-- Biểu đồ cột -->
+<div class="chart-container">
+  <canvas id="chart"></canvas>
+</div>
+
+<!-- Phần top sản phẩm bán chạy -->
+<div class="flex-container">
+  <!-- Biểu đồ tròn -->
+  <div class="pie-chart-container">
+    <canvas id="pieChart"></canvas>
+  </div>
+
+  <!-- Top sản phẩm bán chạy -->
+  <div class="top-san-pham-container">
+    <p class="top-san-pham-title">Top 5 Sản Phẩm Bán Chạy</p>
+
+    <!-- Nút để xem top sản phẩm bán chạy -->
+    <div class="top-san-pham-buttons">
+      <button (click)="loadTopSanPhamHomNay()">Hôm nay</button>
+      <select [(ngModel)]="topProductMonth" (change)="loadTopSanPhamThangNay()"
+        style="width: 130px;padding: 5px 10px;border-radius: 5px;color:#294764; border: 1px solid #294764;">
+        <option *ngFor="let month of months" [value]="month.value" [disabled]="month.value == 0">{{ month.label }}
+        </option>
       </select>
-    </label>
-  
-    <!-- Năm nay (combobox năm thay vì nút) -->
-    <label class="radio-button">
-      <select [(ngModel)]="selectedYear" (change)="onYearChange()">
+      <select [(ngModel)]="topProductYear" (change)="loadTopSanPhamNamNay()"
+        style="width: 90px;padding: 5px;border-radius: 5px;color:#294764; border: 1px solid #294764;">
         <option *ngFor="let year of years" [value]="year">{{ year }}</option>
       </select>
-    </label>
-  
-    <!-- Tất cả -->
-    <label class="radio-button">
-      <input
-        type="radio"
-        name="thongkeType"
-        [value]="'Tất cả'"
-        [checked]="selectedType === 'Tất cả'"
-        (change)="loadThongKe('Tất cả')"
-      />
-      <span>Tất cả</span>
-    </label>
-  </div>
-  
-  
+      <button (click)="loadTopSanPhamTatCa()">Tất cả</button>
 
-  <!-- Phần hiển thị dữ liệu tổng quan -->
-  <div class="thongke-summary" *ngIf="thongKeData">
-    <div class="summary-card">
-      <h3>Hóa đơn</h3>
-      <p>{{ thongKeData.soHoaDon }}</p>
+      <button (click)="chonCheDoTuyChinh()" [class.selected]="selectedTopType === 'Tùy chỉnh'">Tùy chỉnh</button>
     </div>
-    <div class="summary-card">
-      <h3>Doanh thu</h3>
-      <p>{{ thongKeData.tongDoanhThu | number:'1.0-0' }} VND</p>
+    <div *ngIf="selectedTopType === 'Tùy chỉnh'" class="custom-range-picker">
+      <input type="date" [(ngModel)]="topStartDate" class="form-control" placeholder="Từ ngày" />
+      <input type="date" [(ngModel)]="topEndDate" class="form-control" placeholder="Đến ngày" />
+      <button class="btn-apply" (click)="loadTopSanPhamTheoKhoangNgay()" [disabled]="!isTopDateValid()">
+        Áp dụng
+      </button>
     </div>
-    <div class="summary-card">
-      <h3>Khách hàng</h3>
-      <p>{{ thongKeData.soKhachHang }}</p>
-    </div>
-  </div>
-
-  <!-- Biểu đồ cột -->
-  <div class="chart-container">
-    <canvas id="chart"></canvas>
-  </div>
-
-  <!-- Phần top sản phẩm bán chạy -->
-  <div class="flex-container">
-    <!-- Biểu đồ tròn -->
-    <div class="pie-chart-container">
+    <!-- Biểu đồ luôn hiển thị nếu có dữ liệu -->
+    <div class="pie-chart-container" *ngIf="topSanPhamData.length > 0">
       <canvas id="pieChart"></canvas>
     </div>
 
-    <!-- Top sản phẩm bán chạy -->
-    <div class="top-san-pham-container">
-      <p class="top-san-pham-title">Top 5 Sản Phẩm Bán Chạy</p>
+    <!-- Danh sách sản phẩm -->
+    <div *ngIf="topSanPhamData.length > 0" class="top-san-pham-list-wrapper">
+      <ul class="top-san-pham-list" style="margin-top: -150px;">
+        <li *ngFor="let item of topSanPhamData" class="top-san-pham-item">
+          <span class="product-name">{{ item.tenSanPham }}</span>
+          <span class="product-quantity">{{ item.tongSoLuong }} sản phẩm</span>
+        </li>
+      </ul>
+    </div>
 
-      <!-- Nút để xem top sản phẩm bán chạy -->
-      <div class="top-san-pham-buttons">
-        <button (click)="loadTopSanPhamHomNay()">Hôm nay</button>
-        <select [(ngModel)]="topProductMonth" (change)="loadTopSanPhamThangNay()" style="width: 130px;padding: 5px 10px;border-radius: 5px;color:#294764; border: 1px solid #294764;">
-          <option *ngFor="let month of months" [value]="month.value" [disabled]="month.value == 0">{{ month.label }}</option>
-        </select>
-        <select [(ngModel)]="topProductYear" (change)="loadTopSanPhamNamNay()"style="width: 90px;padding: 5px;border-radius: 5px;color:#294764; border: 1px solid #294764;">
-          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-        </select>
-        <button (click)="loadTopSanPhamTatCa()">Tất cả</button>
-      </div>
+    <!-- Trạng thái không có dữ liệu cho chế độ Tùy chỉnh -->
+    <div *ngIf="selectedTopType === 'Tùy chỉnh' && daApDungTuyChinh && topSanPhamData.length === 0"
+      class="no-data-message">
+      Không có dữ liệu trong khoảng thời gian này
+    </div>
 
-      <!-- Hiển thị danh sách top sản phẩm bán chạy -->
-      <div *ngIf="topSanPhamData.length > 0">
-        <ul class="top-san-pham-list">
-          <li *ngFor="let item of topSanPhamData" class="top-san-pham-item">
-            <span class="product-name">{{ item.tenSanPham }}</span>
-            <span class="product-quantity">{{ item.tongSoLuong }} sản phẩm</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Nếu không có dữ liệu -->
-      <div *ngIf="topSanPhamData.length === 0" class="no-data-message">
-        <p>Không có dữ liệu sản phẩm bán chạy.</p>
-      </div>
+    <!-- Nhắc nhở chọn khoảng thời gian trong chế độ Tùy chỉnh -->
+    <div *ngIf="selectedTopType === 'Tùy chỉnh' && !daApDungTuyChinh" class="no-data-message">
+      Vui lòng chọn khoảng thời gian và ấn Áp dụng
     </div>
   </div>
-<!--</div>-->
+  <!--</div>-->

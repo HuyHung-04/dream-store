@@ -112,4 +112,14 @@ public class ThongKeService {
     public List<TopSanPhamResponse> topSanPhamTatCa() {
         return hoaDonChiTietRepository.getTopSanPhamTatCa(PageRequest.of(0, 5)).getContent();
     }
+
+
+    // Thống kê sản phẩm bán chạy nhất theo khoảng ngày
+    public List<TopSanPhamResponse> topSanPhamTheoKhoangNgay(LocalDate startDate, LocalDate endDate) {
+        return hoaDonChiTietRepository.getTopSanPhamTheoKhoangNgay(startDate, endDate, PageRequest.of(0, 5)).getContent();
+    }
+    // Thành:
+    public ThongKeResponse getThongKeTheoKhoangThoiGian(LocalDate startDate, LocalDate endDate) {
+        return hoaDonRepository.getThongKeTheoKhoangThoiGian(startDate, endDate);
+    }
 }

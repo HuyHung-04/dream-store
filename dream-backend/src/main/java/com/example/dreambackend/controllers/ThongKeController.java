@@ -3,9 +3,11 @@ package com.example.dreambackend.controllers;
 import com.example.dreambackend.responses.*;
 import com.example.dreambackend.services.thongke.ThongKeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -89,6 +91,24 @@ public class ThongKeController {
     @GetMapping("/tat-ca/top-san-pham")
     public ResponseEntity<List<TopSanPhamResponse>> topSanPhamTatCa() {
         List<TopSanPhamResponse> response = thongKeService.topSanPhamTatCa();
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Endpoint lấy top sản phẩm bán chạy nhất theo khoảng ngày
+    @GetMapping("/khoang-ngay/top-san-pham")
+    public ResponseEntity<List<TopSanPhamResponse>> topSanPhamTheoKhoangNgay(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        List<TopSanPhamResponse> response = thongKeService.topSanPhamTheoKhoangNgay(startDate, endDate);
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/khoang-thoi-gian")
+    public ResponseEntity<ThongKeResponse> thongKeTheoKhoangThoiGian(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
+        ThongKeResponse response = thongKeService.getThongKeTheoKhoangThoiGian(startDate, endDate);
         return ResponseEntity.ok(response);
     }
 }

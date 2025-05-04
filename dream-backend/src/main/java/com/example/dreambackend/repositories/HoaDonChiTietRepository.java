@@ -22,58 +22,95 @@ import java.util.Optional;
 @Repository
 public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, Integer> {
 
-    // Top sản phẩm bán chạy nhất trong ngày hôm nay
+
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
             "FROM HoaDonChiTiet hdct " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
-            "WHERE hdct.ngayTao = CURRENT_DATE " +
+            "JOIN hdct.hoaDon hd " + // Thêm JOIN với hoaDon
+            "WHERE ((hd.trangThai = 4 AND CAST(hd.ngaySua AS date) = CURRENT_DATE) " +
+            "   OR (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) = CURRENT_DATE)) " +
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
     Page<TopSanPhamResponse> getTopSanPhamHomNay(Pageable pageable);
 
+
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
             "FROM HoaDonChiTiet hdct " +
             "JOIN hdct.hoaDon hd " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
-            "WHERE (hd.trangThai = 4 AND hd.ngaySua BETWEEN :startDate AND :endDate) " +
-            "   OR (hd.trangThai = 7 AND hd.ngayTao BETWEEN :startDate AND :endDate) " +
-            "GROUP BY sp.ten " +
-            "ORDER BY SUM(hdct.soLuong) DESC")
-    Page<TopSanPhamResponse> getTopSanPhamTheoThangVaNam(Pageable pageable,
-                                                         @Param("startDate") LocalDate startDate,
-                                                         @Param("endDate") LocalDate endDate);
-
-
-
-
-    @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
-            "FROM HoaDonChiTiet hdct " +
-            "JOIN hdct.sanPhamChiTiet spct " +
-            "JOIN spct.sanPham sp " +
-            "JOIN hdct.hoaDon hd " +
             "WHERE ( " +
-            "   (hd.trangThai = 4 AND hd.ngaySua BETWEEN :startDate AND :endDate) " +
+            "   (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) BETWEEN :startDate AND :endDate) " +
             "   OR " +
-            "   (hd.trangThai = 7 AND hd.ngayTao BETWEEN :startDate AND :endDate) " +
+            "   (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) BETWEEN :startDate AND :endDate) " +
             ") " +
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
-    Page<TopSanPhamResponse> getTopSanPhamTheoNam(Pageable pageable,
-                                                  @Param("startDate") LocalDate startDate,
-                                                  @Param("endDate") LocalDate endDate);
+    Page<TopSanPhamResponse> getTopSanPhamTheoThangVaNam(
+            Pageable pageable,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
 
-
-
-    // Top sản phẩm bán chạy nhất tất cả thời gian
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
             "FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.hoaDon hd " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
+            "WHERE ( " +
+            "   (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) BETWEEN :startDate AND :endDate) " +
+            "   OR " +
+            "   (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) BETWEEN :startDate AND :endDate) " +
+            ") " +
+            "GROUP BY sp.ten " +
+            "ORDER BY SUM(hdct.soLuong) DESC")
+    Page<TopSanPhamResponse> getTopSanPhamTheoNam(
+            Pageable pageable,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+    @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
+            "FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.hoaDon hd " +
+            "JOIN hdct.sanPhamChiTiet spct " +
+            "JOIN spct.sanPham sp " +
+            "WHERE hd.trangThai IN (4, 7) " + // Chỉ lấy trạng thái 4 và 7
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
     Page<TopSanPhamResponse> getTopSanPhamTatCa(Pageable pageable);
+
+
+    @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
+            "FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.hoaDon hd " +
+            "JOIN hdct.sanPhamChiTiet spct " +
+            "JOIN spct.sanPham sp " +
+            "WHERE hd.trangThai IN (4, 7) " +
+            "AND ( " +
+            "   (:startDate IS NULL OR " +
+            "   ( " +
+            "       (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) >= :startDate) " +
+            "       OR " +
+            "       (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) >= :startDate) " +
+            "   )) " +
+            "   AND " +
+            "   (:endDate IS NULL OR " +
+            "   ( " +
+            "       (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) <= :endDate) " +
+            "       OR " +
+            "       (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) <= :endDate) " +
+            "   )) " +
+            ") " +
+            "GROUP BY sp.ten " +
+            "ORDER BY SUM(hdct.soLuong) DESC")
+    Page<TopSanPhamResponse> getTopSanPhamTheoKhoangNgay(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            Pageable pageable
+    );
+
 
     List<HoaDonChiTiet> findByHoaDonId(int id);
 

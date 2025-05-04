@@ -14,10 +14,6 @@
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/HoaDonChiTietRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/HoaDonChiTietRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/HoaDonRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/HoaDonRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/thongke/ThongKeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/thongke/ThongKeService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/src/app/layotp/layotp.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/src/app/layotp/layotp.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/src/app/taikhoan/taikhoan.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/src/app/taikhoan/taikhoan.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/src/app/taikhoan/taikhoan.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/src/app/taikhoan/taikhoan.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/thongke/thongke.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/thongke/thongke.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/thongke/thongke.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/thongke/thongke.component.html" afterDir="false" />
@@ -270,6 +266,7 @@
       <workItem from="1745763685856" duration="2973000" />
       <workItem from="1746364877787" duration="2980000" />
       <workItem from="1746374450120" duration="467000" />
+      <workItem from="1746393093863" duration="1951000" />
     </task>
     <servers />
   </component>
