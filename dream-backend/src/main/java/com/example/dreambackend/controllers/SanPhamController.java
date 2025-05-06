@@ -1,5 +1,6 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.entities.SanPham;
 import com.example.dreambackend.requests.SanPhamRequest;
 import com.example.dreambackend.responses.SanPhamRespone;
 import com.example.dreambackend.services.chatlieu.ChatLieuService;
@@ -48,7 +49,7 @@ public class SanPhamController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Map<String, String>> addSanPham(@Valid @RequestBody SanPhamRequest sanPhamRequest, BindingResult result) {
+    public ResponseEntity<?> addSanPham(@Valid @RequestBody SanPhamRequest sanPhamRequest, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             for (FieldError error : result.getFieldErrors()) {
@@ -56,9 +57,13 @@ public class SanPhamController {
             }
             return ResponseEntity.badRequest().body(errors);
         }
-        sanPhamService.addSanPham(sanPhamRequest);
-        Map<String, String> response = new HashMap<>();
+
+        // Thay đổi ở đây: Lấy sản phẩm đã lưu và trả về
+        SanPham savedSanPham = sanPhamService.addSanPham(sanPhamRequest);
+
+        Map<String, Object> response = new HashMap<>();
         response.put("message", "Thêm thành công");
+        response.put("id", savedSanPham.getId()); // Thêm ID vào response
         return ResponseEntity.ok(response);
     }
 

@@ -236,9 +236,22 @@ import { CookieService } from 'ngx-cookie-service';
   
 
   kiemTraSoLuong() {
-    if (this.soLuongMua < 1 || isNaN(this.soLuongMua)) {
+    // Chuyển đổi sang number (phòng trường hợp nhập text)
+    this.soLuongMua = Number(this.soLuongMua);
+    
+    // Kiểm tra hợp lệ
+    if (isNaN(this.soLuongMua)) {
       this.soLuongMua = 1;
-    } else if (this.soLuongMua > this.selectedSanPham.soLuongSanPham) {
+      return;
+    }
+  
+    // Làm tròn nếu nhập số thập phân
+    this.soLuongMua = Math.floor(this.soLuongMua);
+  
+    // Validate số lượng
+    if (this.soLuongMua < 1) {
+      this.soLuongMua = 1;
+    } else if (this.selectedSanPham && this.soLuongMua > this.selectedSanPham.soLuongSanPham) {
       alert(`Số lượng mua vượt quá số lượng tồn kho`);
       this.soLuongMua = this.selectedSanPham.soLuongSanPham;
     }

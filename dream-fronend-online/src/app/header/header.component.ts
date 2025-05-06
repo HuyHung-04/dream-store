@@ -112,6 +112,42 @@ export class HeaderComponent implements OnInit {
       });
     }
   }
+
+  onInputChange(event: Event, id: number) {
+    const target = event.target as HTMLInputElement;
+    let value = parseInt(target.value, 10);
+  
+    if (isNaN(value) || value < 1) {
+      value = 1;
+      target.value = '1';
+    }
+  
+    const gioHangItem = this.gioHang.find(item => item.id === id);
+    if (!gioHangItem) {
+      alert("Không tìm thấy sản phẩm.");
+      return;
+    }
+  
+    const idSanPhamChiTiet = gioHangItem.idSanPhamChiTiet;
+  
+    this.sanPhamDetailService.getGioHangChiTietById(idSanPhamChiTiet).subscribe(
+      (tonKho: number) => {
+        if (value > tonKho) {
+          alert(`Số lượng bạn nhập đang vượt quá tồn kho hiện tại`);
+          value = tonKho;
+          target.value = tonKho.toString();
+        }
+  
+        this.suaSoLuong(id, value);
+      },
+      (error) => {
+        console.error("Không kiểm tra được tồn kho:", error);
+      }
+    );
+  }
+  
+  
+  
   suaSoLuong(id: number, soLuongMoi: number) {
     // Tìm sản phẩm trong giỏ hàng theo ID giỏ
     const gioHangItem = this.gioHang.find(item => item.id === id);
@@ -128,18 +164,18 @@ export class HeaderComponent implements OnInit {
         const soLuongTonKho = sanPhamChiTiet;
         console.log(sanPhamChiTiet)
         if (soLuongMoi > soLuongTonKho) {
-          alert(`Số lượng bạn nhập đang vượt quá tồn kho hiện tại.`);
+          alert(`Số lượng bạn nhập đang vượt quá tồn kho hiện tại`);
           return;
         }
 
-        // ✅ Nếu hợp lệ, gọi API để cập nhật
+        // Nếu hợp lệ, gọi API để cập nhật
         this.headerService.updateSoLuong(id, soLuongMoi).subscribe((response) => {
-          console.log("✅ Cập nhật số lượng thành công:", response);
+          console.log("Cập nhật số lượng thành công:", response);
           this.headerService.notifyGioHangUpdated(); // Cập nhật lại giỏ hàng
         });
       },
       (error) => {
-        console.error("❌ Lỗi khi lấy thông tin sản phẩm:", error);
+        console.error("Lỗi khi lấy thông tin sản phẩm:", error);
         alert("Không thể kiểm tra tồn kho. Vui lòng thử lại.");
       }
     );

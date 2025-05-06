@@ -571,6 +571,8 @@ export class SanphamComponent implements OnInit {
       alert('Mỗi sản phẩm chỉ có thể có tối đa 5 ảnh.');
       return;
     }
+    const confirmed = confirm("Bạn có chắc chắn muốn lưu ảnh?");
+    if (!confirmed) return;
     this.sanphamService.uploadAnh(this.idSanPham, this.selectedFiles)
       .subscribe(response => {
         alert(typeof response === 'string' ? response : response.message);
@@ -741,36 +743,50 @@ export class SanphamComponent implements OnInit {
 
   // thêm sản phẩm
   addSanPham(): void {
+    const confirmed = confirm("Bạn có chắc chắn muốn thêm sản phẩm?");
+    if (!confirmed) return;
     this.validateSanPham().then((isValid) => {
-      if (!isValid) {
-        let errorMessages = Object.values(this.validationErrors).join('\n');
-        return; // Dừng lại nếu có lỗi
-      }
-      // Nếu không có lỗi, thực hiện thêm sản phẩm
-      // this.sanPhamRequest.ngayTao = new Date().toISOString().split('T')[0];
-      // this.sanPhamRequest.ngaySua = new Date().toISOString().split('T')[0];
-      // console.log("SanPham Request:", this.sanPhamRequest);
-
+      if (!isValid) return;
+  
       this.sanphamService.addSanPham(this.sanPhamRequest).subscribe({
-        next: (response) => {
-          console.log("Thêm sản phẩm thành công:", response);
-          alert("Thêm sản phẩm thành công");
-          this.closeModalSanPham();
-          this.listSanPham(); // Reload danh sách sản phẩm
+        next: (response: any) => {
+          console.log("Response từ backend:", response);
+          
+          if (response.id) {
+            alert("Thêm sản phẩm thành công");
+            this.closeModalSanPham();
+            this.listSanPham();
+            this.openModalQuanLyAnh(response.id); // Mở modal bằng ID nhận được
+          } else {
+            console.error("Backend không trả về ID");
+            // Fallback: Gọi lại API lấy danh sách
+            this.handleWhenNoIdReturned();
+          }
         },
         error: (error) => {
-          if (error.status === 403) {
-            alert('Bạn không có quyền truy cập chức năng này.');
-          } else {
-            alert('Có lỗi xảy ra khi thêm sản phẩm.');
-          }
           console.error("Lỗi khi thêm sản phẩm:", error);
+          alert(error.status === 403 ? 'Bạn không có quyền' : 'Có lỗi xảy ra');
         }
       });
     });
   }
+  
+  private handleWhenNoIdReturned() {
+    this.sanphamService.getSanPham(0, 100).subscribe({
+      next: (sanPhams) => {
+        const sanPhamList = sanPhams.content;
+        const newProduct = sanPhamList[sanPhamList.length - 1];
+        if (newProduct) {
+          this.openModalQuanLyAnh(newProduct.id);
+        }
+      }
+    });
+  }
+  
   // update sản phẩm
   updateSanPham(): void {
+    const confirmed = confirm("Bạn có chắc chắn muốn sửa sản phẩm?");
+    if (!confirmed) return;
     this.validateSanPhamUpdate().then((isValid) => {
       if (!isValid) {
         let errorMessages = Object.values(this.validationErrors).join('\n');
@@ -943,6 +959,8 @@ export class SanphamComponent implements OnInit {
 
   // thêm sản phẩm chi tiết
   addSanPhamChiTiet(): void {
+  const confirmed = confirm("Bạn có chắc chắn muốn thêm sản phẩm chi tiết?");
+  if (!confirmed) return;
   const productStatus = Number(this.selectedProduct?.trangThai);
   const detailStatus = Number(this.sanPhamChiTietRequest.trangThai);
   if (productStatus === 0 && detailStatus === 1) {
@@ -1112,6 +1130,8 @@ export class SanphamComponent implements OnInit {
   }
   // sửa sản phẩm chi tiết
   updateSanPhamChiTiet(): void {
+    const confirmed = confirm("Bạn có chắc chắn muốn sửa sản phẩm chi tiết?");
+    if (!confirmed) return;
     this.validateSanPhamChiTiet().then((isValid) => {
       if (!isValid) {
         let errorMessages = Object.values(this.validationErrors).join('\n');
@@ -1200,6 +1220,8 @@ export class SanphamComponent implements OnInit {
   }
   // thêm thuộc tính
   addThuocTinh() {
+    const confirmed = confirm("Bạn có chắc chắn muốn thêm thuộc tính?");
+    if (!confirmed) return;
     this.validateThuocTinh().then((isValid) => {
       if (!isValid) {
         let errorMessages = Object.values(this.validationErrors).join('\n');
