@@ -98,9 +98,6 @@ public class GioHangChiTietService implements IGioHangChiTietService {
     @Override
     @Transactional
     public GioHangChiTietResponse muaNgay(GioHangChiTietRequest request) {
-        // Cập nhật tất cả giỏ hàng có `trangThai = 0` thành `1`
-        int updatedRows = gioHangChiTietRepository.updateAllTrangThaiFrom0To1(request.getIdKhachHang());
-        System.out.println("Đã cập nhật " + updatedRows + " sản phẩm từ trạng thái 0 → 1.");
 
         // Xóa tất cả giỏ hàng có trạng thái 2 trước khi tạo mới
         int deletedRows = gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai2(request.getIdKhachHang());

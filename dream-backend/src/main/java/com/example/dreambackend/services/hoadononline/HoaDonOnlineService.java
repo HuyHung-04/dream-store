@@ -7,6 +7,8 @@ import com.example.dreambackend.dtos.HoaDonDto;
 import com.example.dreambackend.dtos.VoucherDto;
 import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
+import com.example.dreambackend.requests.GioHangChiTietRequest;
+import com.example.dreambackend.requests.HoaDonOnlineRequest;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,32 +46,22 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
     @Autowired
     PhuongThucThanhToanRepository phuongThucThanhToanRepository;
 
+
     @Override
-    public List<Integer> getGioHangIdsForThanhToan(Integer idKhachHang) {
-        //xóa giỏ hàng với trạng thái là 2
+    public List<GioHangChiTietResponse> getGioHangIdsForThanhToan(Integer idKhachHang) {
+        // Xóa giỏ hàng có trạng thái 2
         gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai(idKhachHang, 2);
 
-        // Lấy danh sách giỏ hàng của khách hàng
+        // Lấy danh sách giỏ hàng
         List<GioHangChiTietResponse> gioHangChiTietList = gioHangChiTietRepository.findGioHangChiTietByKhachHangId(idKhachHang);
 
         if (gioHangChiTietList.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không có sản phẩm nào trong giỏ hàng.");
         }
 
-        List<Integer> gioHangIds = new ArrayList<>();
-
-        for (GioHangChiTietResponse gioHang : gioHangChiTietList) {
-            GioHangChiTiet gioHangChiTiet = gioHangChiTietRepository.findById(gioHang.getId())
-                    .orElseThrow(() -> new RuntimeException("Giỏ hàng chi tiết không tồn tại"));
-
-            gioHangChiTiet.setTrangThai(0);
-            gioHangChiTietRepository.save(gioHangChiTiet);
-            gioHangIds.add(gioHangChiTiet.getId());
-        }
-
-        return gioHangIds;
-
+        return gioHangChiTietList; // Trả về danh sách chứa: tên sản phẩm, số lượng, giá, tổng tiền
     }
+
 
     @Override
     public List<GioHangChiTietResponse> getChiTietGioHangSauThanhToan(Integer idKhachHang) {
@@ -157,30 +149,45 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
 
     @Override
-    public HoaDon createHoaDon(Integer idKhachHang, Integer voucherId, Double tongTienTruocGiam, Integer paymentMethodId, Double TongTienSauGiam, String sdtNguoiNhan, String tenNguoiNhan, String diaChi, Double shippingFee) {
-        // Lấy khách hàng từ repository
-        KhachHang khachHang = khachHangRepository.findById(idKhachHang).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Khách hàng không tồn tại"));
-        // Lấy phương thức thanh toán từ repository
-        PhuongThucThanhToan phuongThucThanhToan = phuongThucThanhToanRepository.findById(paymentMethodId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Phương thức thanh toán không tồn tại"));
-        Voucher voucher = null;
+    public HoaDon createHoaDon(HoaDonOnlineRequest request) {
+        Integer idKhachHang = request.getIdKhachHang();
+        Integer paymentMethodId = request.getPaymentMethodId();
+        Double tongTienTruocGiam = request.getTongTienTruocGiam();
+        Double tongTienSauGiam = request.getTongTienSauGiam();
+        String tenNguoiNhan = request.getTenNguoiNhan();
+        String sdtNguoiNhan = request.getSdtNguoiNhan();
+        String diaChi = request.getDiaChi();
+        Double shippingFee = request.getShippingFee();
+        Integer voucherId = request.getVoucherId();
+        List<GioHangChiTietRequest> gioHangChiTietRequests = request.getChiTietGioHang();
 
+        KhachHang khachHang = khachHangRepository.findById(idKhachHang)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Khách hàng không tồn tại"));
+
+        PhuongThucThanhToan phuongThuc = phuongThucThanhToanRepository.findById(paymentMethodId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Phương thức thanh toán không tồn tại"));
+
+        Voucher voucher = null;
         if (voucherId != null) {
             voucher = voucherRepository.findById(voucherId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Voucher không tồn tại"));
         }
 
-
-        // Bước 1: Tạo Hóa Đơn (HoaDon)
         HoaDon hoaDon = new HoaDon();
         hoaDon.setKhachHang(khachHang);
-        hoaDon.setMa("HD" + (System.currentTimeMillis() % 10000000)); // Sinh mã hóa đơn (có thể thay đổi theo logic của bạn)
+        hoaDon.setMa("HD" + (System.currentTimeMillis() % 10000000));
         hoaDon.setNgayTao(LocalDate.now());
         hoaDon.setVoucher(voucher);
-        // Nếu id phương thức thanh toán là 4, thì trạng thái hóa đơn là 2
-        if (paymentMethodId == 4) {
-            hoaDon.setTrangThai(2); // Trạng thái hóa đơn là 2
+        hoaDon.setPhuongThucThanhToan(phuongThuc);
+        hoaDon.setTenNguoiNhan(tenNguoiNhan);
+        hoaDon.setSdtNguoiNhan(sdtNguoiNhan);
+        hoaDon.setDiaChiNhanHang(diaChi);
+        hoaDon.setPhiVanChuyen(shippingFee);
+        hoaDon.setTongTienTruocVoucher(tongTienTruocGiam);
+        hoaDon.setTongTienThanhToan(tongTienSauGiam);
 
-            // Trừ số lượng của voucher nếu có
+        if (paymentMethodId == 4) {
+            hoaDon.setTrangThai(2);
             if (voucher != null) {
                 int soLuongConLai = voucher.getSoLuong() - 1;
                 if (soLuongConLai < 0) {
@@ -189,55 +196,69 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                 voucher.setSoLuong(soLuongConLai);
                 voucherRepository.save(voucher);
             }
-
         } else {
-            hoaDon.setTrangThai(1); // Đánh dấu hóa đơn là hoạt động
+            hoaDon.setTrangThai(1);
         }
 
-        hoaDon.setPhuongThucThanhToan(phuongThucThanhToan); // Gán phương thức thanh toán cho hóa đơn
-
-        // Lưu hóa đơn vào repository
         hoaDonRepository.save(hoaDon);
-        HoaDon hoaDon1 = hoaDonRepository.findById(hoaDon.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Khách hàng không tồn tại"));
-        // Bước 2: Thêm Sản Phẩm vào Hóa Đơn Chi Tiết (HoaDonChiTiet)
-        List<GioHangChiTietResponse> gioHangChiTietResponses = gioHangChiTietRepository.findGioHangChiTietByStatus(idKhachHang);
 
-        for (GioHangChiTietResponse item : gioHangChiTietResponses) {
-            if (item.getTrangThai() == 0 || item.getTrangThai() == 2) {
-                SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(item.getIdSanPhamChiTiet())
+        if (gioHangChiTietRequests != null && !gioHangChiTietRequests.isEmpty()) {
+            for (GioHangChiTietRequest item : gioHangChiTietRequests) {
+                SanPhamChiTiet spct = sanPhamChiTietRepository.findById(item.getIdSanPhamChiTiet())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sản phẩm chi tiết không tồn tại"));
 
-                // Trừ số lượng sản phẩm chi tiết nếu phương thức thanh toán là 4
+                // Cập nhật số lượng tồn trong kho nếu là thanh toán online
                 if (paymentMethodId == 4) {
-                    int soLuongConLai = sanPhamChiTiet.getSoLuong() - item.getSoLuong();
+                    int soLuongConLai = spct.getSoLuong() - item.getSoLuong();
                     if (soLuongConLai < 0) {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sản phẩm không đủ số lượng tồn");
                     }
-                    sanPhamChiTiet.setSoLuong(soLuongConLai);
-                    sanPhamChiTietRepository.save(sanPhamChiTiet);
+                    spct.setSoLuong(soLuongConLai);
+                    sanPhamChiTietRepository.save(spct);
                 }
 
-                HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
-                hoaDonChiTiet.setMa("HDCT" + System.currentTimeMillis());
-                hoaDonChiTiet.setHoaDon(hoaDon1);
-                hoaDonChiTiet.setSanPhamChiTiet(sanPhamChiTiet);
-                hoaDonChiTiet.setSoLuong(item.getSoLuong());
-                hoaDonChiTiet.setDonGia(item.getDonGia());
-                hoaDonChiTietRepository.save(hoaDonChiTiet);
-            }
-        }
+                // Tạo hóa đơn chi tiết
+                HoaDonChiTiet hdct = new HoaDonChiTiet();
+                hdct.setMa("HDCT" + System.currentTimeMillis());
+                hdct.setHoaDon(hoaDon);
+                hdct.setSanPhamChiTiet(spct);
+                hdct.setSoLuong(item.getSoLuong());
+                hdct.setDonGia(item.getDonGia());
+                hoaDonChiTietRepository.save(hdct);
 
-        // Bước 3: Cập nhật tổng tiền cho hóa đơn
-        hoaDon.setTongTienTruocVoucher(tongTienTruocGiam);
-        hoaDon.setTongTienThanhToan(TongTienSauGiam);
-        hoaDon.setTenNguoiNhan(tenNguoiNhan);
-        hoaDon.setSdtNguoiNhan(sdtNguoiNhan);
-        hoaDon.setDiaChiNhanHang(diaChi);
-        hoaDon.setPhiVanChuyen(shippingFee);
-        hoaDonRepository.save(hoaDon);
-        gioHangChiTietRepository.deleteByTrangThaiIn(List.of(0, 2));
-        return hoaDon; // Trả về hóa đơn đã tạo với thông tin chi tiết
+                // Tìm dòng giỏ hàng tương ứng
+                Optional<GioHangChiTiet> gioHangChiTietOpt = gioHangChiTietRepository
+                        .findByKhachHangIdAndSanPhamChiTietIdAndTrangThai(khachHang.getId(), item.getIdSanPhamChiTiet());
+
+                if (gioHangChiTietOpt.isPresent()) {
+                    GioHangChiTiet gioHangChiTiet = gioHangChiTietOpt.get();
+                    int soLuongTrongGio = gioHangChiTiet.getSoLuong();
+                    int soLuongMua = item.getSoLuong();
+
+                    if (soLuongMua >= soLuongTrongGio) {
+                        // Nếu mua hết → xóa khỏi giỏ
+                        gioHangChiTietRepository.delete(gioHangChiTiet);
+                    } else {
+                        // Nếu mua một phần → giảm số lượng trong giỏ
+                        gioHangChiTiet.setSoLuong(soLuongTrongGio - soLuongMua);
+                        gioHangChiTiet.setNgaySua(LocalDate.now());
+                        gioHangChiTietRepository.save(gioHangChiTiet);
+                    }
+                }
+            }
+        } else {
+            // Không có chi tiết cụ thể → xóa giỏ hàng trạng thái = 2 (nếu có)
+            gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai(khachHang.getId(), 2);
+        }
+        // Đảm bảo nếu là thanh toán online (phương thức 4) → luôn xóa giỏ hàng trạng thái = 2
+        if (paymentMethodId == 4) {
+            gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai(khachHang.getId(), 2);
+        }
+        return hoaDon;
     }
+
+
+
 
 
     public List<HoaDonChiTietDto> getHoaDonChiTiet(Integer idHoaDon) {

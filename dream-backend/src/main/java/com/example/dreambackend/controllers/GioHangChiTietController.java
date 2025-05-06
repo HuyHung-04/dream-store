@@ -53,14 +53,16 @@ public class GioHangChiTietController {
     }
 
     @GetMapping("/thanh-toan/{idKhachHang}")
-    public ResponseEntity<List<Integer>> getGioHangThanhToan(@PathVariable Integer idKhachHang) {
-        List<Integer> gioHangIds = hoaDonOnlineService.getGioHangIdsForThanhToan(idKhachHang);
+    public ResponseEntity<List<GioHangChiTietResponse>> getGioHangThanhToan(@PathVariable Integer idKhachHang) {
+        List<GioHangChiTietResponse> gioHangList = hoaDonOnlineService.getGioHangIdsForThanhToan(idKhachHang);
 
-        if (gioHangIds.isEmpty()) {
+        if (gioHangList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(gioHangIds);
+
+        return ResponseEntity.ok(gioHangList);
     }
+
 
     @PostMapping("/mua-ngay")
     public ResponseEntity<GioHangChiTietResponse> muaNgay(@RequestBody GioHangChiTietRequest request) {

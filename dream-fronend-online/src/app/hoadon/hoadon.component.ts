@@ -131,19 +131,10 @@ export class HoadonComponent {
   //  @param paymentData Dữ liệu thanh toán từ localStorage
 
   createHoaDonFromVnPay(paymentData: any): void {
-    this.hoadonService.createHoaDon(
-      this.idKhachHang,
-      paymentData.chonVoucherId,
-      paymentData.tamTinh,
-      paymentData.chonPhuongThucThanhToan,
-      paymentData.tongTienThanhToan,
-      paymentData.chonSdtNguoiNhan,
-      paymentData.chonTenNguoiNhan,
-      paymentData.fullDiaChi,
-      paymentData.shippingFee
-    ).subscribe(
+    this.hoadonService.createHoaDonFull(paymentData).subscribe(
       (response) => {
         alert('Đơn hàng đã được thanh toán thành công!');
+        localStorage.removeItem('gioHangThanhToan');
         this.hoadonService.increaseOrderCount();
         this.modalthongbao = true;
         this.idHoaDon = response.id;
@@ -154,6 +145,7 @@ export class HoadonComponent {
       }
     );
   }
+  
 
 
   //  Lấy danh sách địa chỉ của khách hàng:
@@ -195,25 +187,48 @@ export class HoadonComponent {
   getChiTietGioHangSauThanhToan(): void {
     this.hoadonService.getChiTietGioHangSauThanhToan(this.idKhachHang).subscribe(
       (response: any) => {
-        this.chiTietGioHang = response;
-        if (this.chiTietGioHang == null) {
-          alert('Giỏ hàng của bạn đang trống. Vui lòng chọn sản phẩm trước khi thanh toán!');
-          this.router.navigate(['/banhang']);
+        if (response && response.length > 0) {
+          this.chiTietGioHang = response;
+          this.TongTienTamTinh = 0;
+          this.chiTietGioHang.forEach((item: any) => {
+            this.TongTienTamTinh += item.soLuong * item.donGia;
+          });
+          this.getVoucherIdAndTen();
+          this.cdRef.detectChanges();
+        } else {
+          this.loadGioHangFromLocalStorage();
         }
-        // Tính tổng tạm tính: số lượng × đơn giá
-        this.chiTietGioHang.forEach((item: any) => {
-          this.TongTienTamTinh += item.soLuong * item.donGia;
-        });
-        this.getVoucherIdAndTen()
-        this.cdRef.detectChanges();
       },
       (error) => {
         console.error('Lỗi khi lấy chi tiết giỏ hàng sau thanh toán:', error);
-        alert('Không thể lấy chi tiết giỏ hàng. Vui lòng thử lại!');
+        this.loadGioHangFromLocalStorage();
       }
     );
   }
 
+  loadGioHangFromLocalStorage() {
+    const gioHangData = localStorage.getItem('gioHangThanhToan');
+    if (gioHangData) {
+      this.chiTietGioHang = JSON.parse(gioHangData);
+      this.TongTienTamTinh = 0;
+      this.chiTietGioHang.forEach((item: any) => {
+        this.TongTienTamTinh += item.soLuong * item.donGia;
+      });
+      this.getVoucherIdAndTen();
+      this.cdRef.detectChanges();
+    } else {
+      alert('Giỏ hàng trống! Bạn chưa thanh toán sản phẩm nào.');
+      this.router.navigate(['/banhang']);
+    }
+  }
+
+
+  calculateTotal() {
+    this.TongTienTamTinh = 0;
+    this.chiTietGioHang.forEach((item: any) => {
+      this.TongTienTamTinh += item.soLuong * item.donGia;
+    });
+  }
 
   openModal(): void {
     this.isModalOpen = true;
@@ -361,15 +376,17 @@ export class HoadonComponent {
   createThanhToan(): void {
     const paymentData = {
       idKhachHang: this.idKhachHang,
-      chonVoucherId: this.chonVoucher ? this.chonVoucher.id : null,
-      tamTinh: this.TongTienTamTinh,
-      chonPhuongThucThanhToan: this.chonPhuongThucThanhToan,
-      tongTienThanhToan: this.tongTienThanhToan,
-      chonSdtNguoiNhan: this.chonSdtNguoiNhan,
-      chonTenNguoiNhan: this.chonTenNguoiNhan,
-      fullDiaChi: this.fullDiaChi,
-      shippingFee: this.shippingFee
+      voucherId: this.chonVoucher ? this.chonVoucher.id : null,
+      tongTienTruocGiam: this.TongTienTamTinh,
+      paymentMethodId: this.chonPhuongThucThanhToan,
+      tongTienSauGiam: this.tongTienThanhToan,
+      sdtNguoiNhan: this.chonSdtNguoiNhan,
+      tenNguoiNhan: this.chonTenNguoiNhan,
+      diaChi: this.fullDiaChi,
+      shippingFee: this.shippingFee,
+      chiTietGioHang: this.chiTietGioHang // ✅ Thêm chi tiết giỏ hàng ở đây
     };
+    console.log("pay",paymentData)
     localStorage.setItem('paymentData', JSON.stringify(paymentData));
     if (this.chonPhuongThucThanhToan == 4) {
       this.hoadonService.createThanhToanVnpay(this.tongTienThanhToan).subscribe(
@@ -602,46 +619,46 @@ export class HoadonComponent {
       alert("Vui lòng chọn địa chỉ giao hàng!");
       return;
     }
-
+  
     if (this.chonPhuongThucThanhToan == null) {
       alert("Phương thức thanh toán không được để trống");
       return;
     }
-
+  
     if (this.chonPhuongThucThanhToan != 4) {
       const confirmCreateInvoice = confirm('Bạn có muốn tạo đơn hàng không?');
-      if (!confirmCreateInvoice) {
-        return;
-      }
+      if (!confirmCreateInvoice) return;
     }
-
-    const phuongThucThanhToanId = this.chonPhuongThucThanhToan;
-    const voucherId = this.chonVoucher ? this.chonVoucher.id : null;
-    this.hoadonService.createHoaDon(
-      this.idKhachHang,
-      voucherId,
-      this.TongTienTamTinh,
-      phuongThucThanhToanId,
-      this.tongTienThanhToan,
-      this.chonSdtNguoiNhan,
-      this.chonTenNguoiNhan,
-      this.fullDiaChi,
-      this.shippingFee
-    ).subscribe(
+  
+    const data = {
+      idKhachHang: this.idKhachHang,
+      voucherId: this.chonVoucher ? this.chonVoucher.id : null,
+      tongTienTruocGiam: this.TongTienTamTinh,
+      paymentMethodId: this.chonPhuongThucThanhToan,
+      tongTienSauGiam: this.tongTienThanhToan,
+      sdtNguoiNhan: this.chonSdtNguoiNhan,
+      tenNguoiNhan: this.chonTenNguoiNhan,
+      diaChi: this.fullDiaChi,
+      shippingFee: this.shippingFee,
+      chiTietGioHang: this.chiTietGioHang  // 👈 Thêm chi tiết giỏ hàng
+    };
+  
+    this.hoadonService.createHoaDonFull(data).subscribe(
       (response) => {
         alert('Đơn hàng đã được tạo thành công!');
-        this.hoadonService.increaseOrderCount(); // Thông báo có đơn hàng mới
+        this.hoadonService.increaseOrderCount();
         this.modalthongbao = true;
         this.idHoaDon = response.id;
+        localStorage.removeItem('gioHangThanhToan');
+
       },
       (error) => {
         console.error('Lỗi khi tạo hóa đơn:', error);
         alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
       }
     );
-
   }
-
+  
 
   backSanpham(): void {
     window.history.back();
