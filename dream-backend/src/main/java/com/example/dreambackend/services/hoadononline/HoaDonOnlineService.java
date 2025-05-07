@@ -202,12 +202,13 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
         hoaDonRepository.save(hoaDon);
 
+        boolean daXoaTrangThai2 = false;
+
         if (gioHangChiTietRequests != null && !gioHangChiTietRequests.isEmpty()) {
             for (GioHangChiTietRequest item : gioHangChiTietRequests) {
                 SanPhamChiTiet spct = sanPhamChiTietRepository.findById(item.getIdSanPhamChiTiet())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sản phẩm chi tiết không tồn tại"));
 
-                // Cập nhật số lượng tồn trong kho nếu là thanh toán online
                 if (paymentMethodId == 4) {
                     int soLuongConLai = spct.getSoLuong() - item.getSoLuong();
                     if (soLuongConLai < 0) {
@@ -217,7 +218,6 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                     sanPhamChiTietRepository.save(spct);
                 }
 
-                // Tạo hóa đơn chi tiết
                 HoaDonChiTiet hdct = new HoaDonChiTiet();
                 hdct.setMa("HDCT" + System.currentTimeMillis());
                 hdct.setHoaDon(hoaDon);
@@ -226,9 +226,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                 hdct.setDonGia(item.getDonGia());
                 hoaDonChiTietRepository.save(hdct);
 
-                // Tìm dòng giỏ hàng tương ứng
+                Integer trangThaiItem = item.getTrangThai();
                 Optional<GioHangChiTiet> gioHangChiTietOpt = gioHangChiTietRepository
-                        .findByKhachHangIdAndSanPhamChiTietIdAndTrangThai(khachHang.getId(), item.getIdSanPhamChiTiet());
+                        .findByKhachHangIdAndSanPhamChiTietIdAndGioHang(khachHang.getId(), item.getIdSanPhamChiTiet(), trangThaiItem);
 
                 if (gioHangChiTietOpt.isPresent()) {
                     GioHangChiTiet gioHangChiTiet = gioHangChiTietOpt.get();
@@ -236,26 +236,32 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                     int soLuongMua = item.getSoLuong();
 
                     if (soLuongMua >= soLuongTrongGio) {
-                        // Nếu mua hết → xóa khỏi giỏ
                         gioHangChiTietRepository.delete(gioHangChiTiet);
                     } else {
-                        // Nếu mua một phần → giảm số lượng trong giỏ
                         gioHangChiTiet.setSoLuong(soLuongTrongGio - soLuongMua);
                         gioHangChiTiet.setNgaySua(LocalDate.now());
                         gioHangChiTietRepository.save(gioHangChiTiet);
                     }
                 }
+
+                // Nếu là trạng thái 2, xóa hết giỏ hàng trạng thái 2 (1 lần duy nhất)
+                if (trangThaiItem == 2 && !daXoaTrangThai2) {
+                    gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai(khachHang.getId(), 2);
+                    daXoaTrangThai2 = true;
+                }
             }
         } else {
-            // Không có chi tiết cụ thể → xóa giỏ hàng trạng thái = 2 (nếu có)
             gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai(khachHang.getId(), 2);
         }
-        // Đảm bảo nếu là thanh toán online (phương thức 4) → luôn xóa giỏ hàng trạng thái = 2
-        if (paymentMethodId == 4) {
+
+        // Nếu thanh toán online, vẫn xóa giỏ trạng thái 2 để đảm bảo
+        if (paymentMethodId == 4 && !daXoaTrangThai2) {
             gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai(khachHang.getId(), 2);
         }
+
         return hoaDon;
     }
+
 
 
 
@@ -332,7 +338,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
         HoaDon hoaDon = hoaDonRepository.huyHoaDon(idHoaDon)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tồn tại"));
-        hoaDon.setTrangThai(5);
+        hoaDon.setTrangThai(9);
         hoaDon.setGhiChu(ghiChu);
         hoaDonRepository.save(hoaDon);
         return hoaDon;
@@ -347,7 +353,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             Integer trangThaiHienTai = hoaDon.getTrangThai();
 
             // Nếu trạng thái chưa là 4, tăng trạng thái và ghi lại ngày sửa
-            if (trangThaiHienTai != null && trangThaiHienTai < 4) {
+            if (trangThaiHienTai != null && trangThaiHienTai < 5) {
                 hoaDon.setTrangThai(trangThaiHienTai + 1); // Tăng trạng thái (ví dụ: từ 1->2, từ 2->3...)
 
                 // Nếu trạng thái là 2, trừ số lượng sản phẩm và giảm số lượng voucher
@@ -374,14 +380,14 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                 }
 
                 //  Nếu trạng thái đã là 4 → vẫn cập nhật ngày sửa
-                if (trangThaiHienTai != null && trangThaiHienTai == 3) {
+                if (trangThaiHienTai != null && trangThaiHienTai == 4) {
                     hoaDon.setNgaySua(LocalDate.now()); // Cập nhật ngày sửa tại trạng thái cuối
                 }
                 // Lưu lại hóa đơn đã cập nhật
                 return hoaDonRepository.save(hoaDon);
             }
 
-            // Nếu trạng thái đã là 4 thì trả lại hóa đơn không thay đổi
+            // Nếu trạng thái đã là 5 thì trả lại hóa đơn không thay đổi
             return hoaDon;
         }
 

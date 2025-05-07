@@ -257,7 +257,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
     Optional<HoaDon> getHoaDonById(@Param("idHoaDon") Integer idHoaDon);
 
 
-    @Query("SELECT h FROM HoaDon h WHERE h.trangThai IN (1, 2, 3, 4, 5) " +
+    @Query("SELECT h FROM HoaDon h WHERE h.trangThai IN (1, 2, 3, 4, 5, 9) " +
             "AND (:trangThai = 0 OR h.trangThai = :trangThai) " +
             "AND (:tenNguoiNhan = '' OR LOWER(h.tenNguoiNhan) LIKE LOWER(CONCAT('%', :tenNguoiNhan, '%'))) " +
             "AND (:sdtNguoiNhan = '' OR h.sdtNguoiNhan LIKE CONCAT('%', :sdtNguoiNhan, '%')) " +

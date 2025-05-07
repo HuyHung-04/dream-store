@@ -73,6 +73,10 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietIdAndTrangThai(@Param("khachHangId") Integer khachHangId,
                                                                               @Param("sanPhamChiTietId") Integer sanPhamChiTietId);
 
+    @Query("SELECT g FROM GioHangChiTiet g WHERE g.khachHang.id = :khachHangId AND g.sanPhamChiTiet.id = :sanPhamChiTietId AND g.trangThai = :trangThai")
+    Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietIdAndGioHang(@Param("khachHangId") Integer khachHangId,
+                                                                            @Param("sanPhamChiTietId") Integer sanPhamChiTietId,
+                                                                            @Param("trangThai") Integer trangThai);
 
 }
 

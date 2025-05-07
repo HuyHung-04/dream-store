@@ -58,11 +58,11 @@
         <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không áp dụng' }}</td>
         <td>{{ hoaDon.tongTienThanhToan}}</td>
         <td>
-          <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 4 && hoaDon.trangThai !== 5" (click)="updateTrangThai(hoaDon.id,hoaDon.trangThai)">
+          <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 5 && hoaDon.trangThai !== 9" (click)="updateTrangThai(hoaDon.id,hoaDon.trangThai)">
             {{ getButtonLabel(hoaDon.trangThai) }}
           </button>
-          <span *ngIf="hoaDon.trangThai === 5">Đơn đã hủy</span>
-          <span *ngIf="hoaDon.trangThai === 4">Giao hàng thành công</span>
+          <span *ngIf="hoaDon.trangThai === 9">Đơn đã hủy</span>
+          <span *ngIf="hoaDon.trangThai === 5">Giao hàng thành công</span>
         </td>
         <td>
           <button class="xem-chi-tiet" (click)="chonDonHang(hoaDon.id)">
@@ -101,7 +101,7 @@
             <p class="invoice-code"><strong>Mã đơn hàng:</strong> {{ hoaDonData.ma }}</p>
           </div>
 
-          <div class="status-tracker" *ngIf="hoaDonData.trangThai != 5">
+          <div class="status-tracker" *ngIf="hoaDonData.trangThai != 9">
             <div class="status-step" [class.active]="hoaDonData.trangThai == 1" style="margin-top: 20px;">
               <div class="status-icon">📄</div>
               <p>Chờ xác nhận</p>
@@ -109,34 +109,37 @@
             </div>
 
             <div class="status-line" [class.active]="hoaDonData.trangThai == 2"></div>
-
             <div class="status-step" [class.active]="hoaDonData.trangThai == 2">
               <div class="status-icon">✔️</div>
               <p>Đã xác nhận</p>
             </div>
 
             <div class="status-line" [class.active]="hoaDonData.trangThai == 3"></div>
-
             <div class="status-step" [class.active]="hoaDonData.trangThai == 3">
+              <div class="status-icon">⏳</div>
+              <p>Chờ lấy hàng</p>
+            </div>
+
+            <div class="status-line" [class.active]="hoaDonData.trangThai == 4"></div>
+            <div class="status-step" [class.active]="hoaDonData.trangThai == 4">
               <div class="status-icon">🚚</div>
               <p>Đang giao hàng</p>
             </div>
 
-            <div class="status-line" [class.active]="hoaDonData.trangThai == 4"></div>
-
-            <div class="status-step" [class.active]="hoaDonData.trangThai == 4" style="margin-top: 10px;">
+            <div class="status-line" [class.active]="hoaDonData.trangThai == 5"></div>
+            <div class="status-step" [class.active]="hoaDonData.trangThai == 5" style="margin-top: 10px;">
               <div class="status-icon">📦</div>
               <p>Giao hàng thành công</p>
               <span style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngaySua}}</span>
             </div>
 
           </div>
-          <!-- Nếu trạng thái hóa đơn là 5 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->
-          <div *ngIf="hoaDonData.trangThai == 5">
+          <!-- Nếu trạng thái hóa đơn là 9 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->
+          <div *ngIf="hoaDonData.trangThai == 9">
             <div class="cancelHoaDon">
               <p><i class="bi bi-x-circle"></i> Đơn hàng đã bị hủy</p>
-              <!-- Chỉ hiển thị nếu trạng thái = 5 -->
-              <p *ngIf="hoaDonData?.trangThai === 5 && hoaDonData?.ghiChu" style="font-size: 15px;color: black;">
+              <!-- Chỉ hiển thị nếu trạng thái = 9 -->
+              <p *ngIf="hoaDonData?.trangThai === 9 && hoaDonData?.ghiChu" style="font-size: 15px;color: black;">
                 (Lý do hủy đơn: {{ hoaDonData.ghiChu }})
               </p>
             </div>
