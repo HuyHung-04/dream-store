@@ -6,16 +6,16 @@
   </div>
 
   <!-- Nếu trạng thái hóa đơn là 5 (Đơn hàng đã hủy), chỉ hiển thị thông báo này -->
-  <div *ngIf="hoaDonData.trangThai == 5">
+  <div *ngIf="hoaDonData.trangThai == 9">
     <div class="cancelHoaDon">
       <p><i class="bi bi-x-circle"></i> Đơn hàng đã bị hủy</p>
-      <p *ngIf="hoaDonData?.trangThai === 5 && hoaDonData?.ghiChu" style="font-size: 15px;color: black;">
+      <p *ngIf="hoaDonData?.trangThai === 9 && hoaDonData?.ghiChu" style="font-size: 15px;color: black;">
         (Lý do hủy đơn: {{ hoaDonData.ghiChu }})
       </p>
     </div>
   </div>
 
-  <div class="status-tracker" *ngIf="hoaDonData.trangThai != 5">
+  <div class="status-tracker" *ngIf="hoaDonData.trangThai != 9">
     <div class="status-step" [class.active]="hoaDonData.trangThai == 1" style="margin-top: 20px;">
       <div class="status-icon">📄</div>
       <p>Chờ xác nhận</p>
@@ -30,12 +30,18 @@
 
     <div class="status-line" [class.active]="hoaDonData.trangThai == 3"></div>
     <div class="status-step" [class.active]="hoaDonData.trangThai == 3">
+      <div class="status-icon">⏳</div>
+      <p>Chờ lấy hàng</p>
+    </div>
+
+    <div class="status-line" [class.active]="hoaDonData.trangThai == 4"></div>
+    <div class="status-step" [class.active]="hoaDonData.trangThai == 4">
       <div class="status-icon">🚚</div>
       <p>Đang giao hàng</p>
     </div>
 
-    <div class="status-line" [class.active]="hoaDonData.trangThai == 4"></div>
-    <div class="status-step" [class.active]="hoaDonData.trangThai == 4" style="margin-top: 10px;">
+    <div class="status-line" [class.active]="hoaDonData.trangThai == 5"></div>
+    <div class="status-step" [class.active]="hoaDonData.trangThai == 5" style="margin-top: 10px;">
       <div class="status-icon">📦</div>
       <p>Giao hàng thành công</p>
       <span style="margin-top: 4px; font-size: 0.8rem; color: gray;">{{hoaDonData.ngaySua}}</span>
@@ -105,7 +111,7 @@
   <!-- Nút Hủy và Nút Quay Về Trang Chủ -->
   <div class="button-container">
     <!-- Nút hủy -->
-    <button *ngIf="!([5,2,3,4].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn-danger">
+    <button *ngIf="!([2,3,4,5,9].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn-danger">
       Hủy đơn hàng
     </button>
 

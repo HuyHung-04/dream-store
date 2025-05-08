@@ -1,6 +1,7 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   isPlatformBrowser
-} from "./chunk-6MRN6FNX.js";
+} from "./chunk-A4RSQP65.js";
 import {
   ElementRef,
   Injectable,
@@ -12,7 +13,7 @@ import {
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵdefineNgModule
-} from "./chunk-SMKOUPRW.js";
+} from "./chunk-FRKUZEJN.js";
 
 // node_modules/@angular/cdk/fesm2022/coercion.mjs
 function coerceBooleanProperty(value) {
@@ -256,4 +257,4 @@ export {
   _isTestEnvironment,
   _bindEventWithOptions
 };
-//# sourceMappingURL=chunk-QIKCFWUZ.js.map
+//# sourceMappingURL=chunk-7GILNMZM.js.map

@@ -60,33 +60,10 @@ export class DonhangComponent {
     }
   }
 
-  // Hàm kiểm tra trạng thái và thông báo lỗi nếu không thể hủy đơn
-  checkTrangThaiHuy(): boolean {
-    if (this.hoaDonData.trangThai === 2) {
-      alert('Đơn hàng đã xác nhận, không thể hủy đơn.');
-      return false;
-    }
-
-    if (this.hoaDonData.trangThai === 3) {
-      alert('Đơn hàng đang giao, không thể hủy đơn.');
-      return false;
-    }
-
-    if (this.hoaDonData.trangThai === 4) {
-      alert('Đơn hàng đã giao, không thể hủy đơn.');
-      return false;
-    }
-
-    return true;
-  }
 
 
   // Phương thức hủy hóa đơn
   huyHoaDon(): void {
-    if (!this.checkTrangThaiHuy()) {
-      this.showCancelModal = false;
-      return;
-    }
 
     if (!this.ghiChu.trim()) {
       alert('Vui lòng nhập lý do hủy đơn hàng.');
@@ -101,7 +78,7 @@ export class DonhangComponent {
       this.donhangService.huyHoaDon(this.idHoaDon, this.ghiChu).subscribe(
         (response) => {
           console.log('Hóa đơn đã bị hủy:', response);
-          this.hoaDonData.trangThai = 5;
+          this.hoaDonData.trangThai = 9;
           this.hoaDonData.ghiChu = this.ghiChu;
           this.showCancelModal = false;
         },
@@ -113,9 +90,6 @@ export class DonhangComponent {
   }
 
   openCancelModal(): void {
-    if (!this.checkTrangThaiHuy()) {
-      return;
-    }
     this.showCancelModal = true;
   }
 

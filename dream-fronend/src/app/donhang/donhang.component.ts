@@ -31,9 +31,10 @@ export class DonhangComponent {
     { value: 0, label: 'Tất cả' },
     { value: 1, label: 'Chờ xác nhận' },
     { value: 2, label: 'Đã xác nhận' },
-    { value: 3, label: 'Đang giao hàng' },
-    { value: 4, label: 'Giao hàng thành công' },
-    { value: 5, label: 'Đơn hàng đã hủy' }
+    { value: 3, label: 'chờ giao hàng' },
+    { value: 4, label: 'Đang giao hàng' },
+    { value: 5, label: 'Giao hàng thành công' },
+    { value: 9, label: 'Đơn hàng đã hủy' }
   ];
   constructor(private donHangService: DonhangService) { }
 
@@ -121,7 +122,7 @@ export class DonhangComponent {
 
   // Kiểm tra xem trạng thái hiện tại có phải là trạng thái cuối cùng không
   checkStatus(trangThai: number): boolean {
-    const validTrangThai = [1, 2, 3];
+    const validTrangThai = [1, 2, 3,4];
     return validTrangThai.indexOf(trangThai) === -1;
   }
 
@@ -130,9 +131,10 @@ export class DonhangComponent {
     switch (trangThai) {
       case 1: return 'Chờ xác nhận';
       case 2: return 'Đã xác nhận';
-      case 3: return 'Đang giao hàng';
-      case 4: return 'Giao hàng thành công';
-      case 5: return 'Hủy đơn';
+      case 3: return 'Chờ lấy hàng';
+      case 4: return 'Đang giao hàng';
+      case 5: return 'Giao hàng thành công';
+      case 9: return 'Hủy đơn';
       default: return 'Không xác định';
     }
   }
@@ -179,7 +181,8 @@ export class DonhangComponent {
 
     this.donHangService.huyHoaDon(idHoaDon, this.ghiChu).subscribe(
       (response) => {
-        this.hoaDonData.trangThai = 5;
+        this.hoaDonData.trangThai = response.trangThai;
+        console.log("trạng thái",response.trangThai)
         this.hoaDonData.ghiChu = this.ghiChu;
         this.showCancelModal = false;
         this.loadHoaDons();

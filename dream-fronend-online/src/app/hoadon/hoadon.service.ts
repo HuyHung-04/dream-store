@@ -162,31 +162,9 @@ export class HoadonService {
   }
 
 
-  // Phương thức gọi API để tạo hóa đơn và chi tiết hóa đơn
-  createHoaDon(
-    idKhachHang: number,
-    voucherId: number | null,
-    tongTienTruocGiam: number,
-    paymentMethodId: number,
-    TongTienSauGiam: number,
-    sdtNguoiNhan: String,
-    tenNguoiNhan: String,
-    diaChi: String,
-    shippingFee: number
-  ): Observable<any> {
+  createHoaDonFull(data: any): Observable<any> {
     const url = `${this.apiHoaDon}/create`;
-    let params = new HttpParams()
-      .set('idKhachHang', idKhachHang.toString())
-      .set('tongTienTruocGiam', tongTienTruocGiam.toString())
-      .set('paymentMethodId', paymentMethodId.toString())
-      .set('TongTienSauGiam', TongTienSauGiam.toString())
-      .set('sdtNguoiNhan', sdtNguoiNhan.toString())
-      .set('tenNguoiNhan', tenNguoiNhan.toString())
-      .set('diaChi', diaChi.toString())
-      .set('shippingFee', shippingFee.toString());
-    if (voucherId !== null) {
-      params = params.set('voucherId', voucherId.toString());
-    }
-    return this.http.post<any>(url, {}, { params });
+    return this.http.post<any>(url, data); // Gửi JSON body
   }
+  
 }

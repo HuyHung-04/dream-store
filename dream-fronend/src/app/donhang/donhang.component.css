@@ -94,7 +94,7 @@ table {
   }
   
   .invoice-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     position: relative;
   }
@@ -377,7 +377,7 @@ table {
 /* Style cho các tab lọc trạng thái */
 .status-filter button {
   padding: 12px 20px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   text-transform: capitalize;
   border: none;

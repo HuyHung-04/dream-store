@@ -6,6 +6,7 @@ import com.example.dreambackend.dtos.VoucherDto;
 import com.example.dreambackend.entities.GioHangChiTiet;
 import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.Voucher;
+import com.example.dreambackend.requests.HoaDonOnlineRequest;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
 import com.example.dreambackend.services.hoadononline.HoaDonOnlineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,26 +66,15 @@ public class HoaDonOnlineController {
 
     // Tạo hóa đơn
     @PostMapping("/create")
-    public ResponseEntity<HoaDon> createHoaDon(
-            @RequestParam Integer idKhachHang,
-            @RequestParam(required = false) Integer voucherId,
-            @RequestParam Double tongTienTruocGiam,
-            @RequestParam Integer paymentMethodId,
-            @RequestParam Double TongTienSauGiam,
-            @RequestParam String sdtNguoiNhan,
-            @RequestParam String tenNguoiNhan,
-            @RequestParam String diaChi,
-            @RequestParam Double shippingFee
-    ) {
-
+    public ResponseEntity<HoaDon> createHoaDon(@RequestBody HoaDonOnlineRequest request) {
         try {
-            HoaDon hoaDon = hoaDonOnlineService.createHoaDon(
-                    idKhachHang, voucherId, tongTienTruocGiam, paymentMethodId, TongTienSauGiam,sdtNguoiNhan,tenNguoiNhan,diaChi,shippingFee );
+            HoaDon hoaDon = hoaDonOnlineService.createHoaDon(request);
             return new ResponseEntity<>(hoaDon, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     //phương thức load hóa đơn chi tiết
     @GetMapping("/chi-tiet/{idHoaDon}")

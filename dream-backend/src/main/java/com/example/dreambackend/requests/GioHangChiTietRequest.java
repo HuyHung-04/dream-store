@@ -19,4 +19,6 @@ public class GioHangChiTietRequest {
     private Integer soLuong;
 
     private Double donGia;
+
+    private Integer trangThai;
 }

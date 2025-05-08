@@ -312,4 +312,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     List<HoaDonChiTiet> getHoaDonChiTietByHoaDonId(@Param("idHoaDon") Integer idHoaDon);
 
     boolean existsBySanPhamChiTiet_Id(Integer idSanPhamChiTiet);
+
+    Optional<HoaDonChiTiet> findByHoaDonAndSanPhamChiTietAndTrangThai(HoaDon hoaDon, SanPhamChiTiet spct, Integer trangThai);
+
 }
