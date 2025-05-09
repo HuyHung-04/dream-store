@@ -85,34 +85,34 @@
       <form *ngIf="selectedKhuyenMai">
         <div class="input-row">
           <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="selectedKhuyenMai.ma" name="ma" readonly />
+            <input type="text" class="input" [(ngModel)]="selectedKhuyenMai.khuyenMai.ma" name="ma" readonly />
             <label for="ma">Mã khuyến mãi</label>
           </div>
           <div class="input-field">
-            <input type="text" class="input" [(ngModel)]="selectedKhuyenMai.ten" name="ten" readonly />
+            <input type="text" class="input" [(ngModel)]="selectedKhuyenMai.khuyenMai.ten" name="ten" readonly />
             <label for="ten">Tên khuyến mãi</label>
           </div>
         </div>
 
         <div class="input-row">
           <div class="input-field">
-            <input type="number" class="input" [(ngModel)]="selectedKhuyenMai.giaTriGiam" name="giaTriGiam" readonly />
+            <input type="number" class="input" [(ngModel)]="selectedKhuyenMai.khuyenMai.giaTriGiam" name="giaTriGiam" readonly />
             <label for="giaTriGiam">Giá trị giảm</label>
           </div>
           <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="selectedKhuyenMai.ngayBatDau" name="ngayBatDau" readonly />
+            <input type="date" class="input" [(ngModel)]="selectedKhuyenMai.khuyenMai.ngayBatDau" name="ngayBatDau" readonly />
             <label for="ngayBatDau">Ngày bắt đầu</label>
           </div>
         </div>
 
         <div class="input-row">
           <div class="input-field">
-            <input type="text" class="input" [value]="selectedKhuyenMai.trangThai ? 'Hoạt động' : 'Không hoạt động'"
+            <input type="text" class="input" [value]="selectedKhuyenMai.khuyenMai.trangThai ? 'Hoạt động' : 'Không hoạt động'"
               style="width:185px;" readonly />
             <label for="trangThai">Trạng thái</label>
           </div>
           <div class="input-field">
-            <input type="date" class="input" [(ngModel)]="selectedKhuyenMai.ngayKetThuc" name="ngayKetThuc" readonly />
+            <input type="date" class="input" [(ngModel)]="selectedKhuyenMai.khuyenMai.ngayKetThuc" name="ngayKetThuc" readonly />
             <label for="ngayKetThuc">Ngày kết thúc</label>
           </div>
         </div>
@@ -121,6 +121,29 @@
 
         </div>
       </form>
+      <div *ngIf="selectedKhuyenMai.danhSachSanPham?.length > 0">
+        <h3 style="margin-top: 20px;position: relative;right: 20px;">Sản phẩm áp dụng khuyến mãi</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mã SPCT</th>
+              <th>Tên sản phẩm</th>
+              <th>Màu sắc</th>
+              <th>Size</th>
+              <th>Số lượng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let spct of selectedKhuyenMai.danhSachSanPham">
+              <td>{{ spct.ma }}</td>
+              <td>{{ spct.tenSanPham }}</td>
+              <td>{{ spct.mauSac }}</td>
+              <td>{{ spct.size }}</td>
+              <td>{{ spct.soLuong }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <!-- Modal sửa khuyến mãi -->

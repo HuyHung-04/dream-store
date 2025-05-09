@@ -1,6 +1,8 @@
 package com.example.dreambackend.services.khuyenmai;
 
+import com.example.dreambackend.dtos.KhuyenMaiChiTietDto;
 import com.example.dreambackend.dtos.SanPhamChiTietDto;
+import com.example.dreambackend.dtos.SanPhamChiTietViewDto;
 import com.example.dreambackend.entities.KhuyenMai;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.repositories.KhuyenMaiRepository;
@@ -42,17 +44,33 @@ public class KhuyenMaiService implements IKhuyenMaiService{
         khuyenMai.setNgayTao(LocalDate.now());
         return khuyenMaiRepository.save(khuyenMai);
     }
+
     @Override
     public KhuyenMai updateKhuyenMai(KhuyenMai khuyenMai) {
         khuyenMai.setNgaySua(LocalDate.now());
         return khuyenMaiRepository.save(khuyenMai);
     }
-    @Override
-    public KhuyenMai getKhuyenMaiById(Integer id) {
-        return khuyenMaiRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Khuyến mãi không tồn tại với id: " + id));
-    }
 
+    @Override
+    public KhuyenMaiChiTietDto getKhuyenMaiById(Integer khuyenMaiId) {
+        KhuyenMai khuyenMai = khuyenMaiRepository.findById(khuyenMaiId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy khuyến mãi với id: " + khuyenMaiId));
+
+        List<SanPhamChiTietViewDto> dtoList;
+
+        List<SanPhamChiTiet> chiTietList = sanPhamChiTietRepository.findByKhuyenMaiId(khuyenMaiId);
+        dtoList = chiTietList.stream()
+                .map(spct -> new SanPhamChiTietViewDto(
+                        spct.getMa(),
+                        spct.getSanPham() != null ? spct.getSanPham().getTen() : "Không có tên",
+                        spct.getMauSac() != null ? spct.getMauSac().getTen() : "Không có màu",
+                        spct.getSize() != null ? spct.getSize().getTen() : "Không có size",
+                        spct.getSoLuong()
+                ))
+                .toList();
+
+        return new KhuyenMaiChiTietDto(khuyenMai, dtoList);
+    }
 
     @Override
     public List<SanPhamChiTietDto> findAvailableProducts(String tenSanPham, Integer khuyenMaiId) {

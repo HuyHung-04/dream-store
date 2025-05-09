@@ -31,7 +31,7 @@ export class DonhangComponent {
     { value: 0, label: 'Tất cả' },
     { value: 1, label: 'Chờ xác nhận' },
     { value: 2, label: 'Đã xác nhận' },
-    { value: 3, label: 'chờ giao hàng' },
+    { value: 3, label: 'Chờ lấy hàng' },
     { value: 4, label: 'Đang giao hàng' },
     { value: 5, label: 'Giao hàng thành công' },
     { value: 9, label: 'Đơn hàng đã hủy' }

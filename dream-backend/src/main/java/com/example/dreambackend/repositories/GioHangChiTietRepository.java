@@ -22,10 +22,15 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
             "s.ten, spct.mauSac.ten, spct.size.ten, " +
             "g.soLuong, " +
             "CASE " +
-            "   WHEN km.id IS NOT NULL THEN CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
+            "   WHEN km.id IS NOT NULL AND km.trangThai = 1 AND km.ngayBatDau <= CURRENT_DATE AND km.ngayKetThuc >= CURRENT_DATE " +
+            "   THEN CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
             "   ELSE CAST(spct.gia AS double) " +
             "END, " +
-            "km.giaTriGiam, " +
+            "CASE " +
+            "   WHEN km.id IS NOT NULL AND km.trangThai = 1 AND km.ngayBatDau <= CURRENT_DATE AND km.ngayKetThuc >= CURRENT_DATE " +
+            "   THEN km.giaTriGiam " +
+            "   ELSE 0 " +
+            "END, " +
             "g.trangThai, k.id, spct.id) " +
             "FROM GioHangChiTiet g " +
             "JOIN g.khachHang k " +
@@ -36,16 +41,22 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     List<GioHangChiTietResponse> findGioHangChiTietByKhachHangId(@Param("idKhachHang") Integer idKhachHang);
 
 
+
     @Query("SELECT new com.example.dreambackend.responses.GioHangChiTietResponse(" +
             "g.id, " +
             "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham = spct.sanPham AND a.trangThai = 1 ORDER BY a.ngayTao ASC LIMIT 1), " +
             "s.ten, spct.mauSac.ten, spct.size.ten, " +
             "g.soLuong, " +
             "CASE " +
-            "   WHEN km.id IS NOT NULL THEN CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
+            "   WHEN km.id IS NOT NULL AND km.trangThai = 1 AND km.ngayBatDau <= CURRENT_DATE AND km.ngayKetThuc >= CURRENT_DATE " +
+            "   THEN CAST((spct.gia * (1 - km.giaTriGiam / 100.0)) AS double) " +
             "   ELSE CAST(spct.gia AS double) " +
             "END, " +
-            "km.giaTriGiam, " +
+            "CASE " +
+            "   WHEN km.id IS NOT NULL AND km.trangThai = 1 AND km.ngayBatDau <= CURRENT_DATE AND km.ngayKetThuc >= CURRENT_DATE " +
+            "   THEN km.giaTriGiam " +
+            "   ELSE 0 " +
+            "END, " +
             "g.trangThai, k.id, spct.id) " +
             "FROM GioHangChiTiet g " +
             "JOIN g.khachHang k " +

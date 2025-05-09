@@ -62,8 +62,9 @@ export class KhuyenmaiComponent implements OnInit {
   editKhuyenMai(khuyenmaiId: number) {
     const role = localStorage.getItem('role');
     if (role === 'ROLE_Quản lý') {
-      this.khuyenmaiService.chiTietKhuyenMai(khuyenmaiId).subscribe((khuyenmai) => {
-        this.khuyenmaiEdit = { ...khuyenmai };
+      this.khuyenmaiService.chiTietKhuyenMai(khuyenmaiId).subscribe((response) => {
+        console.log(response)
+        this.khuyenmaiEdit = { ...response.khuyenMai };
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const endDate = new Date(this.khuyenmaiEdit.ngayKetThuc);
@@ -149,16 +150,6 @@ export class KhuyenmaiComponent implements OnInit {
     // Kiểm tra nếu khuyến mãi không hoạt động
     if (!selectedKhuyenMai.trangThai) {
       alert('Khuyến mãi không hoạt động, không thể chọn sản phẩm!');
-      return;
-    }
-
-    // Kiểm tra xem ngày bắt đầu có lớn hơn ngày hiện tại không
-    const currentDate = new Date();
-    const startDate = new Date(selectedKhuyenMai.ngayBatDau);
-    currentDate.setHours(23, 59, 59, 999)
-    startDate.setHours(0, 0, 0, 0)
-    if (startDate > currentDate) {
-      alert('Ngày bắt đầu khuyến mãi chưa đến, không thể chọn sản phẩm!');
       return;
     }
 
@@ -379,7 +370,9 @@ export class KhuyenmaiComponent implements OnInit {
 
 
   showDetail(khuyenmaiId: number) {
-    this.selectedKhuyenMai = this.khuyenmais.find(khuyenmai => khuyenmai.id === khuyenmaiId);
+    this.khuyenmaiService.chiTietKhuyenMai(khuyenmaiId).subscribe((response) => {
+      this.selectedKhuyenMai = response
+    });
     this.showModalDetail = true;
   }
 

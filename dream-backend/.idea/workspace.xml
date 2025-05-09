@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="" />
+    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/KhuyenMaiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/GioHangChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/GioHangChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/HoaDonChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/HoaDonChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietOnlineRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietOnlineRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/IKhuyenMaiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/khuyenmai/KhuyenMaiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -257,6 +267,8 @@
       <workItem from="1746522953054" duration="1529000" />
       <workItem from="1746535469769" duration="3877000" />
       <workItem from="1746586778664" duration="4088000" />
+      <workItem from="1746625245071" duration="1742000" />
+      <workItem from="1746756735510" duration="1055000" />
     </task>
     <servers />
   </component>

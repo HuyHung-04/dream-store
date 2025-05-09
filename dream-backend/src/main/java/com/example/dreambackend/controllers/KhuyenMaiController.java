@@ -1,5 +1,6 @@
 package com.example.dreambackend.controllers;
 
+import com.example.dreambackend.dtos.KhuyenMaiChiTietDto;
 import com.example.dreambackend.dtos.SanPhamChiTietDto;
 import com.example.dreambackend.entities.KhuyenMai;
 import com.example.dreambackend.entities.SanPhamChiTiet;
@@ -44,14 +45,11 @@ public class KhuyenMaiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<KhuyenMai> getKhuyenMaiDetail(@PathVariable Integer id) {
-        try {
-            KhuyenMai khuyenMai = khuyenMaiService.getKhuyenMaiById(id);
-            return ResponseEntity.ok(khuyenMai);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<KhuyenMaiChiTietDto> getChiTietKhuyenMai(@PathVariable Integer id) {
+        KhuyenMaiChiTietDto dto = khuyenMaiService.getKhuyenMaiById(id);
+        return ResponseEntity.ok(dto);
     }
+
 
     @GetMapping("/search")
     public ResponseEntity<Page<KhuyenMai>> searchKhuyenMai(

@@ -140,11 +140,15 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
                 	hdct.trang_thai AS trangThai,
                 	vc.ten AS tenVoucher,
                 	vc.hinh_thuc_giam AS hinhThucGiam,
-                	vc.gia_tri_giam AS giaTriGiam,
-                	km.gia_tri_giam AS giaTriGiamKM,
+                    vc.gia_tri_giam AS giaTriGiam,
+                    CASE
+                    WHEN km.trang_thai = 1 AND km.ngay_bat_dau <= CAST(GETDATE() AS DATE) AND km.ngay_ket_thuc >= CAST(GETDATE() AS DATE)
+                    THEN km.gia_tri_giam
+                    ELSE 0
+                    END AS giaTriGiamKM,
                 	nv.ten AS tenNhanVien,
                 	COUNT(1) OVER () AS totalRecords
-                FROM hoa_don_chi_tiet hdct
+                    FROM hoa_don_chi_tiet hdct
                 	LEFT JOIN hoa_don hd ON hd.id = hdct.id_hoa_don
                 	LEFT JOIN san_pham_chi_tiet spct ON spct.id = hdct.id_san_pham_chi_tiet
                 	LEFT JOIN san_pham sp ON spct.id_san_pham = sp.id
@@ -312,4 +316,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     List<HoaDonChiTiet> getHoaDonChiTietByHoaDonId(@Param("idHoaDon") Integer idHoaDon);
 
     boolean existsBySanPhamChiTiet_Id(Integer idSanPhamChiTiet);
+
+    Optional<HoaDonChiTiet> findByHoaDonAndSanPhamChiTietAndTrangThai(HoaDon hoaDon, SanPhamChiTiet spct, Integer trangThai);
+
 }
