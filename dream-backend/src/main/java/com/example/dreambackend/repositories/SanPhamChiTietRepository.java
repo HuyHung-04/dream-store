@@ -171,7 +171,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
             + "JOIN spct.size s "
             + "LEFT JOIN spct.khuyenMai km "
             + "WHERE spct.trangThai = 1"
-            + "AND (km.trangThai = 1 OR km.trangThai IS NULL) "
+
             + "ORDER BY spct.id DESC")
     Page<GetSanPhamToBanHangRespone> getSanPhamForCheckBanHang(Pageable pageable);
 

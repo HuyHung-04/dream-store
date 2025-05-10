@@ -112,9 +112,10 @@ export class DonhangComponent {
           this.loadHoaDons();
         },
         (error) => {
-          this.errorMessage = 'Lỗi khi cập nhật trạng thái hóa đơn!';
-          console.error('Lỗi cập nhật trạng thái:', error);
-          this.loading = false;
+        const chiTietLoi = error.error?.message || 'Lỗi khi cập nhật trạng thái hóa đơn!';
+        alert(`${chiTietLoi}`);
+        console.error('Lỗi cập nhật trạng thái:', error);
+        this.loading = false;
         }
       );
     }

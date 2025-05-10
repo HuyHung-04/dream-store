@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -112,11 +114,14 @@ public class HoaDonOnlineController {
     //phương thức cập nhật trạng thái cho đơn hàng
     @PostMapping("/{id}/tang-trang-thai")
     public ResponseEntity<?> tangTrangThai(@PathVariable Integer id) {
-        HoaDon updated = hoaDonOnlineService.tangTrangThaiHoaDon(id);
-        if (updated != null) {
+        try {
+            HoaDon updated = hoaDonOnlineService.tangTrangThaiHoaDon(id);
             return ResponseEntity.ok(updated);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hóa đơn không tồn tại");
+        } catch (RuntimeException ex) {
+            // Trả về JSON với thông báo lỗi trong trường "message"
+            Map<String, String> response = new HashMap<>();
+            response.put("message", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 

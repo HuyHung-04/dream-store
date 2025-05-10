@@ -10,6 +10,7 @@ import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.GioHangChiTietRequest;
 import com.example.dreambackend.requests.HoaDonOnlineRequest;
 import com.example.dreambackend.responses.GioHangChiTietResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -344,6 +345,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         return hoaDon;
     }
 
+    @Transactional
     @Override
     public HoaDon tangTrangThaiHoaDon(Integer id) {
         Optional<HoaDon> optionalHoaDon = hoaDonRepository.findById(id);
@@ -352,47 +354,61 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             HoaDon hoaDon = optionalHoaDon.get();
             Integer trangThaiHienTai = hoaDon.getTrangThai();
 
-            // Nếu trạng thái chưa là 4, tăng trạng thái và ghi lại ngày sửa
             if (trangThaiHienTai != null && trangThaiHienTai < 5) {
-                hoaDon.setTrangThai(trangThaiHienTai + 1); // Tăng trạng thái (ví dụ: từ 1->2, từ 2->3...)
+                hoaDon.setTrangThai(trangThaiHienTai + 1); // Tăng trạng thái
 
-                // Nếu trạng thái là 2, trừ số lượng sản phẩm và giảm số lượng voucher
                 if (trangThaiHienTai == 1) {
-                    // Lấy danh sách chi tiết hóa đơn từ HoaDonChiTietRepository
+                    // Tìm danh sách chi tiết hóa đơn
                     List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.findByHoaDonId(hoaDon.getId());
 
-                    // Giảm số lượng sản phẩm trong chi tiết hóa đơn
                     for (HoaDonChiTiet hct : hoaDonChiTietList) {
                         SanPhamChiTiet spct = hct.getSanPhamChiTiet();
-                        // Giảm số lượng sản phẩm theo số lượng của chi tiết hóa đơn
                         if (spct != null) {
-                            spct.setSoLuong(spct.getSoLuong() - hct.getSoLuong());
-                            sanPhamChiTietRepository.save(spct); // Lưu lại sự thay đổi trong kho
+                            int soLuongTon = spct.getSoLuong();
+                            int soLuongDat = hct.getSoLuong();
+
+                            // Kiểm tra xem có đủ hàng không
+                            if (soLuongTon >= soLuongDat) {
+                                // Trừ số lượng trong kho
+                                spct.setSoLuong(soLuongTon - soLuongDat);
+                                sanPhamChiTietRepository.save(spct);
+
+                                // Nếu hết hàng sau khi trừ, xóa các giỏ hàng chứa sản phẩm này
+                                if (spct.getSoLuong() == 0) {
+                                    // Lấy tất cả các GioHangChiTiet có sản phẩm này
+                                    List<GioHangChiTiet> gioHangs = gioHangChiTietRepository.findAllBySanPhamChiTietId(spct.getId());
+
+                                    if (!gioHangs.isEmpty()) {
+                                        // Lấy danh sách id kiểu Integer
+                                        List<Integer> ids = gioHangs.stream()
+                                                .map(GioHangChiTiet::getId) // Lấy id của từng GioHangChiTiet
+                                                .collect(Collectors.toList());
+
+                                        // Xóa tất cả các giỏ hàng có id trong danh sách
+                                        gioHangChiTietRepository.deleteAllByIdIn(ids);
+                                    }
+                                }
+                            } else {
+                                // Nếu không đủ số lượng, throw exception hoặc thông báo lỗi
+                                throw new RuntimeException("Sản phẩm " + spct.getSanPham().getTen() + " (" + spct.getMa() + ") không đủ số lượng trong kho. Hiện tại chỉ còn " + spct.getSoLuong() + " sản phẩm");
+                            }
                         }
                     }
-
-                    // Nếu có voucher, giảm số lượng voucher
-                    if (hoaDon.getVoucher() != null) {
-                        Voucher voucher = hoaDon.getVoucher();
-                        voucher.setSoLuong(voucher.getSoLuong() - 1); // Giảm 1 voucher đã sử dụng
-                        voucherRepository.save(voucher); // Lưu lại sự thay đổi của voucher
-                    }
                 }
 
-                //  Nếu trạng thái đã là 4 → vẫn cập nhật ngày sửa
                 if (trangThaiHienTai != null && trangThaiHienTai == 4) {
-                    hoaDon.setNgaySua(LocalDate.now()); // Cập nhật ngày sửa tại trạng thái cuối
+                    hoaDon.setNgaySua(LocalDate.now());
                 }
-                // Lưu lại hóa đơn đã cập nhật
+
                 return hoaDonRepository.save(hoaDon);
             }
 
-            // Nếu trạng thái đã là 5 thì trả lại hóa đơn không thay đổi
             return hoaDon;
         }
 
         return null; // Không tìm thấy hóa đơn
     }
+
 
 
 }

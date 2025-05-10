@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="" />
+    <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/GioHangChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/GioHangChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/repositories/SanPhamChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadononline/HoaDonOnlineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadononline/HoaDonOnlineService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/GioHangChiTietRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/GioHangChiTietRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamChiTietRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/repositories/SanPhamChiTietRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -259,6 +268,8 @@
       <workItem from="1746586778664" duration="4088000" />
       <workItem from="1746625245071" duration="1742000" />
       <workItem from="1746756735510" duration="1850000" />
+      <workItem from="1746848793664" duration="956000" />
+      <workItem from="1746868683634" duration="1646000" />
     </task>
     <servers />
   </component>
@@ -281,7 +292,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>103</line>
+          <line>105</line>
           <properties class="com.example.dreambackend.controllers.HoaDonOnlineController" method="huyHoaDon">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -290,7 +301,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>112</line>
+          <line>114</line>
           <properties class="com.example.dreambackend.controllers.HoaDonOnlineController" method="tangTrangThai">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -299,38 +310,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>102</line>
+          <line>104</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>104</line>
+          <line>106</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>106</line>
+          <line>108</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>111</line>
+          <line>113</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>113</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
-          <line>114</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonOnlineController.java</url>
           <line>115</line>
-          <option name="timeStamp" value="18" />
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -88,6 +88,14 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     Optional<GioHangChiTiet> findByKhachHangIdAndSanPhamChiTietIdAndGioHang(@Param("khachHangId") Integer khachHangId,
                                                                             @Param("sanPhamChiTietId") Integer sanPhamChiTietId,
                                                                             @Param("trangThai") Integer trangThai);
+    // Tìm tất cả chi tiết giỏ hàng theo sản phẩm chi tiết (dựa trên id Integer)
+    List<GioHangChiTiet> findAllBySanPhamChiTietId(Integer sanPhamChiTietId);
+
+    // Phương thức xóa tất cả các giỏ hàng chi tiết dựa trên danh sách ID (kiểu Integer)
+    @Modifying
+    @Transactional
+    void deleteAllByIdIn(List<Integer> ids);// Tìm tất cả chi tiết giỏ hàng theo sản phẩm chi tiết (dựa trên id Integer)
+
 
 }
 
