@@ -14,7 +14,12 @@ public interface SanPhamChiTietOnlineRepository extends JpaRepository<SanPhamChi
     @Query("SELECT new com.example.dreambackend.dtos.SanPhamChiTietOnlineDto( " +
             "spct.id, sp.ten, a.anhUrl, spct.gia, cl.ten, ca.ten, th.ten, xx.ten, " +
             "ms.ten, s.ten, spct.soLuong, COALESCE(ghct.soLuong, 0), " +
-            "CAST(COALESCE(CASE WHEN km.trangThai = 1 AND km.ngayKetThuc >= CURRENT_DATE THEN km.giaTriGiam ELSE 0.0 END, 0.0) AS double)) " +  // Chuyển thành Double
+            "CAST(COALESCE( " +
+            "   CASE " +
+            "       WHEN km.trangThai = 1 AND km.ngayBatDau <= CURRENT_DATE AND km.ngayKetThuc >= CURRENT_DATE " +
+            "       THEN km.giaTriGiam " +
+            "       ELSE 0.0 " +
+            "   END, 0.0) AS double)) " +
             "FROM SanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
             "JOIN Anh a ON sp.id = a.sanPham.id " +

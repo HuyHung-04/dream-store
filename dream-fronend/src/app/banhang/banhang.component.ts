@@ -693,7 +693,6 @@ export class BanhangComponent implements OnInit {
             // Tạo một mảng mới để trigger change detection
             this.sanPhams = [...this.sanPhams];
           }
-          this.loadSanPhamToBanHang()
           // Lấy lại danh sách chi tiết hóa đơn để cập nhật giỏ hàng
           this.banhangService.searchHDCT({ idHoaDon: this.selectedInvoice?.id }).subscribe(
             (cartData) => {
