@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -35,10 +37,18 @@ public class GioHangChiTietController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<GioHangChiTietResponse> themSanPhamVaoGio(@RequestBody GioHangChiTietRequest request) {
-        GioHangChiTietResponse response = gioHangChiTietService.themSanPhamVaoGio(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> themSanPhamVaoGio(@RequestBody GioHangChiTietRequest request) {
+        try {
+            GioHangChiTietResponse response = gioHangChiTietService.themSanPhamVaoGio(request);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Lỗi hệ thống: " + ex.getMessage()));
+        }
     }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteGioHangChiTiet(@PathVariable Integer id) {
@@ -47,28 +57,56 @@ public class GioHangChiTietController {
     }
 
     @PutMapping("/update-soluong/{id}")
-    public ResponseEntity<GioHangChiTietResponse> suaSoLuongSanPham(@PathVariable Integer id, @RequestParam Integer soLuongMoi) {
-        GioHangChiTietResponse response = gioHangChiTietService.suaSoLuongSanPham(id, soLuongMoi);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> suaSoLuongSanPham(
+            @PathVariable Integer id,
+            @RequestParam Integer soLuongMoi
+    ) {
+        try {
+            GioHangChiTietResponse response = gioHangChiTietService.suaSoLuongSanPham(id, soLuongMoi);
+            return ResponseEntity.ok(response);
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity
+                    .status(ex.getStatusCode())
+                    .body(Collections.singletonMap("message", ex.getReason()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Đã xảy ra lỗi khi cập nhật số lượng."));
+        }
     }
+
 
     @GetMapping("/thanh-toan/{idKhachHang}")
-    public ResponseEntity<List<GioHangChiTietResponse>> getGioHangThanhToan(@PathVariable Integer idKhachHang) {
-        List<GioHangChiTietResponse> gioHangList = hoaDonOnlineService.getGioHangIdsForThanhToan(idKhachHang);
+    public ResponseEntity<?> getGioHangThanhToan(@PathVariable Integer idKhachHang) {
+        try {
+            List<GioHangChiTietResponse> gioHangList = hoaDonOnlineService.getGioHangIdsForThanhToan(idKhachHang);
 
-        if (gioHangList.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(gioHangList);
+
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity
+                    .status(ex.getStatusCode())
+                    .body(Collections.singletonMap("message", ex.getReason()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi không xác định.");
         }
-
-        return ResponseEntity.ok(gioHangList);
     }
+
 
 
     @PostMapping("/mua-ngay")
-    public ResponseEntity<GioHangChiTietResponse> muaNgay(@RequestBody GioHangChiTietRequest request) {
-        GioHangChiTietResponse response = gioHangChiTietService.muaNgay(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> muaNgay(@RequestBody GioHangChiTietRequest request) {
+        try {
+            GioHangChiTietResponse response = gioHangChiTietService.muaNgay(request);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Đã xảy ra lỗi khi thực hiện mua ngay."));
+        }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Integer> getSoLuong(@PathVariable Integer id) {

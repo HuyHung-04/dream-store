@@ -3,6 +3,7 @@ package com.example.dreambackend.controllers;
 import com.example.dreambackend.dtos.DataTableResults;
 import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.NhanVien;
+import com.example.dreambackend.repositories.HoaDonRepository;
 import com.example.dreambackend.repositories.NhanVienRepository;
 import com.example.dreambackend.requests.HoaDonRequest;
 import com.example.dreambackend.requests.HoaDonSearchRequest;
@@ -34,9 +35,18 @@ public class HoaDonController {
     @Autowired
     NhanVienRepository nhanVienRepository;
 
+    @Autowired
+    HoaDonRepository hoaDonRepository;
+
     @GetMapping("/hien-thi-ban-hang")
-    public List<NhanVien> getAllNhanVien() {
-        return nhanVienRepository.findAll();
+    public List<NhanVien> getAllNhanVienExcept(@RequestParam(value = "excludeId", required = false) Integer excludeId) {
+        if (excludeId == null) {
+            // Nếu excludeId là null, trả về toàn bộ danh sách nhân viên
+            return nhanVienRepository.findAll();
+        } else {
+            // Nếu excludeId không phải null, trả về danh sách nhân viên ngoại trừ nhân viên có id là excludeId
+            return nhanVienRepository.findByIdNot(excludeId);
+        }
     }
 
     @PostMapping("/create")
@@ -56,15 +66,19 @@ public class HoaDonController {
             HoaDonResponse response = hoaDonService.updateHoaDon(id, request);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+
         }
     }
 
     @PostMapping("/all")
     public DataTableResults<HoaDonResponse> getAllHoaDon(
-            @RequestBody HoaDonSearchRequest request
+            @RequestBody HoaDonSearchRequest request,
+            @RequestParam(required = false) Integer idNhanVien
     ) {
-        return hoaDonService.getAllHoaDon(request);
+        return hoaDonService.getAllHoaDon(request,idNhanVien);
     }
 
     @PostMapping("/{id}/cancel")
@@ -110,6 +124,30 @@ public class HoaDonController {
         return hoaDonService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon, page, size);
     }
 
+    @GetMapping("/nhanvien/{id}")
+    public List<HoaDon> getHoaDonByNhanVien(@PathVariable("id") Integer idNhanVien) {
+        return hoaDonRepository.findByTrangThaiAndNhanVienId(6,idNhanVien);
+    }
 
+    @DeleteMapping("/delete-hoadon-nhanvien/{idNhanVien}")
+    public ResponseEntity<?> deleteHoaDonsByNhanVienId(@PathVariable Integer idNhanVien) {
+        String result = hoaDonService.cancelHoaDonsByNhanVienId(idNhanVien);
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/assign")
+    public ResponseEntity<Map<String, String>> assignHoaDonToNewNhanVien(
+            @RequestParam("from") Integer idNhanVienCu,
+            @RequestParam("to") Integer idNhanVienMoi) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            String message = hoaDonService.assignHoaDonToNewNhanVien(idNhanVienCu, idNhanVienMoi);
+            response.put("message", message);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 
 }

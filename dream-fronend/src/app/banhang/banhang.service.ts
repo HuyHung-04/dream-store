@@ -82,9 +82,13 @@ export class BanhangService {
     return this.http.post(this.apiUrlHD + '/create', request);
   }
 
-  getDanhSachNhanVien(): Observable<any> {
-    return this.http.get<any[]>(`${this.apiUrlNV}/hoa-don/hien-thi-ban-hang`);
+getDanhSachNhanVien(excludeId: number | null): Observable<any> {
+  let params = new HttpParams();
+  if (excludeId !== null) {
+    params = params.set('excludeId', excludeId.toString());
   }
+  return this.http.get<any[]>(`${this.apiUrlNV}/hoa-don/hien-thi-ban-hang`, { params });
+}
 
   getHoaDonById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrlHD}/${id}`);

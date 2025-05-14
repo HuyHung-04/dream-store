@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface NhanVienRepository extends JpaRepository<NhanVien, Integer> {
+    List<NhanVien> findByIdNot(Integer id);
     Page<NhanVien> findByTenContainingIgnoreCase(String ten, Pageable pageable);
     Optional<NhanVien> findByEmail(String email);
     Page<NhanVien> findByTrangThai(Integer trangThai, Pageable pageable);

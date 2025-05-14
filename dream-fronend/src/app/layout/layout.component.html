@@ -51,5 +51,39 @@
     <div class="content">
       <router-outlet></router-outlet>
     </div>
+
+  <div *ngIf="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Danh sách Nhân Viên</h2>
+        </div>
+
+        <div class="table-container">
+          <table class="product-table">
+            <thead>
+              <tr>
+                <th>Mã nhân viên</th>
+                <th>Tên nhân viên</th>
+                <th>Hoạt động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let nhanvien of nhanViens"  [class.selected]="nhanvien.id === selectedNhanVienId">
+                <td>{{ nhanvien.ma }}</td>
+                <td>{{ nhanvien.ten }}</td>
+                <td>
+                  <button (click)="onSelectNhanVien(nhanvien.id)" class="button btn-primary">Chọn</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-footer">
+          <button mat-button (click)="xacNhanBanGiaoVaDangXuat()"  style="color:white;" class="btn-logout">Đăng xuất</button>
+          <button mat-button (click)="closeModal()" style="color:white;" class="btn-close">Đóng</button>
+        </div>
+      </div>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -60,18 +60,16 @@
     </select>
     
     <div class="quantity-control">
-      <button (click)="giamSoLuong()">-</button>
-      <input 
-        type="number" 
-        [(ngModel)]="soLuongMua" 
-        min="1" 
-        [max]="selectedSanPham?.soLuongSanPham || 1"
-        (keyup)="kiemTraSoLuong()"
-        (change)="kiemTraSoLuong()"
-        (blur)="kiemTraSoLuong()">
-      <button (click)="tangSoLuong()">+</button>
+    <button (click)="giamSoLuong()">-</button>
+    <input 
+      type="number" 
+      [(ngModel)]="soLuongMua" 
+      min="1" 
+      [max]="selectedSanPham?.soLuongSanPham || 1"
+      (blur)="kiemTraSoLuong()">
+    <button (click)="tangSoLuong()">+</button>
     </div>
-    
+
     <div class="button-group">
       <button class="btn" (click)="themVaoGio()">Thêm vào giỏ</button>
       <button class="btn" (click)="muaNgay()" >Mua ngay</button>

@@ -73,9 +73,13 @@ export class HoaDonService {
   private apiHoaDonOnline = 'http://localhost:8080/api/hoa-don-online';
   constructor(private http: HttpClient) { }
 
-  getHoaDons(request: HoaDonSearchRequest): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/all`, request);
+getHoaDons(request: HoaDonSearchRequest, idNhanVien: number | null): Observable<any> {
+  let params = new HttpParams();
+  if (idNhanVien !== null && idNhanVien !== undefined) {
+    params = params.set('idNhanVien', idNhanVien.toString());
   }
+  return this.http.post<any>(`${this.apiUrl}/all`, request, { params });
+}
   getHDCT(request: HoaDonChiTietSearchRequest): Observable<any> {
     return this.http.post<any>(`${this.apiUrlHDCT}/all`, request);
   }

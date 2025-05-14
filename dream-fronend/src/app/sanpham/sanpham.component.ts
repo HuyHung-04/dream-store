@@ -113,36 +113,36 @@ export class SanphamComponent implements OnInit {
     const role = localStorage.getItem('role');
     if (role === 'ROLE_Quản lý') {
       // Kiểm tra xem sản phẩm đã được bán chưa
-    this.sanphamService.checkSpct(sanPhamChiTiet.id).subscribe({
-      next: (isUsed) => {
-        this.daBan = isUsed;
-        const sanPhamCha = this.sanPhams.find(sp => sp.id === sanPhamChiTiet.idSanPham);
-        if (sanPhamCha) {
-          this.sanPhamRequest = { ...sanPhamCha };
-          // console.log('Trạng thái sản phẩm cha:', this.sanPhamRequest.trangThai);
-        }
-        this.sanPhamChiTietRequest = {
-          id: sanPhamChiTiet.id,
-          ma: sanPhamChiTiet.ma,
-          gia: sanPhamChiTiet.gia,
-          soLuong: sanPhamChiTiet.soLuong,
-          sanPham: {
-            id: sanPhamChiTiet.idSanPham || '',
-            ten: sanPhamChiTiet.tenSanPham || ''
-          },
-          sizes: sanPhamChiTiet.tenSize ? [{ id: sanPhamChiTiet.idSize, ten: sanPhamChiTiet.tenSize }] : [],
-          mauSacs: sanPhamChiTiet.tenMauSac ? [{ id: sanPhamChiTiet.idMauSac, ten: sanPhamChiTiet.tenMauSac }] : [],
-          trangThai: sanPhamChiTiet.trangThai ?? 1,
-          ngayTao: sanPhamChiTiet.ngayTao || '',
-          ngaySua: new Date().toISOString().split('T')[0],
-        };
+      this.sanphamService.checkSpct(sanPhamChiTiet.id).subscribe({
+        next: (isUsed) => {
+          this.daBan = isUsed;
+          const sanPhamCha = this.sanPhams.find(sp => sp.id === sanPhamChiTiet.idSanPham);
+          if (sanPhamCha) {
+            this.sanPhamRequest = { ...sanPhamCha };
+            // console.log('Trạng thái sản phẩm cha:', this.sanPhamRequest.trangThai);
+          }
+          this.sanPhamChiTietRequest = {
+            id: sanPhamChiTiet.id,
+            ma: sanPhamChiTiet.ma,
+            gia: sanPhamChiTiet.gia,
+            soLuong: sanPhamChiTiet.soLuong,
+            sanPham: {
+              id: sanPhamChiTiet.idSanPham || '',
+              ten: sanPhamChiTiet.tenSanPham || ''
+            },
+            sizes: sanPhamChiTiet.tenSize ? [{ id: sanPhamChiTiet.idSize, ten: sanPhamChiTiet.tenSize }] : [],
+            mauSacs: sanPhamChiTiet.tenMauSac ? [{ id: sanPhamChiTiet.idMauSac, ten: sanPhamChiTiet.tenMauSac }] : [],
+            trangThai: sanPhamChiTiet.trangThai ?? 1,
+            ngayTao: sanPhamChiTiet.ngayTao || '',
+            ngaySua: new Date().toISOString().split('T')[0],
+          };
 
-        this.showModalSanPhamChiTietThem = true;
-      },
-      error: (err) => {
-        console.error('Lỗi khi kiểm tra sản phẩm đã bán:', err);
-      }
-    });
+          this.showModalSanPhamChiTietThem = true;
+        },
+        error: (err) => {
+          console.error('Lỗi khi kiểm tra sản phẩm đã bán:', err);
+        }
+      });
     } else {
       alert('Bạn không có quyền truy cập chức năng này');
     }
@@ -392,7 +392,7 @@ export class SanphamComponent implements OnInit {
           // Chuyển danh sách về mảng các ID thay vì để rỗng
           sizes: sanPhamChiTiet.sizes ? sanPhamChiTiet.sizes.map((size: any) => size.id) : (sanPhamChiTiet.idSize ? [sanPhamChiTiet.idSize] : []),
           mauSacs: sanPhamChiTiet.mauSacs ? sanPhamChiTiet.mauSacs.map((mau: any) => mau.id) : (sanPhamChiTiet.idMauSac ? [sanPhamChiTiet.idMauSac] : []),
-  
+
           trangThai: sanPhamChiTiet.trangThai ?? 1,
           ngayTao: sanPhamChiTiet.ngayTao || '',
           ngaySua: new Date().toISOString().split('T')[0]
@@ -411,7 +411,7 @@ export class SanphamComponent implements OnInit {
           ngayTao: new Date().toISOString().split('T')[0],
           ngaySua: ''
         };
-  
+
         if (this.selectedProduct) {
           this.sanPhamChiTietRequest.sanPham = {
             id: this.selectedProduct.id,
@@ -432,13 +432,13 @@ export class SanphamComponent implements OnInit {
   //     alert('Bạn không có quyền truy cập chức năng này.');
   //     return;
   //   }
-  
+
   //   // Kiểm tra trạng thái sản phẩm
   //   if (this.selectedProduct?.trangThai === 0) {
   //     alert('Sản phẩm không hoạt động, không thể thêm sản phẩm chi tiết');
   //     return;
   //   }
-  
+
   //   if (sanPhamChiTiet) {
   //     this.sanPhamChiTietRequest = {
   //       id: sanPhamChiTiet.id,
@@ -473,7 +473,7 @@ export class SanphamComponent implements OnInit {
   //       ngayTao: new Date().toISOString().split('T')[0],
   //       ngaySua: ''
   //     };
-  
+
   //     if (this.selectedProduct) {
   //       this.sanPhamChiTietRequest.sanPham = {
   //         id: this.selectedProduct.id,
@@ -481,7 +481,7 @@ export class SanphamComponent implements OnInit {
   //       };
   //     }
   //   }
-  
+
   //   this.showModalSanPhamChiTietThem = true;
   // }  
 
@@ -747,11 +747,11 @@ export class SanphamComponent implements OnInit {
     if (!confirmed) return;
     this.validateSanPham().then((isValid) => {
       if (!isValid) return;
-  
+
       this.sanphamService.addSanPham(this.sanPhamRequest).subscribe({
         next: (response: any) => {
           console.log("Response từ backend:", response);
-          
+
           if (response.id) {
             alert("Thêm sản phẩm thành công");
             this.closeModalSanPham();
@@ -770,7 +770,7 @@ export class SanphamComponent implements OnInit {
       });
     });
   }
-  
+
   private handleWhenNoIdReturned() {
     this.sanphamService.getSanPham(0, 100).subscribe({
       next: (sanPhams) => {
@@ -782,7 +782,7 @@ export class SanphamComponent implements OnInit {
       }
     });
   }
-  
+
   // update sản phẩm
   updateSanPham(): void {
     const confirmed = confirm("Bạn có chắc chắn muốn sửa sản phẩm?");
@@ -820,22 +820,36 @@ export class SanphamComponent implements OnInit {
       this.validationErrors = {};
       let hasErrors = false;
 
-      // Kiểm tra các lỗi cơ bản (giá, số lượng, trạng thái)
-      if (!this.sanPhamChiTietRequest.gia || this.sanPhamChiTietRequest.gia.toString().trim() === "") {
+      // Kiểm tra các lỗi
+      if (
+        this.sanPhamChiTietRequest.gia === null ||
+        this.sanPhamChiTietRequest.gia === undefined ||
+        this.sanPhamChiTietRequest.gia.toString().trim() === ''
+      ) {
         this.validationErrors["gia"] = "Giá không được để trống";
         hasErrors = true;
-      } else if (this.sanPhamChiTietRequest.gia < 1) {
+      } else if (isNaN(this.sanPhamChiTietRequest.gia)) {
+        this.validationErrors["gia"] = "Giá phải là số hợp lệ";
+        hasErrors = true;
+      } else if (+this.sanPhamChiTietRequest.gia < 1) {
         this.validationErrors["gia"] = "Giá phải lớn hơn 0";
         hasErrors = true;
-      } else if (this.sanPhamChiTietRequest.gia > 20000000) {
+      } else if (+this.sanPhamChiTietRequest.gia > 20000000) {
         this.validationErrors["gia"] = "Giá tối đa là 20,000,000";
         hasErrors = true;
       }
 
-      if (!this.sanPhamChiTietRequest.soLuong || this.sanPhamChiTietRequest.soLuong.toString().trim() === "") {
+      if (
+        this.sanPhamChiTietRequest.soLuong === null ||
+        this.sanPhamChiTietRequest.soLuong === undefined ||
+        this.sanPhamChiTietRequest.soLuong.toString().trim() === ''
+      ) {
         this.validationErrors["soLuong"] = "Số lượng không được để trống";
         hasErrors = true;
-      } else if (this.sanPhamChiTietRequest.soLuong < 1) {
+      } else if (isNaN(this.sanPhamChiTietRequest.soLuong)) {
+        this.validationErrors["soLuong"] = "Số lượng phải là số hợp lệ";
+        hasErrors = true;
+      } else if (+this.sanPhamChiTietRequest.soLuong < 1) {
         this.validationErrors["soLuong"] = "Số lượng phải lớn hơn 0";
         hasErrors = true;
       }
@@ -861,7 +875,7 @@ export class SanphamComponent implements OnInit {
         this.validationErrors["trangThai"] = "Không thể cập nhật trạng thái vì sản phẩm không hoạt động";
         hasErrors = true;
       }
-    
+
       // Kiểm tra size và màu sắc
       if (this.sanPhamChiTietRequest.id) { // Chỉ khi sửa
         // Kiểm tra số lượng size và màu được chọn
@@ -959,14 +973,14 @@ export class SanphamComponent implements OnInit {
 
   // thêm sản phẩm chi tiết
   addSanPhamChiTiet(): void {
-  const confirmed = confirm("Bạn có chắc chắn muốn thêm sản phẩm chi tiết?");
-  if (!confirmed) return;
-  const productStatus = Number(this.selectedProduct?.trangThai);
-  const detailStatus = Number(this.sanPhamChiTietRequest.trangThai);
-  if (productStatus === 0 && detailStatus === 1) {
-    this.validationErrors['trangThai'] = "Sản phẩm không hoạt động không thể thêm với trạng thái này";
-    return;
-  }
+    const confirmed = confirm("Bạn có chắc chắn muốn thêm sản phẩm chi tiết?");
+    if (!confirmed) return;
+    const productStatus = Number(this.selectedProduct?.trangThai);
+    const detailStatus = Number(this.sanPhamChiTietRequest.trangThai);
+    if (productStatus === 0 && detailStatus === 1) {
+      this.validationErrors['trangThai'] = "Sản phẩm không hoạt động không thể thêm với trạng thái này";
+      return;
+    }
     // console.log("Hàm addSanPhamChiTiet() được gọi");
     this.validateSanPhamChiTiet().then((isValid) => {
       // console.log("Kết quả validate:", isValid);

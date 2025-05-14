@@ -53,10 +53,12 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setNgaySua(LocalDate.now());
         updateHoaDonInfo(hoaDon, request);
 
-        // Cập nhật voucher (nếu có)
         if (request.getIdVoucher() != null) {
             updateVoucherForHoaDon(hoaDon, request.getIdVoucher());
+        } else {
+            hoaDon.setVoucher(null); // Nếu không có voucher thì gỡ bỏ
         }
+
         if (request.getIdPhuongThucThanhToan() != null) {
             PhuongThucThanhToan phuongThucThanhToan = ptttRepository.findById(request.getIdPhuongThucThanhToan()).orElse(null);
             hoaDon.setPhuongThucThanhToan(phuongThucThanhToan);
@@ -77,28 +79,28 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setNgaySua(LocalDate.now());
     }
 
+
     private void updateVoucherForHoaDon(HoaDon hoaDon, Integer idVoucher) {
+
         Voucher newVoucher = voucherRepository.findById(idVoucher)
                 .orElseThrow(() -> new RuntimeException("Voucher không tồn tại"));
 
-        Voucher oldVoucher = hoaDon.getVoucher();
+        if (newVoucher.getSoLuong() <= 0) {
+            hoaDon.setVoucher(null);
+            throw new RuntimeException("Voucher đã hết số lượt sử dụng");
+        }
 
-        if (!Objects.equals(oldVoucher, newVoucher)) {
-            if (oldVoucher != null) {
-                oldVoucher.setSoLuong(oldVoucher.getSoLuong() + 1);
-                voucherRepository.save(oldVoucher);
-            }
-
-            if (newVoucher.getSoLuong() <= 0) {
-                throw new RuntimeException("Voucher đã hết số lượng");
-            }
-
+        // Chỉ trừ số lượng khi trạng thái hóa đơn là 7
+        if (hoaDon.getTrangThai() != null && hoaDon.getTrangThai() == 7) {
             newVoucher.setSoLuong(newVoucher.getSoLuong() - 1);
             voucherRepository.save(newVoucher);
-
+            hoaDon.setVoucher(newVoucher);
+        } else {
+            // Gán voucher nhưng không trừ số lượng nếu chưa đến trạng thái 7
             hoaDon.setVoucher(newVoucher);
         }
     }
+
 
 
     @Override
@@ -127,15 +129,18 @@ public class HoaDonService implements IHoaDonService {
     @PersistenceContext
     private EntityManager em;
     @Override
-    public DataTableResults<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request) {
-        List<HoaDonResponse> list = hoaDonRepository.search(request,em);
+    public DataTableResults<HoaDonResponse> getAllHoaDon(HoaDonSearchRequest request, Integer idNhanVien) {
+        List<HoaDonResponse> list;
+
+        if (idNhanVien != null) {
+            list = hoaDonRepository.search(request, em, idNhanVien); // lọc theo nhân viên
+        } else {
+            list = hoaDonRepository.search(request, em, null); // không lọc theo nhân viên (hoặc xử lý trong repo)
+        }
+
         DataTableResults<HoaDonResponse> results = new DataTableResults<>();
         results.setData(list);
-        if (!list.isEmpty()) {
-            results.setRecordsTotal(request.getTotalRecords());
-        } else {
-            results.setRecordsTotal(0);
-        }
+        results.setRecordsTotal(!list.isEmpty() ? request.getTotalRecords() : 0);
         return results;
     }
 
@@ -160,11 +165,6 @@ public class HoaDonService implements IHoaDonService {
                 sanPhamChiTietRepository.save(spct);
             }
 
-            if (hoaDon.getVoucher() != null) {
-                Voucher voucher = hoaDon.getVoucher();
-                voucher.setSoLuong(voucher.getSoLuong() + 1);
-                voucherRepository.save(voucher);
-            }
         } else{
             throw new RuntimeException("Không thể huỷ hoá đơn");
         }
@@ -241,5 +241,61 @@ public class HoaDonService implements IHoaDonService {
     public Page<HoaDon> getHoaDonsByTrangThaiAndNguoiNhanAndMa(Integer trangThai, String tenNguoiNhan, String sdtNguoiNhan, String maHoaDon, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return hoaDonRepository.findByTrangThaiAndNguoiNhanAndMa(trangThai, tenNguoiNhan, sdtNguoiNhan, maHoaDon, pageable);
+    }
+
+    @Transactional
+    public String cancelHoaDonsByNhanVienId(Integer idNhanVien) {
+        List<HoaDon> hoaDons = hoaDonRepository.findByTrangThaiAndNhanVienId(6, idNhanVien);
+        int count = 0;
+
+        for (HoaDon hoaDon : hoaDons) {
+            // Cập nhật trạng thái hóa đơn
+            hoaDon.setTrangThai(8);
+            hoaDonRepository.save(hoaDon);
+
+            // Lấy chi tiết hóa đơn
+            List<HoaDonChiTiet> chiTiets = hoaDonChiTietRepository.findByHoaDonId(hoaDon.getId());
+
+            for (HoaDonChiTiet chiTiet : chiTiets) {
+                SanPhamChiTiet sanPham = chiTiet.getSanPhamChiTiet();
+                if (sanPham != null) {
+                    int soLuongHoan = chiTiet.getSoLuong();
+                    sanPham.setSoLuong(sanPham.getSoLuong() + soLuongHoan);
+                    sanPhamChiTietRepository.save(sanPham);
+                }
+            }
+
+            count++;
+        }
+
+        return "Đã hủy " + count + " hóa đơn và hoàn lại số lượng sản phẩm.";
+    }
+
+    @Override
+    public String assignHoaDonToNewNhanVien(Integer idNhanVienCu, Integer idNhanVienMoi) {
+        List<HoaDon> hoaDonCuaNhanVienCu = hoaDonRepository.findByTrangThaiAndNhanVienId(6, idNhanVienCu);
+        List<HoaDon> hoaDonCuaNhanVienMoi = hoaDonRepository.findByTrangThaiAndNhanVienId(6, idNhanVienMoi);
+
+        int tongHoaDon = hoaDonCuaNhanVienCu.size() + hoaDonCuaNhanVienMoi.size();
+        if (tongHoaDon > 5) {
+            throw new RuntimeException("Hiện tại số đơn của nhân viên bàn giao vượt quá 5 đơn. Vui lòng chọn nhân viên khác");
+        }
+
+        if (hoaDonCuaNhanVienCu.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy hóa đơn với trạng thái = 6 của nhân viên cũ.");
+        }
+
+        NhanVien nhanVienMoi = nhanVienRepository.findById(idNhanVienMoi).orElse(null);
+        if (nhanVienMoi == null) {
+            throw new RuntimeException("Không tìm thấy nhân viên mới với ID = " + idNhanVienMoi);
+        }
+
+        for (HoaDon hoaDon : hoaDonCuaNhanVienCu) {
+            hoaDon.setNhanVien(nhanVienMoi);
+        }
+
+        hoaDonRepository.saveAll(hoaDonCuaNhanVienCu);
+
+        return "Đã chuyển " + hoaDonCuaNhanVienCu.size() + " hóa đơn sang nhân viên mới.";
     }
 }

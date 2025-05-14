@@ -240,7 +240,7 @@
           <td>{{ sanPham.tenXuatXu }}</td>
           <td>{{ sanPham.tenChatLieu }}</td>
           <td>{{ sanPham.tenCoAo }}</td>
-          <td>{{ sanPham.giaCaoNhat}}</td>
+          <td>{{ sanPham.giaCaoNhat}} VND</td>
           <td>{{ sanPham.tongSoLuong}}</td>
           <td>{{ sanPham.ngayTao }}</td>
           <td>{{ sanPham.ngaySua }}</td>
@@ -469,14 +469,14 @@
               <tr *ngFor="let sanPham of sanPhamChiTiets">
                 <td>{{ sanPham.ma }}</td>
                 <td>{{ sanPham.tenSanPham }}</td>
-                <td>{{ sanPham.gia }}</td>
+                <td>{{ sanPham.gia }} VND</td>
                 <td>{{ sanPham.soLuong }}</td>
                 <td>{{ sanPham.ngayTao }}</td>
                 <td>{{ sanPham.ngaySua }}</td>
                 <td>{{ sanPham.tenSize }}</td>
                 <td>{{ sanPham.tenMauSac }}</td>
                 <td>{{ sanPham.tenKhuyenMai || "Không áp dụng" }}</td>
-                <td>{{ sanPham.giaSauGiam }}</td>
+                <td>{{ sanPham.giaSauGiam }} VND</td>
                 <td>{{ sanPham.trangThai === 1 ? "Hoạt động" : "Không hoạt động" }}</td>
                 <td>
                   <a href="javascript:void(0);"  (click)="editSanPhamChiTiet(sanPham)" class="button btn-danger">Sửa</a>

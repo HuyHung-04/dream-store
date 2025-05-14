@@ -1,309 +1,295 @@
-    <!-- Tạo hóa đơn -->
-    <div class="invoice-container">
-      <button class="create-btn" (click)="createInvoice()">
-        <i class="bi bi-plus-circle-fill"></i> Tạo hoá đơn
+<!-- Tạo hóa đơn -->
+<div class="invoice-container">
+  <button class="create-btn" (click)="createInvoice()">
+    <i class="bi bi-plus-circle-fill"></i> Tạo hoá đơn
+  </button>
+  <div class="invoice-list">
+    <button *ngFor="let invoice of invoices; trackBy: trackById" class="invoice-btn"
+      [class.active]="selectedInvoice?.id === invoice.id" (click)="selectInvoice(invoice)">
+      {{ invoice.maHoaDon}}
+    </button>
+  </div>
+</div>
+<!-- [class.active]="selectedInvoice === invoice" -->
+<!-- giỏ hàng -->
+<div class="cart-container">
+  <h6 class="sidebar-title"><i class="bi bi-cart3"></i> Giỏ hàng</h6>
+  <div class="cart-items">
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Mã sản phẩm</th>
+          <th>Tên sản phẩm</th>
+          <th>Số lượng</th>
+          <th>Đơn Giá</th>
+          <th>Màu Sắc</th>
+          <th>Size</th>
+          <th>Tổng giá</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of cart">
+          <td>{{ item.maSanPhamChiTiet }}</td>
+          <td>{{ item.tenSanPham }}</td>
+          <td>
+            <input type="number" #quantityInput="ngModel" [(ngModel)]="item.soLuong" min="1" max="1000"
+              class="item-quantity" (blur)="onQuantityBlur(item, $event)" (focus)="onQuantityFocus(item)"
+              (keyup.enter)="onQuantityBlur(item, $event)">
+          </td>
+          <td>
+           <div>{{ giaGocSanPhamMap[item.idSanPhamChiTiet] | number:'1.0-0' }} VNĐ</div>
+            <div *ngIf="item.giaTriGiamKM > 0" class="discount-info">
+              <span class="discount-percent">-{{ item.giaTriGiamKM }}%</span>
+              <div class="discounted-price">
+                {{ (item.gia) | number:'1.0-0' }} VND
+              </div>
+            </div>
+          </td>
+          <td>{{item.tenMau}}</td>
+          <td>{{item.tenSize}}</td>
+          <td>
+            {{
+            (
+            item.soLuong * item.gia
+            ) | number:'1.0-0'
+            }} VNĐ
+          </td>
+          <td>
+            <button class="item-remove" (click)="removeFromCart(item)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- lọc -->
+<div class="product-filters">
+  <!-- Ô nhập tìm kiếm sản phẩm -->
+  <div class="input-group">
+    <input type="text" placeholder="Nhập tên sản phẩm..." [(ngModel)]="tenSanPham" (ngModelChange)="filterSanPham()"
+      class="custom-input" style="width: 185px;">
+  </div>
+
+  <!-- Dropdown chọn size -->
+  <div class="input-group" style="padding-left: 150px;">
+    <select class="custom-input" style="width: 170px;" [(ngModel)]="sizeSearch" (ngModelChange)="filterSanPham()">
+      <option value="">Tất cả size</option>
+      <option *ngFor="let size of danhSachSize" [value]="size">{{ size }}</option>
+    </select>
+  </div>
+
+  <!-- Dropdown chọn màu sắc -->
+  <div class="input-group">
+    <select class="custom-input" style="width: 170px;" [(ngModel)]="mauSac" (ngModelChange)="filterSanPham()">
+      <option value="">Tất cả màu</option>
+      <option *ngFor="let mau of danhSachMau" [value]="mau">{{ mau }}</option>
+    </select>
+  </div>
+</div>
+
+<!-- bảng sản phẩm -->
+<div class="table-product pt-4">
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th>Mã sản phẩm</th>
+        <th>Tên sản phẩm</th>
+        <th>Ảnh</th>
+        <th>Giá</th>
+        <th>Khuyến mãi(%)</th>
+        <th>Số lượng</th>
+        <th>Màu sắc</th>
+        <th>Size</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let sp of filteredSanPhams()">
+        <tr *ngIf="sp.soLuong > 0">
+          <td>{{ sp.maSanPhamChiTiet }}</td>
+          <td>{{ sp.tenSanPham }}</td>
+          <td>
+            <img *ngIf="sp.anhUrl" [src]="sp.anhUrl" alt="Ảnh sản phẩm" class="product-image">
+          </td>
+          <td>{{ sp.gia | number:'1.0-0' }} VND</td>
+          <td>{{ sp.giaTriGiam ? (sp.giaTriGiam | number) : '0' }}</td>
+          <td [ngClass]="{'low-stock': sp.soLuong <= 5}">{{ sp.soLuong }}</td>
+          <td>{{ sp.tenMau }}</td>
+          <td>{{ sp.tenSize }}</td>
+          <td>
+            <button class="product-add" (click)="addToCart(sp); $event.stopPropagation()">
+              <i class="bi bi-cart-plus"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <!-- phân trang -->
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="page === 0"><i class="bi bi-chevron-double-left"></i></button>
+    <span>{{ page + 1 }} / {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="page >= totalPages - 1"><i class="bi bi-chevron-double-right"></i></button>
+  </div>
+</div>
+
+<!-- khách hàng -->
+<div class="right-container">
+  <!-- Chọn khách hàng -->
+  <div class="khach-hang">
+    <div class="input-group">
+      <input style="width: 285px;" type="text" class="custom-input" placeholder="Tên khách hàng..."
+        [(ngModel)]="tenKhachHang">
+      <!-- Nút chọn khách hàng -->
+      <button class="btn btn-primary" (click)="moDanhSachKhachHang()">
+        Chọn
       </button>
-      <div class="invoice-list">
-        <button
-          *ngFor="let invoice of invoices; trackBy: trackById"
-          class="invoice-btn"
-          [class.active]="selectedInvoice?.id === invoice.id"
-          (click)="selectInvoice(invoice)">
-          {{ invoice.maHoaDon}}
-        </button>
-      </div>
-    </div>
-    <!-- [class.active]="selectedInvoice === invoice" -->
-    <!-- giỏ hàng -->
-    <div class="cart-container">
-      <h6 class="sidebar-title"><i class="bi bi-cart3"></i> Giỏ hàng</h6>
-      <div class="cart-items">
-        <table class="cart-table">
-          <thead>
-            <tr>
-              <th>Mã sản phẩm</th>
-              <th>Tên sản phẩm</th>
-              <th>Số lượng</th>
-              <th>Đơn Giá</th>
-              <th>Màu Sắc</th>
-              <th>Size</th>
-              <th>Tổng giá</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of cart">
-              <td>{{ item.maSanPhamChiTiet }}</td>
-              <td>{{ item.tenSanPham }}</td>
-              <td>
-                <input 
-                  type="number" 
-                  #quantityInput="ngModel"
-                  [(ngModel)]="item.soLuong" 
-                  min="1" 
-                  max="1000"
-                  class="item-quantity" 
-                  (blur)="onQuantityBlur(item, $event)"
-                  (focus)="onQuantityFocus(item)"
-                  (keyup.enter)="onQuantityBlur(item, $event)">
-              </td>
-              <td>
-                <div>{{ item.gia | number:'1.0-0' }} VNĐ</div>
-                <div *ngIf="item.giaTriGiamKM > 0" class="discount-info">
-                  <span class="discount-percent">-{{ item.giaTriGiamKM }}%</span>
-                  <div class="discounted-price">
-                    {{ (item.gia - (item.gia * item.giaTriGiamKM / 100)) | number:'1.0-0' }} VNĐ
-                  </div>
-                </div>
-              </td>
-              <td>{{item.tenMau}}</td>
-              <td>{{item.tenSize}}</td>
-              <td>
-                {{
-                  (
-                    item.soLuong * (item.gia - (item.gia * item.giaTriGiamKM / 100))
-                  ) | number:'1.0-0'
-                }} VNĐ
-              </td>
-              <td>
-                <button class="item-remove" (click)="removeFromCart(item)">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
-    <!-- lọc -->
-    <div class="product-filters">
-      <!-- Ô nhập tìm kiếm sản phẩm -->
-      <div class="input-group">
-        <input type="text" placeholder="Nhập tên sản phẩm..." [(ngModel)]="tenSanPham" (ngModelChange)="filterSanPham()" class="custom-input" style="width: 185px;">
-      </div>
-
-      <!-- Dropdown chọn size -->
-      <div class="input-group" style="padding-left: 150px;">
-        <select class="custom-input" style="width: 170px;" [(ngModel)]="sizeSearch" (ngModelChange)="filterSanPham()">
-          <option value="">Tất cả size</option>
-          <option *ngFor="let size of danhSachSize" [value]="size">{{ size }}</option>
-        </select>
-      </div>
-
-      <!-- Dropdown chọn màu sắc -->
-      <div class="input-group">
-        <select class="custom-input" style="width: 170px;" [(ngModel)]="mauSac" (ngModelChange)="filterSanPham()">
-          <option value="">Tất cả màu</option>
-          <option *ngFor="let mau of danhSachMau" [value]="mau">{{ mau }}</option>
-        </select>
-      </div>
+    <!-- Nhập số điện thoại -->
+    <div class="input-group">
+      <input style="width: 285px;" type="text" class="custom-input" placeholder="Số điện thoại..."
+        [(ngModel)]="sdtNguoiNhan" (blur)="timKhachHang()">
     </div>
 
-    <!-- bảng sản phẩm -->
-    <div class="table-product pt-4">
-      <table class="product-table">
-        <thead>
-          <tr>
-            <th>Mã sản phẩm</th>
-            <th>Tên sản phẩm</th>
-            <th>Ảnh</th>
-            <th>Giá</th>
-            <th>Khuyến mãi(%)</th>
-            <th>Số lượng</th>
-            <th>Màu sắc</th>
-            <th>Size</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody>
-        <ng-container *ngFor="let sp of filteredSanPhams()">
-          <tr *ngIf="sp.soLuong > 0">
-            <td>{{ sp.maSanPhamChiTiet }}</td>
-            <td>{{ sp.tenSanPham }}</td>
-            <td>
-              <img *ngIf="sp.anhUrl" [src]="sp.anhUrl" alt="Ảnh sản phẩm" class="product-image">
-            </td>
-            <td>{{ sp.gia | number:'1.0-0' }} VND</td>
-            <td>{{ sp.giaTriGiam ? (sp.giaTriGiam | number) : '0' }}</td>
-            <td [ngClass]="{'low-stock': sp.soLuong <= 5}">{{ sp.soLuong }}</td>
-            <td>{{ sp.tenMau }}</td>
-            <td>{{ sp.tenSize }}</td>
-            <td>
-              <button class="product-add" (click)="addToCart(sp); $event.stopPropagation()">
-                <i class="bi bi-cart-plus"></i>
-              </button>
-            </td>
-          </tr>
-        </ng-container>
-        </tbody>
-      </table>
-      <!-- phân trang -->
-    <div class="pagination">
-      <button (click)="prevPage()" [disabled]="page === 0"><i class="bi bi-chevron-double-left"></i></button>
-      <span>{{ page + 1 }} / {{ totalPages }}</span>
-      <button (click)="nextPage()" [disabled]="page >= totalPages - 1"><i class="bi bi-chevron-double-right"></i></button>
+    <!-- Chọn nhân viên -->
+    <div class="input-group">
+      <label style="color: #294764" for=""><strong style="color: #294764">Nhân viên</strong> : {{tenNhanVien}}</label>
+    </div>
+    <div class="input-group">
+      <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;"
+        [disabled]="!selectedInvoice || cart.length === 0">
+        <option [ngValue]="null">Chọn mã giảm giá</option>
+        <option *ngFor="let discount of discountCodes" [ngValue]="discount.id">
+          {{ discount.ten }}
+        </option>
+      </select>
+      <button (click)="applyDiscount()" class="discount-btn" [disabled]="!selectedInvoice || cart.length === 0">Áp
+        dụng</button>
     </div>
   </div>
 
-    <!-- khách hàng -->
-    <div class="right-container">
-      <!-- Chọn khách hàng -->
-     <div class="khach-hang">
-       <div class="input-group">
-         <input style="width: 285px;" type="text" class="custom-input" placeholder="Tên khách hàng..." [(ngModel)]="tenKhachHang">
-         <!-- Nút chọn khách hàng -->
-         <button class="btn btn-primary" (click)="moDanhSachKhachHang()">
-          Chọn
-         </button>
-       </div>
-
-       <!-- Nhập số điện thoại -->
-       <div class="input-group">
-         <input style="width: 285px;" type="text" class="custom-input" placeholder="Số điện thoại..." [(ngModel)]="sdtNguoiNhan" (blur)="timKhachHang()">
-       </div>
-
-       <!-- Chọn nhân viên -->
-       <div class="input-group">
-        <label style="color: #294764" for="" ><strong style="color: #294764">Nhân viên</strong> : {{tenNhanVien}}</label>
-       </div>
-       <div class="input-group">
-          <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;" [disabled]="!selectedInvoice || cart.length === 0">
-            <option [ngValue]="null">Chọn mã giảm giá</option>
-            <option *ngFor="let discount of discountCodes" [ngValue]="discount.id">
-              {{ discount.ten }}
-            </option>
-          </select>
-          <button (click)="applyDiscount()" class="discount-btn" [disabled]="!selectedInvoice || cart.length === 0">Áp dụng</button>
-       </div>
-     </div>
-
-    <!-- mã giảm giá -->
-      <div class="cart-total">
-        <!-- Select box cho mã giảm giá -->
-        <div class="invoice-info">
-          <h3 style="color: #294764; font-weight: bold; padding-top: 35px;">Thông tin hóa đơn</h3>
-          <p style="color: #294764;">Tạm tính: {{ selectedInvoice?.tongTienTruocVoucher | number:'1.0-0' }} VND</p>
-          <p style="color: #294764;">Giảm giá: {{ getDiscountDisplay() }}</p>
-          <p style="color: #294764;">Tổng cộng: {{ (selectedInvoice?.tongTienThanhToan) | number:'1.0-0' }} VND</p>
-        </div>
-        <div *ngIf="selectedInvoice">
-          <button class="cancel-btn" (click)="cancelInvoice(selectedInvoice)">
-            <i class="bi bi-calendar2-x-fill"></i> Hủy đơn
-          </button>
-        </div>
-      </div>
-
-
-      <!-- thanh toán -->
-    <div class="payment-container">
-      <h2 style="color: #294764; font-weight: bold;" class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán</h2>
-      <div class="input-group">
-        <label style="color: #294764; font-weight: bold;" for="paymentMethod">Phương thức thanh toán</label>
-        <select 
-          id="paymentMethod"
-          [(ngModel)]="selectedPaymentMethod" 
-          class="custom-input" 
-          style="width: 285px;" 
-          (ngModelChange)="kiemTraMoModal()"
-          [disabled]="!selectedInvoice">
-          <option [ngValue]="null">Chọn phương thức thanh toán</option>
-          <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
-            {{ method.ten }}
-          </option>
-        </select>
-      </div>
-      <div style="padding-top: 45px;">
-        <button 
-          class="checkout-btn" 
-          (click)="checkout()" 
-          [disabled]="!selectedPaymentMethod || !selectedInvoice || cart.length === 0">
-          <i class="bi bi-wallet2"></i> Xác nhận thanh toán
-        </button>
-      </div>
+  <!-- mã giảm giá -->
+  <div class="cart-total">
+    <!-- Select box cho mã giảm giá -->
+    <div class="invoice-info">
+      <h3 style="color: #294764; font-weight: bold; padding-top: 35px;">Thông tin hóa đơn</h3>
+      <p style="color: #294764;">Tạm tính:
+        {{ (cart.length === 0 ? 0 : selectedInvoice?.tongTienTruocVoucher) | number:'1.0-0' }} VND
+      </p>
+      <p style="color: #294764;">Giảm giá:
+        {{ cart.length === 0 ? '0 VND' : getDiscountDisplay() }}
+      </p>
+      <p style="color: #294764;">Tổng cộng:
+        {{ (cart.length === 0 ? 0 : selectedInvoice?.tongTienThanhToan) | number:'1.0-0' }} VND
+      </p>
+    </div>
+    <div *ngIf="selectedInvoice">
+      <button class="cancel-btn" (click)="cancelInvoice(selectedInvoice)">
+        <i class="bi bi-calendar2-x-fill"></i> Hủy đơn
+      </button>
     </div>
   </div>
 
-    <!-- Danh sách khách hàng -->
-    <div class="modal" *ngIf="hienThiDanhSachKhachHang">
-      <div class="modal-content">
-        <h3>Chọn khách hàng</h3>
-        <!-- Thêm ô tìm kiếm -->
-        <div class="search-box">
-          <input 
-            type="text" 
-            class="custom-input" 
-            placeholder="Tìm kiếm theo tên hoặc số điện thoại..." 
-            [(ngModel)]="searchKhachHang"
-            (ngModelChange)="filterKhachHang()">
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-warning" (click)="chonKhachHangVangLai()">
-            <i class="bi bi-person-plus"></i> Khách hàng vãng lai
-          </button>
-        </div>
-        <table class="customer-table">
-          <thead>
-            <tr>
-              <th>Tên khách hàng</th>
-              <th>Số điện thoại</th>
-              <th>Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let kh of filteredKhachHang">
-              <td>{{ kh.ten }}</td>
-              <td>{{ kh.soDienThoai }}</td>
-              <td>
-                <button class="btn btn-success" (click)="chonKhachHang(kh)">Chọn</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button class="btn btn-danger" (click)="hienThiDanhSachKhachHang = false">Đóng</button>
-      </div>
-    </div>
 
-    <!-- Payment Popup for Cash -->
-    <div class="modal" *ngIf="showPaymentPopup">
-      <div class="modal-content">
-        <h3>Thanh toán tiền mặt</h3>
-        <div class="payment-details">
-          <p>Tổng tiền: {{ selectedInvoice?.tongTienThanhToan | number:'1.0-0' }} VND</p>
-          <div class="input-group">
-            <label for="tienKhachDua">Tiền khách đưa:</label>
-            <input 
-              id="tienKhachDua"
-              type="text" 
-              [ngModel]="tienKhachDua === 0 ? '' : (tienKhachDua | number:'1.0-0')"
-              (ngModelChange)="onTienKhachDuaChange($event)"
-              (focus)="clearTienKhachDua()"
-              class="custom-input"
-              min="0">
-          </div>
-          <p>Tiền thừa: {{ tienThua | number:'1.0-0' }} VND</p>
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-success" (click)="confirmPayment()" [disabled]="!selectedInvoice || !tienKhachDua || tienKhachDua < selectedInvoice.tongTienThanhToan">
-            <i class="bi bi-check-circle"></i> Xác nhận
-          </button>
-          <button class="btn btn-danger" (click)="cancelPayment()">
-            <i class="bi bi-x-circle"></i> Hủy
-          </button>
-        </div>
-      </div>
+  <!-- thanh toán -->
+  <div class="payment-container">
+    <h2 style="color: #294764; font-weight: bold;" class="sidebar-title"><i class="bi bi-credit-card"></i> Thanh toán
+    </h2>
+    <div class="input-group">
+      <label style="color: #294764; font-weight: bold;" for="paymentMethod">Phương thức thanh toán</label>
+      <select id="paymentMethod" [(ngModel)]="selectedPaymentMethod" class="custom-input" style="width: 285px;"
+        (ngModelChange)="kiemTraMoModal()" [disabled]="!selectedInvoice">
+        <option [ngValue]="null">Chọn phương thức thanh toán</option>
+        <option *ngFor="let method of paymentMethods" [ngValue]="method.id">
+          {{ method.ten }}
+        </option>
+      </select>
     </div>
+    <div style="padding-top: 45px;">
+      <button class="checkout-btn" (click)="checkout()"
+        [disabled]="!selectedPaymentMethod || !selectedInvoice || cart.length === 0">
+        <i class="bi bi-wallet2"></i> Xác nhận thanh toán
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Danh sách khách hàng -->
+<div class="modal" *ngIf="hienThiDanhSachKhachHang">
+  <div class="modal-content">
+    <h3>Chọn khách hàng</h3>
+    <!-- Thêm ô tìm kiếm -->
+    <div class="search-box">
+      <input type="text" class="custom-input" placeholder="Tìm kiếm theo tên hoặc số điện thoại..."
+        [(ngModel)]="searchKhachHang" (ngModelChange)="filterKhachHang()">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-warning" (click)="chonKhachHangVangLai()">
+        <i class="bi bi-person-plus"></i> Khách hàng vãng lai
+      </button>
+    </div>
+    <table class="customer-table">
+      <thead>
+        <tr>
+          <th>Tên khách hàng</th>
+          <th>Số điện thoại</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let kh of filteredKhachHang">
+          <td>{{ kh.ten }}</td>
+          <td>{{ kh.soDienThoai }}</td>
+          <td>
+            <button class="btn btn-success" (click)="chonKhachHang(kh)">Chọn</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-danger" (click)="hienThiDanhSachKhachHang = false">Đóng</button>
+  </div>
+</div>
+
+<!-- Payment Popup for Cash -->
+<div class="modal" *ngIf="showPaymentPopup">
+  <div class="modal-content">
+    <h3>Thanh toán tiền mặt</h3>
+    <div class="payment-details">
+      <p>Tổng tiền: {{ selectedInvoice?.tongTienThanhToan | number:'1.0-0' }} VND</p>
+      <div class="input-group">
+        <label for="tienKhachDua">Tiền khách đưa:</label>
+        <input id="tienKhachDua" type="text" [ngModel]="tienKhachDua === 0 ? '' : (tienKhachDua | number:'1.0-0')"
+          (ngModelChange)="onTienKhachDuaChange($event)" (focus)="clearTienKhachDua()" class="custom-input" min="0">
+      </div>
+      <p>Tiền thừa: {{ tienThua | number:'1.0-0' }} VND</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-success" (click)="confirmPayment()"
+        [disabled]="!selectedInvoice || !tienKhachDua || tienKhachDua < selectedInvoice.tongTienThanhToan">
+        <i class="bi bi-check-circle"></i> Xác nhận
+      </button>
+      <button class="btn btn-danger" (click)="cancelPayment()">
+        <i class="bi bi-x-circle"></i> Hủy
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- Overlay làm tối màn hình -->
-  <div *ngIf="quetQr" class="modal-overlay">
-    <!-- Modal -->
-    <div class="modalQr">
-      <div class="modal-contentQr">
-        <button class="btn btn-danger" (click)="closeQuetQr()">X</button>
-        <div>
-          <h3>Mã QR chuyển khoản:</h3>
-          <img [src]="qrUrl" alt="QR code chuyển khoản" />
-        </div>
+<div *ngIf="quetQr" class="modal-overlay">
+  <!-- Modal -->
+  <div class="modalQr">
+    <div class="modal-contentQr">
+      <button class="btn btn-danger" (click)="closeQuetQr()">X</button>
+      <div>
+        <h3>Mã QR chuyển khoản:</h3>
+        <img [src]="qrUrl" alt="QR code chuyển khoản" />
       </div>
     </div>
   </div>
+</div>

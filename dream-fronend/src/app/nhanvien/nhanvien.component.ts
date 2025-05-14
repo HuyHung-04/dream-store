@@ -131,6 +131,10 @@ export class NhanvienComponent implements OnInit {
     if (!this.validateForm()) {
       return; // Prevent submission if form is not valid
     }
+    const confirmAdd = window.confirm('Bạn có chắc chắn muốn thêm nhân viên này không?');
+    if (!confirmAdd) {
+      return;
+    }
     this.nhanVien.vaiTro = { id: 2 };
     // Gửi dữ liệu nhân viên mà không có ảnh
     const nhanVienData = { ...this.nhanVien }; // Tạo bản sao dữ liệu nhân viên
@@ -444,6 +448,10 @@ export class NhanvienComponent implements OnInit {
   updateNhanVien() {
     if (!this.validateEditForm()) {
       return; // Dừng nếu form không hợp lệ
+    }
+    const confirmUpdate = window.confirm('Bạn có chắc chắn muốn sửa nhân viên này không?');
+    if (!confirmUpdate) {
+      return;
     }
     if (this.nhanVienEdit.id) {
       // Nếu vai trò là Admin, giữ nguyên

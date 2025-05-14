@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject  } from 'rxjs';
+import { Observable, BehaviorSubject,Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,8 @@ export class HeaderService {
   // hiện modal thanh toán
   private modalThanhToanSubject = new BehaviorSubject<boolean>(false);
   modalThanhToan$ = this.modalThanhToanSubject.asObservable();
-  
+  private triggerLoadSanPham = new Subject<void>();
+  loadSanPham$ = this.triggerLoadSanPham.asObservable();
   private gioHangUpdated = new BehaviorSubject<boolean>(false);
   gioHangUpdated$ = this.gioHangUpdated.asObservable();
 
@@ -56,9 +57,12 @@ export class HeaderService {
     this.modalThanhToanSubject.next(false);
   }
   
-  // 🛒 Lấy danh sách ID giỏ hàng khi nhấn thanh toán
+  // Lấy danh sách ID giỏ hàng khi nhấn thanh toán
   getGioHangIdsForThanhToan(idKhachHang: number): Observable<number[]> {
     return this.http.get<number[]>(`${this.apiUrl}/thanh-toan/${idKhachHang}`);
   }
   
+  triggerLoadSanPhamChiTiet() {
+    this.triggerLoadSanPham.next();
+  }
 }

@@ -79,7 +79,7 @@ export class HoadonComponent {
   diaChiEdit = { id: '', tenNguoiNhan: '', sdtNguoiNhan: '', diaChiCuThe: '', tinhThanhPho: null, quanHuyen: null, phuongXa: null };
   constructor(private hoadonService: HoadonService, private router: Router, private cookieService: CookieService, private cdRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute) { }
 
-
+  idSanPhamBack: string = '';
   //   Khởi tạo component:
   //  - Kiểm tra đăng nhập qua cookie
   //  - Load địa chỉ, tỉnh thành, giỏ hàng, voucher
@@ -140,12 +140,25 @@ export class HoadonComponent {
         this.idHoaDon = response.id;
       },
       (error) => {
-        console.error('Lỗi khi tạo hóa đơn:', error);
-        alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
+        const rawMessage = error?.error?.message || "";
+        if (rawMessage.startsWith("HET_HANG:")) {
+          alert(rawMessage.replace("HET_HANG:", ""));
+           this.router.navigate(['/banhang']);
+           localStorage.removeItem('gioHangThanhToan');
+        } else if (rawMessage.startsWith("VUOT_TON:")) {
+          alert(rawMessage.replace("VUOT_TON:", ""));
+        }
+        else if (rawMessage.startsWith("VOUCHER_HET:")) {
+          alert(rawMessage.replace("VOUCHER_HET:", ""));
+          this.getVoucherIdAndTen()
+        }
+        else {
+          alert("Lỗi không xác định. Vui lòng thử lại.");
+        }
       }
     );
   }
-  
+
 
 
   //  Lấy danh sách địa chỉ của khách hàng:
@@ -386,7 +399,7 @@ export class HoadonComponent {
       shippingFee: this.shippingFee,
       chiTietGioHang: this.chiTietGioHang // ✅ Thêm chi tiết giỏ hàng ở đây
     };
-    console.log("pay",paymentData)
+    console.log("pay", paymentData)
     localStorage.setItem('paymentData', JSON.stringify(paymentData));
     if (this.chonPhuongThucThanhToan == 4) {
       this.hoadonService.createThanhToanVnpay(this.tongTienThanhToan).subscribe(
@@ -619,17 +632,17 @@ export class HoadonComponent {
       alert("Vui lòng chọn địa chỉ giao hàng!");
       return;
     }
-  
+
     if (this.chonPhuongThucThanhToan == null) {
       alert("Phương thức thanh toán không được để trống");
       return;
     }
-  
+
     if (this.chonPhuongThucThanhToan != 4) {
       const confirmCreateInvoice = confirm('Bạn có muốn tạo đơn hàng không?');
       if (!confirmCreateInvoice) return;
     }
-  
+
     const data = {
       idKhachHang: this.idKhachHang,
       voucherId: this.chonVoucher ? this.chonVoucher.id : null,
@@ -642,7 +655,7 @@ export class HoadonComponent {
       shippingFee: this.shippingFee,
       chiTietGioHang: this.chiTietGioHang  // 👈 Thêm chi tiết giỏ hàng
     };
-  
+
     this.hoadonService.createHoaDonFull(data).subscribe(
       (response) => {
         alert('Đơn hàng đã được tạo thành công!');
@@ -653,15 +666,32 @@ export class HoadonComponent {
 
       },
       (error) => {
-        console.error('Lỗi khi tạo hóa đơn:', error);
-        alert('Không thể tạo hóa đơn. Vui lòng thử lại!');
+        const rawMessage = error?.error?.message || "";
+        if (rawMessage.startsWith("HET_HANG:")) {
+          alert(rawMessage.replace("HET_HANG:", ""));
+           this.router.navigate(['/banhang']);
+           localStorage.removeItem('gioHangThanhToan');
+        } else if (rawMessage.startsWith("VUOT_TON:")) {
+          alert(rawMessage.replace("VUOT_TON:", ""));
+        }
+         else if (rawMessage.startsWith("VOUCHER_HET:")) {
+          alert(rawMessage.replace("VOUCHER_HET:", ""));
+          this.getVoucherIdAndTen()
+        }
+         else {
+          alert("Lỗi không xác định. Vui lòng thử lại.");
+        }
       }
     );
   }
-  
+
 
   backSanpham(): void {
-    window.history.back();
+    if (this.idSanPhamBack) {
+      this.router.navigate(['/sanpham', this.idSanPhamBack]);
+    } else {
+      window.history.back(); // fallback nếu không có id
+    }
   }
 
 

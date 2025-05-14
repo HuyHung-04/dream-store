@@ -69,7 +69,7 @@ export class HoaDonComponent implements OnInit {
 
   // Load danh sách hóa đơn từ backend
   loadHoaDons(): void {
-    this.hoaDonService.getHoaDons(this.searchRequest).subscribe(
+    this.hoaDonService.getHoaDons(this.searchRequest,null).subscribe(
       (response: any) => {
         console.log("Dữ liệu từ API:", response);
         if (response && response.data) {

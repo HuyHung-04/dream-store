@@ -73,6 +73,10 @@ export class KhachhangComponent implements OnInit {
     if (!this.validateForm()) {
       return;
     }
+    const confirmAdd = window.confirm('Bạn có chắc chắn muốn thêm khách hàng không?');
+    if (!confirmAdd) {
+      return;
+    }
     this.khachHangService.addKhachHang(this.khachhang).subscribe(
       (response) => {
         alert('Thêm khách hàng thành công!');
@@ -229,6 +233,10 @@ export class KhachhangComponent implements OnInit {
 
   updateKhachHang() {
     if (!this.validateEditForm()) {
+      return;
+    }
+    const confirmUdt = window.confirm('Bạn có chắc chắn muốn sửa khách hàng này không?');
+    if (!confirmUdt) {
       return;
     }
     if (this.khachHangEdit!=null) {

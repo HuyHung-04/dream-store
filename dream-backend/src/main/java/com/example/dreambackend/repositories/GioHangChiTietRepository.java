@@ -96,7 +96,11 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     @Transactional
     void deleteAllByIdIn(List<Integer> ids);// Tìm tất cả chi tiết giỏ hàng theo sản phẩm chi tiết (dựa trên id Integer)
 
+    List<GioHangChiTiet> findByKhachHangIdAndTrangThai(Integer idKhachHang, Integer trangThai);
 
+    @Modifying
+    @Transactional
+    void deleteByKhachHangIdAndSanPhamChiTietIdAndTrangThai(Integer khachHangId, Integer sanPhamChiTietId, Integer trangThai);
 }
 
 

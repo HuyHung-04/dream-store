@@ -36,6 +36,13 @@ public class GioHangChiTietService implements IGioHangChiTietService {
     HoaDonChiTietRepository hoaDonChiTietRepository;
 
     public List<GioHangChiTietResponse> getGioHangChiTietByKhachHangId(Integer idKhachHang) {
+        List<GioHangChiTiet> danhSachGioHang = gioHangChiTietRepository.findByKhachHangIdAndTrangThai(idKhachHang, 1);
+        for (GioHangChiTiet gio : danhSachGioHang) {
+            if (gio.getSanPhamChiTiet().getSoLuong() == 0) {
+                gioHangChiTietRepository.deleteById(gio.getId());
+            }
+        }
+
         return gioHangChiTietRepository.findGioHangChiTietByKhachHangId(idKhachHang);
     }
 
@@ -46,15 +53,28 @@ public class GioHangChiTietService implements IGioHangChiTietService {
                 request.getIdKhachHang(), request.getIdSanPhamChiTiet()
         );
 
-        GioHangChiTiet gioHangChiTiet;
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm chi tiết"));
 
+        int soLuongTon = sanPhamChiTiet.getSoLuong();
+        GioHangChiTiet gioHangChiTiet;
+        if (soLuongTon == 0) {
+            throw new IllegalArgumentException("Sản phẩm đã hết hàng, vui lòng chọn sản phẩm khác.");
+        }
         if (existingItem.isPresent()) {
             gioHangChiTiet = existingItem.get();
+            int tongSoLuong = gioHangChiTiet.getSoLuong() + request.getSoLuong();
+            if (tongSoLuong > soLuongTon) {
+                throw new IllegalArgumentException("Số lượng thêm vào vượt quá số lượng tồn. Hiện tại chỉ còn " +soLuongTon+ " sản phẩm");
+            }
             gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + request.getSoLuong());
             gioHangChiTiet.setNgaySua(LocalDate.now());
             Double ThanhTien = gioHangChiTiet.getSanPhamChiTiet().getGia() * gioHangChiTiet.getSoLuong();
             gioHangChiTiet.setDonGia(ThanhTien / gioHangChiTiet.getSoLuong());
         } else {
+            if (request.getSoLuong() > soLuongTon) {
+                throw new IllegalArgumentException("Số lượng thêm vào vượt quá số lượng tồn. Hiện tại chỉ còn " +soLuongTon+ " sản phẩm");
+            }
             gioHangChiTiet = new GioHangChiTiet();
             gioHangChiTiet.setKhachHang(khachHangRepository.findById(request.getIdKhachHang()).orElseThrow());
             gioHangChiTiet.setSanPhamChiTiet(sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet()).orElseThrow());
@@ -98,6 +118,17 @@ public class GioHangChiTietService implements IGioHangChiTietService {
     @Override
     @Transactional
     public GioHangChiTietResponse muaNgay(GioHangChiTietRequest request) {
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm chi tiết."));
+
+        if (sanPhamChiTiet.getSoLuong() == 0) {
+            throw new IllegalArgumentException("Sản phẩm đã hết hàng, vui lòng chọn sản phẩm khác.");
+        }
+
+        // Kiểm tra số lượng tồn
+        if (request.getSoLuong() > sanPhamChiTiet.getSoLuong()) {
+            throw new IllegalArgumentException("Số lượng mua vượt quá số lượng tồn kho. Hiện tại chỉ còn " + sanPhamChiTiet.getSoLuong() + " sản phẩm");
+        }
 
         // Xóa tất cả giỏ hàng có trạng thái 2 trước khi tạo mới
         int deletedRows = gioHangChiTietRepository.deleteByKhachHangIdAndTrangThai2(request.getIdKhachHang());
@@ -155,24 +186,40 @@ public class GioHangChiTietService implements IGioHangChiTietService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Số lượng phải lớn hơn 0");
         }
 
+        int soLuongTon = gioHangChiTiet.getSanPhamChiTiet().getSoLuong();
+
+        if (soLuongTon == 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "HET_HANG:Sản phẩm đã hết hàng. Vui lòng chọn sản phẩm khác."
+            );
+        }
+
+        if (soLuongMoi > soLuongTon) {
+            gioHangChiTiet.setSoLuong(soLuongTon);
+            gioHangChiTietRepository.save(gioHangChiTiet);
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "VUOT_TON:Số lượng yêu cầu vượt quá tồn kho. Chỉ còn lại " + soLuongTon + " sản phẩm."
+            );
+        }
+
         gioHangChiTiet.setSoLuong(soLuongMoi);
-        double ThanhTien = gioHangChiTiet.getSanPhamChiTiet().getGia() * soLuongMoi;
-        gioHangChiTiet.setDonGia(ThanhTien / soLuongMoi);
+        double thanhTien = gioHangChiTiet.getSanPhamChiTiet().getGia() * soLuongMoi;
+        gioHangChiTiet.setDonGia(thanhTien / soLuongMoi);
         gioHangChiTiet.setNgaySua(LocalDate.now());
 
         gioHangChiTiet = gioHangChiTietRepository.save(gioHangChiTiet);
 
-        //  Lấy ảnh đầu tiên từ bảng Anh
+        // Ảnh đầu tiên
         String anhUrl = anhRepository.findFirstBySanPhamIdAndTrangThaiOrderByNgayTaoAsc(
                         gioHangChiTiet.getSanPhamChiTiet().getSanPham().getId(), 1)
                 .map(Anh::getAnhUrl)
-                .orElse(null); // Nếu không có ảnh thì để null
+                .orElse(null);
 
-        //  Chỉ lấy giá trị giảm (mặc định là giảm theo %)
         Double giaTriGiam = (gioHangChiTiet.getSanPhamChiTiet().getKhuyenMai() != null) ?
                 gioHangChiTiet.getSanPhamChiTiet().getKhuyenMai().getGiaTriGiam() : 0.0;
 
-        //  Trả về thông tin giỏ hàng sau khi cập nhật
         return new GioHangChiTietResponse(
                 gioHangChiTiet.getId(),
                 anhUrl,
@@ -181,10 +228,11 @@ public class GioHangChiTietService implements IGioHangChiTietService {
                 gioHangChiTiet.getSanPhamChiTiet().getSize().getTen(),
                 gioHangChiTiet.getSoLuong(),
                 gioHangChiTiet.getDonGia(),
-                giaTriGiam, // Chỉ giảm theo %
+                giaTriGiam,
                 gioHangChiTiet.getTrangThai(),
                 gioHangChiTiet.getKhachHang().getId(),
                 gioHangChiTiet.getSanPhamChiTiet().getId()
         );
     }
+
 }

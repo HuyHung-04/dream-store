@@ -86,7 +86,7 @@ export class HeaderComponent implements OnInit {
 
     this.headerService.getGioHang(this.khachhang.id).subscribe(
       (data) => {
-        this.gioHang = data;
+        this.gioHang = data.filter(item => item.soLuong > 0);
         console.log("Dữ liệu giỏ hàng:", data);
       },
       (error) => {
@@ -116,20 +116,20 @@ export class HeaderComponent implements OnInit {
   onInputChange(event: Event, id: number) {
     const target = event.target as HTMLInputElement;
     let value = parseInt(target.value, 10);
-  
+
     if (isNaN(value) || value < 1) {
       value = 1;
       target.value = '1';
     }
-  
+
     const gioHangItem = this.gioHang.find(item => item.id === id);
     if (!gioHangItem) {
       alert("Không tìm thấy sản phẩm.");
       return;
     }
-  
+
     const idSanPhamChiTiet = gioHangItem.idSanPhamChiTiet;
-  
+
     this.sanPhamDetailService.getGioHangChiTietById(idSanPhamChiTiet).subscribe(
       (tonKho: number) => {
         if (value > tonKho) {
@@ -137,7 +137,7 @@ export class HeaderComponent implements OnInit {
           value = tonKho;
           target.value = tonKho.toString();
         }
-  
+
         this.suaSoLuong(id, value);
       },
       (error) => {
@@ -145,38 +145,29 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
-  
-  
-  
+
+
+
   suaSoLuong(id: number, soLuongMoi: number) {
-    // Tìm sản phẩm trong giỏ hàng theo ID giỏ
-    const gioHangItem = this.gioHang.find(item => item.id === id);
-    if (!gioHangItem) {
-      alert("Không tìm thấy sản phẩm trong giỏ hàng.");
-      return;
-    }
-
-    const idSanPhamChiTiet = gioHangItem.idSanPhamChiTiet;
-    console.log(idSanPhamChiTiet)
-    // Gọi API để lấy thông tin sản phẩm chi tiết (bao gồm tồn kho)
-    this.sanPhamDetailService.getGioHangChiTietById(idSanPhamChiTiet).subscribe(
-      (sanPhamChiTiet) => {
-        const soLuongTonKho = sanPhamChiTiet;
-        console.log(sanPhamChiTiet)
-        if (soLuongMoi > soLuongTonKho) {
-          alert(`Số lượng bạn nhập đang vượt quá tồn kho hiện tại`);
-          return;
-        }
-
-        // Nếu hợp lệ, gọi API để cập nhật
-        this.headerService.updateSoLuong(id, soLuongMoi).subscribe((response) => {
-          console.log("Cập nhật số lượng thành công:", response);
-          this.headerService.notifyGioHangUpdated(); // Cập nhật lại giỏ hàng
-        });
-      },
+    // Nếu hợp lệ, gọi API để cập nhật
+    this.headerService.updateSoLuong(id, soLuongMoi).subscribe((response) => {
+      console.log("Cập nhật số lượng thành công:", response);
+      this.headerService.notifyGioHangUpdated(); // Cập nhật lại giỏ hàng
+    },
       (error) => {
-        console.error("Lỗi khi lấy thông tin sản phẩm:", error);
-        alert("Không thể kiểm tra tồn kho. Vui lòng thử lại.");
+        const rawMessage = error?.error?.message || "";
+        if (rawMessage.startsWith("HET_HANG:")) {
+          alert(rawMessage.replace("HET_HANG:", ""));
+          this.loadGioHang()
+          this.modalCard=false
+          this.headerService.triggerLoadSanPhamChiTiet();
+        } else if (rawMessage.startsWith("VUOT_TON:")) {
+          alert(rawMessage.replace("VUOT_TON:", ""));
+          this.loadGioHang()
+          this.headerService.triggerLoadSanPhamChiTiet();
+        } else {
+          alert("Lỗi không xác định. Vui lòng thử lại.");
+        }
       }
     );
   }
@@ -213,7 +204,19 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/hoadon']);
       },
       (error) => {
-        console.error('Lỗi khi lấy giỏ hàng:', error);
+        const rawMessage = error?.error?.message || "";
+        if (rawMessage.startsWith("HET_HANG:")) {
+          alert(rawMessage.replace("HET_HANG:", ""));
+          this.loadGioHang()
+          this.modalCard=false
+          this.headerService.triggerLoadSanPhamChiTiet();
+        } else if (rawMessage.startsWith("VUOT_TON:")) {
+          alert(rawMessage.replace("VUOT_TON:", ""));
+          this.loadGioHang()
+          this.headerService.triggerLoadSanPhamChiTiet();
+        } else {
+          alert("Lỗi không xác định. Vui lòng thử lại.");
+        }
       }
     );
   }

@@ -2,6 +2,7 @@ package com.example.dreambackend.services.hoadonchitiet;
 
 import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.HoaDonChiTiet;
+import com.example.dreambackend.entities.KhuyenMai;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.repositories.HoaDonChiTietRepository;
 import com.example.dreambackend.repositories.HoaDonRepository;
@@ -43,13 +44,36 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
         SanPhamChiTiet spct = spctRepository.findById(sanPhamChiTietId)
                 .orElseThrow(() -> new RuntimeException("Sản phẩm chi tiết không tồn tại"));
 
+        if (spct.getSoLuong() == 0) {
+            throw new RuntimeException("Sản phẩm đã hết hàng");
+        }
+
         if (spct.getSoLuong() < soLuong) {
             throw new RuntimeException("Số lượng vượt quá tồn kho");
         }
 
-        Optional<HoaDonChiTiet> existingHdct = hdctRepository.findByHoaDonAndSanPhamChiTiet(hoaDon, spct);
+        // Giá mặc định là giá gốc
+        double giaApDung = Optional.ofNullable(spct.getGia()).orElse(0.0);
 
+        // Áp dụng khuyến mại nếu hợp lệ
+        KhuyenMai km = spct.getKhuyenMai(); // Giả sử có mối quan hệ giữa SPCT và KM
+        if (km != null
+                && km.getTrangThai() == 1
+                && km.getNgayBatDau() != null
+                && km.getNgayKetThuc() != null) {
+
+            LocalDate today = LocalDate.now();
+            if ((today.isEqual(km.getNgayBatDau()) || today.isAfter(km.getNgayBatDau()))
+                    && (today.isEqual(km.getNgayKetThuc()) || today.isBefore(km.getNgayKetThuc()))) {
+                // Giảm theo % nếu hợp lệ
+                double phanTramGiam = Optional.ofNullable(km.getGiaTriGiam()).orElse(0.0);
+                giaApDung = giaApDung - (giaApDung * phanTramGiam / 100);
+            }
+        }
+
+        Optional<HoaDonChiTiet> existingHdct = hdctRepository.findByHoaDonAndSanPhamChiTiet(hoaDon, spct);
         HoaDonChiTiet savedHdct;
+
         if (existingHdct.isPresent()) {
             HoaDonChiTiet hdct = existingHdct.get();
             hdct.setSoLuong(hdct.getSoLuong() + soLuong);
@@ -61,18 +85,20 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
                     .sanPhamChiTiet(spct)
                     .ma(UUID.randomUUID().toString().substring(0, 4))
                     .soLuong(soLuong)
-                    .donGia(Optional.ofNullable(spct.getGia()).orElse(0.0))
+                    .donGia(giaApDung)
                     .ngayTao(LocalDate.now())
                     .trangThai(1)
                     .build();
             savedHdct = hdctRepository.save(newHdct);
         }
 
+        // Trừ tồn kho
         spct.setSoLuong(spct.getSoLuong() - soLuong);
         spctRepository.save(spct);
 
         return convertToDTO(savedHdct);
     }
+
 
     @Override
     public HoaDonChiTietResponse updateHoaDonChiTiet(Integer id, Integer soLuong) {
@@ -87,6 +113,7 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
 
 
     @Override
+    @Transactional
     public void removeSanPhamFromHoaDon(Integer id) {
         HoaDonChiTiet hdct = hdctRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chi tiết hóa đơn không tồn tại"));
@@ -94,6 +121,14 @@ public class HoaDonChiTietService implements IHoaDonChiTietService {
         SanPhamChiTiet spct = hdct.getSanPhamChiTiet();
         spct.setSoLuong(spct.getSoLuong() + hdct.getSoLuong());
         spctRepository.save(spct);
+
+        HoaDon hoaDon = hoaDonRepository.findById(hdct.getHoaDon().getId())
+                .orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại"));
+
+        if (hoaDon.getVoucher() != null) {
+            hoaDon.setVoucher(null);
+            hoaDonRepository.save(hoaDon);
+        }
 
         hdctRepository.delete(hdct);
     }

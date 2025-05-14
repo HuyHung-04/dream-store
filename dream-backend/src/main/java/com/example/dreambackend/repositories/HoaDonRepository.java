@@ -123,7 +123,7 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
     Optional<HoaDon> huyHoaDon(@Param("id") Integer id);
 
 
-    default List<HoaDonResponse> search(HoaDonSearchRequest searchRequest, EntityManager entityManager) {
+    default List<HoaDonResponse> search(HoaDonSearchRequest searchRequest, EntityManager entityManager,Integer idNhanVien) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         StringBuilder sql = new StringBuilder();
         sql.append("""
@@ -184,6 +184,9 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
         if (searchRequest.getListTrangThai() != null) {
             sql.append(" AND hd.trang_thai = :listTrangThai");
         }
+        if (idNhanVien != null) {
+            sql.append(" AND hd.id_nhan_vien = :idNhanVien");
+        }
 //        if (searchRequest.getIdHoaDon() != null) {
 //            sql.append(" AND UPPER(hd.id) LIKE UPPER(:idHoaDon)");
 //        }
@@ -222,6 +225,9 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
 
         if(searchRequest.getSdtNguoiNhan() != null && !searchRequest.getSdtNguoiNhan().isEmpty()) {
             query.setParameter("soDienThoai","%" + searchRequest.getSdtNguoiNhan() + "%");
+        }
+        if (idNhanVien != null) {
+            query.setParameter("idNhanVien", idNhanVien);
         }
 //        if (searchRequest.getIdHoaDon() != null) {
 //            query.setParameter("idHoaDon", "%" + searchRequest.getIdHoaDon() + "%");
@@ -270,7 +276,9 @@ public interface HoaDonRepository extends CrudRepository<HoaDon, Integer> {
             @Param("maHoaDon") String maHoaDon,
             Pageable pageable);
 
-    List<HoaDon> findByTrangThai(Integer trangThai);
+    List<HoaDon> findAllByNhanVienIdAndTrangThai(Integer idNhanVien, Integer trangThai);
+
+    List<HoaDon> findByTrangThaiAndNhanVienId(Integer trangThai, Integer nhanVienId);
 
     boolean existsByVoucher_Id(Integer voucherId);
 }

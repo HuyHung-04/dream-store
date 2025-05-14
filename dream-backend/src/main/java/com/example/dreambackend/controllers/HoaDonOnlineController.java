@@ -15,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/hoa-don-online")
@@ -68,12 +65,18 @@ public class HoaDonOnlineController {
 
     // Tạo hóa đơn
     @PostMapping("/create")
-    public ResponseEntity<HoaDon> createHoaDon(@RequestBody HoaDonOnlineRequest request) {
+    public ResponseEntity<?> createHoaDon(@RequestBody HoaDonOnlineRequest request) {
         try {
             HoaDon hoaDon = hoaDonOnlineService.createHoaDon(request);
             return new ResponseEntity<>(hoaDon, HttpStatus.CREATED);
+        }catch (ResponseStatusException ex) {
+            return ResponseEntity
+                    .status(ex.getStatusCode())
+                    .body(Collections.singletonMap("message", ex.getReason()));
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Đã xảy ra lỗi khi cập nhật số lượng."));
         }
     }
 
