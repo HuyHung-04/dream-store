@@ -10,7 +10,6 @@ import { DonhangService } from './donhang.service';
 })
 export class DonhangComponent {
   hoaDons: any[] = [];
-
   errorMessage: string = '';
   page: number = 0;
   size: number = 6;
@@ -36,12 +35,32 @@ export class DonhangComponent {
     { value: 5, label: 'Giao hàng thành công' },
     { value: 9, label: 'Đơn hàng đã hủy' }
   ];
+  danhSachSanPhamNo: any[] = [];
+  hienThiModalNo: boolean = false;
+  
   constructor(private donHangService: DonhangService) { }
 
   loading: boolean = false;
 
   ngOnInit(): void {
     this.loadHoaDons();
+  }
+
+   moModalSoLuongNo(): void {
+    this.donHangService.getSanPhamNo().subscribe({
+      next: (data) => {
+        this.danhSachSanPhamNo = data;
+        this.hienThiModalNo = true;
+      },
+      error: (err) => {
+        alert('Lỗi khi tải danh sách sản phẩm nợ');
+        console.error(err);
+      }
+    });
+  }
+
+  dongModal(): void {
+    this.hienThiModalNo = false;
   }
 
   //phương thức lọc trạng thái đơn hàng
@@ -111,6 +130,9 @@ export class DonhangComponent {
         (response) => {
           alert("Cập nhật trạng thái thành công")
           this.loadHoaDons();
+          if (this.hienThiModalNo) {
+          this.moModalSoLuongNo(); // Gọi lại API để load số lượng mới
+        }
         },
         (error) => {
         const chiTietLoi = error.error?.message || 'Lỗi khi cập nhật trạng thái hóa đơn!';

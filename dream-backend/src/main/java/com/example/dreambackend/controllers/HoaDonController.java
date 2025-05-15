@@ -1,6 +1,7 @@
 package com.example.dreambackend.controllers;
 
 import com.example.dreambackend.dtos.DataTableResults;
+import com.example.dreambackend.dtos.SanPhamThieuDto;
 import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.NhanVien;
 import com.example.dreambackend.repositories.HoaDonRepository;
@@ -8,6 +9,7 @@ import com.example.dreambackend.repositories.NhanVienRepository;
 import com.example.dreambackend.requests.HoaDonRequest;
 import com.example.dreambackend.requests.HoaDonSearchRequest;
 import com.example.dreambackend.responses.HoaDonResponse;
+import com.example.dreambackend.services.hoadon.HoaDonService;
 import com.example.dreambackend.services.hoadon.IHoaDonService;
 import com.example.dreambackend.services.pdf.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class HoaDonController {
 
     @Autowired
     HoaDonRepository hoaDonRepository;
+    @Autowired
+    HoaDonService hoaDonService1;
 
     @GetMapping("/hien-thi-ban-hang")
     public List<NhanVien> getAllNhanVienExcept(@RequestParam(value = "excludeId", required = false) Integer excludeId) {
@@ -148,6 +152,12 @@ public class HoaDonController {
             response.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    @GetMapping("/san-pham-thieu")
+    public ResponseEntity<List<SanPhamThieuDto>> getSanPhamTrongDonChuaXacNhan() {
+        List<SanPhamThieuDto> result = hoaDonService1.getSanPhamThieu();
+        return ResponseEntity.ok(result);
     }
 
 }

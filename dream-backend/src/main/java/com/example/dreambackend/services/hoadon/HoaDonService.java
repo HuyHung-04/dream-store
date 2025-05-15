@@ -1,6 +1,7 @@
 package com.example.dreambackend.services.hoadon;
 
 import com.example.dreambackend.dtos.DataTableResults;
+import com.example.dreambackend.dtos.SanPhamThieuDto;
 import com.example.dreambackend.entities.*;
 import com.example.dreambackend.repositories.*;
 import com.example.dreambackend.requests.HoaDonRequest;
@@ -297,5 +298,9 @@ public class HoaDonService implements IHoaDonService {
         hoaDonRepository.saveAll(hoaDonCuaNhanVienCu);
 
         return "Đã chuyển " + hoaDonCuaNhanVienCu.size() + " hóa đơn sang nhân viên mới.";
+    }
+
+    public List<SanPhamThieuDto> getSanPhamThieu() {
+        return hoaDonChiTietRepository.findSanPhamTrongDonChuaXacNhan();
     }
 }

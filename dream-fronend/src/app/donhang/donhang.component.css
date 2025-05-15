@@ -429,7 +429,7 @@ color: #294764;
 /* Đảm bảo các input trường hiển thị trên một hàng */
 .input-field-container {
 display: flex;
-gap: 170px;
+gap: 130px;
 margin-bottom: 20px;
 }
 .btn-primary{
@@ -520,3 +520,64 @@ padding: 5px 10px;
 .next{
 padding: 5px 10px;
 }
+.modal-no {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content-no {
+  position: relative;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+/* Nút đóng modal */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Vùng chứa bảng có cuộn */
+.table-scroll-container {
+  max-height: calc(30px * 13); /* Chiều cao của 13 dòng (khoảng 30px mỗi dòng) */
+  overflow-y: auto;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+}
+
+.table-no {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-no th, .table-no td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+/* Sticky header cho thead */
+.table-no thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+

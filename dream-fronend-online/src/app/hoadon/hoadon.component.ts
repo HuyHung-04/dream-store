@@ -605,7 +605,7 @@ export class HoadonComponent {
     this.hoadonService.getVouchers(this.TongTienTamTinh).subscribe(
       (response: any) => {
         this.vouchers = response;
-        if (!this.chonVoucher && this.vouchers.length > 0) {
+        if (!this.chonVoucher && this.vouchers.length >= 0) {
           this.chonVoucher = null;
           this.getTongTienThanhToan(); // Tính lại tổng tiền
         }

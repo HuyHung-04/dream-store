@@ -48,7 +48,6 @@ import java.util.List;
         @JoinColumn(name = "id_xuat_xu", referencedColumnName = "id")
         private XuatXu xuatXu;
 
-        // ✅ Liên kết với ảnh (OneToMany)
         @OneToMany(mappedBy = "sanPham", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         private List<Anh> anhs;
     }

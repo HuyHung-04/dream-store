@@ -1,5 +1,6 @@
 package com.example.dreambackend.repositories;
 
+import com.example.dreambackend.dtos.SanPhamThieuDto;
 import com.example.dreambackend.entities.HoaDon;
 import com.example.dreambackend.entities.SanPhamChiTiet;
 import com.example.dreambackend.requests.HoaDonChiTietSearchRequest;
@@ -318,5 +319,17 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
     boolean existsBySanPhamChiTiet_Id(Integer idSanPhamChiTiet);
 
     Optional<HoaDonChiTiet> findByHoaDonAndSanPhamChiTietAndTrangThai(HoaDon hoaDon, SanPhamChiTiet spct, Integer trangThai);
+
+    @Query("SELECT new com.example.dreambackend.dtos.SanPhamThieuDto(" +
+            "spct.ma, sp.ten, ms.ten, sz.ten, SUM(hdct.soLuong)) " +
+            "FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.sanPhamChiTiet spct " +
+            "JOIN spct.sanPham sp " +
+            "JOIN spct.mauSac ms " +
+            "JOIN spct.size sz " +
+            "JOIN hdct.hoaDon hd " +
+            "WHERE hd.trangThai = 1 " +
+            "GROUP BY spct.ma, sp.ten, ms.ten, sz.ten")
+    List<SanPhamThieuDto> findSanPhamTrongDonChuaXacNhan();
 
 }

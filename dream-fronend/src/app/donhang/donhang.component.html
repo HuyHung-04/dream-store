@@ -17,23 +17,63 @@
     <div class="input-field">
       <label for="customerPhone">Số điện thoại khách hàng</label>
       <input type="text" id="customerPhone" [(ngModel)]="sdtNguoiNhan" (ngModelChange)="onSearchChange()" class="input"
-        placeholder="Nhập số điện thoại..." style="width: 250px;">
+        placeholder="Nhập số điện thoại..." style="width: 200px;">
     </div>
 
     <!-- tìm kiếm mã hóa đơn -->
     <div class="input-field">
       <label for="invoiceCode">Mã hóa đơn</label>
-      <input style="width: 250px;" type="text" id="invoiceCode" [(ngModel)]="maHoaDon" (ngModelChange)="onSearchChange()"
+      <input style="width: 200px;" type="text" id="invoiceCode" [(ngModel)]="maHoaDon" (ngModelChange)="onSearchChange()"
         class="input" placeholder="Nhập mã hóa đơn...">
     </div>
 
     <!-- tìm kiếm tên khách hàng -->
     <div class="input-field">
       <label for="tenKhachHang">Tên khách hàng</label>
-      <input style="width: 250px;" type="text" id="tenKhachHang" [(ngModel)]="tenNguoiNhan" (ngModelChange)="onSearchChange()"
+      <input style="width: 200px;" type="text" id="tenKhachHang" [(ngModel)]="tenNguoiNhan" (ngModelChange)="onSearchChange()"
         class="input" placeholder="Nhập tên khách hàng...">
     </div>
+
+    <div class="input-field">
+      <label>
+        <button class="xac-nhan" (click)="moModalSoLuongNo()">Số lượng nợ</button>
+      </label>
+    </div>
   </div>
+
+ <div class="modal-no" *ngIf="hienThiModalNo">
+  <div class="modal-content-no">
+    <!-- Nút đóng ở góc phải -->
+    <button class="close-button" (click)="dongModal()">✕</button>
+
+    <h4 style="color: #294764;">Danh sách sản phẩm thiếu</h4>
+
+    <!-- Bảng cuộn tối đa 13 dòng -->
+    <div class="table-scroll-container">
+      <table class="table-no">
+        <thead>
+          <tr>
+            <th>Mã SPCT</th>
+            <th>Tên</th>
+            <th>Màu</th>
+            <th>Size</th>
+            <th>Số lượng nợ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sp of danhSachSanPhamNo">
+            <td>{{ sp.maSPCT }}</td>
+            <td>{{ sp.tenSanPham }}</td>
+            <td>{{ sp.mauSac }}</td>
+            <td>{{ sp.size }}</td>
+            <td>{{ sp.soLuongThieu }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 
   <!-- bảng đơn hàng -->
   <table border="1" cellpadding="5" cellspacing="0">

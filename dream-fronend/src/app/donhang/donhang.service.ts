@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 export class DonhangService {
   private apiUrl = 'http://localhost:8080/api/hoa-don/filter';
   private apiHoaDonOnline = 'http://localhost:8080/api/hoa-don-online';
+  private apiSanPhamNo = 'http://localhost:8080/api/hoa-don';
   constructor(private http: HttpClient) { }
 
   // Phương thức gọi API để lấy hóa đơn theo các tiêu chí lọc + thêm phân trang
@@ -52,4 +53,8 @@ export class DonhangService {
 
     return this.http.post<any>(`${this.apiHoaDonOnline}/huy`, null, { params });
   }
+  getSanPhamNo(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiSanPhamNo}/san-pham-thieu`);
+  }
+  
 }
