@@ -170,8 +170,9 @@
   </div>
 
   <div class="form-group">
-    <label class="input-label" for="voucher">Chọn voucher:</label>
+    <label class="input-label" for="voucher">Voucher:</label>
     <select id="voucher" [(ngModel)]="chonVoucher" (change)="getTongTienThanhToan()" class="selectoption">
+      <option [ngValue]="null"> Chọn voucher </option>
       <option *ngFor="let voucher of vouchers" [ngValue]="voucher">
         {{ voucher.ten }}
       </option>
