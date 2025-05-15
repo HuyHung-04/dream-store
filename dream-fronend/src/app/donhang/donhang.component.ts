@@ -57,6 +57,7 @@ export class DonhangComponent {
     const status = this.chonTrangThai === 0 ? 0 : this.chonTrangThai;
     this.donHangService.getHoaDonsByTrangThaiAndNguoiNhanAndMa(status, this.tenNguoiNhan, this.sdtNguoiNhan, this.maHoaDon, this.page, 6).subscribe(
       (data) => {
+        console.log(data)
         this.fullHoaDonList = data.content;
         this.totalPages = data.totalPages
       },
@@ -205,6 +206,7 @@ export class DonhangComponent {
   }
 
   openCancelModal(): void {
+    this.ghiChu=''
     this.showCancelModal = true;
   }
 

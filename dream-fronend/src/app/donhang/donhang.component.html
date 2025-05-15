@@ -43,6 +43,7 @@
         <th>Tên khách hàng</th>
         <th>Số điện thoại</th>
         <th>Tổng tiền trước voucher</th>
+        <th>Phương thức thanh toán</th>
         <th>Voucher</th>
         <th>Tổng tiền thanh toán</th>
         <th>Trạng thái thanh toán</th>
@@ -55,6 +56,7 @@
         <td>{{ hoaDon.tenNguoiNhan }}</td>
         <td>{{hoaDon.sdtNguoiNhan}}</td>
         <td>{{ hoaDon.tongTienTruocVoucher}}</td>
+        <td>{{ hoaDon.phuongThucThanhToan.ten}}</td>
         <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không áp dụng' }}</td>
         <td>{{ hoaDon.tongTienThanhToan}}</td>
         <td>

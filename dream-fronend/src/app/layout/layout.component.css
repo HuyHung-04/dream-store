@@ -181,3 +181,57 @@ mat-sidenav a i {
   opacity: 0.5; /* Làm mờ dòng */
   background-color: #d3e0ea !important; /* Hoặc đổi màu để dễ thấy */
 }
+
+/* Modal Overlay */
+.modal-overlay-confirm {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* overlay nhẹ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeInOverlay 0.3s ease-in-out;
+}
+
+/* Modal Content */
+.modal-content-confirm {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 450px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: scaleFadeIn 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  margin-top: -200px;
+}
+
+/* Fade In Overlay */
+@keyframes fadeInOverlay {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Scale + Fade In Content */
+@keyframes scaleFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-footer{
+  gap: 10px;
+}

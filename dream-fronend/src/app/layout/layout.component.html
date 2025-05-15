@@ -1,8 +1,9 @@
 <mat-sidenav-container class="example-container">
   <mat-sidenav #sidenav mode="side" opened>
     <div class="sidebar-header">
-      <img src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs"
-           alt="Logo Cửa Hàng" class="logo">
+      <img
+        src="https://media.licdn.com/dms/image/v2/D4D0BAQG4-oyhJObyeQ/company-logo_200_200/company-logo_200_200/0/1692049150669/dream_store_brinquedos_logo?e=2147483647&v=beta&t=tMKRIMyWlenH5Iv1wIijIfCBTSAuiZ6FAW9vWR5M0Cs"
+        alt="Logo Cửa Hàng" class="logo">
     </div>
     <nav>
       <a mat-button routerLink="/layout/banhang" routerLinkActive="active-link">
@@ -18,7 +19,7 @@
         Đơn Hàng
       </a>
       <a mat-button routerLink="/layout/sanpham" routerLinkActive="active-link">
-        <i class="bi bi-box"></i> 
+        <i class="bi bi-box"></i>
         Sản Phẩm
       </a>
       <a mat-button routerLink="/layout/voucher" routerLinkActive="active-link">
@@ -30,13 +31,13 @@
         Khuyến Mãi
       </a>
       <a mat-button routerLink="/layout/khachhang" routerLinkActive="active-link">
-        <i class="bi bi-person"></i> 
+        <i class="bi bi-person"></i>
         Khách Hàng
       </a>
       <a mat-button (click)="accessNhanVien()">
-        <i class="bi bi-person"></i> 
+        <i class="bi bi-person"></i>
         Nhân Viên
-      </a>      
+      </a>
       <a mat-button (click)="accessThongKe()">
         <i class="bi bi-bar-chart"></i>
         Thống Kê
@@ -52,7 +53,21 @@
       <router-outlet></router-outlet>
     </div>
 
-  <div *ngIf="showModal" class="modal-overlay">
+    <div *ngIf="confirmLogoutDialog" class="modal-overlay-confirm">
+      <div class="modal-content-confirm">
+        <div class="modal-header-confirm">
+          <h3>Cảnh báo đăng xuất</h3>
+        </div>
+        <p>Bạn có {{ soHoaDonChuaThanhToan }} hoá đơn chưa thanh toán. Bạn có muốn bàn giao cho nhân viên khác không ?</p>
+        <div class="modal-footer">
+          <button mat-button style=" background-color:#e3f2fd; color:#1976d2;" color="primary" (click)="onBanGiao()">Bàn giao</button>
+          <button mat-button style=" background-color:#e3f2fd; color:#1976d2;" color="warn" (click)="onHuyHoaDon()">Đăng xuất</button>
+          <button mat-button style=" background-color:#e3f2fd; color:#1976d2;" (click)="onCloseConfirmLogout()">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="showModal" class="modal-overlay">
       <div class="modal-content">
         <div class="modal-header">
           <h2>Danh sách Nhân Viên</h2>
@@ -68,7 +83,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let nhanvien of nhanViens"  [class.selected]="nhanvien.id === selectedNhanVienId">
+              <tr *ngFor="let nhanvien of nhanViens" [class.selected]="nhanvien.id === selectedNhanVienId">
                 <td>{{ nhanvien.ma }}</td>
                 <td>{{ nhanvien.ten }}</td>
                 <td>
@@ -80,7 +95,8 @@
         </div>
 
         <div class="modal-footer">
-          <button mat-button (click)="xacNhanBanGiaoVaDangXuat()"  style="color:white;" class="btn-logout">Đăng xuất</button>
+          <button mat-button (click)="xacNhanBanGiaoVaDangXuat()" style="color:white;" class="btn-logout">Đăng
+            xuất</button>
           <button mat-button (click)="closeModal()" style="color:white;" class="btn-close">Đóng</button>
         </div>
       </div>

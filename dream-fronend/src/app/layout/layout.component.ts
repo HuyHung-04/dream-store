@@ -27,13 +27,16 @@ export class LayoutComponent {
   hoaDons: any[] = [];
   selectedNhanVienId: string | null = null;
   showModal: boolean = false;
+  confirmLogoutDialog: boolean = false;
+  soHoaDonChuaThanhToan: number = 0;
+
   constructor(private dialog: MatDialog, private router: Router, private layoutService: LayoutService) { }
 
   ngOnInit(): void {
     this.loadNhanViens(); // Tải danh sách nhân viên khi component khởi tạo
   }
 
-confirmLogout() {
+  confirmLogout() {
   const idNhanVien = localStorage.getItem('idNhanVien');
 
   if (!idNhanVien) {
@@ -46,26 +49,10 @@ confirmLogout() {
       const soHoaDonChuaThanhToan = hoaDons.length;
 
       if (soHoaDonChuaThanhToan > 0) {
-        const confirmResult = confirm(
-          `Bạn có ${soHoaDonChuaThanhToan} hóa đơn chưa thanh toán. Bạn có muốn bàn giao lại cho nhân viên khác không?`
-        );
-
-        if (confirmResult) {
-          this.showModal = true; // Hiển thị modal để chọn người bàn giao
-        } else {
-          // Gọi API để hủy tất cả hóa đơn trạng thái 6 của nhân viên
-          this.layoutService.deleteHoaDonChuaThanhToan(Number(idNhanVien)).subscribe({
-            next: () => {
-              
-            },
-            error: (err) => {
-              alert('Đăng xuất thành công');
-              this.thucHienDangXuat();
-            }
-          });
-        }
+        // ✅ Thay vì dùng confirm, mở modal tùy chỉnh
+        this.soHoaDonChuaThanhToan = soHoaDonChuaThanhToan;
+        this.confirmLogoutDialog = true;
       } else {
-        // Không có hóa đơn nào => đăng xuất luôn
         const confirmOut = confirm("Bạn có chắc chắn muốn đăng xuất không?");
         if (confirmOut) {
           this.thucHienDangXuat();
@@ -78,12 +65,13 @@ confirmLogout() {
   });
 }
 
-thucHienDangXuat(): void {
-  this.showModal = false;
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('idNhanVien');
-  this.router.navigate(['/layout/dangnhap']);
-}
+
+  thucHienDangXuat(): void {
+    this.showModal = false;
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('idNhanVien');
+    this.router.navigate(['/layout/dangnhap']);
+  }
 
   accessNhanVien() {
     const role = localStorage.getItem('role');
@@ -142,28 +130,53 @@ thucHienDangXuat(): void {
   }
 
   xacNhanBanGiaoVaDangXuat(): void {
-  const idNhanVienCu = localStorage.getItem('idNhanVien');
-  const idNhanVienMoi = this.selectedNhanVienId;
+    const idNhanVienCu = localStorage.getItem('idNhanVien');
+    const idNhanVienMoi = this.selectedNhanVienId;
 
-  if (!idNhanVienCu || !idNhanVienMoi) {
-    alert('Vui lòng chọn nhân viên để bàn giao hóa đơn.');
-    return;
-  }
-
-  const confirmed = window.confirm('Bạn có chắc chắn muốn đăng xuất và bàn giao hóa đơn không?');
-  if (!confirmed) {
-    return;
-  }
-
-  this.layoutService.banGiaoHoaDonChoNhanVienMoi(+idNhanVienCu, +idNhanVienMoi).subscribe({
-    next: () => {
-      alert('Bàn giao hóa đơn thành công.');
-      this.thucHienDangXuat();
-    },
-    error: (err) => {
-      alert(err.error.error);
+    if (!idNhanVienCu || !idNhanVienMoi) {
+      alert('Vui lòng chọn nhân viên để bàn giao hóa đơn.');
+      return;
     }
-  });
+
+    const confirmed = window.confirm('Bạn có chắc chắn muốn bàn giao hóa đơn cho nhân viên này và đăng xuất không ?');
+    if (!confirmed) {
+      return;
+    }
+
+    this.layoutService.banGiaoHoaDonChoNhanVienMoi(+idNhanVienCu, +idNhanVienMoi).subscribe({
+      next: () => {
+        alert('Bàn giao hóa đơn thành công.');
+        this.thucHienDangXuat();
+      },
+      error: (err) => {
+        alert(err.error.error);
+      }
+    });
+  }
+
+  onBanGiao() {
+  this.confirmLogoutDialog = false;
+  this.showModal = true; 
+}
+
+onHuyHoaDon() {
+  const idNhanVien = localStorage.getItem('idNhanVien');
+  if (idNhanVien) {
+    this.layoutService.deleteHoaDonChuaThanhToan(Number(idNhanVien)).subscribe({
+      next: () => {
+        this.thucHienDangXuat();
+      },
+      error: (err) => {
+        alert('Đăng xuất thành công');
+        this.thucHienDangXuat();
+      }
+    });
+  }
+  this.confirmLogoutDialog = false;
+}
+
+onCloseConfirmLogout() {
+  this.confirmLogoutDialog = false;
 }
 
 }
