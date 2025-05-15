@@ -143,14 +143,16 @@ export class HoadonComponent {
         const rawMessage = error?.error?.message || "";
         if (rawMessage.startsWith("HET_HANG:")) {
           alert(rawMessage.replace("HET_HANG:", ""));
-           this.router.navigate(['/banhang']);
-           localStorage.removeItem('gioHangThanhToan');
+          this.router.navigate(['/banhang']);
+          localStorage.removeItem('gioHangThanhToan');
         } else if (rawMessage.startsWith("VUOT_TON:")) {
           alert(rawMessage.replace("VUOT_TON:", ""));
         }
         else if (rawMessage.startsWith("VOUCHER_HET:")) {
           alert(rawMessage.replace("VOUCHER_HET:", ""));
           this.getVoucherIdAndTen()
+          this.chonVoucher = null
+          this.getTinhVoucher()
         }
         else {
           alert("Lỗi không xác định. Vui lòng thử lại.");
@@ -603,6 +605,10 @@ export class HoadonComponent {
     this.hoadonService.getVouchers(this.TongTienTamTinh).subscribe(
       (response: any) => {
         this.vouchers = response;
+        if (!this.chonVoucher && this.vouchers.length > 0) {
+          this.chonVoucher = null;
+          this.getTongTienThanhToan(); // Tính lại tổng tiền
+        }
       },
       (error) => {
         console.error("Lỗi khi lấy danh sách voucher", error);
@@ -669,16 +675,18 @@ export class HoadonComponent {
         const rawMessage = error?.error?.message || "";
         if (rawMessage.startsWith("HET_HANG:")) {
           alert(rawMessage.replace("HET_HANG:", ""));
-           this.router.navigate(['/banhang']);
-           localStorage.removeItem('gioHangThanhToan');
+          this.router.navigate(['/banhang']);
+          localStorage.removeItem('gioHangThanhToan');
         } else if (rawMessage.startsWith("VUOT_TON:")) {
           alert(rawMessage.replace("VUOT_TON:", ""));
         }
-         else if (rawMessage.startsWith("VOUCHER_HET:")) {
+        else if (rawMessage.startsWith("VOUCHER_HET:")) {
           alert(rawMessage.replace("VOUCHER_HET:", ""));
           this.getVoucherIdAndTen()
+          this.chonVoucher = null
+          this.getTinhVoucher()
         }
-         else {
+        else {
           alert("Lỗi không xác định. Vui lòng thử lại.");
         }
       }
