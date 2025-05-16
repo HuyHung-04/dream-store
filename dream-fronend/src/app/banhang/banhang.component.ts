@@ -1258,7 +1258,14 @@ export class BanhangComponent implements OnInit {
   }
 
   loadInvoices(): void {
-    this.banhangService.getDanhSachHD({}).subscribe(
+    const idNhanVien = localStorage.getItem('idNhanVien');
+
+    if (!idNhanVien) {
+      console.error('Không tìm thấy idNhanVien trong localStorage');
+      return;
+    }
+
+    this.banhangService.getDanhSachHD({}, +idNhanVien).subscribe(
       (response) => {
         if (response && response.data) {
           this.invoices = response.data.filter((invoice: any) => invoice.trangThai === 6);

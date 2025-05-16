@@ -23,13 +23,12 @@ import java.util.Optional;
 @Repository
 public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, Integer> {
 
-
     @Query("SELECT new com.example.dreambackend.responses.TopSanPhamResponse(sp.ten, SUM(hdct.soLuong)) " +
             "FROM HoaDonChiTiet hdct " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
             "JOIN hdct.hoaDon hd " + // Thêm JOIN với hoaDon
-            "WHERE ((hd.trangThai = 4 AND CAST(hd.ngaySua AS date) = CURRENT_DATE) " +
+            "WHERE ((hd.trangThai = 5 AND CAST(hd.ngaySua AS date) = CURRENT_DATE) " +
             "   OR (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) = CURRENT_DATE)) " +
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
@@ -42,7 +41,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
             "WHERE ( " +
-            "   (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) BETWEEN :startDate AND :endDate) " +
+            "   (hd.trangThai = 5 AND CAST(hd.ngaySua AS date) BETWEEN :startDate AND :endDate) " +
             "   OR " +
             "   (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) BETWEEN :startDate AND :endDate) " +
             ") " +
@@ -60,7 +59,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
             "WHERE ( " +
-            "   (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) BETWEEN :startDate AND :endDate) " +
+            "   (hd.trangThai = 5 AND CAST(hd.ngaySua AS date) BETWEEN :startDate AND :endDate) " +
             "   OR " +
             "   (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) BETWEEN :startDate AND :endDate) " +
             ") " +
@@ -77,7 +76,7 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "JOIN hdct.hoaDon hd " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
-            "WHERE hd.trangThai IN (4, 7) " + // Chỉ lấy trạng thái 4 và 7
+            "WHERE hd.trangThai IN (5, 7) " + // Chỉ lấy trạng thái 4 và 7
             "GROUP BY sp.ten " +
             "ORDER BY SUM(hdct.soLuong) DESC")
     Page<TopSanPhamResponse> getTopSanPhamTatCa(Pageable pageable);
@@ -88,18 +87,18 @@ public interface HoaDonChiTietRepository extends CrudRepository<HoaDonChiTiet, I
             "JOIN hdct.hoaDon hd " +
             "JOIN hdct.sanPhamChiTiet spct " +
             "JOIN spct.sanPham sp " +
-            "WHERE hd.trangThai IN (4, 7) " +
+            "WHERE hd.trangThai IN (5, 7) " +
             "AND ( " +
             "   (:startDate IS NULL OR " +
             "   ( " +
-            "       (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) >= :startDate) " +
+            "       (hd.trangThai = 5 AND CAST(hd.ngaySua AS date) >= :startDate) " +
             "       OR " +
             "       (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) >= :startDate) " +
             "   )) " +
             "   AND " +
             "   (:endDate IS NULL OR " +
             "   ( " +
-            "       (hd.trangThai = 4 AND CAST(hd.ngaySua AS date) <= :endDate) " +
+            "       (hd.trangThai = 5 AND CAST(hd.ngaySua AS date) <= :endDate) " +
             "       OR " +
             "       (hd.trangThai = 7 AND CAST(hd.ngayTao AS date) <= :endDate) " +
             "   )) " +

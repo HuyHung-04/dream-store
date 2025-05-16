@@ -16,7 +16,7 @@ import {
 })
 export class ThongkeComponent implements OnInit {
   thongKeData: ThongKeResponse | null = null;
-  selectedType: string = 'Năm nay';
+  selectedType: string = '';
   chart: any;
   pieChart: any;
   topSanPhamData: TopSanPhamResponse[] = [];
@@ -62,7 +62,7 @@ export class ThongkeComponent implements OnInit {
   loadThongKe(type: string): void {
     this.selectedType = type;
     this.thongKeData = null;
-    this.loadBieuDoNam()
+    this.loadBieuDoNam();
     this.destroyChart();
 
     // 👉 Đặt lại tháng và năm hiện tại
@@ -277,7 +277,7 @@ export class ThongkeComponent implements OnInit {
   }
   // Tải danh sách top sản phẩm bán chạy hôm nay
   loadTopSanPhamHomNay(): void {
-    this.selectedTopType = 'Hôm nay';
+    this.selectedTopType = '';
     this.daApDungTuyChinh = false;
     // Reset tháng và năm về hiện tại
     this.topProductMonth = new Date().getMonth() + 1;
@@ -295,6 +295,7 @@ export class ThongkeComponent implements OnInit {
   }
   // Tải danh sách top sản phẩm bán chạy trong tháng này
   loadTopSanPhamThangNay(): void {
+    this.selectedTopType = '';
     this.thongKeService.topSanPhamTheoThangVaNam(this.topProductMonth, this.topProductYear, this.page, this.size).subscribe(
       (data: TopSanPhamResponse[]) => {
         this.topSanPhamData = data;
@@ -308,6 +309,7 @@ export class ThongkeComponent implements OnInit {
 
   // Tải danh sách top sản phẩm bán chạy trong năm nay
   loadTopSanPhamNamNay(): void {
+    this.selectedTopType = '';
     this.topProductMonth = 0
     this.thongKeService.topSanPhamTheoNam(this.topProductYear, this.page, this.size).subscribe(
       (data: TopSanPhamResponse[]) => {
@@ -322,6 +324,7 @@ export class ThongkeComponent implements OnInit {
 
   // Tải danh sách top sản phẩm bán chạy tất cả thời gian
   loadTopSanPhamTatCa(): void {
+    this.selectedTopType = '';
     // Reset tháng và năm về hiện tại
     this.topProductMonth = new Date().getMonth() + 1;
     this.topProductYear = new Date().getFullYear();
@@ -473,6 +476,7 @@ export class ThongkeComponent implements OnInit {
 
   // Cập nhật phương thức load dữ liệu theo khoảng ngày
   loadTopSanPhamTheoKhoangNgay(): void {
+    this.selectedTopType = 'Tùy chỉnh';
     if (!this.isTopDateValid()) {
       this.errorMessage = 'Vui lòng chọn khoảng ngày hợp lệ (Từ ngày ≤ Đến ngày)';
       return;

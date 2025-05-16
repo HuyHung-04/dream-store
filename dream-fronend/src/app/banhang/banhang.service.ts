@@ -27,10 +27,10 @@ export class BanhangService {
     return this.http.get<any>(`${this.apiUrl1}?page=0&size=10000`);
   }
 
-  getDanhSachHD(request: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrlHD}/all`, request);
+  getDanhSachHD(request: any, idNhanVien: number): Observable<any> {
+  const params = new HttpParams().set('idNhanVien', idNhanVien);
+  return this.http.post<any>(`${this.apiUrlHD}/all`, request, { params });
   }
-
 
   addSanPhamToHoaDon(hoaDonId: number, sanPhamChiTietId: number, soLuong: number): Observable<any> {
     return this.http.post(`${this.apiUrlHDCT}/${hoaDonId}/add/${sanPhamChiTietId}?soLuong=${soLuong}`, {});
