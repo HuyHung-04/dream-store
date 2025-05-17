@@ -214,6 +214,10 @@ export class HeaderComponent implements OnInit {
           alert(rawMessage.replace("VUOT_TON:", ""));
           this.loadGioHang()
           this.headerService.triggerLoadSanPhamChiTiet();
+        } else if (rawMessage.startsWith("TRONG:")) {
+          alert(rawMessage.replace("TRONG:", ""));
+          this.loadGioHang()
+          this.headerService.triggerLoadSanPhamChiTiet();
         } else {
           alert("Lỗi không xác định. Vui lòng thử lại.");
         }

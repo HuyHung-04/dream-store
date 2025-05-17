@@ -144,7 +144,7 @@ export class BanhangComponent implements OnInit {
     console.log('Loading all products...');
     this.banhangService.getAllSanPham().subscribe(
       response => {
-        this.dsSanPham=response.content
+        this.dsSanPham = response.content
         console.log('Response from getAllSanPham:', response);
         if (response && response.content) {
           this.allSanPhams = response.content.map((sp: any) => ({
@@ -268,13 +268,13 @@ export class BanhangComponent implements OnInit {
   loadChiTietHoaDon(idHoaDon: number) {
     this.banhangService.searchHDCT({ idHoaDon }).subscribe(
       (data) => {
-         this.giaGocSanPhamMap = {};
-            data.forEach(item => {
-              const sanPhamChiTiet = this.dsSanPham.find(sp => sp.id === item.idSanPhamChiTiet);
-              if (sanPhamChiTiet) {
-                this.giaGocSanPhamMap[item.idSanPhamChiTiet] = sanPhamChiTiet.gia;
-              }
-            });
+        this.giaGocSanPhamMap = {};
+        data.forEach(item => {
+          const sanPhamChiTiet = this.dsSanPham.find(sp => sp.id === item.idSanPhamChiTiet);
+          if (sanPhamChiTiet) {
+            this.giaGocSanPhamMap[item.idSanPhamChiTiet] = sanPhamChiTiet.gia;
+          }
+        });
         console.log('=== THÔNG TIN CHI TIẾT GIỎ HÀNG ===');
         if (data && data.length > 0) {
           console.log('\nDanh sách tất cả items trong cart:');
@@ -285,10 +285,23 @@ export class BanhangComponent implements OnInit {
           console.log('Giỏ hàng trống');
         }
 
-        this.cart = data ? data.map(item => ({
-          ...item,
-          soLuongBanDau: item.soLuong
-        })) : [];
+        this.cart = data ? data.map(item => {
+          const giaGoc = this.giaGocSanPhamMap[item.idSanPhamChiTiet];
+          const giaHienTai = item.gia;
+
+          const daTungDuocGiam = giaGoc && giaHienTai < giaGoc;
+
+          const giaTriGiamKM = daTungDuocGiam
+            ? Math.round((1 - giaHienTai / giaGoc) * 100)
+            : 0;
+
+          return {
+            ...item,
+            soLuongBanDau: item.soLuong,
+            gia: daTungDuocGiam ? giaHienTai : giaGoc,
+            giaTriGiamKM: giaTriGiamKM,
+          };
+        }) : [];
 
         const total = this.getTotal();
         this.cartTotal = total;
@@ -301,7 +314,7 @@ export class BanhangComponent implements OnInit {
           this.banhangService.getDetailVoucher(this.selectedInvoice.idVoucher).subscribe(
             (voucher) => {
               if (voucher) {
-                if (voucher.soLuong == 0) {
+                if (voucher.soLuong == 0 || voucher.trangThai == 0) {
                   this.selectedDiscount = null;
                   this.discountAmount = 0;
                 }
@@ -710,12 +723,25 @@ export class BanhangComponent implements OnInit {
           this.banhangService.searchHDCT({ idHoaDon: this.selectedInvoice?.id }).subscribe(
             (cartData) => {
               console.log('Danh sách hóa đơn chi tiết sau khi thêm:', cartData);
-              this.cart = cartData.map(item => ({
-                ...item,
-                soLuongBanDau: item.idSanPhamChiTiet === product.id ?
-                  (existingCartItem.soLuongBanDau || existingCartItem.soLuong) + 1 :
-                  (item.soLuongBanDau || item.soLuong)
-              })) || [];
+              this.cart = cartData.map(item => {
+                const sp = this.dsSanPham.find(sp => sp.id === item.idSanPhamChiTiet);
+                const giaGoc = sp?.gia || item.gia;
+                const giaHienTai = item.gia;
+
+                const daGiamGia = giaHienTai < giaGoc;
+                const giaTriGiamKM = daGiamGia ? Math.round((1 - giaHienTai / giaGoc) * 100) : 0;
+
+                this.giaGocSanPhamMap[item.idSanPhamChiTiet] = giaGoc;
+
+                return {
+                  ...item,
+                  soLuongBanDau: item.idSanPhamChiTiet === product.id
+                    ? product.soLuong + 1
+                    : (item.soLuongBanDau || item.soLuong),
+                  giaTriGiamKM: giaTriGiamKM,
+                  isGiamGia: daGiamGia
+                };
+              });
               this.getVoucher(this.getTotal());
               this.updateInvoiceTotal();
               this.updateVoucher();
@@ -755,7 +781,7 @@ export class BanhangComponent implements OnInit {
         this.banhangService.searchHDCT({ idHoaDon: this.selectedInvoice?.id }).subscribe(
           (cartData) => {
             console.log('Danh sách hóa đơn chi tiết sau khi thêm:', cartData);
-             this.giaGocSanPhamMap = {};
+            this.giaGocSanPhamMap = {};
             cartData.forEach(item => {
               const sanPhamChiTiet = this.dsSanPham.find(sp => sp.id === item.idSanPhamChiTiet);
               if (sanPhamChiTiet) {
@@ -763,10 +789,25 @@ export class BanhangComponent implements OnInit {
               }
             });
             // Gán soLuongBanDau cho mỗi sản phẩm trong giỏ hàng
-            this.cart = cartData.map(item => ({
-              ...item,
-              soLuongBanDau: item.idSanPhamChiTiet === product.id ? product.soLuong + 1 : (item.soLuongBanDau || item.soLuong)
-            })) || [];
+            this.cart = cartData.map(item => {
+              const sp = this.dsSanPham.find(sp => sp.id === item.idSanPhamChiTiet);
+              const giaGoc = sp?.gia || item.gia;
+              const giaHienTai = item.gia;
+
+              const daGiamGia = giaHienTai < giaGoc;
+              const giaTriGiamKM = daGiamGia ? Math.round((1 - giaHienTai / giaGoc) * 100) : 0;
+
+              this.giaGocSanPhamMap[item.idSanPhamChiTiet] = giaGoc;
+
+              return {
+                ...item,
+                soLuongBanDau: item.idSanPhamChiTiet === product.id
+                  ? product.soLuong + 1
+                  : (item.soLuongBanDau || item.soLuong),
+                giaTriGiamKM: giaTriGiamKM,
+                isGiamGia: daGiamGia
+              };
+            });
             this.getVoucher(this.getTotal());
             this.updateInvoiceTotal();
             this.updateVoucher();
@@ -1129,6 +1170,8 @@ export class BanhangComponent implements OnInit {
         const message = error?.error?.error || 'Đã xảy ra lỗi khi cập nhật hóa đơn';
         alert(message);
         if (this.selectedInvoice?.tongTienTruocVoucher) {
+          this.selectedInvoice.tongTienThanhToan = this.selectedInvoice.tongTienTruocVoucher;
+          this.discountAmount=0;
           this.selectedDiscount = null
           this.getVoucher(this.selectedInvoice.tongTienTruocVoucher)
         }
@@ -1476,6 +1519,7 @@ export class BanhangComponent implements OnInit {
             item.soLuong = this.previousQuantity;
             this.cdr.detectChanges();
             alert(`Số lượng vượt quá số lượng trong kho!`);
+            this.loadSanPhamToBanHang()
             return;
           }
 

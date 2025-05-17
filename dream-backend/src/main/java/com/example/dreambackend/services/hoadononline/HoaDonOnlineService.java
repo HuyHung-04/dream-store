@@ -57,7 +57,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         List<GioHangChiTietResponse> gioHangChiTietList = gioHangChiTietRepository.findGioHangChiTietByKhachHangId(idKhachHang);
 
         if (gioHangChiTietList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không có sản phẩm nào trong giỏ hàng.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TRONG: Số lượng sản phẩm này đã hết vui lòng chọn sản phẩm khác");
         }
 
         for (GioHangChiTietResponse item : gioHangChiTietList) {
@@ -462,20 +462,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                                     }
                                 }
 
-                                // Nếu hết hàng sau khi trừ, xóa các giỏ hàng chứa sản phẩm này
+
                                 if (spct.getSoLuong() == 0) {
-                                    // Lấy tất cả các GioHangChiTiet có sản phẩm này
-                                    List<GioHangChiTiet> gioHangCanXoa  = gioHangChiTietRepository.findAllBySanPhamChiTietId(spct.getId());
-
-                                    if (!gioHangCanXoa.isEmpty()) {
-                                        // Lấy danh sách id kiểu Integer
-                                        List<Integer> ids = gioHangCanXoa.stream()
-                                                .map(GioHangChiTiet::getId) // Lấy id của từng GioHangChiTiet
-                                                .collect(Collectors.toList());
-
-                                        // Xóa tất cả các giỏ hàng có id trong danh sách
-                                        gioHangChiTietRepository.deleteAllByIdIn(ids);
-                                    }
+                                    throw new RuntimeException("Sản phẩm " + spct.getSanPham().getTen() + " (" + spct.getMa() + ") đã hết hàng. Vui lòng chọn sản phẩm khác.");
                                 }
                             } else {
                                 // Nếu không đủ số lượng, throw exception hoặc thông báo lỗi

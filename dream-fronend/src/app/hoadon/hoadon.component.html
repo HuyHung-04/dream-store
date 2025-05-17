@@ -91,14 +91,14 @@
             <td>{{ invoice.sdtNguoiNhan }}</td>
             <td>{{ invoice.tenNhanVien }}</td>
             <td>{{ getTenPhuongThucThanhToan(invoice.idPhuongThucThanhToan) }}</td>
-            <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VNĐ</td>
+            <td>{{ invoice.tongTienTruocVoucher | number:'1.0-0' }} VND</td>
             <!-- <td>
               <span *ngIf="invoice.tenVoucher; else noVoucher">
                 {{ invoice.tenVoucher }} (Giảm {{ invoice.giaTriGiam }}{{ invoice.hinhThucGiam ? ' %' : ' VNĐ' }})
               </span>
             <ng-template #noVoucher>Không</ng-template>
           </td> -->
-            <td>{{ invoice.tongTienThanhToan | number:'1.0-0' }} VNĐ</td>
+            <td>{{ invoice.tongTienThanhToan | number:'1.0-0' }} VND</td>
             <td>{{ invoice.ngayTao | date:'yyyy-MM-dd' }}</td>
             <td>
               <!-- Hiển thị nút trạng thái nếu trong danh sách có thể đổi -->
@@ -167,7 +167,7 @@
                 <p><strong>Phân loại hàng: </strong>({{ item.mauSac }} / {{item.size}})</p>
                 <p><strong>Đơn Giá:</strong> {{ item.donGia | number }} VND </p>
                 <p><strong>Số lượng:</strong> {{ item.soLuong }}</p>
-                <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
+                <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VND</p>
               </div>
             </div>
           </section>

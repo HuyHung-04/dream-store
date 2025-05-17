@@ -86,6 +86,12 @@ public class HoaDonService implements IHoaDonService {
         Voucher newVoucher = voucherRepository.findById(idVoucher)
                 .orElseThrow(() -> new RuntimeException("Voucher không tồn tại"));
 
+        // Kiểm tra trạng thái của voucher
+        if (newVoucher.getTrangThai() != null && newVoucher.getTrangThai() == 0) {
+            hoaDon.setVoucher(null);
+            throw new RuntimeException("Voucher đã ngừng hoạt động, vui lòng chọn voucher khác");
+        }
+
         if (newVoucher.getSoLuong() <= 0) {
             hoaDon.setVoucher(null);
             throw new RuntimeException("Voucher đã hết số lượt sử dụng");

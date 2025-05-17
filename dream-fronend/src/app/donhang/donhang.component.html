@@ -36,7 +36,7 @@
 
     <div class="input-field">
       <label>
-        <button class="xac-nhan" (click)="moModalSoLuongNo()">Số lượng nợ</button>
+        <button class="xac-nhan" (click)="moModalSoLuongNo()">Danh sách sản phẩm chờ xác nhận</button>
       </label>
     </div>
   </div>
@@ -46,7 +46,7 @@
     <!-- Nút đóng ở góc phải -->
     <button class="close-button" (click)="dongModal()">✕</button>
 
-    <h4 style="color: #294764;">Danh sách sản phẩm thiếu</h4>
+    <h4 style="color: #294764;">Danh sách sản phẩm chờ xác nhận</h4>
 
     <!-- Bảng cuộn tối đa 13 dòng -->
     <div class="table-scroll-container">
@@ -95,10 +95,10 @@
         <td>{{ hoaDon.ma }}</td>
         <td>{{ hoaDon.tenNguoiNhan }}</td>
         <td>{{hoaDon.sdtNguoiNhan}}</td>
-        <td>{{ hoaDon.tongTienTruocVoucher}}</td>
+        <td>{{ hoaDon.tongTienTruocVoucher}} VND</td>
         <td>{{ hoaDon.phuongThucThanhToan.ten}}</td>
         <td>{{ hoaDon.voucher ? hoaDon.voucher.ten : 'Không áp dụng' }}</td>
-        <td>{{ hoaDon.tongTienThanhToan}}</td>
+        <td>{{ hoaDon.tongTienThanhToan}} VND</td>
         <td>
           <button class="xac-nhan" *ngIf="hoaDon.trangThai !== 5 && hoaDon.trangThai !== 9" (click)="updateTrangThai(hoaDon.id,hoaDon.trangThai)">
             {{ getButtonLabel(hoaDon.trangThai) }}
@@ -205,7 +205,7 @@
                 <p><strong>Phân loại hàng: </strong>({{ item.mauSac }} / {{item.size}})</p>
                 <p><strong>Đơn Giá:</strong> {{ item.donGia | number }} VND (x{{ item.soLuong }})</p>
                 <p></p>
-                <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
+                <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VND</p>
               </div>
             </div>
           </section>

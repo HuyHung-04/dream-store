@@ -69,14 +69,14 @@
         <p><strong>Đơn Giá:</strong> {{ item.donGia | number }} VND (x{{ item.soLuong }})</p>
 
         <p></p>
-        <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VNĐ</p>
+        <p><strong>Thành Tiền:</strong> {{ item.donGia * item.soLuong | number }} VND</p>
       </div>
     </div>
   </section>
 
   <!-- Chi tiết thanh toán -->
   <section class="section">
-    <p><strong>Tạm tính:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VNĐ</p>
+    <p><strong>Tạm tính:</strong> {{ hoaDonData.tongTienTruocVoucher | number }} VND</p>
     <!-- Điều kiện hiển thị voucher và giá trị giảm -->
     <div *ngIf="hoaDonData.voucher">
       <p>
@@ -89,12 +89,12 @@
 
         <!-- Hiện nếu giảm % nhưng vượt quá mức giảm tối đa -->
         <span *ngIf="showGiamToiDa">
-          (Giảm tối đa: {{ hoaDonData.voucher?.giamToiDa | number }} VNĐ)
+          (Giảm tối đa: {{ hoaDonData.voucher?.giamToiDa | number }} VND)
         </span>
 
         <!-- Hiện nếu giảm bằng số tiền -->
         <span *ngIf="hoaDonData.voucher?.hinhThucGiam === true">
-          (Giảm: {{ hoaDonData.voucher?.giaTriGiam | number }} VNĐ)
+          (Giảm: {{ hoaDonData.voucher?.giaTriGiam | number }} VND)
         </span>
       </p>
     </div>
@@ -103,9 +103,9 @@
     <p *ngIf="!hoaDonData.voucher"><strong>Hóa đơn không áp dụng voucher</strong></p>
     <p><strong>Phương thức thanh toán:</strong> {{ hoaDonData.phuongThucThanhToan?.ten }}</p>
     <p *ngIf="hoaDonData.phiVanChuyen && hoaDonData.phiVanChuyen > 0">
-      <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VNĐ
+      <strong>Phí vận chuyển:</strong> {{ hoaDonData.phiVanChuyen | number }} VND
     </p>
-    <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VNĐ</p>
+    <p><strong>Tổng tiền thanh toán:</strong> {{ hoaDonData.tongTienThanhToan | number }} VND</p>
   </section>
 
   <!-- Nút Hủy và Nút Quay Về Trang Chủ -->
