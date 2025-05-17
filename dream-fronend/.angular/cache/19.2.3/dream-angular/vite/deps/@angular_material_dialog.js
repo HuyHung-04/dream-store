@@ -1,10 +1,4 @@
 import {
-  CdkScrollable,
-  ScrollDispatcher,
-  ScrollingModule,
-  ViewportRuler
-} from "./chunk-DLPC2AAF.js";
-import {
   A11yModule,
   ESCAPE,
   FocusMonitor,
@@ -14,7 +8,13 @@ import {
   _CdkPrivateStyleLoader,
   _IdGenerator,
   hasModifierKey
-} from "./chunk-4ZSYFFUB.js";
+} from "./chunk-EHCNZKTO.js";
+import {
+  CdkScrollable,
+  ScrollDispatcher,
+  ScrollingModule,
+  ViewportRuler
+} from "./chunk-5JHFLP6N.js";
 import {
   Platform,
   _bindEventWithOptions,
@@ -25,7 +25,7 @@ import {
   coerceCssPixelValue,
   coerceNumberProperty,
   supportsScrollBehavior
-} from "./chunk-QIKCFWUZ.js";
+} from "./chunk-X5TTCENO.js";
 import {
   BidiModule,
   Directionality

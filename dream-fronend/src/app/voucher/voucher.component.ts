@@ -308,13 +308,13 @@ export class VoucherComponent implements OnInit {
       this.loadPage(0)
       return
     }
- 
-    this.voucherService.searchVoucherByTenAndTrangThai(this.selectedTrangThai,this.searchText,0,8).subscribe(
+
+    this.voucherService.searchVoucherByTenAndTrangThai(this.selectedTrangThai, this.searchText, 0, 8).subscribe(
       (data) => {
         this.vouchers = data.content
-         this.totalPages = data.totalPages || 0; 
-         this.currentPage = 0; 
-         this.tinhSoTrang(); 
+        this.totalPages = data.totalPages || 0;
+        this.currentPage = 0;
+        this.tinhSoTrang();
       },
       (error) => {
 
@@ -396,11 +396,20 @@ export class VoucherComponent implements OnInit {
     if (this.voucherEdit.hinhThucGiam == true) {
       // Nếu giảm theo tiền, phải để trống giảm tối đa
       this.voucherEdit.giamToiDa = null;
-    } 
+    }
+
 
 
     if (!this.voucherEdit.ngayBatDau) {
       this.errors.ngayBatDau = 'Ngày bắt đầu không được để trống!';
+    }
+    else {
+      const currentDate = new Date();
+      const startDate = new Date(`${this.voucherEdit.ngayBatDau}T00:00:00.000`);
+
+      if (startDate.getTime() < currentDate.setHours(0, 0, 0, 0)) {
+        this.errors.ngayBatDau = 'Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại!';
+      }
     }
 
     if (!this.voucherEdit.ngayKetThuc) {
@@ -470,7 +479,7 @@ export class VoucherComponent implements OnInit {
     this.showModalDetail = true;
   }
   locTrangThai(trangThai: number, page: number): void {
-    this.voucherService.searchVoucherByTenAndTrangThai(trangThai,this.searchText, page, 8).subscribe((response) => {
+    this.voucherService.searchVoucherByTenAndTrangThai(trangThai, this.searchText, page, 8).subscribe((response) => {
       this.vouchers = response.content;
       this.totalPages = response.totalPages;
       this.currentPage = page;
@@ -611,7 +620,7 @@ export class VoucherComponent implements OnInit {
         }
         break;
       case 'soLuong':
-       if (isVoucherExpired) {
+        if (isVoucherExpired) {
           alert('Voucher đã hết hạn, không thể sửa số lượng!');
         }
         break;

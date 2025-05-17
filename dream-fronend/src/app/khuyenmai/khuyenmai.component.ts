@@ -309,6 +309,14 @@ export class KhuyenmaiComponent implements OnInit {
     if (!this.khuyenmaiEdit.ngayBatDau) {
       this.errors.ngayBatDau = 'Ngày bắt đầu không được để trống!';
     }
+    else {
+      const startDate = new Date(`${this.khuyenmaiEdit.ngayBatDau}T00:00:00.000`);
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      if (startDate.getTime() < currentDate.getTime()) {
+        this.errors.ngayBatDau = 'Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại!';
+      }
+    }
 
     if (!this.khuyenmaiEdit.ngayKetThuc) {
       this.errors.ngayKetThuc = 'Ngày kết thúc không được để trống!';
