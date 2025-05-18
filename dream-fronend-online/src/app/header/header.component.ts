@@ -209,7 +209,7 @@ export class HeaderComponent implements OnInit {
           alert(rawMessage.replace("HET_HANG:", ""));
           this.loadGioHang()
           this.modalCard=false
-          this.headerService.triggerLoadSanPhamChiTiet();
+           this.router.navigate(['/banhang']);
         } else if (rawMessage.startsWith("VUOT_TON:")) {
           alert(rawMessage.replace("VUOT_TON:", ""));
           this.loadGioHang()
@@ -218,7 +218,13 @@ export class HeaderComponent implements OnInit {
           alert(rawMessage.replace("TRONG:", ""));
           this.loadGioHang()
           this.headerService.triggerLoadSanPhamChiTiet();
-        } else {
+        }
+        else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
+          alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
+          this.loadGioHang()
+           this.router.navigate(['/banhang']);
+        }
+         else {
           alert("Lỗi không xác định. Vui lòng thử lại.");
         }
       }

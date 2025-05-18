@@ -12,13 +12,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SanPhamOnlineRepository extends JpaRepository<SanPham, Integer> {
     @Query("SELECT new com.example.dreambackend.dtos.SanPhamDto(sp.id, sp.ten, " +
-            "(SELECT MIN(spct.gia) FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id), " +
+            "(SELECT MIN(spct.gia) FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id AND spct.trangThai = 1), " +
             "(SELECT a.anhUrl FROM Anh a WHERE a.sanPham.id = sp.id ORDER BY a.id ASC LIMIT 1)) " +
             "FROM SanPham sp " +
             "WHERE sp.trangThai = 1 " +
             "AND EXISTS (SELECT 1 FROM Anh a WHERE a.sanPham.id = sp.id) " +
-            "AND EXISTS (SELECT 1 FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id) " +
-            "AND (SELECT SUM(spct.soLuong) FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id) > 0")
+            "AND EXISTS (SELECT 1 FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id AND spct.trangThai = 1 AND spct.soLuong > 0)")
     Page<SanPhamDto> getSanPhamChiTietOnline(Pageable pageable);
     @Query("SELECT new com.example.dreambackend.dtos.SanPhamDto(sp.id, sp.ten, " +
             "(SELECT MIN(spct.gia) FROM SanPhamChiTiet spct WHERE spct.sanPham.id = sp.id), " +

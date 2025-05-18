@@ -41,13 +41,15 @@ public class GioHangChiTietController {
         try {
             GioHangChiTietResponse response = gioHangChiTietService.themSanPhamVaoGio(request);
             return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Lỗi hệ thống: " + ex.getMessage()));
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity
+                    .status(ex.getStatusCode())
+                    .body(Collections.singletonMap("message", ex.getReason()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi không xác định.");
         }
     }
+
 
 
     @DeleteMapping("/delete/{id}")
@@ -99,11 +101,12 @@ public class GioHangChiTietController {
         try {
             GioHangChiTietResponse response = gioHangChiTietService.muaNgay(request);
             return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity
+                    .status(ex.getStatusCode())
+                    .body(Collections.singletonMap("message", ex.getReason()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("error", "Đã xảy ra lỗi khi thực hiện mua ngay."));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi không xác định.");
         }
     }
 

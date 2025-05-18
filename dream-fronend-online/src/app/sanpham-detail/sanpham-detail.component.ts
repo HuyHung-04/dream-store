@@ -83,7 +83,7 @@ export class SanphamDetailComponent implements OnInit {
     });
 
     this.headerService.loadSanPham$.subscribe(() => {
-      this.loadSanPhamChiTiet();  
+      this.loadSanPhamChiTiet();
     });
   }
 
@@ -297,10 +297,27 @@ export class SanphamDetailComponent implements OnInit {
           this.soLuongMua = 1;
           this.hienToast();
         },
-        error: (err) => {
-          const errorMessage = err?.error?.error || "Đã xảy ra lỗi khi thêm vào giỏ hàng.";
-          alert(errorMessage);
-          this.loadSanPhamChiTiet()
+        error: (error) => {
+             const rawMessage = error?.error?.message || "";
+          if (rawMessage.startsWith("HET_HANG:")) {
+            alert(rawMessage.replace("HET_HANG:", ""));
+            this.router.navigate(['/banhang']);
+          } else if (rawMessage.startsWith("VUOT_TON:")) {
+            alert(rawMessage.replace("VUOT_TON:", ""));
+            this.loadSanPhamChiTiet()
+          }
+           else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
+            alert(rawMessage.replace("KHONG_TIM_THAY:", ""));
+          }
+            else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
+            alert(rawMessage.replace("KHONG_TIM_THAY:", ""));
+            this.router.navigate(['/banhang']);
+          }
+            else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
+            alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
+            this.router.navigate(['/banhang']);
+          }
+          
         }
       });
     });
@@ -331,9 +348,26 @@ export class SanphamDetailComponent implements OnInit {
         this.router.navigate(['/hoadon']);
       },
       (error) => {
-        const message = error?.error?.error || "Đã xảy ra lỗi khi mua sản phẩm.";
-        alert(message);
-        this.loadSanPhamChiTiet()
+            const rawMessage = error?.error?.message || "";
+          if (rawMessage.startsWith("HET_HANG:")) {
+            alert(rawMessage.replace("HET_HANG:", ""));
+            this.router.navigate(['/banhang']);
+          } else if (rawMessage.startsWith("VUOT_TON:")) {
+            alert(rawMessage.replace("VUOT_TON:", ""));
+            this.loadSanPhamChiTiet()
+          }
+           else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
+            alert(rawMessage.replace("KHONG_TIM_THAY:", ""));
+          }
+            else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
+            alert(rawMessage.replace("KHONG_TIM_THAY:", ""));
+            this.router.navigate(['/banhang']);
+          }
+            else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
+            alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
+            this.router.navigate(['/banhang']);
+          }
+          
       }
     );
   }

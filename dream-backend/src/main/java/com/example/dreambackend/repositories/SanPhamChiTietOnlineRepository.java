@@ -32,6 +32,7 @@ public interface SanPhamChiTietOnlineRepository extends JpaRepository<SanPhamChi
             "LEFT JOIN GioHangChiTiet ghct ON spct.id = ghct.sanPhamChiTiet.id " +
             "LEFT JOIN KhuyenMai km ON spct.khuyenMai.id = km.id " +
             "WHERE sp.trangThai = 1 " +
+            "AND spct.trangThai = 1 " +
             "AND spct.soLuong > 0 " +
             "AND sp.id = :idSanPham " +
             "AND (spct.khuyenMai IS NULL OR km.trangThai = 1 OR km.trangThai = 0) " +

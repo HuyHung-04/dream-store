@@ -154,8 +154,11 @@ export class HoadonComponent {
           this.chonVoucher = null
           this.getTinhVoucher()
         }
+         else if (rawMessage.startsWith("VOUCHER_KHONG_HOAT_DONG:")) {
+          alert(rawMessage.replace("VOUCHER_KHONG_HOAT_DONG:", ""));
+        }
         else {
-          alert("Lỗi không xác định. Vui lòng thử lại.");
+          alert(error);
         }
       }
     );
@@ -686,8 +689,18 @@ export class HoadonComponent {
           this.chonVoucher = null
           this.getTinhVoucher()
         }
+         else if (rawMessage.startsWith("VOUCHER_KHONG_HOAT_DONG:")) {
+          alert(rawMessage.replace("VOUCHER_KHONG_HOAT_DONG:", ""));
+           this.getVoucherIdAndTen()
+          this.chonVoucher = null
+          this.getTinhVoucher()
+        }
+         else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
+          alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
+           this.router.navigate(['/banhang']);
+        }
         else {
-          alert("Lỗi không xác định. Vui lòng thử lại.");
+          alert(error);
         }
       }
     );

@@ -147,9 +147,13 @@ export class KhuyenmaiComponent implements OnInit {
       return;
     }
 
-    // Kiểm tra nếu khuyến mãi không hoạt động
-    if (!selectedKhuyenMai.trangThai) {
-      alert('Khuyến mãi không hoạt động, không thể chọn sản phẩm!');
+    // Kiểm tra nếu khuyến mãi đã hết hạn
+    const today = new Date();
+    const endDate = new Date(selectedKhuyenMai.ngayKetThuc);
+    endDate.setHours(23, 59, 59, 999);
+
+    if (endDate < today) {
+      alert('Khuyến mãi đã hết hạn, không thể chọn sản phẩm!');
       return;
     }
 

@@ -64,6 +64,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             Integer idSanPhamChiTiet = item.getIdSanPhamChiTiet();
             Integer soLuongTrongGio = item.getSoLuong();
 
+            SanPhamChiTiet spChiTiet = sanPhamChiTietRepository.findById(idSanPhamChiTiet)
+                    .orElse(null);
+
             Integer soLuongTon = sanPhamChiTietRepository.findById(idSanPhamChiTiet)
                     .map(sp -> sp.getSoLuong())
                     .orElse(0);
@@ -72,6 +75,12 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
             String mauSac = item.getMau();
             String size = item.getSize();
 
+            if (spChiTiet.getTrangThai() == 0) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "NGUNG_HOAT_DONG: Sản phẩm \"" + tenSanPham + " (" + mauSac + ", " + size + ")\" đã ngưng hoạt động. Vui lòng chọn sản phẩm khác."
+                );
+            }
             // Nếu sản phẩm hết hàng
             if (soLuongTon == 0) {
                 throw new ResponseStatusException(
@@ -181,6 +190,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
     @Override
     @Transactional
     public HoaDon createHoaDon(HoaDonOnlineRequest request) {
+        if (request == null || request.getChiTietGioHang() == null || request.getChiTietGioHang().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "KHONG_CO_SAN_PHAM: Không có sản phẩm nào được chọn để thanh toán.");
+        }
         Integer idKhachHang = request.getIdKhachHang();
         Integer paymentMethodId = request.getPaymentMethodId();
         Double tongTienTruocGiam = request.getTongTienTruocGiam();
@@ -205,6 +217,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         }
 
         if (paymentMethodId == 4) {
+            if (voucher.getTrangThai() == 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "VOUCHER_KHONG_HOAT_DONG: Voucher hiện tại không hoạt động");
+            }
             if (voucher != null && voucher.getSoLuong() <= 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "VOUCHER_HET: Voucher hiện tại đã hết lượt sử dụng");
             }
@@ -214,6 +229,12 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sản phẩm chi tiết không tồn tại"));
 
                 String thongTinSanPham = spct.getSanPham().getTen() + " (" + spct.getSize().getTen() + "/ " + spct.getMauSac().getTen() + ")";
+
+                if (spct.getTrangThai() == 0) {
+                    gioHangChiTietRepository.deleteByKhachHangIdAndSanPhamChiTietIdAndTrangThai(khachHang.getId(), spct.getId(), 1);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "NGUNG_HOAT_DONG: Sản phẩm '" + thongTinSanPham + "' đã ngưng hoạt động. Vui lòng chọn sản phẩm khác.");
+                }
 
                 if (spct.getSoLuong() == 0) {
                     gioHangChiTietRepository.deleteByKhachHangIdAndSanPhamChiTietIdAndTrangThai(khachHang.getId(), spct.getId(), 1);
@@ -240,6 +261,9 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         hoaDon.setTongTienThanhToan(tongTienSauGiam);
         hoaDon.setTrangThai(paymentMethodId == 4 ? 2 : 1);
         if (voucher != null) {
+            if (voucher.getTrangThai() == 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "VOUCHER_KHONG_HOAT_DONG: Voucher hiện tại không hoạt động");
+            }
             if (voucher.getSoLuong() == 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "VOUCHER_HET: Voucher hiện tại đã hết lượt sử dụng");
             }
@@ -263,6 +287,12 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
                 String tenMauSac = spct.getMauSac().getTen();
                 String tenKichThuoc = spct.getSize().getTen();
                 String thongTinSanPham = tenSanPham + " (" + tenKichThuoc + "/ " + tenMauSac + ")";
+
+                if (spct.getTrangThai() == 0) {
+                    gioHangChiTietRepository.deleteByKhachHangIdAndSanPhamChiTietIdAndTrangThai(khachHang.getId(), spct.getId(), 1);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "NGUNG_HOAT_DONG: Sản phẩm '" + thongTinSanPham + "' đã ngưng hoạt động. Vui lòng chọn sản phẩm khác.");
+                }
 
                 // Nếu sản phẩm hết hàng
                 if (spct.getSoLuong() == 0) {
@@ -446,26 +476,12 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
 
                             // Kiểm tra xem có đủ hàng không
                             if (soLuongTon >= soLuongDat) {
-                                // Trừ số lượng trong kho
-                                spct.setSoLuong(soLuongTon - soLuongDat);
-                                sanPhamChiTietRepository.save(spct);
-
-                                // Lấy lại số lượng tồn kho sau khi đã trừ
-                                int soLuongTonMoi = spct.getSoLuong();
-
-                                // Kiểm tra và cập nhật giỏ hàng nếu vượt quá số lượng tồn mới
-                                List<GioHangChiTiet> gioHangs = gioHangChiTietRepository.findAllBySanPhamChiTietId(spct.getId());
-                                for (GioHangChiTiet gio : gioHangs) {
-                                    if (gio.getSoLuong() > soLuongTonMoi) {
-                                        gio.setSoLuong(soLuongTonMoi);
-                                        gioHangChiTietRepository.save(gio);
-                                    }
-                                }
-
-
                                 if (spct.getSoLuong() == 0) {
                                     throw new RuntimeException("Sản phẩm " + spct.getSanPham().getTen() + " (" + spct.getMa() + ") đã hết hàng. Vui lòng chọn sản phẩm khác.");
                                 }
+                                // Trừ số lượng trong kho
+                                spct.setSoLuong(soLuongTon - soLuongDat);
+                                sanPhamChiTietRepository.save(spct);
                             } else {
                                 // Nếu không đủ số lượng, throw exception hoặc thông báo lỗi
                                 throw new RuntimeException("Sản phẩm " + spct.getSanPham().getTen() + " (" + spct.getMa() + ") không đủ số lượng trong kho. Hiện tại chỉ còn " + spct.getSoLuong() + " sản phẩm");
@@ -485,7 +501,6 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         }
         return null; // Không tìm thấy hóa đơn
     }
-
 
 
 }

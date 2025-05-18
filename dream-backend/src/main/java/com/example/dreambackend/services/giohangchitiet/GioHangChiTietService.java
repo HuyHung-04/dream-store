@@ -38,7 +38,7 @@ public class GioHangChiTietService implements IGioHangChiTietService {
     public List<GioHangChiTietResponse> getGioHangChiTietByKhachHangId(Integer idKhachHang) {
         List<GioHangChiTiet> danhSachGioHang = gioHangChiTietRepository.findByKhachHangIdAndTrangThai(idKhachHang, 1);
         for (GioHangChiTiet gio : danhSachGioHang) {
-            if (gio.getSanPhamChiTiet().getSoLuong() == 0) {
+            if (gio.getSanPhamChiTiet().getSoLuong() == 0 || gio.getSanPhamChiTiet().getTrangThai()==0) {
                 gioHangChiTietRepository.deleteById(gio.getId());
             }
         }
@@ -54,18 +54,23 @@ public class GioHangChiTietService implements IGioHangChiTietService {
         );
 
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm chi tiết"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "KHONG_TIM_THAY:Không tìm thấy sản phẩm chi tiết"));
+
+        if (sanPhamChiTiet.getTrangThai() == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NGUNG_HOAT_DONG:Sản phẩm đã ngưng hoạt động, vui lòng chọn sản phẩm khác.");
+        }
 
         int soLuongTon = sanPhamChiTiet.getSoLuong();
         GioHangChiTiet gioHangChiTiet;
         if (soLuongTon == 0) {
-            throw new IllegalArgumentException("Sản phẩm đã hết hàng, vui lòng chọn sản phẩm khác.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "HET_HANG:Sản phẩm đã hết hàng, vui lòng chọn sản phẩm khác.");
         }
         if (existingItem.isPresent()) {
             gioHangChiTiet = existingItem.get();
             int tongSoLuong = gioHangChiTiet.getSoLuong() + request.getSoLuong();
             if (tongSoLuong > soLuongTon) {
-                throw new IllegalArgumentException("Số lượng thêm vào vượt quá số lượng tồn. Hiện tại chỉ còn " +soLuongTon+ " sản phẩm");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "VUOT_TON:Số lượng thêm vào vượt quá số lượng tồn. Hiện tại chỉ còn " + soLuongTon + " sản phẩm.");
             }
             gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + request.getSoLuong());
             gioHangChiTiet.setNgaySua(LocalDate.now());
@@ -73,7 +78,8 @@ public class GioHangChiTietService implements IGioHangChiTietService {
             gioHangChiTiet.setDonGia(ThanhTien / gioHangChiTiet.getSoLuong());
         } else {
             if (request.getSoLuong() > soLuongTon) {
-                throw new IllegalArgumentException("Số lượng thêm vào vượt quá số lượng tồn. Hiện tại chỉ còn " +soLuongTon+ " sản phẩm");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "VUOT_TON:Số lượng thêm vào vượt quá số lượng tồn. Hiện tại chỉ còn " + soLuongTon + " sản phẩm.");
             }
             gioHangChiTiet = new GioHangChiTiet();
             gioHangChiTiet.setKhachHang(khachHangRepository.findById(request.getIdKhachHang()).orElseThrow());
@@ -119,15 +125,21 @@ public class GioHangChiTietService implements IGioHangChiTietService {
     @Transactional
     public GioHangChiTietResponse muaNgay(GioHangChiTietRequest request) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(request.getIdSanPhamChiTiet())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm chi tiết."));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "KHONG_TIM_THAY:Không tìm thấy sản phẩm chi tiết."));
+
+        if (sanPhamChiTiet.getTrangThai() == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NGUNG_HOAT_DONG:Sản phẩm đã ngưng hoạt động, vui lòng chọn sản phẩm khác.");
+        }
 
         if (sanPhamChiTiet.getSoLuong() == 0) {
-            throw new IllegalArgumentException("Sản phẩm đã hết hàng, vui lòng chọn sản phẩm khác.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "HET_HANG:Sản phẩm đã hết hàng, vui lòng chọn sản phẩm khác.");
         }
+
 
         // Kiểm tra số lượng tồn
         if (request.getSoLuong() > sanPhamChiTiet.getSoLuong()) {
-            throw new IllegalArgumentException("Số lượng mua vượt quá số lượng tồn kho. Hiện tại chỉ còn " + sanPhamChiTiet.getSoLuong() + " sản phẩm");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "VUOT_TON:Số lượng mua vượt quá số lượng tồn kho. Hiện tại chỉ còn " + sanPhamChiTiet.getSoLuong() + " sản phẩm");
         }
 
         // Xóa tất cả giỏ hàng có trạng thái 2 trước khi tạo mới
