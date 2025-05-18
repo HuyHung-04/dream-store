@@ -105,13 +105,20 @@ public class HoaDonOnlineController {
         return hoaDonOnlineService.getHoaDon(id);
     }
 
-    //phương thức hủy đơn hàng
     @PostMapping("/huy")
-    public ResponseEntity<HoaDon> huyHoaDon(@RequestParam Integer idHoaDon,
-                                            @RequestParam String ghiChu) {
-        HoaDon hoadon = hoaDonOnlineService.huyHoaDon(idHoaDon, ghiChu);
-
-        return ResponseEntity.ok(hoadon);
+    public ResponseEntity<?> huyHoaDon(@RequestParam Integer idHoaDon,
+                                       @RequestParam String ghiChu) {
+        try {
+            HoaDon hoadon = hoaDonOnlineService.huyHoaDon(idHoaDon, ghiChu);
+            return ResponseEntity.ok(hoadon);
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity
+                    .status(ex.getStatusCode())
+                    .body(Map.of(
+                            "status", ex.getStatusCode().value(),
+                            "message", ex.getReason()
+                    ));
+        }
     }
 
     //phương thức cập nhật trạng thái cho đơn hàng

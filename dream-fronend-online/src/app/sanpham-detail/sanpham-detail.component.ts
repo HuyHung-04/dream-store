@@ -277,10 +277,6 @@ export class SanphamDetailComponent implements OnInit {
       const soLuongTrongGio = gioItem?.soLuong || 0;
       const tong = soLuongTrongGio + this.soLuongMua;
 
-      if (tong > soLuongTonKho) {
-        alert(`Số lượng sản phẩm thêm đang vượt quá số lượng tồn kho. Vui lòng thử lại`);
-        return;
-      }
 
       // Nếu hợp lệ thì thêm
       const sanPhamGioHang = {
@@ -305,9 +301,6 @@ export class SanphamDetailComponent implements OnInit {
           } else if (rawMessage.startsWith("VUOT_TON:")) {
             alert(rawMessage.replace("VUOT_TON:", ""));
             this.loadSanPhamChiTiet()
-          }
-           else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
-            alert(rawMessage.replace("KHONG_TIM_THAY:", ""));
           }
             else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
             alert(rawMessage.replace("KHONG_TIM_THAY:", ""));
@@ -355,9 +348,6 @@ export class SanphamDetailComponent implements OnInit {
           } else if (rawMessage.startsWith("VUOT_TON:")) {
             alert(rawMessage.replace("VUOT_TON:", ""));
             this.loadSanPhamChiTiet()
-          }
-           else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
-            alert(rawMessage.replace("KHONG_TIM_THAY:", ""));
           }
             else if (rawMessage.startsWith("KHONG_TIM_THAY:")) {
             alert(rawMessage.replace("KHONG_TIM_THAY:", ""));

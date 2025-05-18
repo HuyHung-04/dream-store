@@ -212,6 +212,13 @@ export class DonhangComponent {
         this.loadHoaDons();
       },
       (error) => {
+        if (error.error && error.error.message) {
+          alert('Lỗi: ' + error.error.message);
+          this.chonDonHang(idHoaDon)
+          this.showCancelModal = false;
+        } else {
+          alert('Đã xảy ra lỗi khi hủy hóa đơn.');
+        }
         console.error('Lỗi khi hủy hóa đơn:', error);
       }
     );

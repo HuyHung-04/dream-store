@@ -154,8 +154,12 @@ export class HoadonComponent {
           this.chonVoucher = null
           this.getTinhVoucher()
         }
-         else if (rawMessage.startsWith("VOUCHER_KHONG_HOAT_DONG:")) {
+        else if (rawMessage.startsWith("VOUCHER_KHONG_HOAT_DONG:")) {
           alert(rawMessage.replace("VOUCHER_KHONG_HOAT_DONG:", ""));
+        }
+        else if (rawMessage.startsWith("KHONG_CO_SAN_PHAM:")) {
+          alert(rawMessage.replace("KHONG_CO_SAN_PHAM:", ""));
+          this.router.navigate(['/banhang']);
         }
         else {
           alert(error);
@@ -689,15 +693,19 @@ export class HoadonComponent {
           this.chonVoucher = null
           this.getTinhVoucher()
         }
-         else if (rawMessage.startsWith("VOUCHER_KHONG_HOAT_DONG:")) {
+        else if (rawMessage.startsWith("VOUCHER_KHONG_HOAT_DONG:")) {
           alert(rawMessage.replace("VOUCHER_KHONG_HOAT_DONG:", ""));
-           this.getVoucherIdAndTen()
+          this.getVoucherIdAndTen()
           this.chonVoucher = null
           this.getTinhVoucher()
         }
-         else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
+        else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
           alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
-           this.router.navigate(['/banhang']);
+          this.router.navigate(['/banhang']);
+        }
+        else if (rawMessage.startsWith("KHONG_CO_SAN_PHAM:")) {
+          alert(rawMessage.replace("KHONG_CO_SAN_PHAM:", ""));
+          this.router.navigate(['/banhang']);
         }
         else {
           alert(error);

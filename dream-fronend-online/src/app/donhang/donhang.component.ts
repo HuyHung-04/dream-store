@@ -83,7 +83,14 @@ export class DonhangComponent {
           this.showCancelModal = false;
         },
         (error) => {
-          console.error('Lỗi khi hủy hóa đơn:', error);
+          if (error.error && error.error.message) {
+          alert('Lỗi: ' + error.error.message);
+          this.getHoaDon()
+          this.showCancelModal = false;
+        } else {
+          alert('Đã xảy ra lỗi khi hủy hóa đơn.');
+        }
+        console.error('Lỗi khi hủy hóa đơn:', error);
         }
       );
     }

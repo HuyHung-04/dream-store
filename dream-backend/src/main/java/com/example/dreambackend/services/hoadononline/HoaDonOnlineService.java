@@ -217,7 +217,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         }
 
         if (paymentMethodId == 4) {
-            if (voucher.getTrangThai() == 0) {
+            if ( voucher != null && voucher.getTrangThai() == 0) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "VOUCHER_KHONG_HOAT_DONG: Voucher hiện tại không hoạt động");
             }
             if (voucher != null && voucher.getSoLuong() <= 0) {
@@ -439,9 +439,16 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         HoaDon hoaDon = hoaDonRepository.huyHoaDon(idHoaDon)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tồn tại"));
 
+        if (hoaDon.getTrangThai() == 2) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không thể hủy hóa đơn ở trạng thái này");
+        }
+
         // Nếu có voucher thì cộng 1 vào số lượng voucher
         Voucher voucher = hoaDon.getVoucher();
         if (voucher != null) {
+            if (voucher.getSoLuong() == 0 && voucher.getTrangThai() == 0) {
+                voucher.setTrangThai(1);
+            }
             voucher.setSoLuong(voucher.getSoLuong() + 1);
             voucherRepository.save(voucher);
         }
@@ -451,7 +458,6 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         hoaDonRepository.save(hoaDon);
         return hoaDon;
     }
-
     @Transactional
     @Override
     public HoaDon tangTrangThaiHoaDon(Integer id) {
