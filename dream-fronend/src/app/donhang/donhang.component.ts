@@ -117,32 +117,46 @@ export class DonhangComponent {
 
   // Phương thức để cập nhật trạng thái hóa đơn (tăng 1 trạng thái)
   updateTrangThai(id: number, trangThai: number): void {
+  this.donHangService.getHoaDon(id).subscribe({
+    next: (hoaDonMoiNhat) => {
+      const trangThaiHienTai = hoaDonMoiNhat.trangThai;
+      if (trangThaiHienTai > trangThai) {
+        alert("Trạng thái đơn hàng đã được cập nhật trước đó. Vui lòng xem lại danh sách");
+        this.loadHoaDons();
+        return;
+      }
 
-    const nextTrangThai = trangThai + 1;
-    const nextTrangThaiLabel = this.getTrangThaiLabel(nextTrangThai);
-    const confirmUpdate = window.confirm(
-      `Bạn có chắc chắn muốn cập nhật đến trạng thái "${nextTrangThaiLabel}" không?`
-    );
-
-    if (confirmUpdate) {
-      this.loading = true;
-      this.donHangService.capNhatTrangThai(id).subscribe(
-        (response) => {
-          alert("Cập nhật trạng thái thành công")
-          this.loadHoaDons();
-          if (this.hienThiModalNo) {
-          this.moModalSoLuongNo(); // Gọi lại API để load số lượng mới
-        }
-        },
-        (error) => {
-        const chiTietLoi = error.error?.message || 'Lỗi khi cập nhật trạng thái hóa đơn!';
-        alert(`${chiTietLoi}`);
-        console.error('Lỗi cập nhật trạng thái:', error);
-        this.loading = false;
-        }
+      const nextTrangThai = trangThai + 1;
+      const nextTrangThaiLabel = this.getTrangThaiLabel(nextTrangThai);
+      const confirmUpdate = window.confirm(
+        `Bạn có chắc chắn muốn cập nhật đến trạng thái "${nextTrangThaiLabel}" không?`
       );
+
+      if (confirmUpdate) {
+        this.loading = true;
+        this.donHangService.capNhatTrangThai(id).subscribe(
+          (response) => {
+            alert("Cập nhật trạng thái thành công");
+            this.loadHoaDons();
+            if (this.hienThiModalNo) {
+              this.moModalSoLuongNo();
+            }
+          },
+          (error) => {
+            const chiTietLoi = error.error?.message || 'Lỗi khi cập nhật trạng thái hóa đơn!';
+            alert(`${chiTietLoi}`);
+            console.error('Lỗi cập nhật trạng thái:', error);
+            this.loading = false;
+          }
+        );
+      }
+    },
+    error: (err) => {
+      console.error("Lỗi khi kiểm tra trạng thái hóa đơn:", err);
+      alert("Không thể kiểm tra trạng thái hiện tại của đơn hàng!");
     }
-  }
+  });
+}
 
   // Kiểm tra xem trạng thái hiện tại có phải là trạng thái cuối cùng không
   checkStatus(trangThai: number): boolean {

@@ -248,7 +248,7 @@
 
           <!-- Nút Hủy và Nút Quay Về Trang Chủ -->
           <div class="btn">
-            <button *ngIf="!([5,2,3,4].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn-danger">
+            <button *ngIf="!([2,3,4,5,9].includes(hoaDonData.trangThai))" (click)="openCancelModal()" class="btn-danger">
               Hủy đơn hàng
             </button>
             <button (click)="goHome()" class="btn-primary">Đóng</button>

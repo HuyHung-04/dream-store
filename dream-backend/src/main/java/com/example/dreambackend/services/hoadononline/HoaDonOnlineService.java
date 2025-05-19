@@ -439,7 +439,7 @@ public class HoaDonOnlineService implements IHoaDonOnlineService {
         HoaDon hoaDon = hoaDonRepository.huyHoaDon(idHoaDon)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tồn tại"));
 
-        if (hoaDon.getTrangThai() == 2) {
+        if (hoaDon.getTrangThai() >= 2) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Không thể hủy hóa đơn ở trạng thái này");
         }
 
