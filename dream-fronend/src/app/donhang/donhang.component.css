@@ -557,10 +557,8 @@ padding: 5px 10px;
 
 /* Vùng chứa bảng có cuộn */
 .table-scroll-container {
-  max-height: calc(30px * 13); /* Chiều cao của 13 dòng (khoảng 30px mỗi dòng) */
-  overflow-y: auto;
-  margin-top: 10px;
-  border: 1px solid #ddd;
+  padding-top: 30px;
+  max-height: none; /* không giới hạn, sẽ hiển thị đầy đủ */
 }
 
 .table-no {

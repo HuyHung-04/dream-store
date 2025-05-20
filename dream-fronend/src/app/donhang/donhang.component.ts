@@ -227,7 +227,7 @@ export class DonhangComponent {
       },
       (error) => {
         if (error.error && error.error.message) {
-          alert('Lỗi: ' + error.error.message);
+          alert(error.error.message);
           this.chonDonHang(idHoaDon)
           this.showCancelModal = false;
         } else {

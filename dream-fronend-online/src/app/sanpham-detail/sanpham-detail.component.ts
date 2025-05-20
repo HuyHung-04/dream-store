@@ -114,6 +114,11 @@ export class SanphamDetailComponent implements OnInit {
             // Cập nhật sản phẩm được chọn
             this.updateSelectedSanPham();
           }
+          else {
+          // Nếu không có dữ liệu, chuyển hướng về trang chủ
+          alert('Sản phẩm này đã hết hoặc ngừng bán vui lòng chọn sản phẩm khác');
+          this.router.navigate(['/banhang']);
+        }
         },
         error: (err) => console.error('Lỗi khi lấy dữ liệu sản phẩm:', err)
       });
@@ -292,6 +297,7 @@ export class SanphamDetailComponent implements OnInit {
           this.headerService.notifyGioHangUpdated();
           this.soLuongMua = 1;
           this.hienToast();
+          this.loadSanPhamChiTiet()
         },
         error: (error) => {
              const rawMessage = error?.error?.message || "";

@@ -132,8 +132,16 @@ export class HeaderComponent implements OnInit {
 
     this.sanPhamDetailService.getGioHangChiTietById(idSanPhamChiTiet).subscribe(
       (tonKho: number) => {
+
+        if (tonKho === 0) {
+        alert("Sản phẩm đã hết hàng. Vui lòng chọn sản phẩm khác");
+        this.router.navigate(['/banhang']);
+        return;
+        }
+
         if (value > tonKho) {
           alert(`Số lượng bạn nhập đang vượt quá tồn kho hiện tại`);
+          this.headerService.triggerLoadSanPhamChiTiet();
           value = tonKho;
           target.value = tonKho.toString();
         }
@@ -160,7 +168,7 @@ export class HeaderComponent implements OnInit {
           alert(rawMessage.replace("HET_HANG:", ""));
           this.loadGioHang()
           this.modalCard=false
-          this.headerService.triggerLoadSanPhamChiTiet();
+          this.router.navigate(['/banhang']);
         } else if (rawMessage.startsWith("VUOT_TON:")) {
           alert(rawMessage.replace("VUOT_TON:", ""));
           this.loadGioHang()

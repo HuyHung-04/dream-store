@@ -92,6 +92,36 @@ export class ThongkeComponent implements OnInit {
     }
   }
 
+    onMonthClick(): void {
+    if (this.selectedMonth === new Date().getMonth() + 1 && this.selectedYear === new Date().getFullYear()) {
+      this.onMonthChange();
+    }
+  }
+
+  onYearClick(): void {
+    if (this.selectedYear === new Date().getFullYear()) {
+      this.onYearChange();
+    }
+  }
+
+  onMonthSelectClick(): void {
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+
+    if (this.topProductMonth === currentMonth && this.topProductYear === currentYear) {
+      this.loadTopSanPhamThangNay();
+    }
+  }
+
+  onYearSelectClick(): void {
+    const currentYear = new Date().getFullYear();
+
+    if (this.topProductYear === currentYear) {
+      this.loadTopSanPhamNamNay();
+    }
+  }
+
+  
   onMonthChange(): void {
     this.selectedType = '';
     if (this.selectedType === 'Hôm nay' || this.selectedMonth === 0) {
