@@ -134,9 +134,9 @@ export class HeaderComponent implements OnInit {
       (tonKho: number) => {
 
         if (tonKho === 0) {
-        alert("Sản phẩm đã hết hàng. Vui lòng chọn sản phẩm khác");
-        this.router.navigate(['/banhang']);
-        return;
+          alert("Sản phẩm đã hết hàng. Vui lòng chọn sản phẩm khác");
+          this.router.navigate(['/banhang']);
+          return;
         }
 
         if (value > tonKho) {
@@ -167,13 +167,19 @@ export class HeaderComponent implements OnInit {
         if (rawMessage.startsWith("HET_HANG:")) {
           alert(rawMessage.replace("HET_HANG:", ""));
           this.loadGioHang()
-          this.modalCard=false
+          this.modalCard = false
           this.router.navigate(['/banhang']);
         } else if (rawMessage.startsWith("VUOT_TON:")) {
           alert(rawMessage.replace("VUOT_TON:", ""));
           this.loadGioHang()
           this.headerService.triggerLoadSanPhamChiTiet();
-        } else {
+        }
+        else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
+          alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
+          this.loadGioHang()
+          this.router.navigate(['/banhang']);
+        }
+        else {
           alert("Lỗi không xác định. Vui lòng thử lại.");
         }
       }
@@ -216,8 +222,8 @@ export class HeaderComponent implements OnInit {
         if (rawMessage.startsWith("HET_HANG:")) {
           alert(rawMessage.replace("HET_HANG:", ""));
           this.loadGioHang()
-          this.modalCard=false
-           this.router.navigate(['/banhang']);
+          this.modalCard = false
+          this.router.navigate(['/banhang']);
         } else if (rawMessage.startsWith("VUOT_TON:")) {
           alert(rawMessage.replace("VUOT_TON:", ""));
           this.loadGioHang()
@@ -230,9 +236,9 @@ export class HeaderComponent implements OnInit {
         else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
           alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
           this.loadGioHang()
-           this.router.navigate(['/banhang']);
+          this.router.navigate(['/banhang']);
         }
-         else {
+        else {
           alert("Lỗi không xác định. Vui lòng thử lại.");
         }
       }

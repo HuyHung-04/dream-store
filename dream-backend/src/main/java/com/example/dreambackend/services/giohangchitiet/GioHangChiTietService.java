@@ -198,6 +198,14 @@ public class GioHangChiTietService implements IGioHangChiTietService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Số lượng phải lớn hơn 0");
         }
 
+        int trangThaiSanPham = gioHangChiTiet.getSanPhamChiTiet().getTrangThai();
+        if (trangThaiSanPham == 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "NGUNG_HOAT_DONG:Sản phẩm này đã ngưng hoạt động. Vui lòng chọn sản phẩm khác."
+            );
+        }
+
         int soLuongTon = gioHangChiTiet.getSanPhamChiTiet().getSoLuong();
 
         if (soLuongTon == 0) {

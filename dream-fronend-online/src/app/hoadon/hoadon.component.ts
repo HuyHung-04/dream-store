@@ -161,6 +161,10 @@ export class HoadonComponent {
           alert(rawMessage.replace("KHONG_CO_SAN_PHAM:", ""));
           this.router.navigate(['/banhang']);
         }
+        else if (rawMessage.startsWith("NGUNG_HOAT_DONG:")) {
+          alert(rawMessage.replace("NGUNG_HOAT_DONG:", ""));
+          this.router.navigate(['/banhang']);
+        }
         else {
           alert(error);
         }

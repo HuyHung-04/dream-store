@@ -1004,7 +1004,9 @@ export class BanhangComponent implements OnInit {
     }
 
     if (!this.selectedDiscount) {
-      alert("Vui lòng chọn mã giảm giá!");
+      this.discountAmount = 0;
+      this.selectedVoucher = null;
+      this.updateInvoiceTotal();
       return;
     }
 
@@ -1135,7 +1137,6 @@ export class BanhangComponent implements OnInit {
 
     const request = {
       ...this.selectedInvoice,
-      idVoucher: this.selectedDiscount,
       idPhuongThucThanhToan: this.selectedPaymentMethod,
       tongTienTruocVoucher,
       tongTienThanhToan,
