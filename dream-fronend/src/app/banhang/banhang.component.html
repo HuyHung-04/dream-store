@@ -162,7 +162,7 @@
     </div>
     <div class="input-group">
       <select [(ngModel)]="selectedDiscount" class="custom-input" style="width: 285px;"
-        [disabled]="!selectedInvoice || cart.length === 0">
+        [disabled]="!selectedInvoice || cart.length === 0" (ngModelChange)="onDiscountChange($event)">
         <option [ngValue]="null">Chọn mã giảm giá</option>
         <option *ngFor="let discount of discountCodes" [ngValue]="discount.id">
           {{ discount.ten }}

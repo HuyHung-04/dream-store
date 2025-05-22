@@ -164,6 +164,12 @@ export class BanhangComponent implements OnInit {
     );
   }
 
+  onDiscountChange(newValue: any) {
+    if (newValue === null) {
+      this.applyDiscount();
+    }
+  }
+
   // Tạo hóa đơn mới
   createInvoice() {
     if (!this.selectedNhanVien) {
@@ -1172,9 +1178,10 @@ export class BanhangComponent implements OnInit {
         alert(message);
         if (this.selectedInvoice?.tongTienTruocVoucher) {
           this.selectedInvoice.tongTienThanhToan = this.selectedInvoice.tongTienTruocVoucher;
-          this.discountAmount=0;
+          this.discountAmount = 0;
           this.selectedDiscount = null
           this.getVoucher(this.selectedInvoice.tongTienTruocVoucher)
+          this.applyDiscount()
         }
       }
     );
