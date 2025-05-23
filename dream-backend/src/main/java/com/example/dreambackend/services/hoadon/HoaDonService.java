@@ -52,6 +52,11 @@ public class HoaDonService implements IHoaDonService {
         hoaDon.setTenNguoiNhan(request.getTenNguoiNhan());
         hoaDon.setSdtNguoiNhan(request.getSdtNguoiNhan());
         hoaDon.setNgaySua(LocalDate.now());
+        if (request.getIdKhachHang() != null) {
+            KhachHang khachHang = khachHangRepository.findById(request.getIdKhachHang())
+                    .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại"));
+            hoaDon.setKhachHang(khachHang);
+        }
         updateHoaDonInfo(hoaDon, request);
 
         if (request.getIdVoucher() != null) {

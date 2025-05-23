@@ -109,7 +109,7 @@ export class BanhangComponent implements OnInit {
   idNhanVien: number = 0;
   // Thêm mảng số tiền nhanh
   quickAmounts: number[] = [100000, 200000, 500000, 1000000];
-
+  selectedKhachHangId: number=0;
   // Thêm các biến mới cho tìm kiếm khách hàng
   searchKhachHang: string = '';
   filteredKhachHang: KhachHang[] = [];
@@ -254,6 +254,7 @@ export class BanhangComponent implements OnInit {
           this.banhangService.getKhachHangById(hoaDon.idKhachHang).subscribe(
             (khachHang) => {
               this.selectedKhachHang = khachHang;
+              this.selectedKhachHangId=khachHang.id
               this.tenKhachHang = khachHang.ten || 'Không tìm thấy';
               this.sdtNguoiNhan = khachHang.soDienThoai || '';
             }
@@ -441,6 +442,7 @@ export class BanhangComponent implements OnInit {
   // Chọn khách hàng từ modal
   chonKhachHang(khachHang: KhachHang) {
     console.log('Khách hàng được chọn:', khachHang);
+    this.selectedKhachHangId = khachHang.id
     this.selectedKhachHang = khachHang;
     this.tenKhachHang = khachHang.ten;
     this.sdtNguoiNhan = khachHang.soDienThoai;
@@ -450,7 +452,6 @@ export class BanhangComponent implements OnInit {
     if (this.selectedInvoice) {
       const updatedInvoice = {
         ...this.selectedInvoice,
-        idKhachHang: khachHang.id,
         tenNguoiNhan: khachHang.ten,
         sdtNguoiNhan: khachHang.soDienThoai
       };
@@ -1143,6 +1144,7 @@ export class BanhangComponent implements OnInit {
 
     const request = {
       ...this.selectedInvoice,
+      idKhachHang: this.selectedKhachHangId || 1,
       idPhuongThucThanhToan: this.selectedPaymentMethod,
       tongTienTruocVoucher,
       tongTienThanhToan,
