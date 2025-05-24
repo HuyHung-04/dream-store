@@ -109,7 +109,7 @@ export class BanhangComponent implements OnInit {
   idNhanVien: number = 0;
   // Thêm mảng số tiền nhanh
   quickAmounts: number[] = [100000, 200000, 500000, 1000000];
-
+selectedKhachHangId: number=0;
   // Thêm các biến mới cho tìm kiếm khách hàng
   searchKhachHang: string = '';
   filteredKhachHang: KhachHang[] = [];
@@ -243,16 +243,18 @@ export class BanhangComponent implements OnInit {
     this.cart = [];
     this.selectedDiscount = null;
     this.discountAmount = 0;
-
+console.log("xem",invoice.maHoaDon)
     // Lấy thông tin chi tiết hóa đơn
     this.banhangService.getHoaDonById(invoice.id).subscribe(
       (hoaDon) => {
         this.selectedInvoice = hoaDon;
-
+console.log("hoa don",hoaDon)
         // Cập nhật thông tin khách hàng nếu có
         if (hoaDon.idKhachHang) {
           this.banhangService.getKhachHangById(hoaDon.idKhachHang).subscribe(
             (khachHang) => {
+              console.log("chon khách",khachHang)
+              this.selectedKhachHangId=khachHang.id
               this.selectedKhachHang = khachHang;
               this.tenKhachHang = khachHang.ten || 'Không tìm thấy';
               this.sdtNguoiNhan = khachHang.soDienThoai || '';
@@ -441,6 +443,7 @@ export class BanhangComponent implements OnInit {
   // Chọn khách hàng từ modal
   chonKhachHang(khachHang: KhachHang) {
     console.log('Khách hàng được chọn:', khachHang);
+    this.selectedKhachHangId = khachHang.id
     this.selectedKhachHang = khachHang;
     this.tenKhachHang = khachHang.ten;
     this.sdtNguoiNhan = khachHang.soDienThoai;
@@ -450,15 +453,16 @@ export class BanhangComponent implements OnInit {
     if (this.selectedInvoice) {
       const updatedInvoice = {
         ...this.selectedInvoice,
-        idKhachHang: khachHang.id,
         tenNguoiNhan: khachHang.ten,
         sdtNguoiNhan: khachHang.soDienThoai
       };
-
+console.log("gửi đi",updatedInvoice)
       this.banhangService.updateHoaDon(this.selectedInvoice.id, updatedInvoice).subscribe(
         response => {
           console.log('Cập nhật khách hàng cho hóa đơn thành công:', response);
           this.selectedInvoice = response;
+          console.log("tên khach hang",response)
+          this.tenKhachHang = response.tenNguoiNhan
         },
         error => {
           console.error('Lỗi khi cập nhật khách hàng cho hóa đơn:', error);
@@ -1143,6 +1147,7 @@ export class BanhangComponent implements OnInit {
 
     const request = {
       ...this.selectedInvoice,
+      idKhachHang: this.selectedKhachHangId || 1,
       idPhuongThucThanhToan: this.selectedPaymentMethod,
       tongTienTruocVoucher,
       tongTienThanhToan,

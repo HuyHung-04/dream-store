@@ -5,8 +5,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d7dcb88-d015-40bd-b1c2-e4c2578857ff" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/hoadon/HoaDonService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/dreambackend/services/hoadon/HoaDonService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_material_icon.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_material_icon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr_node.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/@angular_ssr_node.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/chunk-VYDFAPOT.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend-online/.angular/cache/19.2.0/dream-angular/vite/deps_ssr/chunk-VYDFAPOT.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_cdk_bidi.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_cdk_bidi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_cdk_scrolling.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_cdk_scrolling.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_common_http.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_core.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_forms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_button.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_button.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_dialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_icon.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_icon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_sidenav.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_sidenav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_toolbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_material_toolbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_platform-browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_platform-browser_animations.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_platform-browser_animations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@angular_router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@ng-select_ng-select.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/@ng-select_ng-select.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_cdk_scrolling.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_cdk_scrolling.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_button.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_button.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_dialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_icon.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_icon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_sidenav.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_sidenav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_toolbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_material_toolbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_ssr.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_ssr.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_ssr_node.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/@angular_ssr_node.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-3FL56LBG.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-3FL56LBG.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-3FL56LBG.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-3FL56LBG.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-7GILNMZM.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-7GILNMZM.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-7GILNMZM.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-7GILNMZM.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-JX6RTNSQ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-JX6RTNSQ.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-SF5PMAYJ.js" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-SF5PMAYJ.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-SF5PMAYJ.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/.angular/cache/19.2.3/dream-angular/vite/deps_ssr/chunk-SF5PMAYJ.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../dream-fronend/src/app/banhang/banhang.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,7 +107,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.DreamBackendApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;huy-hung&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;le-hoang&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/dream-store/dream-backend&quot;,
@@ -281,6 +325,11 @@
       <workItem from="1747732013462" duration="910000" />
       <workItem from="1747795213539" duration="1311000" />
       <workItem from="1747880271066" duration="1148000" />
+      <workItem from="1747919450739" duration="1539000" />
+      <workItem from="1747925370028" duration="2670000" />
+      <workItem from="1747968959676" duration="1399000" />
+      <workItem from="1747977590463" duration="828000" />
+      <workItem from="1747991050643" duration="799000" />
     </task>
     <servers />
   </component>
@@ -297,5 +346,73 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonController.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonController.java</url>
+          <line>69</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonController.java</url>
+          <line>68</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>218</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>219</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/controllers/HoaDonController.java</url>
+          <line>67</line>
+          <properties class="com.example.dreambackend.controllers.HoaDonController" method="updateHoaDon">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>217</line>
+          <properties class="com.example.dreambackend.services.hoadon.HoaDonService" method="convertToDTO">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/dreambackend/services/hoadon/HoaDonService.java</url>
+          <line>46</line>
+          <properties class="com.example.dreambackend.services.hoadon.HoaDonService" method="updateHoaDon">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
